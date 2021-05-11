@@ -35,54 +35,6 @@ class ExportJustification:
     Exportació Ateneu
     
     """
-
-    def export_2018_2019(self):
-        self.export_manager.import_correlations(
-            settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
-        self.export_manager.subsidy_period_range = ["2018-11-01", "2019-10-31"]
-
-        """ Each function here called handles the creation of one of the worksheets."""
-        self.export_actuacions_2018_2019()
-        self.export_stages_2018_2019()
-        self.export_founded_projects_2018_2019()
-        self.export_participants_2018_2019()
-        self.export_nouniversitaris_2018_2019()
-        self.export_insercionslaborals_2018_2019()
-        self.export_all_projects_2018_2019()
-
-        return self.export_manager.return_document("justificacio2018-2019")
-
-    def export_2019_2020_dos_itineraris(self):
-        self.export_manager.stages_groups = {
-            1: 'nova_creacio',
-            2: 'nova_creacio',
-            6: 'nova_creacio',
-            7: 'consolidacio',
-            8: 'consolidacio',
-            9: 'incubacio'
-        }
-        return self.export_2019_2020()
-
-    def export_2019_2020(self):
-        self.export_manager.import_correlations(
-            settings.BASE_DIR
-            + "/../apps/dataexports/fixtures/correlations_2019.json"
-        )
-        self.export_manager.subsidy_period_range = ["2019-11-01", "2020-10-31"]
-
-        self.export_manager.import_organizers()
-
-        """ Each function here called handles the creation of one of the 
-        worksheets."""
-        self.export_actuacions_2018_2019()
-        self.export_stages_2018_2019()
-        self.export_founded_projects_2018_2019()
-        self.export_participants_2018_2019()
-        self.export_nouniversitaris_2018_2019()
-        self.export_insercionslaborals_2018_2019()
-
-        return self.export_manager.return_document("justificacio2019-2020")
-
     def export_2020_2021_dos_itineraris(self):
         self.export_manager.stages_groups = {
             1: 'nova_creacio',
@@ -110,16 +62,16 @@ class ExportJustification:
 
         """ Each function here called handles the creation of one of the 
         worksheets."""
-        self.export_actuacions_2018_2019()
-        self.export_stages_2018_2019()
-        self.export_founded_projects_2018_2019()
-        self.export_participants_2018_2019()
-        self.export_nouniversitaris_2018_2019()
-        self.export_insercionslaborals_2018_2019()
+        self.export_actuacions()
+        self.export_stages()
+        self.export_founded_projects()
+        self.export_participants()
+        self.export_nouniversitaris()
+        self.export_insercionslaborals()
 
-        return self.export_manager.return_document("justificacio2019-2020")
+        return self.export_manager.return_document("justificacio2020-21")
 
-    def export_actuacions_2018_2019(self):
+    def export_actuacions(self):
         # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-
         # data-to-xlsx-files.html
         # Docs: https://openpyxl.readthedocs.io/en/stable/
@@ -142,13 +94,13 @@ class ExportJustification:
             ("[Acció]", 20),
         ]
         self.export_manager.create_columns(columns)
-        self.actuacions_2018_2019_rows_activities()
-        self.actuacions_2018_2019_rows_stages()
-        self.actuacions_2018_2019_rows_nouniversitaris()
-        self.actuacions_2018_2019_rows_founded_projects()
+        self.actuacions_rows_activities()
+        self.actuacions_rows_stages()
+        self.actuacions_rows_nouniversitaris()
+        self.actuacions_rows_founded_projects()
         # Total Stages: self.export_manager.row_number-Total Activities-1
 
-    def actuacions_2018_2019_rows_activities(self):
+    def actuacions_rows_activities(self):
         obj = self.export_manager.get_sessions_obj()
         self.export_manager.number_of_activities = len(obj)
         for item in obj:
@@ -187,7 +139,7 @@ class ExportJustification:
             ]
             self.export_manager.fill_row_data(row)
 
-    def actuacions_2018_2019_rows_stages(self):
+    def actuacions_rows_stages(self):
         """
         Acompanyaments que han d'aparèixer:
         - En cas que tingui algun acompanyament de tipus Nova Creació,
@@ -336,7 +288,7 @@ class ExportJustification:
                 ]
                 self.export_manager.fill_row_data(row)
 
-    def actuacions_2018_2019_rows_nouniversitaris(self):
+    def actuacions_rows_nouniversitaris(self):
         obj = self.export_manager.get_sessions_obj(for_minors=True)
         self.export_manager.number_of_nouniversitaris = len(obj)
         for item in obj:
@@ -372,7 +324,7 @@ class ExportJustification:
             ]
             self.export_manager.fill_row_data(row)
 
-    def actuacions_2018_2019_rows_founded_projects(self):
+    def actuacions_rows_founded_projects(self):
         """
         Tots els projectes que tinguin data de constitució dins de 
         les dates de la convocatòria apareixeran
@@ -435,7 +387,7 @@ class ExportJustification:
             ]
             self.export_manager.fill_row_data(row)
 
-    def export_stages_2018_2019(self):
+    def export_stages(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
             "Acompanyaments")
         self.export_manager.row_number = 1
@@ -455,9 +407,9 @@ class ExportJustification:
         ]
         self.export_manager.create_columns(columns)
 
-        self.stages_2018_2019_rows()
+        self.stages_rows()
 
-    def stages_2018_2019_rows(self):
+    def stages_rows(self):
         reference_number = self.export_manager.number_of_activities
 
         for p_id, stage in self.export_manager.stages_obj.items():
@@ -491,7 +443,7 @@ class ExportJustification:
                 ]
                 self.export_manager.fill_row_data(row)
 
-    def export_founded_projects_2018_2019(self):
+    def export_founded_projects(self):
         self.export_manager.worksheet = \
             self.export_manager.workbook.create_sheet("EntitatCreada")
         self.export_manager.row_number = 1
@@ -510,9 +462,9 @@ class ExportJustification:
         ]
         self.export_manager.create_columns(columns)
 
-        self.founded_projects_2018_2019_rows()
+        self.founded_projects_rows()
 
-    def founded_projects_2018_2019_rows(self):
+    def founded_projects_rows(self):
         # The Ids start at 1, so later we add 1 to this number to have the 
         # right ID.
         founded_projects_reference_number = \
@@ -563,7 +515,7 @@ class ExportJustification:
             ]
             self.export_manager.fill_row_data(row)
 
-    def export_participants_2018_2019(self):
+    def export_participants(self):
         self.export_manager.worksheet = \
             self.export_manager.workbook.create_sheet("Participants")
         self.export_manager.row_number = 1
@@ -589,7 +541,7 @@ class ExportJustification:
         ]
         self.export_manager.create_columns(columns)
 
-        self.participants_2018_2019_rows()
+        self.participants_rows()
         self.participants_project_stages_rows()
 
     def participants_project_stages_rows(self):
@@ -632,7 +584,7 @@ class ExportJustification:
                     self.export_manager.row_number += 1
                     self.export_manager.fill_row_data(row)
 
-    def participants_2018_2019_rows(self):
+    def participants_rows(self):
         activity_reference_number = 0
         obj = self.export_manager.get_sessions_obj(for_minors=False)
         for activity in obj:
@@ -674,7 +626,7 @@ class ExportJustification:
                 ]
                 self.export_manager.fill_row_data(row)
 
-    def export_nouniversitaris_2018_2019(self):
+    def export_nouniversitaris(self):
         self.export_manager.worksheet = \
             self.export_manager.workbook.create_sheet(
                 "ParticipantsNoUniversitaris"
@@ -689,9 +641,9 @@ class ExportJustification:
         ]
         self.export_manager.create_columns(columns)
 
-        self.nouniversitaris_2018_2019_rows()
+        self.nouniversitaris_rows()
 
-    def nouniversitaris_2018_2019_rows(self):
+    def nouniversitaris_rows(self):
         nouniversitari_reference_number = \
             self.export_manager.number_of_stages \
             + self.export_manager.number_of_activities
@@ -709,7 +661,7 @@ class ExportJustification:
             ]
             self.export_manager.fill_row_data(row)
 
-    def export_insercionslaborals_2018_2019(self):
+    def export_insercionslaborals(self):
         self.export_manager.worksheet = \
             self.export_manager.workbook.create_sheet("InsercionsLaborals")
         self.export_manager.row_number = 1
@@ -733,9 +685,9 @@ class ExportJustification:
         ]
         self.export_manager.create_columns(columns)
 
-        self.insercionslaborals_2018_2019_rows()
+        self.insercionslaborals_rows()
 
-    def insercionslaborals_2018_2019_rows(self):
+    def insercionslaborals_rows(self):
         obj = EmploymentInsertion.objects.filter(
             subsidy_period__date_start__range=self.export_manager.subsidy_period_range)
         for insertion in obj:
@@ -784,7 +736,7 @@ class ExportJustification:
             ]
             self.export_manager.fill_row_data(row)
 
-    def export_all_projects_2018_2019(self):
+    def export_all_projects(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet("PROJECTES")
         self.export_manager.row_number = 1
 
@@ -802,9 +754,9 @@ class ExportJustification:
         ]
         self.export_manager.create_columns(columns)
 
-        self.all_projects_2018_2019_rows()
+        self.all_projects_rows()
 
-    def all_projects_2018_2019_rows(self):
+    def all_projects_rows(self):
         self.export_manager.row_number = 1
         obj = Project.objects.order_by('id').all()
         for project in obj:
