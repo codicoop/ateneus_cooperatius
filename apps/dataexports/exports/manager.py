@@ -63,7 +63,6 @@ class ExcelExportManager(ExportManager):
         super().__init__(export_obj)
         self.workbook = Workbook()
         self.worksheet = self.workbook.active
-        self.stages_obj = None
         self.row_number = 1
         self.correlations = dict()
 

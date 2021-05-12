@@ -29,6 +29,7 @@ class ExportJustification:
             8: 'nova_creacio',
             9: 'nova_creacio'  # Era Incubació
         }
+        self.stages_obj = None
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
@@ -166,18 +167,18 @@ class ExportJustification:
         obj = ProjectStage.objects.order_by('date_start').filter(
             subsidy_period=self.export_manager.subsidy_period
         )
-        self.export_manager.stages_obj = {}
+        self.stages_obj = {}
         for item in obj:
             if int(item.stage_type) not in self.export_manager.stages_groups:
                 continue
             group = self.export_manager.stages_groups[int(item.stage_type)]
             p_id = item.project.id
-            if p_id not in self.export_manager.stages_obj:
-                self.export_manager.stages_obj.update({
+            if p_id not in self.stages_obj:
+                self.stages_obj.update({
                     p_id: {}
                 })
-            if group not in self.export_manager.stages_obj[p_id]:
-                self.export_manager.stages_obj[p_id].update({
+            if group not in self.stages_obj[p_id]:
+                self.stages_obj[p_id].update({
                     group: {
                         'obj': item,
                         'total_hours': 0,
@@ -186,7 +187,7 @@ class ExportJustification:
                 })
             if item.hours is None:
                 item.hours = 0
-            self.export_manager.stages_obj[p_id][group][
+            self.stages_obj[p_id][group][
                 'total_hours'] += item.hours
 
             # Aprofitem per omplir les dades dels participants aquí per no
@@ -195,14 +196,14 @@ class ExportJustification:
             # només aparegui una vegada.
             for participant in item.involved_partners.all():
                 if (participant
-                        not in self.export_manager.stages_obj[p_id][group][
+                        not in self.stages_obj[p_id][group][
                             'participants']):
-                    self.export_manager.stages_obj[p_id][group][
+                    self.stages_obj[p_id][group][
                         'participants'].append(
                         participant
                     )
         """
-        En aquest punt, self.export_manager.stages_obj té aquesta estructura:
+        En aquest punt, self.stages_obj té aquesta estructura:
         160: {
             'nova_creacio': {
                 'obj': '<ProjectStage: Consell Comarcal Conca de Barberà - Concactiva: 00 Nova creació - acollida>',
@@ -251,13 +252,13 @@ class ExportJustification:
         tindrà la seva propia fila a Actuacions.
         
         En el procés de fer-ho, aprofitem per desar el nº de row dins 
-        self.export_manager.stages_obj[id_projecte][nom_grup][row_number]
+        self.stages_obj[id_projecte][nom_grup][row_number]
         per poder-ho fer servir més endavant quan generem els rows de les 
         persones participants.
         """
 
         self.number_of_stages = 0
-        for project_id, project in self.export_manager.stages_obj.items():
+        for project_id, project in self.stages_obj.items():
             for group_name, group in project.items():
                 self.number_of_stages += 1
                 item = group['obj']
@@ -267,7 +268,7 @@ class ExportJustification:
                 # self.export_manager.row_number conté el row REAL, que com que inclou la fila
                 # de headers, és un més que la que s'assignarà com a
                 # referència.
-                self.export_manager.stages_obj[project_id][group_name][
+                self.stages_obj[project_id][group_name][
                     'row_number'
                 ] = self.export_manager.row_number - 1
 
@@ -424,7 +425,7 @@ class ExportJustification:
     def stages_rows(self):
         reference_number = self.number_of_activities
 
-        for p_id, stage in self.export_manager.stages_obj.items():
+        for p_id, stage in self.stages_obj.items():
             for group_name, group in stage.items():
                 self.export_manager.row_number += 1
                 reference_number += 1
@@ -557,7 +558,7 @@ class ExportJustification:
         self.participants_project_stages_rows()
 
     def participants_project_stages_rows(self):
-        for project_id, project in self.export_manager.stages_obj.items():
+        for project_id, project in self.stages_obj.items():
             for group_name, group in project.items():
                 activity = group['obj']
                 activity_reference_number = group['row_number']
