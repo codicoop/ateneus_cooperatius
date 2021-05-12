@@ -6,7 +6,6 @@ from dataexports.exports.justification_2_itineraris import (
     ExportJustification2Itineraris
 )
 from dataexports.exports.memory import ExportMemory
-from dataexports.models import DataExports
 
 
 class ExportFunctions:
@@ -25,10 +24,9 @@ class ExportFunctions:
 
     To use them, call callmethod('function_name')
     """
-    def callmethod(self, name):
-        if hasattr(self, name):
-            obj = DataExports.objects.get(function_name=name)
-            return getattr(self, name)(obj)
+    def callmethod(self, obj):
+        if hasattr(self, obj.function_name):
+            return getattr(self, obj.function_name)(obj)
         else:
             message = "<h1>La funció especificada no existeix</h1>"
             return HttpResponseNotFound(message)
