@@ -5,10 +5,7 @@ from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side, PatternFill
-from django.db.models import Q
 from django.conf import settings
-
-from cc_courses.models import Activity, Organizer
 
 
 class ExportManager:
@@ -66,40 +63,14 @@ class ExcelExportManager(ExportManager):
         super().__init__(export_obj)
         self.workbook = Workbook()
         self.worksheet = self.workbook.active
-
         self.stages_obj = None
-
         self.row_number = 1
-        self.number_of_activities = 0
-        self.number_of_stages = 0
-        self.number_of_nouniversitaris = 0
-        self.number_of_founded_projects = 0
-
         self.correlations = dict()
-        self.organizers = dict()  # Camp per Ateneu / Cercle
-        self.d_organizer = None
 
-        # La majoria d'ateneus volen que hi hagi una sola actuació per un
-        # projecte encara que hagi tingut diferents tipus d'acompanyament.
-        # CoopCamp (i potser algun altre?) volen separar-ho per itineraris,
-        # de manera que hi hagi una actuació per l'itinerari de Nova Creació i
-        # una pel de Consolidació.
-        # Per defecte ho definim per 1 itinerari.
-        self.stages_groups = {
-            1: 'nova_creacio',
-            2: 'nova_creacio',
-            6: 'nova_creacio',
-            7: 'nova_creacio',
-            8: 'nova_creacio',
-            9: 'nova_creacio'  # Era Incubació
-        }
         self.import_correlations(
             settings.BASE_DIR
             + "/../apps/dataexports/fixtures/correlations_2019.json"
         )
-
-        self.import_organizers()
-
 
     def return_document(self, name):
         """ Attention: non-ascii characters in the name will cause
@@ -163,29 +134,3 @@ class ExcelExportManager(ExportManager):
                     cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
                 cell_value = cell_value[0]
             cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
-
-    def import_organizers(self):
-        # Not forcing any order because we want it in the same order that
-        # they see (which should be by ID)
-        orgs = Organizer.objects.all()
-        if not orgs:
-            self.organizers.update({
-                0: 'Ateneu'
-            })
-        else:
-            i = 0
-            for org in orgs:
-                if i == 0:
-                    cercle = 'Ateneu'
-                else:
-                    cercle = f"Cercle {i}"
-                self.organizers.update({
-                    org.id: cercle
-                })
-                i += 1
-        self.d_organizer = list(self.organizers.keys())[0]
-
-    def get_organizer(self, organizer):
-        if not organizer:
-            return self.organizers[self.d_organizer]
-        return self.organizers[organizer.id]

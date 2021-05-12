@@ -8,6 +8,27 @@ from dataexports.exports.manager import ExcelExportManager
 class ExportJustification:
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
+        self.organizers = None
+        self.d_organizer = None
+        self.import_organizers()
+        self.number_of_activities = 0
+        self.number_of_stages = 0
+        self.number_of_nouniversitaris = 0
+        self.number_of_founded_projects = 0
+        # La majoria d'ateneus volen que hi hagi una sola actuació per un
+        # projecte encara que hagi tingut diferents tipus d'acompanyament.
+        # CoopCamp (i potser algun altre?) volen separar-ho per itineraris,
+        # de manera que hi hagi una actuació per l'itinerari de Nova Creació i
+        # una pel de Consolidació.
+        # Per defecte ho definim per 1 itinerari.
+        self.stages_groups = {
+            1: 'nova_creacio',
+            2: 'nova_creacio',
+            6: 'nova_creacio',
+            7: 'nova_creacio',
+            8: 'nova_creacio',
+            9: 'nova_creacio'  # Era Incubació
+        }
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
@@ -26,7 +47,7 @@ class ExportJustification:
         # they see (which should be by ID)
         orgs = Organizer.objects.all()
         if not orgs:
-            self.export_manager.organizers.update({
+            self.organizers.update({
                 0: 'Ateneu'
             })
         else:
@@ -36,13 +57,17 @@ class ExportJustification:
                     cercle = 'Ateneu'
                 else:
                     cercle = f"Cercle {i}"
-                self.export_manager.organizers.update({
+                self.organizers.update({
                     org.id: cercle
                 })
                 i += 1
-        self.export_manager.d_organizer = \
-        list(self.export_manager.organizers.keys())[0]
+        self.d_organizer = list(self.organizers.keys())[0]
 
+    def get_organizer(self, organizer):
+        if not organizer:
+            return self.organizers[self.d_organizer]
+        return self.organizers[organizer.id]
+    
     """
     
     Exportació Ateneu
@@ -91,7 +116,7 @@ class ExportJustification:
 
     def actuacions_rows_activities(self):
         obj = self.get_sessions_obj()
-        self.export_manager.number_of_activities = len(obj)
+        self.number_of_activities = len(obj)
         for item in obj:
             self.export_manager.row_number += 1
 
@@ -131,14 +156,12 @@ class ExportJustification:
     def actuacions_rows_stages(self):
         """
         Acompanyaments que han d'aparèixer:
-        - En cas que tingui algun acompanyament de tipus Nova Creació,
-          ha d'aparèixer fent la suma d'hores de tots els acompanyaments
-          d'aquet tipus.
-        - Idem però pels acompanyaments de Consolidació.
+        - Tots els que siguin tipus Creació o Consolidació.
         - Idem però pels acompanyaments d'Incubació.
-        Per tant com a màxim apareixerà 3 vegades.
+        Per tant com a màxim apareixerà 2 vegades.
 
-        TIPOLOGIA COVID: Pendent de saber què n'he de fer.
+        A banda hi ha l'exportació en 2 itineraris, on s'hi separaran els de
+        Creació i els de Consolidació.
         """
         obj = ProjectStage.objects.order_by('date_start').filter(
             subsidy_period=self.export_manager.subsidy_period
@@ -233,10 +256,10 @@ class ExportJustification:
         persones participants.
         """
 
-        self.export_manager.number_of_stages = 0
+        self.number_of_stages = 0
         for project_id, project in self.export_manager.stages_obj.items():
             for group_name, group in project.items():
-                self.export_manager.number_of_stages += 1
+                self.number_of_stages += 1
                 item = group['obj']
                 self.export_manager.row_number += 1
 
@@ -279,7 +302,7 @@ class ExportJustification:
 
     def actuacions_rows_nouniversitaris(self):
         obj = self.get_sessions_obj(for_minors=True)
-        self.export_manager.number_of_nouniversitaris = len(obj)
+        self.number_of_nouniversitaris = len(obj)
         for item in obj:
             self.export_manager.row_number += 1
 
@@ -336,7 +359,7 @@ class ExportJustification:
         """
         obj = Project.objects.filter(
             constitution_date__range=self.export_manager.subsidy_period_range)
-        self.export_manager.number_of_founded_projects = len(obj)
+        self.number_of_founded_projects = len(obj)
         for project in obj:
             stages = ProjectStage.objects.filter(
                 project=project,
@@ -399,7 +422,7 @@ class ExportJustification:
         self.stages_rows()
 
     def stages_rows(self):
-        reference_number = self.export_manager.number_of_activities
+        reference_number = self.number_of_activities
 
         for p_id, stage in self.export_manager.stages_obj.items():
             for group_name, group in stage.items():
@@ -457,9 +480,9 @@ class ExportJustification:
         # The Ids start at 1, so later we add 1 to this number to have the 
         # right ID.
         founded_projects_reference_number = \
-            self.export_manager.number_of_stages \
-            + self.export_manager.number_of_activities \
-            + self.export_manager.number_of_nouniversitaris
+            self.number_of_stages \
+            + self.number_of_activities \
+            + self.number_of_nouniversitaris
         obj = Project.objects.filter(
             constitution_date__range=self.export_manager.subsidy_period_range)
         for project in obj:
@@ -634,8 +657,8 @@ class ExportJustification:
 
     def nouniversitaris_rows(self):
         nouniversitari_reference_number = \
-            self.export_manager.number_of_stages \
-            + self.export_manager.number_of_activities
+            self.number_of_stages \
+            + self.number_of_activities
         obj = self.get_sessions_obj(for_minors=True)
         for activity in obj:
             self.export_manager.row_number += 1
