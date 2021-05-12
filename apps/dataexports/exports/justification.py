@@ -35,18 +35,7 @@ class ExportJustification:
     Exportació Ateneu
     
     """
-    def export_2020_2021_dos_itineraris(self):
-        self.export_manager.stages_groups = {
-            1: 'nova_creacio',
-            2: 'nova_creacio',
-            6: 'nova_creacio',
-            7: 'consolidacio',
-            8: 'consolidacio',
-            9: 'incubacio'
-        }
-        return self.export_2020_2021()
-
-    def export_2020_2021(self, export_obj):
+    def export(self, export_obj):
         self.export_manager.ignore_errors = export_obj.ignore_errors
         self.export_manager.subsidy_period = export_obj.subsidy_period
         self.export_manager.subsidy_period_range = (

@@ -23,7 +23,8 @@ class ExportManager:
         """
         if message:
             self.error_message.add(message)
-        message = "<h1>Error al generar el document</h1>" + " ".join(self.error_message)
+        message = "<h1>Error al generar el document</h1>" + " ".join(
+            self.error_message)
         return HttpResponseNotFound(message)
 
     def import_correlations(self, file_path):
