@@ -8,8 +8,8 @@ from dataexports.exports.manager import ExcelExportManager
 class ExportJustification:
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
-        self.organizers = None
-        self.d_organizer = None
+        self.organizers = dict()
+        self.d_organizer = dict()
         self.import_organizers()
         self.number_of_activities = 0
         self.number_of_stages = 0
@@ -22,12 +22,14 @@ class ExportJustification:
         # una pel de Consolidació.
         # Per defecte ho definim per 1 itinerari.
         self.stages_groups = {
-            1: 'nova_creacio',
-            2: 'nova_creacio',
-            6: 'nova_creacio',
-            7: 'nova_creacio',
-            8: 'nova_creacio',
-            9: 'nova_creacio'  # Era Incubació
+            # 1: 'nova_creacio',
+            # 2: 'nova_creacio',
+            # 6: 'nova_creacio',
+            # 7: 'nova_creacio',
+            # 8: 'nova_creacio',
+            9: 'creacio',  # Era Incubació
+            11: 'creacio',  # Creació
+            12: 'creacio',  # Consolidació
         }
         self.stages_obj = None
 
@@ -142,7 +144,7 @@ class ExportJustification:
                 subaxis,
                 item.name,
                 item.date_start,
-                self.export_manager.get_organizer(item.organizer),
+                self.get_organizer(item.organizer),
                 town,
                 item.enrolled.count(),
                 material_difusio,
@@ -169,9 +171,9 @@ class ExportJustification:
         )
         self.stages_obj = {}
         for item in obj:
-            if int(item.stage_type) not in self.export_manager.stages_groups:
+            if int(item.stage_type) not in self.stages_groups:
                 continue
-            group = self.export_manager.stages_groups[int(item.stage_type)]
+            group = self.stages_groups[int(item.stage_type)]
             p_id = item.project.id
             if p_id not in self.stages_obj:
                 self.stages_obj.update({
@@ -187,19 +189,18 @@ class ExportJustification:
                 })
             if item.hours is None:
                 item.hours = 0
-            self.stages_obj[p_id][group][
-                'total_hours'] += item.hours
+            self.stages_obj[p_id][group]['total_hours'] += item.hours_sum()
 
             # Aprofitem per omplir les dades dels participants aquí per no
             # repetir el procés més endavant. La qüestió és que encara que un
             # participant hagi participat a diversos acompanyaments, aquí
             # només aparegui una vegada.
             for participant in item.involved_partners.all():
-                if (participant
-                        not in self.stages_obj[p_id][group][
-                            'participants']):
-                    self.stages_obj[p_id][group][
-                        'participants'].append(
+                if (
+                        participant
+                        not in self.stages_obj[p_id][group]['participants']
+                ):
+                    self.stages_obj[p_id][group]['participants'].append(
                         participant
                     )
         """
@@ -288,7 +289,7 @@ class ExportJustification:
                     subaxis,
                     item.project.name,
                     item.date_start if not None else '',
-                    self.export_manager.get_organizer(item.stage_organizer),
+                    self.get_organizer(item.stage_organizer),
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
@@ -325,7 +326,7 @@ class ExportJustification:
                 subaxis,
                 item.name,
                 item.date_start,
-                self.export_manager.get_organizer(item.organizer),
+                self.get_organizer(item.organizer),
                 town,
                 item.minors_participants_number,
                 "No",
@@ -387,7 +388,7 @@ class ExportJustification:
                 subaxis,
                 project.name,
                 stage.date_start,
-                self.export_manager.get_organizer(stage.stage_organizer),
+                self.get_organizer(stage.stage_organizer),
                 town,
                 stage.involved_partners.count(),
                 "No",
@@ -444,8 +445,8 @@ class ExportJustification:
                     "Entitat",
                     # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
                     item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
-                    self.export_manager.get_correlation("project_status",
-                                                        item.project.project_status),
+                    self.export_manager.get_correlation(
+                        "project_status", item.project.project_status),
                     crea_consolida if crea_consolida else '',
                     # "Creació/consolidació".
                     item.date_start if item.date_start else '',
