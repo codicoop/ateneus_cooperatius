@@ -1,19 +1,24 @@
-from cc_courses.models import Activity, Organizer
+import json
+
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side, PatternFill
 from django.db.models import Q
-import json
+from django.conf import settings
+
+from cc_courses.models import Activity, Organizer
 
 
 class ExportManager:
-    def __init__(self):
-        self.ignore_errors = False
-        self.subsidy_period = None
-        self.subsidy_period_range = None
+    def __init__(self, export_obj):
         self.error_message = set()
+        self.ignore_errors = export_obj.ignore_errors
+        self.subsidy_period = export_obj.subsidy_period
+        self.subsidy_period_range = (
+            export_obj.subsidy_period.range
+        )
 
     def return_404(self, message=""):
         """When the exported data has to fit a specific format, there
@@ -57,8 +62,8 @@ class ExportManager:
 
 
 class ExcelExportManager(ExportManager):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, export_obj):
+        super().__init__(export_obj)
         self.workbook = Workbook()
         self.worksheet = self.workbook.active
 
@@ -88,6 +93,13 @@ class ExcelExportManager(ExportManager):
             8: 'nova_creacio',
             9: 'nova_creacio'  # Era Incubació
         }
+        self.import_correlations(
+            settings.BASE_DIR
+            + "/../apps/dataexports/fixtures/correlations_2019.json"
+        )
+
+        self.import_organizers()
+
 
     def return_document(self, name):
         """ Attention: non-ascii characters in the name will cause
@@ -105,16 +117,6 @@ class ExcelExportManager(ExportManager):
         )
         self.workbook.save(response)
         return response
-
-    def get_sessions_obj(self, for_minors=False):
-        return Activity.objects.filter(
-            Q(date_start__range=self.subsidy_period.range, for_minors=for_minors) &
-            (
-                Q(cofunded__isnull=True) | (
-                    Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
-                )
-            )
-        )
 
     def create_columns(self, columns):
         """ create_columns

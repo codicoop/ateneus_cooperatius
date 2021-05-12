@@ -11,14 +11,10 @@ class ExportMemory:
     Exportació de les memòries d'acompanyament a fitxer de text
 
     """
-    def __init__(self):
-        self.export_manager = ExportManager()
+    def __init__(self, export_obj):
+        self.export_manager = ExportManager(export_obj)
 
-    def export_stages_descriptions(self, export_obj):
-        self.export_manager.ignore_errors = export_obj.ignore_errors
-        self.export_manager.subsidy_period = export_obj.subsidy_period
-        self.export_manager.subsidy_period_range = export_obj.subsidy_period.range
-
+    def export_stages_descriptions(self):
         qs = ProjectStage.objects.filter(
             Q(subsidy_period=self.export_manager.subsidy_period)
             and

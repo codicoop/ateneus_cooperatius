@@ -1,12 +1,25 @@
+from django.db.models import Q
+
 from coopolis.models import ProjectStage, Project, EmploymentInsertion
-from cc_courses.models import Organizer
+from cc_courses.models import Organizer, Activity
 from dataexports.exports.manager import ExcelExportManager
-from django.conf import settings
 
 
 class ExportJustification:
-    def __init__(self):
-        self.export_manager = ExcelExportManager()
+    def __init__(self, export_obj):
+        self.export_manager = ExcelExportManager(export_obj)
+
+    def get_sessions_obj(self, for_minors=False):
+        return Activity.objects.filter(
+            Q(
+                date_start__range=self.export_manager.subsidy_period.range,
+                for_minors=for_minors) &
+            (
+                Q(cofunded__isnull=True) | (
+                    Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
+                )
+            )
+        )
 
     def import_organizers(self):
         # Not forcing any order because we want it in the same order that
@@ -35,21 +48,8 @@ class ExportJustification:
     Exportació Ateneu
     
     """
-    def export(self, export_obj):
-        self.export_manager.ignore_errors = export_obj.ignore_errors
-        self.export_manager.subsidy_period = export_obj.subsidy_period
-        self.export_manager.subsidy_period_range = (
-            export_obj.subsidy_period.range
-        )
-
-        self.export_manager.import_correlations(
-            settings.BASE_DIR 
-            + "/../apps/dataexports/fixtures/correlations_2019.json"
-        )
-
-        self.export_manager.import_organizers()
-
-        """ Each function here called handles the creation of one of the 
+    def export(self):
+        """ Each function here called handles the creation of one of the
         worksheets."""
         self.export_actuacions()
         self.export_stages()
@@ -90,7 +90,7 @@ class ExportJustification:
         # Total Stages: self.export_manager.row_number-Total Activities-1
 
     def actuacions_rows_activities(self):
-        obj = self.export_manager.get_sessions_obj()
+        obj = self.get_sessions_obj()
         self.export_manager.number_of_activities = len(obj)
         for item in obj:
             self.export_manager.row_number += 1
@@ -278,7 +278,7 @@ class ExportJustification:
                 self.export_manager.fill_row_data(row)
 
     def actuacions_rows_nouniversitaris(self):
-        obj = self.export_manager.get_sessions_obj(for_minors=True)
+        obj = self.get_sessions_obj(for_minors=True)
         self.export_manager.number_of_nouniversitaris = len(obj)
         for item in obj:
             self.export_manager.row_number += 1
@@ -575,7 +575,7 @@ class ExportJustification:
 
     def participants_rows(self):
         activity_reference_number = 0
-        obj = self.export_manager.get_sessions_obj(for_minors=False)
+        obj = self.get_sessions_obj(for_minors=False)
         for activity in obj:
             # We know that activities where generated first, so it starts at 1.
             activity_reference_number += 1
@@ -636,7 +636,7 @@ class ExportJustification:
         nouniversitari_reference_number = \
             self.export_manager.number_of_stages \
             + self.export_manager.number_of_activities
-        obj = self.export_manager.get_sessions_obj(for_minors=True)
+        obj = self.get_sessions_obj(for_minors=True)
         for activity in obj:
             self.export_manager.row_number += 1
             nouniversitari_reference_number += 1

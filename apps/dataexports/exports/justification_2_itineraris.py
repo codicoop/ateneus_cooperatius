@@ -8,7 +8,7 @@ class ExportJustification2Itineraris(ExportJustification):
 
     """
 
-    def export_dos_itineraris(self, export_obj):
+    def export_dos_itineraris(self):
         self.export_manager.stages_groups = {
             1: 'nova_creacio',
             2: 'nova_creacio',
@@ -17,4 +17,4 @@ class ExportJustification2Itineraris(ExportJustification):
             8: 'consolidacio',
             9: 'incubacio'
         }
-        return self.export(export_obj)
+        return self.export()

@@ -34,17 +34,17 @@ class ExportFunctions:
             return HttpResponseNotFound(message)
 
     def export_stages_descriptions(self, export_obj):
-        controller = ExportMemory()
-        return controller.export_stages_descriptions(export_obj)
+        controller = ExportMemory(export_obj)
+        return controller.export_stages_descriptions()
 
     def export(self, export_obj):
-        controller = ExportJustification()
-        return controller.export(export_obj)
+        controller = ExportJustification(export_obj)
+        return controller.export()
 
     def export_dos_itineraris(self, export_obj):
-        controller = ExportJustification2Itineraris()
-        return controller.export_dos_itineraris(export_obj)
+        controller = ExportJustification2Itineraris(export_obj)
+        return controller.export_dos_itineraris()
 
     def export_cofunded(self, export_obj):
-        controller = ExportJustificationCofunded()
-        return controller.export(export_obj)
+        controller = ExportJustificationCofunded(export_obj)
+        return controller.export()
