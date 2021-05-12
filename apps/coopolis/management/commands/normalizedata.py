@@ -70,39 +70,51 @@ class Command(BaseCommand):
         period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
         exports = (
             {
-                'name': "Exportació justificació",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_2019_2020',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació en 2 itineraris",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_2019_2020_dos_itineraris',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_2020_2021',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació en 2 itineraris",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_2020_2021_dos_itineraris',
-                'ignore_errors': True
-            },
-            {
                 'name': "Cofinançades",
                 'subsidy_period': period2019_2020,
-                'function_name': 'export_cofunded_2019_2020',
+                'function_name': 'export_cofunded',
                 'ignore_errors': True
             },
             {
                 'name': "Memòria dels acompanyaments en fitxer de text",
                 'subsidy_period': period2019_2020,
                 'function_name': 'export_stages_descriptions',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació en 2 itineraris",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export_dos_itineraris',
+                'ignore_errors': True
+            },
+            {
+                'name': "Cofinançades",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_cofunded',
+                'ignore_errors': True
+            },
+            {
+                'name': "Memòria dels acompanyaments en fitxer de text",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_stages_descriptions',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació en 2 itineraris",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_dos_itineraris',
                 'ignore_errors': True
             },
         )
