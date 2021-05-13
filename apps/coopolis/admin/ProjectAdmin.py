@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+from django.forms import models
 from django.urls import reverse, reverse_lazy
 from django_object_actions import DjangoObjectActions
 from django.contrib import admin
@@ -225,11 +227,68 @@ class ProjectStagesInline(admin.StackedInline):
         return fieldsets
 
 
+class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        for form in self.forms:
+            if not hasattr(form, 'cleaned_data'):
+                continue
+            data = form.cleaned_data
+            if 'DELETE' not in data:
+                # When there are no rows in the formset it still calls this
+                # clean() but with empty data.
+                continue
+            # Skipping the ones marked for deletion:
+            if data['DELETE']:
+                continue
+            # We're checking for all the rows because trying to check only
+            # for new ones will cause problems, as we'll need to check also
+            # for rows in which the user has been modified (or make the
+            # user row read only when editing).
+            # New (unsaved yet) ones will have data['id'] == None
+
+            user_errors = []
+            if not data['user'].surname:
+                user_errors.append("- Cognom.<br>")
+            if not data['user'].gender:
+                user_errors.append("- Gènere.<br>")
+            if not data['user'].birthdate:
+                user_errors.append("- Data de naixement.<br>")
+            if not data['user'].town:
+                user_errors.append("- Municipi.<br>")
+
+            cif_error = None
+            if not data['project'].cif:
+                cif_error = ("- NIF (el trobaràs més amunt en aquest mateix "
+                             "formulari).<br>")
+
+            if len(user_errors) == 0 and not cif_error:
+                continue
+            url = reverse(
+                'admin:coopolis_user_change',
+                kwargs={'object_id': data['user'].id}
+            )
+            url = f'<a href="{url}" target="_blank">Fitxa de la Persona</a>'
+            msg = (f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
+                   f"Projecte i de les Persones que normalment son opcionals, "
+                   f"però que per poder justificar les insercions laborals "
+                   f"son obligatoris.<br>")
+            if len(user_errors) > 0:
+                msg += f"De la {url}:<br>"
+                msg += "".join(user_errors)
+                msg += "<br>"
+            if cif_error:
+                msg += f"De la fitxa del Projecte:<br>{cif_error}"
+
+            raise ValidationError(mark_safe(msg))
+
+
 class EmploymentInsertionInline(admin.TabularInline):
     class Media:
         js = ('js/grappellihacks.js',)
 
     model = EmploymentInsertion
+    formset = EmploymentInsertionInlineFormSet
     extra = 0
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {
