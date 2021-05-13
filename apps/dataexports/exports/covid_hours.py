@@ -1,8 +1,11 @@
 from coopolis.models import ProjectStage
-from dataexports.exports.justification import ExportJustification
+from dataexports.exports.manager import ExcelExportManager
 
 
-class ExportCovidHours(ExportJustification):
+class ExportCovidHours:
+    def __init__(self, export_obj):
+        self.export_manager = ExcelExportManager(export_obj)
+
     def export(self):
         """ Each function here called handles the creation of one of the
         worksheets."""
