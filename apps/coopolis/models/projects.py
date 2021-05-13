@@ -514,7 +514,7 @@ class EmploymentInsertion(models.Model):
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
     insertion_date = models.DateField("alta seguretat social")
-    end_date = models.DateField("alta baixa social", null=True, blank=True)
+    end_date = models.DateField("baixa seg. social", null=True, blank=True)
     CONTRACT_TYPE_CHOICES = (
         (1, "Indefinit"),
         (5, "Temporal"),
