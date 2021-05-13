@@ -78,7 +78,7 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
             cif_error = ("- NIF (el trobaràs més amunt en aquest mateix "
                          "formulari).<br>")
 
-        if len(user_errors) == 0 and not cif_error:
+        if not user_errors and not cif_error:
             return True
         url = reverse(
             'admin:coopolis_user_change',
