@@ -89,7 +89,7 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
                f"Projecte i de les Persones que normalment son opcionals, "
                f"però que per poder justificar les insercions laborals "
                f"son obligatoris.<br>")
-        if len(user_errors) > 0:
+        if user_errors:
             msg += f"De la {url}:<br>"
             msg += "".join(user_errors)
             msg += "<br>"
