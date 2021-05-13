@@ -63,15 +63,14 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
             self.validate_extended_fields(data['user'], data['project'])
 
     def validate_extended_fields(self, user_obj, project_obj):
-        user_errors = []
-        if not user_obj.surname:
-            user_errors.append("- Cognom.<br>")
-        if not user_obj.gender:
-            user_errors.append("- Gènere.<br>")
-        if not user_obj.birthdate:
-            user_errors.append("- Data de naixement.<br>")
-        if not user_obj.town:
-            user_errors.append("- Municipi.<br>")
+        user_obj_errors = {
+            "surname": "- Cognom.<br />",
+            "gender": "- Gènere. <br/>",
+            "birthdate": "- Data de naixement.<br />",
+            "town": "- Municipi.<br />",
+        }
+        user_errors = [value for key, value in user_obj_errors.items() if
+                       not getattr(user_obj, key)]
 
         cif_error = None
         if not project_obj.cif:
