@@ -89,9 +89,7 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
                f"però que per poder justificar les insercions laborals "
                f"son obligatoris.<br>")
         if user_errors:
-            msg += f"De la {url}:<br>"
-            msg += "".join(user_errors)
-            msg += "<br>"
+            msg += f"De la {url}:<br /> {''.join(user_errors)}<br />"
         if cif_error:
             msg += f"De la fitxa del Projecte:<br>{cif_error}"
         raise ValidationError(mark_safe(msg))
