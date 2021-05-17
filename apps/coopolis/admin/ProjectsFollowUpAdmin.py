@@ -211,9 +211,11 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             totals['total_incubation_certificat'] += (
                 1 if row['incubation_certificat'] else 0
             )
+            insertions = row['project'].employment_insertions.filter(
+                subsidy_period=filtered_subsidy_period
+            )
             totals['total_employment_insertions'] += (
-                len(row['project'].employment_insertions.all())
-                if row['project'].employment_insertions else 0
+                len(insertions) if insertions else 0
             )
             totals['total_constitutions'] += (
                 1 if row['project'].constitution_date else 0
