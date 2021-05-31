@@ -125,7 +125,7 @@ class ExcelExportManager(ExportManager):
             ("second value", True),
         ]
         """
-        for col_num, cell_value in enumerate(row, 1):
+        for col_num, cell_value in enumerate(row, start=1):
             cell = self.worksheet.cell(row=self.row_number, column=col_num)
             if isinstance(cell_value, tuple):
                 error_mark = cell_value[1]
