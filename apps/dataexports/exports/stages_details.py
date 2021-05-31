@@ -45,24 +45,34 @@ class ExportStagesDetails:
                 return key
         return None
 
+    @staticmethod
+    def none_as_zero(value):
+        return value if value else 0
+
     def format_circles_data(self, data):
         template = self.get_data_structure()
         for item in data:
             print("Item:")
             pprint(item["hours_ateneu_certified"])
             # Ateneu
-            template["ateneu"][item["axis"]][2] = item["hours_ateneu_certified"]
-            template["ateneu"][item["axis"]][3] = item["hours_ateneu_uncertified"]
+            template["ateneu"][item["axis"]][2] = self.none_as_zero(
+                item["hours_ateneu_certified"]
+            )
+            template["ateneu"][item["axis"]][3] = self.none_as_zero(
+                item["hours_ateneu_uncertified"]
+            )
             if isinstance(item["hours_ateneu_certified"], numbers.Number):
                 template["ateneu"]["total"][2] += item["hours_ateneu_certified"]
             if isinstance(item["hours_ateneu_uncertified"], numbers.Number):
                 template["ateneu"]["total"][3] += item["hours_ateneu_uncertified"]
 
             # Cercle Migracions
-            template["circle_migrations"][item["axis"]][2] = \
+            template["circle_migrations"][item["axis"]][2] = self.none_as_zero(
                 item["hours_circle_migrations_certified"]
-            template["circle_migrations"][item["axis"]][3] = \
+            )
+            template["circle_migrations"][item["axis"]][3] = self.none_as_zero(
                 item["hours_circle_migrations_uncertified"]
+            )
             if isinstance(item["hours_circle_migrations_certified"], numbers.Number):
                 template["circle_migrations"]["total"][2] += \
                     item["hours_circle_migrations_certified"]
@@ -71,10 +81,12 @@ class ExportStagesDetails:
                     item["hours_circle_migrations_uncertified"]
 
             # Cercle canvi ecosocial
-            template["circle_eco"][item["axis"]][2] = \
+            template["circle_eco"][item["axis"]][2] = self.none_as_zero(
                 item["hours_circle_eco_certified"]
-            template["circle_eco"][item["axis"]][3] = \
+            )
+            template["circle_eco"][item["axis"]][3] = self.none_as_zero(
                 item["hours_circle_eco_uncertified"]
+            )
             if isinstance(item["hours_circle_eco_certified"], numbers.Number):
                 template["circle_eco"]["total"][2] += \
                     item["hours_circle_eco_certified"]
