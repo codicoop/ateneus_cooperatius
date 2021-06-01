@@ -1,7 +1,7 @@
 import numbers
 from pprint import pprint
 
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Count
 
 from coopolis.models import ProjectStage
 from coopolis.models.projects import ProjectStageSession
@@ -122,6 +122,7 @@ class StageDetailsDataManager:
 class CirclesPerUserDataManager(StageDetailsDataManager):
     def get_data(self):
         query = {
+            'sessions_number': Count('session_responsible'),
             'hours_ateneu_certified': Sum(
                 'hours',
                 filter=(
@@ -204,8 +205,7 @@ class CirclesPerUserDataManager(StageDetailsDataManager):
         return [
             item["session_responsible__first_name"],
             self.none_as_zero(
-                # item["sessions_ateneu"]
-                0  # TO DO: afegir el count
+                item["sessions_number"]
             ),
             self.none_as_zero(
                 item[f"hours_{circle}_certified"]
