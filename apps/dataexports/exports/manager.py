@@ -133,3 +133,33 @@ class ExcelExportManager(ExportManager):
                     cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
                 cell_value = cell_value[0]
             cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
+
+    def format_row(self, row_num, prop_name, obj):
+        """
+        Applies the given format to the given property to each of the cells of
+         the row.
+
+        :param row_num: int, row nº to modify.
+        :param prop_name: str, name of the property, ex: "fill"
+        :param obj: one of the openpyxl.styles objects
+        :return:
+        """
+        for col in range(1, self.worksheet.max_column + 1):
+            cell = self.worksheet.cell(row=row_num, column=col)
+            setattr(cell, prop_name, obj)
+
+    def format_row_header(self, row_num: int = None):
+        if not row_num:
+            row_num = self.row_number
+        format_obj = Font(bold=True, name="ttf-opensans", size=9)
+        self.format_row(
+            row_num,
+            "font",
+            format_obj
+        )
+        format_obj = Border(bottom=Side(border_style="thin", color='000000'))
+        self.format_row(
+            row_num,
+            "border",
+            format_obj
+        )

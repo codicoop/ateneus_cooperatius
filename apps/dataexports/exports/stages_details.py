@@ -168,29 +168,34 @@ class ExportStagesDetails:
             self.export_manager.fill_row_data(row)
 
     def circles_circle1_rows(self):
-        rows = [
-            [], [
-                "Cercle transició eco-social",
-                "Bases Convo",
-                "Justificades BO",
-                "Sense certificat BO",
-            ],
+        self.export_manager.row_number += 1
+        row = [
+            "Cercle transició eco-social",
+            "Bases Convo",
+            "Justificades BO",
+            "Sense certificat BO",
         ]
-        rows.extend(self.circles_data["circle_migrations"].values())
+        self.export_manager.row_number += 1
+        self.export_manager.fill_row_data(row)
+        self.export_manager.format_row_header()
+
+        rows = self.circles_data["circle_migrations"].values()
         for row in rows:
             self.export_manager.row_number += 1
             self.export_manager.fill_row_data(row)
 
     def circles_circle2_rows(self):
-        rows = [
-            [], [
-                "Cercle migracions",
-                "Bases Convo",
-                "Justificades BO",
-                "Sense certificat BO",
-            ],
+        self.export_manager.row_number += 1
+        row = [
+            "Cercle migracions",
+            "Bases Convo",
+            "Justificades BO",
+            "Sense certificat BO",
         ]
-        rows.extend(self.circles_data["circle_eco"].values())
+        self.export_manager.row_number += 1
+        self.export_manager.fill_row_data(row)
+        self.export_manager.format_row_header()
+        rows = self.circles_data["circle_eco"].values()
         for row in rows:
             self.export_manager.row_number += 1
             self.export_manager.fill_row_data(row)
