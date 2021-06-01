@@ -4,13 +4,14 @@ from pprint import pprint
 from django.db.models import Sum, Q, Count
 
 from coopolis.models import ProjectStage
-from coopolis.models.projects import ProjectStageSession
+from coopolis.models.projects import ProjectStageSession, StageSubtype
 from dataexports.exports.manager import ExcelExportManager
 
 
 class ExportStagesDetails:
     circles_data = None
     users_data = None
+    stage_types_data = None
 
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
@@ -20,14 +21,49 @@ class ExportStagesDetails:
         self.users_data = CirclesPerUserDataManager(
             self.export_manager.subsidy_period
         ).get_data()
+        self.stage_types_data = StageTypesDataManager(
+            self.export_manager.subsidy_period
+        ).get_data()
 
     def export(self):
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.export_circles()
-        # self.export_axis()
+        self.export_stage()
 
         return self.export_manager.return_document("detalls_acompanyaments")
+
+    def export_stage(self):
+        self.export_manager.worksheet = \
+            self.export_manager.workbook.create_sheet("Itinerari")
+        self.export_manager.row_number = 1
+
+        columns = [
+            ("Tipus d'acompanyament justifica.", 40),
+            ("Hores executades", 20),
+            ("Hores justificades", 20),
+            ("Hores sense certificat", 20),
+            ("Percentatge", 20),
+        ]
+        self.export_manager.create_columns(columns)
+        self.stage_totals_rows()
+
+    def stage_totals_rows(self):
+        for row in self.stage_types_data:
+            self.export_manager.row_number += 1
+            self.export_manager.fill_row_data(row)
+
+    def stage_creation_rows(self):
+        self.export_manager.row_number += 1
+        row = [
+            "Creació - Acollida",
+            "Número",
+            "Hores justificades",
+            "Hores sense certificat",
+        ]
+        self.export_manager.row_number += 1
+        self.export_manager.fill_row_data(row)
+        self.export_manager.format_row_header()
 
     def export_circles(self):
         self.export_manager.worksheet.title = "Ateneu-Cercles"
@@ -86,9 +122,7 @@ class ExportStagesDetails:
 
     def circles_ateneu_user_rows(self):
         for data in self.users_data.values():
-            pprint(data)
             verbose_name, values = data.values()
-            pprint(values)
             self.export_manager.row_number += 2
             row = [
                 verbose_name,
@@ -117,6 +151,180 @@ class StageDetailsDataManager:
     @staticmethod
     def none_as_zero(value):
         return value if value else 0
+
+
+class StageTypesDataManager(StageDetailsDataManager):
+    """
+    stage_subtypes will be populated with this scheme:
+    {1: 'Acollida', 2: 'Procés', 3: 'Constitució', 4: 'Acompanyament'}
+    """
+    stage_types = {
+        11: {
+            "verbose_name": "Creació",
+            "name": "creation",
+        },
+        12: {
+            "verbose_name": "Consolidació",
+            "name": "consolidation",
+        },
+    }
+    stage_subtypes = {}
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        qs = StageSubtype.objects.all()
+        for subtype in qs:
+            self.stage_subtypes.update({
+                subtype.pk: subtype.name
+            })
+        pprint(self.stage_subtypes)
+
+    def get_data(self):
+        stage_creation_totals_data = self.get_totals_data(
+            self.stage_types[11]
+        )
+        stage_consolidation_totals_data = self.get_totals_data(
+            self.stage_types[12]
+        )
+
+        return stage_creation_totals_data + stage_consolidation_totals_data
+
+    def get_totals_data(self, stage_type):
+        stage_type_name = stage_type["name"]
+        query = {
+            f"hours_{stage_type_name}_certified": Sum(
+                "stage_sessions__hours",
+                filter=(
+                    Q(scanned_certificate__isnull=False) &
+                    ~Q(scanned_certificate__exact='')
+                )
+            ),
+            f"hours_{stage_type_name}_uncertified": Sum(
+                "stage_sessions__hours",
+                filter=(
+                    Q(scanned_certificate__isnull=True) |
+                    Q(scanned_certificate__exact='')
+                )
+            ),
+        }
+        qs = ProjectStage.objects.filter(
+            subsidy_period=self.subsidy_period,
+            stage_type=11,
+        )
+        qs = (
+            qs
+                .values('stage_subtype')
+                .annotate(**query)
+        )
+        qs = qs.order_by()
+        data = self.format_totals_data(stage_type, qs)
+        return data
+
+    def format_totals_data(self, stage_type, qs):
+        """
+        IDEA:
+        Aprofitar que el query que ja tenim ara genera totes les combinacions de:
+        creation - Acollida
+        creation - Procés
+        creation - Constitució
+        consolidation - Acollida
+        consolidation - Acompanyament
+        :return:
+        """
+        data = []
+        for item in qs:
+            data.append(self.fill_total_row(stage_type, item))
+        pprint(data)
+        return data
+
+    def fill_total_row(self, stage_type, item):
+        cert = self.none_as_zero(
+            item[f"hours_{stage_type['name']}_certified"]
+        )
+        uncert = self.none_as_zero(
+            item[f"hours_{stage_type['name']}_uncertified"]
+        )
+        subtype_name = self.stage_subtypes[item['stage_subtype']]
+        return [
+            f"{stage_type['verbose_name']} - {subtype_name}",
+            cert + uncert,
+            cert,
+            uncert,
+            0,  # TODO: Percentage
+        ]
+
+
+class StagePerUserDataManager(StageDetailsDataManager):
+    def get_data(self):
+        for stage in self.stages:
+            for subtype in self.stage_subtypes:
+                query = {
+                    "sessions_number": Count('session_responsible'),
+                    f"hours_{stage['verbose_name']}_{subtype.name}_certified": Sum(
+                        'hours',
+                        filter=(
+                            Q(project_stage__scanned_certificate__isnull=False) &
+                            ~Q(project_stage__scanned_certificate__exact='')
+                        )
+                    ),
+                    f"hours_{stage['verbose_name']}_{subtype.name}_uncertified": Sum(
+                        'hours',
+                        filter=(
+                            Q(project_stage__scanned_certificate__isnull=True) |
+                            Q(project_stage__scanned_certificate__exact='')
+                        )
+                    ),
+                }
+        qs = ProjectStageSession.objects.filter(
+            project_stage__subsidy_period=self.subsidy_period,
+        )
+        qs = (
+            qs
+                .values('session_responsible__first_name')
+                .annotate(**query)
+        )
+        qs = qs.order_by()
+        pprint(qs)
+        data = self.format_data(qs)
+        return data
+
+    @staticmethod
+    def get_base_data_structure():
+        data = {
+            "creacio": {
+                "verbose_name": "Ateneu",
+                "values": [],
+            },
+            "consolidacio": {
+                "verbose_name": "Cercles migracions",
+                "values": [],
+            },
+        }
+        return data
+
+    def fill_user_data(self, circle, item):
+        return [
+            item["session_responsible__first_name"],
+            self.none_as_zero(
+                item["sessions_number"]
+            ),
+            self.none_as_zero(
+                item[f"hours_{circle}_certified"]
+            ),
+            self.none_as_zero(
+                item[f"hours_{circle}_uncertified"]
+            ),
+        ]
+
+    def format_data(self, data):
+        base_template = self.get_base_data_structure()
+        circles = [x for x in base_template.keys()]
+        for item in data:
+            for circle in circles:
+                base_template[circle]["values"].append(
+                    self.fill_user_data(circle, item)
+                )
+        return base_template
 
 
 class CirclesPerUserDataManager(StageDetailsDataManager):
