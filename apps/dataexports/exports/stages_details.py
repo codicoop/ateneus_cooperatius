@@ -4,17 +4,22 @@ from pprint import pprint
 from django.db.models import Sum, Q
 
 from coopolis.models import ProjectStage
+from coopolis.models.projects import ProjectStageSession
 from dataexports.exports.manager import ExcelExportManager
 
 
 class ExportStagesDetails:
     circles_data = None
+    users_data = None
 
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
         self.circles_data = CirclesDataManager(
             self.export_manager.subsidy_period
         ).get_circles_data()
+        self.users_data = CirclesPerUserDataManager(
+            self.export_manager.subsidy_period
+        ).get_data()
 
     def export(self):
         """ Each function here called handles the creation of one of the
@@ -38,7 +43,7 @@ class ExportStagesDetails:
         self.circles_ateneu_rows()
         self.circles_circle1_rows()
         self.circles_circle2_rows()
-        # self.circles_ateneu_users_rows()
+        self.circles_ateneu_user_rows()
 
     def circles_ateneu_rows(self):
         rows = list(self.circles_data["ateneu"].values())
@@ -79,17 +84,149 @@ class ExportStagesDetails:
             self.export_manager.row_number += 1
             self.export_manager.fill_row_data(row)
 
+    def circles_ateneu_user_rows(self):
+        for data in self.users_data.values():
+            pprint(data)
+            verbose_name, values = data.values()
+            pprint(values)
+            self.export_manager.row_number += 2
+            row = [
+                verbose_name,
+                "Número de SESSIONS",
+                "Hores justificades",
+                "Hores sense certificat",
+            ]
+            self.export_manager.row_number += 1
+            self.export_manager.fill_row_data(row)
+            self.export_manager.format_row_header()
 
-class CirclesDataManager:
+            for row in values:
+                self.export_manager.row_number += 1
+                self.export_manager.fill_row_data(row)
+
+
+class StageDetailsDataManager:
     organizer_ateneu_id = 5
     organizer_circle_migrations_id = 2
     organizer_circle_eco_id = 6
     subsidy_period = None
 
     def __init__(self, subsidy_period):
-        print(subsidy_period)
         self.subsidy_period = subsidy_period
 
+    @staticmethod
+    def none_as_zero(value):
+        return value if value else 0
+
+
+class CirclesPerUserDataManager(StageDetailsDataManager):
+    def get_data(self):
+        query = {
+            'hours_ateneu_certified': Sum(
+                'hours',
+                filter=(
+                    Q(project_stage__stage_organizer=self.organizer_ateneu_id) &
+                    Q(project_stage__scanned_certificate__isnull=False) &
+                    ~Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+            'hours_ateneu_uncertified': Sum(
+                'hours',
+                filter=(
+                    Q(project_stage__stage_organizer=self.organizer_ateneu_id) &
+                    Q(project_stage__scanned_certificate__isnull=True) |
+                    Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+            'hours_circle_migrations_certified': Sum(
+                'hours',
+                filter=(
+                    Q(project_stage__stage_organizer=self.organizer_circle_migrations_id) &
+                    Q(project_stage__scanned_certificate__isnull=False) &
+                    ~Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+            'hours_circle_migrations_uncertified': Sum(
+                'hours',
+                filter=(
+                    Q(project_stage__stage_organizer=self.organizer_circle_migrations_id) &
+                    Q(project_stage__scanned_certificate__isnull=True) |
+                    Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+            'hours_circle_eco_certified': Sum(
+                'hours',
+                filter=(
+                    Q(project_stage__stage_organizer=self.organizer_circle_eco_id) &
+                    Q(project_stage__scanned_certificate__isnull=False) &
+                    ~Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+            'hours_circle_eco_uncertified': Sum(
+                'hours',
+                filter=(
+                    Q(project_stage__stage_organizer=self.organizer_circle_eco_id) &
+                    Q(project_stage__scanned_certificate__isnull=True) |
+                    Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+        }
+        qs = ProjectStageSession.objects.filter(
+            project_stage__subsidy_period=self.subsidy_period,
+        )
+        qs = (
+            qs
+                .values('session_responsible__first_name')
+                .annotate(**query)
+        )
+        qs = qs.order_by()
+        data = self.format_data(qs)
+        return data
+
+    @staticmethod
+    def get_base_data_structure():
+        return {
+            "ateneu": {
+                "verbose_name": "Ateneu",
+                "values": [],
+            },
+            "circle_migrations": {
+                "verbose_name": "Cercles migracions",
+                "values": [],
+            },
+            "circle_eco": {
+                "verbose_name": "Cercles transició eco-social",
+                "values": [],
+            },
+        }
+
+    def fill_user_data(self, circle, item):
+        return [
+            item["session_responsible__first_name"],
+            self.none_as_zero(
+                # item["sessions_ateneu"]
+                0  # TO DO: afegir el count
+            ),
+            self.none_as_zero(
+                item[f"hours_{circle}_certified"]
+            ),
+            self.none_as_zero(
+                item[f"hours_{circle}_uncertified"]
+            ),
+        ]
+
+    def format_data(self, data):
+        base_template = self.get_base_data_structure()
+        circles = [x for x in base_template.keys()]
+        for item in data:
+            for circle in circles:
+                base_template[circle]["values"].append(
+                    self.fill_user_data(circle, item)
+                )
+        return base_template
+
+
+class CirclesDataManager(StageDetailsDataManager):
     @staticmethod
     def get_data_structure():
         return {
@@ -222,6 +359,7 @@ class CirclesDataManager:
             'hours_ateneu_uncertified': Sum(
                 'stage_sessions__hours',
                 filter=(
+                    Q(stage_organizer=self.organizer_ateneu_id) &
                     Q(scanned_certificate__isnull=True) |
                     Q(scanned_certificate__exact='')
                 )
@@ -237,6 +375,7 @@ class CirclesDataManager:
             'hours_circle_migrations_uncertified': Sum(
                 'stage_sessions__hours',
                 filter=(
+                    Q(stage_organizer=self.organizer_circle_migrations_id) &
                     Q(scanned_certificate__isnull=True) |
                     Q(scanned_certificate__exact='')
                 )
@@ -252,6 +391,7 @@ class CirclesDataManager:
             'hours_circle_eco_uncertified': Sum(
                 'stage_sessions__hours',
                 filter=(
+                    Q(stage_organizer=self.organizer_circle_eco_id) &
                     Q(scanned_certificate__isnull=True) |
                     Q(scanned_certificate__exact='')
                 )
@@ -273,8 +413,6 @@ class CirclesDataManager:
     def format_circles_data(self, data):
         template = self.get_data_structure()
         for item in data:
-            print("Item:")
-            pprint(item["hours_ateneu_certified"])
             # Ateneu
             template["ateneu"][item["axis"]][2] = self.none_as_zero(
                 item["hours_ateneu_certified"]
@@ -315,7 +453,3 @@ class CirclesDataManager:
                 template["circle_eco"]["total"][3] += \
                     item["hours_circle_eco_uncertified"]
         return template
-
-    @staticmethod
-    def none_as_zero(value):
-        return value if value else 0
