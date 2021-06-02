@@ -53,9 +53,12 @@ class ExportStagesDetails:
         self.stage_users_rows()
 
     def stage_totals_rows(self):
+        first_row = self.export_manager.row_number
+        rows_number = len(self.stage_types_data["totals"])
         for row in self.stage_types_data["totals"]:
             self.export_manager.row_number += 1
             self.export_manager.fill_row_data(row["totals"])
+            self.set_percent_cell(first_row, rows_number)
 
     def stage_users_rows(self):
         for stage_type in self.stage_types_data["users"].values():
