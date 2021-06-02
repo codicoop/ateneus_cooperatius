@@ -64,10 +64,12 @@ class ExportStagesDetails:
         for stage_type in self.stage_types_data["users"].values():
             stage_type_v_name = stage_type["verbose_name"]
             for stage_subtype in stage_type["subtypes"].values():
+                if not len(stage_subtype["users"]):
+                    continue
                 stage_subtype_v_name = stage_subtype["verbose_name"]
                 row = [
                     f"{stage_type_v_name} - {stage_subtype_v_name}",
-                    "Número",
+                    "Número de sessions",
                     "Hores justificades",
                     "Hores sense certificat",
                     "Percentatge"
