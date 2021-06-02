@@ -11,7 +11,7 @@ from dataexports.exports.manager import ExcelExportManager
 class ExportStagesDetails:
     circles_data = None
     users_data = None
-    stage_types_data = None
+    stage_types_data = {}
 
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
@@ -21,9 +21,13 @@ class ExportStagesDetails:
         self.users_data = CirclesPerUserDataManager(
             self.export_manager.subsidy_period
         ).get_data()
-        self.stage_types_data = StageTypesDataManager(
+        (
+            self.stage_types_data["totals"],
+            self.stage_types_data["users"]
+        ) = StageTypesDataManager(
             self.export_manager.subsidy_period
         ).get_data()
+        pprint(self.stage_types_data)
 
     def export(self):
         """ Each function here called handles the creation of one of the
@@ -47,23 +51,31 @@ class ExportStagesDetails:
         ]
         self.export_manager.create_columns(columns)
         self.stage_totals_rows()
+        self.stage_users_rows()
 
     def stage_totals_rows(self):
-        for row in self.stage_types_data:
+        for row in self.stage_types_data["totals"]:
             self.export_manager.row_number += 1
-            self.export_manager.fill_row_data(row)
+            self.export_manager.fill_row_data(row["totals"])
 
-    def stage_creation_rows(self):
-        self.export_manager.row_number += 1
-        row = [
-            "Creació - Acollida",
-            "Número",
-            "Hores justificades",
-            "Hores sense certificat",
-        ]
-        self.export_manager.row_number += 1
-        self.export_manager.fill_row_data(row)
-        self.export_manager.format_row_header()
+    def stage_users_rows(self):
+        for stage_type in self.stage_types_data["users"].values():
+            stage_type_v_name = stage_type["verbose_name"]
+            for stage_subtype in stage_type["subtypes"].values():
+                stage_subtype_v_name = stage_subtype["verbose_name"]
+                row = [
+                    f"{stage_type_v_name} - {stage_subtype_v_name}",
+                    "Número",
+                    "Hores justificades",
+                    "Hores sense certificat",
+                    "Percentatge"
+                ]
+                self.export_manager.row_number += 2
+                self.export_manager.fill_row_data(row)
+                self.export_manager.format_row_header()
+                for row in stage_subtype["users"]:
+                    self.export_manager.row_number += 1
+                    self.export_manager.fill_row_data(row)
 
     def export_circles(self):
         self.export_manager.worksheet.title = "Ateneu-Cercles"
@@ -177,17 +189,146 @@ class StageTypesDataManager(StageDetailsDataManager):
             self.stage_subtypes.update({
                 subtype.pk: subtype.name
             })
-        pprint(self.stage_subtypes)
 
     def get_data(self):
-        stage_creation_totals_data = self.get_totals_data(
+        creation_totals_data = self.get_totals_data(
             self.stage_types[11]
         )
-        stage_consolidation_totals_data = self.get_totals_data(
+        consolidation_totals_data = self.get_totals_data(
             self.stage_types[12]
         )
+        totals_data = creation_totals_data + consolidation_totals_data
+        users_data = self.get_users_data()
+        users_data = self.format_users_data(users_data)
+        return totals_data, users_data
 
-        return stage_creation_totals_data + stage_consolidation_totals_data
+    def get_users_data_scheme(self):
+        """
+        :return: dict with this scheme:
+                data = {
+            11: {
+                "verbose_name": "Foo",
+                "name": "foo",
+                "subtypes": {
+                    4: [ ],
+                    5 [ ],
+                }
+            },
+            12: {
+                "verbose_name": "Foo",
+                "name": "foo",
+                "subtypes": {
+                    4: [ ],
+                    5 [ ],
+                }
+            },
+        }
+        """
+        data = self.stage_types
+        for stage_type_key in data.keys():
+            data[stage_type_key].update({
+                "subtypes": {}
+            })
+            for stage_subtype in self.stage_subtypes.keys():
+                data[stage_type_key]["subtypes"].update({
+                    stage_subtype: {
+                        "verbose_name": self.stage_subtypes[stage_subtype],
+                        "users": []
+                    }
+                })
+        return data
+
+    def format_users_data(self, users_data):
+        """
+        :param users_data: queryset obtained from get_users_data()
+        :return: the dictionary from get_users_data_scheme() filled like this:
+        data = {
+            11: {
+                "verbose_name": "Stage Name",
+                "name": "stage_name",
+                "subtypes": {
+                    4: {
+                        "verbose_name": "Stage Subtype Name",
+                        "users": [
+                            ["Nom user", num_sessions, h_certificades, h_no_cert, percentage ],
+                            ["Nom user 2", num_sessions, h_certificades,h_no_cert, percentage ],
+                            ["Nom user 3", num_sessions, h_certificades,h_no_cert, percentage ],
+                        ],
+                    },
+                    5: {
+                        "verbose_name": "Stage Subtype Name",
+                        "users": [
+                            ["Nom user", num_sessions, h_certificades, h_no_cert, percentage ],
+                            ["Nom user 2", num_sessions, h_certificades,h_no_cert, percentage ],
+                            ["Nom user 3", num_sessions, h_certificades,h_no_cert, percentage ],
+                        ],
+                    },
+                },
+            },
+            12: {
+                [[ same structure ]]
+            },
+        }
+        """
+        data = self.get_users_data_scheme()
+        for user in users_data:
+            s_type = int(user["project_stage__stage_type"])
+            if s_type not in self.stage_types:
+                continue
+            s_type_name = self.stage_types[s_type]["name"]
+            s_subtype = int(user["project_stage__stage_subtype"])
+            subset = [
+                user["session_responsible__first_name"],
+                0,  # TODO: Nº de SESSIONS
+                user[f"hours_{s_type_name}_{s_subtype}_certified"],
+                user[f"hours_{s_type_name}_{s_subtype}_uncertified"],
+                0,  # TODO: Percentage
+            ]
+            data[s_type]["subtypes"][s_subtype]["users"].append(subset)
+        return data
+
+    def get_users_data(self):
+        query = {}
+        for stage_id, stage_type in self.stage_types.items():
+            stage_name = stage_type["name"]
+            for subtype_id in self.stage_subtypes.keys():
+                query.update({
+                    "sessions_number": Count('session_responsible'),
+                    f"hours_{stage_name}_{subtype_id}_certified": Sum(
+                        'hours',
+                        filter=(
+                            Q(project_stage__stage_type=stage_id) &
+                            Q(project_stage__stage_subtype=subtype_id) &
+                            Q(project_stage__scanned_certificate__isnull=False) &
+                            ~Q(project_stage__scanned_certificate__exact='')
+                        )
+                    ),
+                    f"hours_{stage_name}_{subtype_id}_uncertified": Sum(
+                        'hours',
+                        filter=(
+                            Q(project_stage__stage_type=stage_id) &
+                            Q(project_stage__stage_subtype=subtype_id) &
+                            Q(project_stage__scanned_certificate__isnull=True) |
+                            Q(project_stage__scanned_certificate__exact='')
+                        )
+                    ),
+                })
+        qs = ProjectStageSession.objects.filter(
+            project_stage__subsidy_period=self.subsidy_period,
+        )
+        qs = (
+            qs
+                .values(
+                    "session_responsible__first_name",
+                    "project_stage__stage_subtype",
+                    "project_stage__stage_subtype__name",
+                    "project_stage__stage_type",
+                )
+                .annotate(**query)
+        )
+        qs = qs.order_by()
+        data = qs
+        return data
 
     def get_totals_data(self, stage_type):
         stage_type_name = stage_type["name"]
@@ -233,8 +374,10 @@ class StageTypesDataManager(StageDetailsDataManager):
         """
         data = []
         for item in qs:
-            data.append(self.fill_total_row(stage_type, item))
-        pprint(data)
+            data.append({
+                "totals": self.fill_total_row(stage_type, item),
+                "users": [],
+            })
         return data
 
     def fill_total_row(self, stage_type, item):
@@ -256,37 +399,7 @@ class StageTypesDataManager(StageDetailsDataManager):
 
 class StagePerUserDataManager(StageDetailsDataManager):
     def get_data(self):
-        for stage in self.stages:
-            for subtype in self.stage_subtypes:
-                query = {
-                    "sessions_number": Count('session_responsible'),
-                    f"hours_{stage['verbose_name']}_{subtype.name}_certified": Sum(
-                        'hours',
-                        filter=(
-                            Q(project_stage__scanned_certificate__isnull=False) &
-                            ~Q(project_stage__scanned_certificate__exact='')
-                        )
-                    ),
-                    f"hours_{stage['verbose_name']}_{subtype.name}_uncertified": Sum(
-                        'hours',
-                        filter=(
-                            Q(project_stage__scanned_certificate__isnull=True) |
-                            Q(project_stage__scanned_certificate__exact='')
-                        )
-                    ),
-                }
-        qs = ProjectStageSession.objects.filter(
-            project_stage__subsidy_period=self.subsidy_period,
-        )
-        qs = (
-            qs
-                .values('session_responsible__first_name')
-                .annotate(**query)
-        )
-        qs = qs.order_by()
-        pprint(qs)
-        data = self.format_data(qs)
-        return data
+        pass
 
     @staticmethod
     def get_base_data_structure():
