@@ -423,49 +423,6 @@ class StageTypesDataManager(StageDetailsDataManager):
         ]
 
 
-class StagePerUserDataManager(StageDetailsDataManager):
-    def get_data(self):
-        pass
-
-    @staticmethod
-    def get_base_data_structure():
-        data = {
-            "creacio": {
-                "verbose_name": "Ateneu",
-                "values": [],
-            },
-            "consolidacio": {
-                "verbose_name": "Cercles migracions",
-                "values": [],
-            },
-        }
-        return data
-
-    def fill_user_data(self, circle, item):
-        return [
-            item["session_responsible__first_name"],
-            self.none_as_zero(
-                item["sessions_number"]
-            ),
-            self.none_as_zero(
-                item[f"hours_{circle}_certified"]
-            ),
-            self.none_as_zero(
-                item[f"hours_{circle}_uncertified"]
-            ),
-        ]
-
-    def format_data(self, data):
-        base_template = self.get_base_data_structure()
-        circles = [x for x in base_template.keys()]
-        for item in data:
-            for circle in circles:
-                base_template[circle]["values"].append(
-                    self.fill_user_data(circle, item)
-                )
-        return base_template
-
-
 class CirclesPerUserDataManager(StageDetailsDataManager):
     def get_data(self):
         query = {
