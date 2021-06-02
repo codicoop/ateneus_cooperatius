@@ -299,9 +299,15 @@ class StageTypesDataManager(StageDetailsDataManager):
             s_subtype = int(user["project_stage__stage_subtype"])
             subset = [
                 user["session_responsible__first_name"],
-                user["sessions_number"],
-                user[f"hours_{s_type_name}_{s_subtype}_certified"],
-                user[f"hours_{s_type_name}_{s_subtype}_uncertified"],
+                self.none_as_zero(
+                    user["sessions_number"]
+                ),
+                self.none_as_zero(
+                    user[f"hours_{s_type_name}_{s_subtype}_certified"]
+                ),
+                self.none_as_zero(
+                    user[f"hours_{s_type_name}_{s_subtype}_uncertified"]
+                ),
                 0,
             ]
             data[s_type]["subtypes"][s_subtype]["users"].append(subset)
