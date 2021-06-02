@@ -1,7 +1,7 @@
 import numbers
-from pprint import pprint
 
 from django.db.models import Sum, Q, Count
+from openpyxl.styles.numbers import FORMAT_PERCENTAGE
 
 from coopolis.models import ProjectStage
 from coopolis.models.projects import ProjectStageSession, StageSubtype
@@ -27,7 +27,6 @@ class ExportStagesDetails:
         ) = StageTypesDataManager(
             self.export_manager.subsidy_period
         ).get_data()
-        pprint(self.stage_types_data)
 
     def export(self):
         """ Each function here called handles the creation of one of the
@@ -73,9 +72,27 @@ class ExportStagesDetails:
                 self.export_manager.row_number += 2
                 self.export_manager.fill_row_data(row)
                 self.export_manager.format_row_header()
+                first_row = self.export_manager.row_number
+                rows_number = len(stage_subtype["users"])
                 for row in stage_subtype["users"]:
                     self.export_manager.row_number += 1
                     self.export_manager.fill_row_data(row)
+                    self.set_percent_cell(first_row, rows_number)
+
+    def set_percent_cell(self, first_row, rows_number):
+        last_row = first_row + rows_number
+        cur_row = self.export_manager.row_number
+        f_total_sum = f"SUM(C{first_row}:D{last_row})"
+        f_user_sum = f"SUM(C{cur_row}:D{cur_row})"
+        f = f"={f_user_sum}/{f_total_sum}"
+        self.export_manager.format_cell(
+            5,
+            cur_row,
+            "number_format",
+            FORMAT_PERCENTAGE
+        )
+        self.export_manager.set_cell_value(5, cur_row, f)
+        self.export_manager.format_cell_default_font(5, cur_row)
 
     def export_circles(self):
         self.export_manager.worksheet.title = "Ateneu-Cercles"
@@ -279,10 +296,10 @@ class StageTypesDataManager(StageDetailsDataManager):
             s_subtype = int(user["project_stage__stage_subtype"])
             subset = [
                 user["session_responsible__first_name"],
-                0,  # TODO: Nº de SESSIONS
+                user["sessions_number"],
                 user[f"hours_{s_type_name}_{s_subtype}_certified"],
                 user[f"hours_{s_type_name}_{s_subtype}_uncertified"],
-                0,  # TODO: Percentage
+                0,
             ]
             data[s_type]["subtypes"][s_subtype]["users"].append(subset)
         return data

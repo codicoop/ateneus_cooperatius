@@ -132,7 +132,7 @@ class ExcelExportManager(ExportManager):
                 if error_mark:
                     cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
                 cell_value = cell_value[0]
-            cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
+            cell.value = cell_value
 
     def format_row(self, row_num, prop_name, obj):
         """
@@ -145,8 +145,11 @@ class ExcelExportManager(ExportManager):
         :return:
         """
         for col in range(1, self.worksheet.max_column + 1):
-            cell = self.worksheet.cell(row=row_num, column=col)
-            setattr(cell, prop_name, obj)
+            self.format_cell(col, row_num, prop_name, obj)
+
+    def format_cell(self, col_num, row_num, prop_name, obj):
+        cell = self.worksheet.cell(column=col_num, row=row_num)
+        setattr(cell, prop_name, obj)
 
     def format_row_header(self, row_num: int = None):
         if not row_num:
@@ -163,3 +166,16 @@ class ExcelExportManager(ExportManager):
             "border",
             format_obj
         )
+
+    def format_cell_default_font(self, col_num, row_num):
+        format_obj = Font(name="ttf-opensans", size=9)
+        self.format_cell(
+            col_num,
+            row_num,
+            "font",
+            format_obj
+        )
+
+    def set_cell_value(self, col_num, row_num, value):
+        cell = self.worksheet.cell(row=row_num, column=col_num)
+        cell.value = value
