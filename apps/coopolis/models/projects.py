@@ -313,7 +313,7 @@ class ProjectStage(models.Model):
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
     date_start = models.DateField(
-        "data d'inici", null=False, blank=False,
+        "data creació acompanyament", null=False, blank=False,
         auto_now_add=True
     )
     date_end = models.DateField(
