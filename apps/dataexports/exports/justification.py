@@ -37,8 +37,8 @@ class ExportJustification:
         return Activity.objects.filter(
             Q(
                 date_start__range=self.export_manager.subsidy_period.range,
-                for_minors=for_minors) &
-            (
+                for_minors=for_minors
+            ) & (
                 Q(cofunded__isnull=True) | (
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
                 )
@@ -109,6 +109,8 @@ class ExportJustification:
             ("[Organitzadora]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
+            ("[Cofinançat]", 20),
+            ("[Cofinançat amb AACC]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -151,6 +153,8 @@ class ExportJustification:
                 str(item.organizer) if item.organizer else '',  # Organitzadora
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
+                str(item.cofunded),  # Cofinançat
+                "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -298,6 +302,8 @@ class ExportJustification:
                     str(item.stage_organizer) if item.stage_organizer else '',
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
+                    str(item.cofunded),  # Cofinançat
+                    "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 ]
                 self.export_manager.fill_row_data(row)
 
@@ -335,6 +341,8 @@ class ExportJustification:
                 str(item.entity) if item.organizer else '',  # Organitzadora
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
+                str(item.cofunded),  # Cofinançat
+                "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -398,6 +406,8 @@ class ExportJustification:
                 # Organitzadora
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
+                str(stage.cofunded),  # Cofinançat
+                "Sí" if stage.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
