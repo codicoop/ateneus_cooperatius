@@ -317,6 +317,9 @@ class ExportJustification:
             town = ("", True)
             if item.place.town:
                 town = str(item.place.town)
+            material_difusio = "No"
+            if item.file1.name:
+                material_difusio = "Sí"
 
             row = [
                 axis,
@@ -326,7 +329,7 @@ class ExportJustification:
                 self.get_organizer(item.organizer),
                 town,
                 item.minors_participants_number,
-                "No",
+                material_difusio,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
                 str(item.entity) if item.organizer else '',  # Organitzadora
