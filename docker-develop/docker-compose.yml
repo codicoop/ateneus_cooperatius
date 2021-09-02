@@ -26,6 +26,25 @@ services:
     networks:
       - develop_ateneus_network
     #entrypoint: ["sh", "-c", "sleep 2073600"]
+  ateneu-coopolis-automation:
+    container_name: develop_automation_coopolis
+    build:
+      context: ..
+      dockerfile: ./docker-develop/Dockerfile
+    environment:
+      - DB_HOST=develop_ateneus_db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopolis
+      - PYTHONPATH=/shared_libraries
+    command: python manage.py qcluster
+    volumes:
+      - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
+    depends_on:
+      - develop_ateneus_db
+    networks:
+      - develop_ateneus_network
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
 
   # http://ateneus-develop.codi.coop:5002
   ateneu-coopcamp:
