@@ -470,9 +470,12 @@ class ProjectStageSession(models.Model):
         default=datetime.date.today,
         null=True, blank=False
     )
-    hours = models.IntegerField(
-        "número d'hores", help_text="Camp necessari per la justificació.",
-        null=True, blank=True)
+    hours = models.FloatField(
+        "número d'hores",
+        help_text="Camp necessari per la justificació.",
+        null=True,
+        blank=True,
+    )
     follow_up = models.TextField("seguiment", null=True, blank=True)
     entity = models.ForeignKey(
         Entity, verbose_name="Entitat", default=None, null=True, blank=True,
