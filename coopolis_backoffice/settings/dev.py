@@ -616,4 +616,5 @@ Q_CLUSTER = {
     "name": "ateneus-backoffice",
     "orm": "default",  # Use Django's ORM + database for broker
     "timeout": 30,
+    "workers": 1,
 }
