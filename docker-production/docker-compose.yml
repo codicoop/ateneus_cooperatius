@@ -506,28 +506,6 @@ services:
       - db
       - ateneu-altpirineu
 
-  # Important: a l'afegir un nou ateneu, actualitzar el depends_on de l'Ofelia.
-
-  ofelia:
-    container_name: ofelia
-    image: 'mcuadros/ofelia:latest'
-    volumes:
-      - ./ofelia/config.ini:/etc/ofelia/config.ini
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - coopolis
-      - ateneu-coopcamp
-      - ateneu-coopmaresme
-      - ateneu-bnord
-      - ateneu-ponentcoopera
-      - ateneu-vallesoccidental
-      - ateneu-catcentral
-      - ateneu-coopsetania
-      - ateneu-terresgironines
-      - ateneu-hospitalet
-      - ateneu-terresebre
-      - ateneu-altpirineu
-
   # https://documentacio-backoffice.bcn.coop
   documentacio:
     restart: on-failure
