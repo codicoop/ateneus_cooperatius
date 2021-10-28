@@ -1,3 +1,8 @@
+from pprint import pprint
+
+from django.db.models import Count
+
+from cc_courses.models import Organizer
 from coopolis.models import ActivityPoll
 from dataexports.exports.manager import ExcelExportManager
 
@@ -50,6 +55,8 @@ class TitleRow(BaseRow):
 class ExportPolls:
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
+        self.organizers = dict()
+        self.import_organizers()
 
     def export(self):
         """ Each function here called handles the creation of one of the
@@ -64,24 +71,40 @@ class ExportPolls:
 
         columns = [
             ("", 60),
-            ("Ateneu Cooperatiu", 20),
-            ("Cercle 1", 20),
-            ("Cercle 2", 20),
-            ("Cercle 3", 20),
-            ("Cercle 4", 20),
+            (self.organizers.get(0), 20),
+            (self.organizers.get(1), 20),
+            (self.organizers.get(2), 20),
+            (self.organizers.get(3), 20),
+            (self.organizers.get(4), 20),
         ]
         self.export_manager.create_columns(columns)
 
         self.polls_rows()
 
     def global_report_obj(self):
-        return ActivityPoll.objects.filter(
-            created__range=self.export_manager.subsidy_period_range,
-        )
+        querysets = []
+        for organizer in self.organizers.values():
+            querysets.append(
+                ActivityPoll.objects.filter(
+                    created__range=self.export_manager.subsidy_period_range,
+                    activity__organizer=organizer,
+                )
+            )
+        # qs.annotate(Count("id"))
+        # qs.order_by()
+        return querysets
 
     def polls_rows(self):
+        querysets = self.global_report_obj()
+        pprint(querysets)
         rows = [
-            GlobalReportRow("Nombre d'enquestes de satisfacció valorades"),
+            GlobalReportRow(
+                "Nombre d'enquestes de satisfacció valorades",
+                querysets[0].count(),
+                querysets[1].count() if len(querysets) > 0 else "-",
+                querysets[2].count() if len(querysets) > 1 else "-",
+                querysets[3].count() if len(querysets) > 2 else "-",
+            ),
             EmptyRow(),
             GlobalReportRow("Valoracions globals"),
             GlobalReportRow("Valoració global de les actuacions"),
@@ -115,8 +138,16 @@ class ExportPolls:
             TitleRow("Valoració global"),
             GlobalReportRow("Grau de satisfacció general"),
         ]
-        # polls_obj = self.global_report_obj()
 
         for row in rows:
             self.export_manager.row_number += 1
             self.export_manager.fill_row_data(row.get_columns())
+
+    def import_organizers(self):
+        orgs = Organizer.objects.all()
+        i = 0
+        for org in orgs:
+            self.organizers.update({
+                i: org
+            })
+            i += 1
