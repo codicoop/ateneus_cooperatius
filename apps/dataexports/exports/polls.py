@@ -8,6 +8,11 @@ from coopolis.models import ActivityPoll
 from dataexports.exports.manager import ExcelExportManager
 
 
+class MissingOrganizers(Exception):
+    """The polls report is based in Organizers and no Organizer exists."""
+    pass
+
+
 class BaseRow:
     def get_columns(self) -> list:
         return []
@@ -101,16 +106,18 @@ class ExportPolls:
         self.export_manager = ExcelExportManager(export_obj)
         self.organizers = dict()
         self.import_organizers()
+        if not len(self.organizers):
+            raise MissingOrganizers
 
     def export(self):
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.export_polls()
 
-        return self.export_manager.return_document("hores_covid")
+        return self.export_manager.return_document("resultats_enquestes")
 
     def export_polls(self):
-        self.export_manager.worksheet.title = "Acompanyaments covid"
+        self.export_manager.worksheet.title = "Informe Global"
         self.export_manager.row_number = 1
 
         columns = [
@@ -136,10 +143,28 @@ class ExportPolls:
             )
         # qs.annotate(Count("id"))
         # qs.order_by()
-        return querysets
+        averages = {
+            "ateneu": self.get_averages_qs(querysets[0]),
+            "cercle1": {},
+            "cercle2": {},
+            "cercle3": {},
+            "cercle4": {},
+        }
+        total_organizers = len(self.organizers)
+        if total_organizers > 1:
+            averages["cercle1"] = self.get_averages_qs(querysets[1])
+        if total_organizers > 2:
+            averages["cercle2"] = self.get_averages_qs(querysets[2])
+        if total_organizers > 3:
+            averages["cercle3"] = self.get_averages_qs(querysets[3])
+        if total_organizers > 4:
+            averages["cercle4"] = self.get_averages_qs(querysets[4])
+
+        return querysets, averages
 
     def get_averages_qs(self, queryset):
         return queryset.aggregate(
+            Count("id"),
             Avg("duration"),
             Avg("hours"),
             Avg("information"),
@@ -155,8 +180,6 @@ class ExportPolls:
             Avg("teacher_has_communication_skills"),
             Avg("expectations_satisfied"),
             Avg("adquired_new_tools"),
-            # Avg("wanted_start_cooperative"),
-            # Avg("wants_start_cooperative_now"),
             Avg("general_satisfaction"),
             met_new_people_yes=Sum(
                 Case(
@@ -179,39 +202,60 @@ class ExportPolls:
                     default=0,
                 )
             ),
+            wanted_start_cooperative_yes=Sum(
+                Case(
+                    When(wanted_start_cooperative=True, then=Value(1)),
+                    output_field=IntegerField(),
+                    default=0,
+                )
+            ),
+            wanted_start_cooperative_no=Sum(
+                Case(
+                    When(wanted_start_cooperative=False, then=Value(1)),
+                    output_field=IntegerField(),
+                    default=0,
+                ),
+            ),
+            wanted_start_cooperative_empty=Sum(
+                Case(
+                    When(wanted_start_cooperative=None, then=Value(1)),
+                    output_field=IntegerField(),
+                    default=0,
+                )
+            ),
+            wants_start_cooperative_now_yes=Sum(
+                Case(
+                    When(wants_start_cooperative_now=True, then=Value(1)),
+                    output_field=IntegerField(),
+                    default=0,
+                )
+            ),
+            wants_start_cooperative_now_no=Sum(
+                Case(
+                    When(wants_start_cooperative_now=False, then=Value(1)),
+                    output_field=IntegerField(),
+                    default=0,
+                ),
+            ),
+            wants_start_cooperative_now_empty=Sum(
+                Case(
+                    When(wants_start_cooperative_now=None, then=Value(1)),
+                    output_field=IntegerField(),
+                    default=0,
+                )
+            ),
         )
 
     def polls_rows(self):
-        querysets = self.global_report_obj()
-        total_organizers = len(querysets)
-        if not total_organizers:
-            return
-        averages = {
-            "ateneu": self.get_averages_qs(querysets[0]),
-            "cercle1": {},
-            "cercle2": {},
-            "cercle3": {},
-            "cercle4": {},
-        }
-        if total_organizers > 1:
-            averages["cercle1"] = self.get_averages_qs(querysets[1])
-        if total_organizers > 2:
-            averages["cercle2"] = self.get_averages_qs(querysets[2])
-        if total_organizers > 3:
-            averages["cercle3"] = self.get_averages_qs(querysets[3])
-        if total_organizers > 4:
-            averages["cercle4"] = self.get_averages_qs(querysets[4])
-
-
-
+        querysets, averages = self.global_report_obj()
         rows = [
             GlobalReportRow(
                 "Nombre d'enquestes de satisfacció valorades",
-                querysets[0].count(),
-                querysets[1].count() if total_organizers > 1 else "-",
-                querysets[2].count() if total_organizers > 2 else "-",
-                querysets[3].count() if total_organizers > 3 else "-",
-                querysets[4].count() if total_organizers > 4 else "-",
+                averages["ateneu"]["id__count"],
+                averages["cercle1"]["id__count"],
+                averages["cercle2"]["id__count"],
+                averages["cercle3"]["id__count"],
+                averages["cercle4"]["id__count"],
             ),
             EmptyRow(),
             GlobalReportRow(
@@ -330,15 +374,61 @@ class ExportPolls:
                     averages["cercle4"].get("met_new_people_empty"),
                 ),
             ),
-            GlobalReportRow(
+            GlobalReportYesNoEmptyRow(
                 "Abans del curs, teníeu ganes/necessitats d'engegar algun projecte cooperatiu",
-                values_dict=averages,
-                values_dict_field="wanted_start_cooperative__avg",
+                (
+                    averages["ateneu"].get("wanted_start_cooperative_yes"),
+                    averages["ateneu"].get("wanted_start_cooperative_no"),
+                    averages["ateneu"].get("wanted_start_cooperative_empty"),
+                ),
+                (
+                    averages["cercle1"].get("wanted_start_cooperative_yes"),
+                    averages["cercle1"].get("wanted_start_cooperative_no"),
+                    averages["cercle1"].get("wanted_start_cooperative_empty"),
+                ),
+                (
+                    averages["cercle2"].get("wanted_start_cooperative_yes"),
+                    averages["cercle2"].get("wanted_start_cooperative_no"),
+                    averages["cercle2"].get("wanted_start_cooperative_empty"),
+                ),
+                (
+                    averages["cercle3"].get("wanted_start_cooperative_yes"),
+                    averages["cercle3"].get("wanted_start_cooperative_no"),
+                    averages["cercle3"].get("wanted_start_cooperative_empty"),
+                ),
+                (
+                    averages["cercle4"].get("wanted_start_cooperative_yes"),
+                    averages["cercle4"].get("wanted_start_cooperative_no"),
+                    averages["cercle4"].get("wanted_start_cooperative_empty"),
+                ),
             ),
-            GlobalReportRow(
+            GlobalReportYesNoEmptyRow(
                 "I després?",
-                values_dict=averages,
-                values_dict_field="wants_start_cooperative_now__avg",
+                (
+                    averages["ateneu"].get("wants_start_cooperative_now_yes"),
+                    averages["ateneu"].get("wants_start_cooperative_now_no"),
+                    averages["ateneu"].get("wants_start_cooperative_now_empty"),
+                ),
+                (
+                    averages["cercle1"].get("wants_start_cooperative_now_yes"),
+                    averages["cercle1"].get("wants_start_cooperative_now_no"),
+                    averages["cercle1"].get("wants_start_cooperative_now_empty"),
+                ),
+                (
+                    averages["cercle2"].get("wants_start_cooperative_now_yes"),
+                    averages["cercle2"].get("wants_start_cooperative_now_no"),
+                    averages["cercle2"].get("wants_start_cooperative_now_empty"),
+                ),
+                (
+                    averages["cercle3"].get("wants_start_cooperative_now_yes"),
+                    averages["cercle3"].get("wants_start_cooperative_now_no"),
+                    averages["cercle3"].get("wants_start_cooperative_now_empty"),
+                ),
+                (
+                    averages["cercle4"].get("wants_start_cooperative_now_yes"),
+                    averages["cercle4"].get("wants_start_cooperative_now_no"),
+                    averages["cercle4"].get("wants_start_cooperative_now_empty"),
+                ),
             ),
             EmptyRow(),
             TitleRow("Valoració global"),
