@@ -1,7 +1,9 @@
 from pprint import pprint
+from statistics import mean
 
 from django.db.models import Count, Avg, F, IntegerField, Case, When, Sum, \
-    Value
+    Value, Q, FloatField
+from django.db.models.functions import Coalesce
 
 from cc_courses.models import Organizer
 from coopolis.models import ActivityPoll
@@ -181,6 +183,24 @@ class ExportPolls:
             Avg("expectations_satisfied"),
             Avg("adquired_new_tools"),
             Avg("general_satisfaction"),
+            global_average=(
+                Avg("duration")
+                + Avg("hours")
+                + Avg("information")
+                + Avg("on_schedule")
+                + Avg("included_resources")
+                + Avg("space_adequation")
+                + Avg("contents")
+                + Avg("methodology_fulfilled_objectives")
+                + Avg("methodology_better_results")
+                + Avg("participation_system")
+                + Avg("teacher_has_knowledge")
+                + Avg("teacher_resolved_doubts")
+                + Avg("teacher_has_communication_skills")
+                + Avg("expectations_satisfied")
+                + Avg("adquired_new_tools")
+                + Avg("general_satisfaction")
+            ),
             met_new_people_yes=Sum(
                 Case(
                     When(met_new_people=True, then=Value(1)),
@@ -258,10 +278,17 @@ class ExportPolls:
                 averages["cercle4"]["id__count"],
             ),
             EmptyRow(),
-            GlobalReportRow(
+            TitleRow(
                 "Valoracions globals",
             ),
-            GlobalReportRow("Valoració global de les actuacions"),
+            GlobalReportRow(
+                "Valoració global de les actuacions",
+                self.get_global_average(averages["ateneu"]),
+                self.get_global_average(averages["cercle1"]),
+                self.get_global_average(averages["cercle2"]),
+                self.get_global_average(averages["cercle3"]),
+                self.get_global_average(averages["cercle4"]),
+            ),
             EmptyRow(),
             TitleRow("Organització"),
             GlobalReportRow(
@@ -451,3 +478,34 @@ class ExportPolls:
                 i: org
             })
             i += 1
+
+    def get_global_average(self, values: dict):
+        averageable_fields = [
+            "duration__avg",
+            "hours__avg",
+            "information__avg",
+            "on_schedule__avg",
+            "included_resources__avg",
+            "space_adequation__avg",
+            "contents__avg",
+            "methodology_fulfilled_objectives__avg",
+            "methodology_better_results__avg",
+            "participation_system__avg",
+            "teacher_has_knowledge__avg",
+            "teacher_resolved_doubts__avg",
+            "teacher_has_communication_skills__avg",
+            "expectations_satisfied__avg",
+            "adquired_new_tools__avg",
+            "general_satisfaction__avg",
+        ]
+        numbers = [
+            x
+            for key, x in values.items()
+            if key in averageable_fields
+               and x is not None
+        ]
+        # for key, x in values.items():
+        #     print(x, key)
+        #     if key in averageable_fields:
+        #         numbers.append(x)
+        return mean(numbers)
