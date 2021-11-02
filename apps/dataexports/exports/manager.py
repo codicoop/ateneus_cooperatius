@@ -134,6 +134,14 @@ class ExcelExportManager(ExportManager):
                 cell_value = cell_value[0]
             cell.value = cell_value
 
+    def fill_row_from_factory(self, row_factory):
+        self.row_number += 1
+        self.fill_row_data(row_factory.get_columns())
+        if row_factory.get_format_method():
+            getattr(self, row_factory.get_format_method()[0])(
+                row_factory.get_format_method()[1]
+            )
+
     def format_row(self, row_num, prop_name, obj):
         """
         Applies the given format to the given property to each of the cells of
