@@ -130,8 +130,37 @@ class ExportPolls:
         self.global_report()
         for axis in AXIS_OPTIONS:
             self.global_report(axis[0])
+        self.answers_list("also_interested_in", "AltresTemesInterès")
+        self.answers_list("heard_about_it", "ComUsHeuAssabentat")
+        self.answers_list("comments", "VolsComentarAlgunaCosaMés")
 
         return self.export_manager.return_document("resultats_enquestes")
+
+    def answers_list(self, question, title):
+        self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+            title
+        )
+        self.export_manager.row_number = 1
+        columns = [
+            ("Acumulació de respostes a aquesta pregunta", 80),
+        ]
+        self.export_manager.create_columns(columns)
+        obj = self.answers_list_obj(question)
+        self.answers_list_rows(obj, question)
+
+    def answers_list_rows(self, obj, question):
+        for poll_obj in obj:
+            answer = getattr(poll_obj, question)
+            if answer:
+                self.export_manager.row_number += 1
+                self.export_manager.fill_row_data(
+                    TitleRow(answer).get_columns()
+                )
+
+    def answers_list_obj(self, question):
+        return ActivityPoll.objects.filter(
+            activity__date_start__range=self.export_manager.subsidy_period_range,
+        )
 
     def global_report(self, axis: str = None):
         if axis:
