@@ -1,17 +1,24 @@
 from pprint import pprint
 from statistics import mean
 
-from django.db.models import Count, Avg, F, IntegerField, Case, When, Sum, \
-    Value, Q, FloatField
-from django.db.models.functions import Coalesce
+from django.db.models import (
+    Count, Avg, IntegerField, Case, When, Sum,
+    Value
+)
 
 from cc_courses.models import Organizer
 from coopolis.models import ActivityPoll
+from coopolis_backoffice.settings import AXIS_OPTIONS
 from dataexports.exports.manager import ExcelExportManager
 
 
 class MissingOrganizers(Exception):
     """The polls report is based in Organizers and no Organizer exists."""
+    pass
+
+
+class AxisDoesNotExistException(Exception):
+    """Trying to resolve the title of an axis that does not exist in settings."""
     pass
 
 
@@ -39,6 +46,12 @@ class GlobalReportYesNoEmptyRow(BaseRow):
 
     def to_yes_no_empty(self, values):
         if len(values) == 3:
+            if (
+                values[0] is None
+                or values[1] is None
+                or values[2] is None
+            ):
+                return "Sense dades"
             return f"Sí {values[0]}, No {values[1]}, Blanc {values[2]}"
         return "-"
 
@@ -114,12 +127,21 @@ class ExportPolls:
     def export(self):
         """ Each function here called handles the creation of one of the
         worksheets."""
-        self.export_polls()
+        self.global_report()
+        for axis in AXIS_OPTIONS:
+            self.global_report(axis[0])
 
         return self.export_manager.return_document("resultats_enquestes")
 
-    def export_polls(self):
-        self.export_manager.worksheet.title = "Informe Global"
+    def global_report(self, axis: str = None):
+        if axis:
+            self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+                self.get_axis_title(axis)
+            )
+        else:
+            # The first sheet is already created, just need to adjust name.
+            self.export_manager.worksheet.title = "Informe Global"
+
         self.export_manager.row_number = 1
 
         columns = [
@@ -132,16 +154,19 @@ class ExportPolls:
         ]
         self.export_manager.create_columns(columns)
 
-        self.polls_rows()
+        self.polls_rows(axis)
 
-    def global_report_obj(self):
+    def global_report_obj(self, axis: str = None):
         querysets = []
         for organizer in self.organizers.values():
-            querysets.append(
-                ActivityPoll.objects.filter(
+            qs = ActivityPoll.objects.filter(
                     activity__date_start__range=self.export_manager.subsidy_period_range,
                     activity__organizer=organizer,
                 )
+            if axis:
+                qs = qs.filter(activity__axis=axis)
+            querysets.append(
+                qs
             )
         # qs.annotate(Count("id"))
         # qs.order_by()
@@ -266,8 +291,8 @@ class ExportPolls:
             ),
         )
 
-    def polls_rows(self):
-        querysets, averages = self.global_report_obj()
+    def polls_rows(self, axis: str = None):
+        querysets, averages = self.global_report_obj(axis)
         rows = [
             GlobalReportRow(
                 "Nombre d'enquestes de satisfacció valorades",
@@ -504,8 +529,12 @@ class ExportPolls:
             if key in averageable_fields
                and x is not None
         ]
-        # for key, x in values.items():
-        #     print(x, key)
-        #     if key in averageable_fields:
-        #         numbers.append(x)
-        return mean(numbers)
+        if numbers:
+            return mean(numbers)
+        return 0
+
+    def get_axis_title(self, axis):
+        for axis_tuple in AXIS_OPTIONS:
+            if axis in axis_tuple:
+                return axis_tuple[1]
+        raise AxisDoesNotExistException
