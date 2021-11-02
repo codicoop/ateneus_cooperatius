@@ -1,4 +1,3 @@
-from pprint import pprint
 from statistics import mean
 
 from django.db.models import (
@@ -6,114 +5,18 @@ from django.db.models import (
     Value
 )
 
-from cc_courses.models import Organizer
+from cc_courses.models import Organizer, Activity
 from coopolis.models import ActivityPoll
 from coopolis_backoffice.settings import AXIS_OPTIONS
+from dataexports.exports.exceptions import (
+    MissingOrganizers,
+    AxisDoesNotExistException
+)
 from dataexports.exports.manager import ExcelExportManager
-
-
-class MissingOrganizers(Exception):
-    """The polls report is based in Organizers and no Organizer exists."""
-    pass
-
-
-class AxisDoesNotExistException(Exception):
-    """Trying to resolve the title of an axis that does not exist in settings."""
-    pass
-
-
-class BaseRow:
-    def get_columns(self) -> list:
-        return []
-
-
-class GlobalReportYesNoEmptyRow(BaseRow):
-    def __init__(
-        self,
-        title: str,
-        ateneu: tuple = (),
-        cercle1: tuple = (),
-        cercle2: tuple = (),
-        cercle3: tuple = (),
-        cercle4: tuple = (),
-    ):
-        self.title = title
-        self.ateneu = self.to_yes_no_empty(ateneu)
-        self.cercle1 = self.to_yes_no_empty(cercle1)
-        self.cercle2 = self.to_yes_no_empty(cercle2)
-        self.cercle3 = self.to_yes_no_empty(cercle3)
-        self.cercle4 = self.to_yes_no_empty(cercle4)
-
-    def to_yes_no_empty(self, values):
-        if len(values) == 3:
-            if (
-                values[0] is None
-                or values[1] is None
-                or values[2] is None
-            ):
-                return "Sense dades"
-            return f"Sí {values[0]}, No {values[1]}, Blanc {values[2]}"
-        return "-"
-
-    def get_columns(self) -> list:
-        return [
-            self.title,
-            self.ateneu,
-            self.cercle1,
-            self.cercle2,
-            self.cercle3,
-            self.cercle4,
-        ]
-
-
-class GlobalReportRow(BaseRow):
-    value_if_empty = "-"
-
-    def __init__(
-        self,
-        title: str,
-        ateneu: int = 0,
-        cercle1: int = 0,
-        cercle2: int = 0,
-        cercle3: int = 0,
-        cercle4: int = 0,
-        values_dict: dict = None,
-        values_dict_field: str = None,
-    ):
-        self.title = title
-        self.ateneu = ateneu
-        self.cercle1 = cercle1
-        self.cercle2 = cercle2
-        self.cercle3 = cercle3
-        self.cercle4 = cercle4
-        if values_dict and values_dict_field:
-            self.ateneu = values_dict["ateneu"].get(values_dict_field)
-            self.cercle1 = values_dict["cercle1"].get(values_dict_field)
-            self.cercle2 = values_dict["cercle2"].get(values_dict_field)
-            self.cercle3 = values_dict["cercle3"].get(values_dict_field)
-            self.cercle4 = values_dict["cercle4"].get(values_dict_field)
-
-    def get_columns(self) -> list:
-        return [
-            self.title,
-            round(self.ateneu, 1) if self.ateneu else self.value_if_empty,
-            round(self.cercle1, 1) if self.cercle1 else self.value_if_empty,
-            round(self.cercle2, 1) if self.cercle2 else self.value_if_empty,
-            round(self.cercle3, 1) if self.cercle3 else self.value_if_empty,
-            round(self.cercle4, 1) if self.cercle4 else self.value_if_empty,
-        ]
-
-
-class EmptyRow(BaseRow):
-    pass
-
-
-class TitleRow(BaseRow):
-    def __init__(self, title: str):
-        self.title = title
-
-    def get_columns(self) -> list:
-        return [self.title, ]
+from dataexports.exports.row_factories import (
+    EmptyRow, TitleWithValue,
+    TitleRow, TitleWithYesNoEmpty, GlobalReportRow, GlobalReportYesNoEmptyRow
+)
 
 
 class ExportPolls:
@@ -133,8 +36,243 @@ class ExportPolls:
         self.answers_list("also_interested_in", "AltresTemesInterès")
         self.answers_list("heard_about_it", "ComUsHeuAssabentat")
         self.answers_list("comments", "VolsComentarAlgunaCosaMés")
+        self.all_activities()
 
         return self.export_manager.return_document("resultats_enquestes")
+
+    def all_activities(self):
+        self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+            "BuidatTotal"
+        )
+        self.export_manager.row_number = 1
+        columns = [
+            ("Totals per sessió", 60),
+            ("", 20),
+        ]
+        self.export_manager.create_columns(columns)
+        self.all_activities_rows()
+
+    def all_activities_obj(self):
+        return (
+            Activity
+            .objects
+            .filter(
+                date_start__range=self.export_manager.subsidy_period_range,
+            )
+            .exclude(polls=None)
+            .annotate(
+                Avg("polls__duration"),
+                Avg("polls__hours"),
+                Avg("polls__information"),
+                Avg("polls__on_schedule"),
+                Avg("polls__included_resources"),
+                Avg("polls__space_adequation"),
+                Avg("polls__contents"),
+                Avg("polls__methodology_fulfilled_objectives"),
+                Avg("polls__methodology_better_results"),
+                Avg("polls__participation_system"),
+                Avg("polls__teacher_has_knowledge"),
+                Avg("polls__teacher_resolved_doubts"),
+                Avg("polls__teacher_has_communication_skills"),
+                Avg("polls__expectations_satisfied"),
+                Avg("polls__adquired_new_tools"),
+                Avg("polls__general_satisfaction"),
+                Count("polls"),
+                met_new_people_yes=Sum(
+                    Case(
+                        When(polls__met_new_people=True, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    )
+                ),
+                met_new_people_no=Sum(
+                    Case(
+                        When(polls__met_new_people=False, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    ),
+                ),
+                met_new_people_empty=Sum(
+                    Case(
+                        When(polls__met_new_people=None, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    )
+                ),
+                wanted_start_cooperative_yes=Sum(
+                    Case(
+                        When(polls__wanted_start_cooperative=True, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    )
+                ),
+                wanted_start_cooperative_no=Sum(
+                    Case(
+                        When(polls__wanted_start_cooperative=False, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    ),
+                ),
+                wanted_start_cooperative_empty=Sum(
+                    Case(
+                        When(polls__wanted_start_cooperative=None, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    )
+                ),
+                wants_start_cooperative_now_yes=Sum(
+                    Case(
+                        When(polls__wants_start_cooperative_now=True, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    )
+                ),
+                wants_start_cooperative_now_no=Sum(
+                    Case(
+                        When(polls__wants_start_cooperative_now=False, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    ),
+                ),
+                wants_start_cooperative_now_empty=Sum(
+                    Case(
+                        When(polls__wants_start_cooperative_now=None, then=Value(1)),
+                        output_field=IntegerField(),
+                        default=0,
+                    )
+                ),
+            )
+        )
+
+    def all_activities_rows(self):
+        obj = self.all_activities_obj()
+        for activity in obj:
+            rows = [
+                EmptyRow(),
+                EmptyRow(),
+                TitleWithValue("Nom de l'actuació", activity.name),
+                TitleWithValue("Eix", activity.axis),
+                TitleWithValue(
+                    "Tipus d'actuació",
+                    "Per menors" if activity.for_minors else "Per adults",
+                ),
+                TitleWithValue(
+                    "Cercle / Ateneu",
+                    activity.organizer.name if activity.organizer else "-",
+                ),
+                TitleWithValue(
+                    "Municipi",
+                    activity.place.town.name if activity.place and activity.place.town else "-",
+                ),
+                TitleWithValue(
+                    "Nombre de participants",
+                    len(activity.enrolled.all()),
+                ),
+                TitleWithValue(
+                    "Nombre d'enquestes rebudes",
+                    activity.polls__count,
+                ),
+                TitleRow("Organització"),
+                TitleWithValue("Durada", activity.polls__duration__avg),
+                TitleWithValue(
+                    "La durada ha estat l'adequada?",
+                    activity.polls__duration__avg,
+                ),
+                TitleWithValue(
+                    "Els horaris han estat adequats?",
+                    activity.polls__hours__avg,
+                ),
+                TitleWithValue(
+                    "Informació necessària per fer l'activitat",
+                    activity.polls__information__avg,
+                ),
+                TitleWithValue(
+                    "S'han complert les dates, horaris, etc...",
+                    activity.polls__on_schedule__avg,
+                ),
+                TitleWithValue(
+                    "Materials de suport facilitats",
+                    activity.polls__included_resources__avg,
+                ),
+                TitleWithValue(
+                    "Els espais han estat adequats (sales, aules, plataforma digital...)",
+                    activity.polls__space_adequation__avg,
+                ),
+                TitleRow("Continguts"),
+                TitleWithValue(
+                    "Els continguts han estat adequats",
+                    activity.polls__contents__avg,
+                ),
+                TitleRow("Metodologia"),
+                TitleWithValue(
+                    "La metodologia ha estat coherent amb els objectius",
+                    activity.polls__methodology_fulfilled_objectives__avg,
+                ),
+                TitleWithValue(
+                    "La metodologia ha permès obtenir millors resultats",
+                    activity.polls__methodology_better_results__avg,
+                ),
+                TitleWithValue(
+                    "El sistema de participació i resolució de dubtes ha estat adequat?",
+                    activity.polls__participation_system__avg,
+                ),
+                TitleRow("Valoració de la persona formadora"),
+                TitleWithValue(
+                    "Ha mostrat coneixements i experiència sobre el tema?",
+                    activity.polls__teacher_has_knowledge__avg,
+                ),
+                TitleWithValue(
+                    "Ha aconseguit resoldre els problemes i dubtes que s’ha plantejat?",
+                    activity.polls__teacher_resolved_doubts__avg,
+                ),
+                TitleWithValue(
+                    "El professional ha mostrat competències comunicatives?",
+                    activity.polls__teacher_has_communication_skills__avg,
+                ),
+                TitleRow("Utilitat del curs"),
+                TitleWithValue(
+                    "Ha satisfet les meves expectatives",
+                    activity.polls__expectations_satisfied__avg,
+                ),
+                TitleWithValue(
+                    "He incorporat eines per aplicar a nous projectes",
+                    activity.polls__adquired_new_tools__avg,
+                ),
+                TitleWithYesNoEmpty(
+                    "M'ha permès conèixer persones afins",
+                    (
+                        activity.met_new_people_yes,
+                        activity.met_new_people_no,
+                        activity.met_new_people_empty,
+                    ),
+                ),
+                TitleWithYesNoEmpty(
+                    "Abans del curs, teníeu ganes/necessitats d'engegar algun projecte cooperatiu",
+                    (
+                        activity.wanted_start_cooperative_yes,
+                        activity.wanted_start_cooperative_no,
+                        activity.wanted_start_cooperative_empty,
+                    ),
+                ),
+                TitleWithYesNoEmpty(
+                    "I després?",
+                    (
+                        activity.wants_start_cooperative_now_yes,
+                        activity.wants_start_cooperative_now_no,
+                        activity.wants_start_cooperative_now_empty,
+                    ),
+                ),
+                TitleRow("Valoració global"),
+                TitleWithValue(
+                    "Grau de satisfacció general",
+                    activity.polls__general_satisfaction__avg,
+                ),
+
+            ]
+
+            for row in rows:
+                self.export_manager.row_number += 1
+                self.export_manager.fill_row_data(row.get_columns())
 
     def answers_list(self, question, title):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
@@ -145,7 +283,7 @@ class ExportPolls:
             ("Acumulació de respostes a aquesta pregunta", 80),
         ]
         self.export_manager.create_columns(columns)
-        obj = self.answers_list_obj(question)
+        obj = self.answers_list_obj()
         self.answers_list_rows(obj, question)
 
     def answers_list_rows(self, obj, question):
@@ -157,7 +295,7 @@ class ExportPolls:
                     TitleRow(answer).get_columns()
                 )
 
-    def answers_list_obj(self, question):
+    def answers_list_obj(self):
         return ActivityPoll.objects.filter(
             activity__date_start__range=self.export_manager.subsidy_period_range,
         )
