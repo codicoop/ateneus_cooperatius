@@ -139,7 +139,7 @@ class ExportPolls:
         for organizer in self.organizers.values():
             querysets.append(
                 ActivityPoll.objects.filter(
-                    created__range=self.export_manager.subsidy_period_range,
+                    activity__date_start__range=self.export_manager.subsidy_period_range,
                     activity__organizer=organizer,
                 )
             )
