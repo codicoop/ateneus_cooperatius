@@ -5,6 +5,9 @@ class BaseRow:
     def get_columns(self) -> list:
         return []
 
+    def get_format_method(self):
+        return None
+
 
 class GlobalReportYesNoEmptyRow(BaseRow):
     def __init__(
@@ -87,7 +90,7 @@ class EmptyRow(BaseRow):
     pass
 
 
-class TitleRow(BaseRow):
+class TextRow(BaseRow):
     def __init__(self, title: str):
         self.title = title
 
@@ -95,20 +98,23 @@ class TitleRow(BaseRow):
         return [self.title, ]
 
 
-class TitleWithValue(TitleRow):
+class TitleRow(TextRow):
+    def get_format_method(self) -> tuple:
+        return "format_cell_bold", 1
+
+
+class TextWithValue(BaseRow):
     def __init__(self, title: str, value: Union[int, str] = 0):
-        super().__init__(title)
+        self.title = title
         self.value = value
 
     def get_columns(self) -> list:
-        cols = super().get_columns()
-        cols.append(self.value)
-        return cols
+        return [self.title, self.value]
 
 
-class TitleWithYesNoEmpty(TitleRow):
+class TextWithYesNoEmpty(BaseRow):
     def __init__(self, title: str, values: tuple = ()):
-        super().__init__(title)
+        self.title = title
         self.value = self.to_yes_no_empty(values)
 
     def to_yes_no_empty(self, values):
@@ -123,8 +129,4 @@ class TitleWithYesNoEmpty(TitleRow):
         return "-"
 
     def get_columns(self) -> list:
-        cols = super().get_columns()
-        cols.append(self.value)
-        return cols
-
-
+        return [self.title, self.value]

@@ -14,8 +14,9 @@ from dataexports.exports.exceptions import (
 )
 from dataexports.exports.manager import ExcelExportManager
 from dataexports.exports.row_factories import (
-    EmptyRow, TitleWithValue,
-    TitleRow, TitleWithYesNoEmpty, GlobalReportRow, GlobalReportYesNoEmptyRow
+    EmptyRow, TextWithValue,
+    TitleRow, TextWithYesNoEmpty, GlobalReportRow, GlobalReportYesNoEmptyRow,
+    TextRow
 )
 
 
@@ -150,95 +151,95 @@ class ExportPolls:
             rows = [
                 EmptyRow(),
                 EmptyRow(),
-                TitleWithValue("Nom de l'actuació", activity.name),
-                TitleWithValue("Eix", activity.axis),
-                TitleWithValue(
+                TextWithValue("Nom de l'actuació", activity.name),
+                TextWithValue("Eix", activity.axis),
+                TextWithValue(
                     "Tipus d'actuació",
                     "Per menors" if activity.for_minors else "Per adults",
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Cercle / Ateneu",
                     activity.organizer.name if activity.organizer else "-",
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Municipi",
                     activity.place.town.name if activity.place and activity.place.town else "-",
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Nombre de participants",
                     len(activity.enrolled.all()),
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Nombre d'enquestes rebudes",
                     activity.polls__count,
                 ),
                 TitleRow("Organització"),
-                TitleWithValue("Durada", activity.polls__duration__avg),
-                TitleWithValue(
+                TextWithValue("Durada", activity.polls__duration__avg),
+                TextWithValue(
                     "La durada ha estat l'adequada?",
                     activity.polls__duration__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Els horaris han estat adequats?",
                     activity.polls__hours__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Informació necessària per fer l'activitat",
                     activity.polls__information__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "S'han complert les dates, horaris, etc...",
                     activity.polls__on_schedule__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Materials de suport facilitats",
                     activity.polls__included_resources__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Els espais han estat adequats (sales, aules, plataforma digital...)",
                     activity.polls__space_adequation__avg,
                 ),
                 TitleRow("Continguts"),
-                TitleWithValue(
+                TextWithValue(
                     "Els continguts han estat adequats",
                     activity.polls__contents__avg,
                 ),
                 TitleRow("Metodologia"),
-                TitleWithValue(
+                TextWithValue(
                     "La metodologia ha estat coherent amb els objectius",
                     activity.polls__methodology_fulfilled_objectives__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "La metodologia ha permès obtenir millors resultats",
                     activity.polls__methodology_better_results__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "El sistema de participació i resolució de dubtes ha estat adequat?",
                     activity.polls__participation_system__avg,
                 ),
                 TitleRow("Valoració de la persona formadora"),
-                TitleWithValue(
+                TextWithValue(
                     "Ha mostrat coneixements i experiència sobre el tema?",
                     activity.polls__teacher_has_knowledge__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "Ha aconseguit resoldre els problemes i dubtes que s’ha plantejat?",
                     activity.polls__teacher_resolved_doubts__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "El professional ha mostrat competències comunicatives?",
                     activity.polls__teacher_has_communication_skills__avg,
                 ),
                 TitleRow("Utilitat del curs"),
-                TitleWithValue(
+                TextWithValue(
                     "Ha satisfet les meves expectatives",
                     activity.polls__expectations_satisfied__avg,
                 ),
-                TitleWithValue(
+                TextWithValue(
                     "He incorporat eines per aplicar a nous projectes",
                     activity.polls__adquired_new_tools__avg,
                 ),
-                TitleWithYesNoEmpty(
+                TextWithYesNoEmpty(
                     "M'ha permès conèixer persones afins",
                     (
                         activity.met_new_people_yes,
@@ -246,7 +247,7 @@ class ExportPolls:
                         activity.met_new_people_empty,
                     ),
                 ),
-                TitleWithYesNoEmpty(
+                TextWithYesNoEmpty(
                     "Abans del curs, teníeu ganes/necessitats d'engegar algun projecte cooperatiu",
                     (
                         activity.wanted_start_cooperative_yes,
@@ -254,7 +255,7 @@ class ExportPolls:
                         activity.wanted_start_cooperative_empty,
                     ),
                 ),
-                TitleWithYesNoEmpty(
+                TextWithYesNoEmpty(
                     "I després?",
                     (
                         activity.wants_start_cooperative_now_yes,
@@ -263,7 +264,7 @@ class ExportPolls:
                     ),
                 ),
                 TitleRow("Valoració global"),
-                TitleWithValue(
+                TextWithValue(
                     "Grau de satisfacció general",
                     activity.polls__general_satisfaction__avg,
                 ),
@@ -271,8 +272,7 @@ class ExportPolls:
             ]
 
             for row in rows:
-                self.export_manager.row_number += 1
-                self.export_manager.fill_row_data(row.get_columns())
+                self.export_manager.fill_row_from_factory(row)
 
     def answers_list(self, question, title):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
@@ -290,9 +290,8 @@ class ExportPolls:
         for poll_obj in obj:
             answer = getattr(poll_obj, question)
             if answer:
-                self.export_manager.row_number += 1
-                self.export_manager.fill_row_data(
-                    TitleRow(answer).get_columns()
+                self.export_manager.fill_row_from_factory(
+                    TextRow(answer)
                 )
 
     def answers_list_obj(self):
@@ -659,8 +658,7 @@ class ExportPolls:
         ]
 
         for row in rows:
-            self.export_manager.row_number += 1
-            self.export_manager.fill_row_data(row.get_columns())
+            self.export_manager.fill_row_from_factory(row)
 
     def import_organizers(self):
         orgs = Organizer.objects.all()
