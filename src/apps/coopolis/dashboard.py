@@ -35,7 +35,7 @@ class MyDashboard(Dashboard):
                     title="Gestió de reserves d'aules i sales",
                     column=1,
                     collapsible=False,
-                    models=('facilities_reservations.models.Reservation', 'facilities_reservations.models.Room'),
+                    models=('apps.facilities_reservations.models.Reservation', 'facilities_reservations.models.Room'),
                 )
             reservations_module_calendar = modules.LinkList(
                     title="Calendari de reserves",
@@ -56,20 +56,20 @@ class MyDashboard(Dashboard):
                 title='Accions i sessions',
                 column=1,
                 collapsible=False,
-                models=('cc_courses.models.Course', 'cc_courses.models.Activity',),
+                models=('apps.cc_courses.models.Course', 'cc_courses.models.Activity',),
             ),
             modules.ModelList(
                 title='Acompanyament de projectes',
                 column=1,
                 collapsible=False,
-                models=('coopolis.models.projects.Project', 'coopolis.models.projects.ProjectStage',
-                        'coopolis.models.projects.EmploymentInsertion', ),
+                models=('apps.coopolis.models.projects.Project', 'coopolis.models.projects.ProjectStage',
+                        'apps.coopolis.models.projects.EmploymentInsertion', ),
             ),
             modules.ModelList(
                 title='Seguiment de projectes',
                 column=1,
                 collapsible=False,
-                models=('coopolis.models.projects.ProjectsFollowUp', 'coopolis.models.projects.ProjectsConstituted', ),
+                models=('apps.coopolis.models.projects.ProjectsFollowUp', 'coopolis.models.projects.ProjectsConstituted', ),
             ),
             reservations_module_app,
             reservations_module_calendar,
@@ -77,19 +77,19 @@ class MyDashboard(Dashboard):
                 title="Gestió d'usuàries",
                 column=1,
                 collapsible=False,
-                models=('coopolis.models.users.User',),
+                models=('apps.coopolis.models.users.User',),
             ),
             modules.ModelList(
                 title="Exportació de dades per justificacions",
                 column=1,
                 collapsible=False,
-                models=('dataexports.models.DataExports', 'dataexports.models.SubsidyPeriod'),
+                models=('apps.dataexports.models.DataExports', 'dataexports.models.SubsidyPeriod'),
             ),
             modules.ModelList(
                 title="Gestió de dades",
                 column=1,
                 collapsible=False,
-                models=('cc_courses.models.Organizer', 'cc_courses.models.Entity', 'cc_courses.models.CoursePlace'),
+                models=('apps.cc_courses.models.Organizer', 'cc_courses.models.Entity', 'cc_courses.models.CoursePlace'),
             ),
         ]
 
