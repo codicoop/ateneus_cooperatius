@@ -3,7 +3,7 @@
 
 from django.apps import apps
 from django.contrib.auth import get_user_model
-from cc_lib.fixtures import DjangoFactory
+from src.apps.cc_lib import DjangoFactory
 
 
 class UserFactory(DjangoFactory):

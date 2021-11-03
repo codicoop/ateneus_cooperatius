@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from django.core.management.commands.flush import Command as Flush
 from django.db import DEFAULT_DB_ALIAS
 from django.conf import settings
-from cc_lib.utils import get_class_from_route
+from src.apps.cc_lib.utils import get_class_from_route
 import inspect
 import random
 import factory
