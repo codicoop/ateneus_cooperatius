@@ -102,7 +102,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'coopolis.context_processors.settings_values',
+                'apps.coopolis.context_processors.settings_values',
             ],
         },
     },
@@ -482,12 +482,12 @@ CONSTANCE_CONFIG_FIELDSETS = {
 # CC Courses
 
 COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
-COURSES_CLASS_TO_ENROLL = 'coopolis.User'
+COURSES_CLASS_TO_ENROLL = 'apps.coopolis.User'
 COURSES_CLASSES_CAN_ENROLL = ['cc_courses.models.Course']
 
 FIXTURE_FACTORIES = [
-    ('coopolis.tests.fixtures.UserFactory', {}),
-    ('coopolis.tests.fixtures.ProjectFactory', {}),
+    ('apps.coopolis.tests.fixtures.UserFactory', {}),
+    ('apps.coopolis.tests.fixtures.ProjectFactory', {}),
     ('cc_courses.tests.fixtures.CourseFactory', {}),
     ('cc_courses.tests.fixtures.EntityFactory', {}),
     ('cc_courses.tests.fixtures.CoursePlaceFactory', {}),
@@ -499,7 +499,7 @@ FIXTURE_FACTORIES = [
 STATIC_ROOT = 'static'
 
 
-SIGNUP_FORM = 'coopolis.forms.MySignUpForm'
+SIGNUP_FORM = 'apps.coopolis.forms.MySignUpForm'
 
 # Static texts and option fields
 ADMIN_SITE_TITLE = ''
@@ -584,7 +584,7 @@ CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE = '#808080'
 # Grappeli
 # (https://django-grappelli.readthedocs.io/en/latest/customization.html)
 GRAPPELLI_SWITCH_USER = False
-GRAPPELLI_INDEX_DASHBOARD = 'coopolis.dashboard.MyDashboard'
+GRAPPELLI_INDEX_DASHBOARD = 'apps.coopolis.dashboard.MyDashboard'
 
 THUMBNAIL_ALIASES = {
     '': {
