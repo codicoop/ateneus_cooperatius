@@ -11,7 +11,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
 from django.core.validators import ValidationError
 
-from apps.cc_lib import slugify_model
+from apps.cc_lib.utils import slugify_model
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.helpers import get_subaxis_choices
