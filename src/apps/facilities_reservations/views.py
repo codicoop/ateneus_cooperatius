@@ -6,7 +6,7 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 from django.conf import settings
 
-from facilities_reservations.models import Reservation, Room
+from apps.facilities_reservations.models import Reservation, Room
 from apps.cc_courses.models import Activity
 
 

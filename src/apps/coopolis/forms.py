@@ -16,7 +16,7 @@ from django.utils.timezone import make_aware
 from apps.coopolis.models import Project, User, ProjectStage, ActivityPoll
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.mixins import FormDistrictValidationMixin
-from facilities_reservations.models import Reservation
+from apps.facilities_reservations.models import Reservation
 
 
 class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
