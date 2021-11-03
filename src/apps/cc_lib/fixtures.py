@@ -3,7 +3,7 @@
 
 from factory.django import DjangoModelFactory
 import factory
-import src.apps.cc_lib.fixture_helpers as helpers
+import apps.cc_lib.fixture_helpers as helpers
 
 
 known_attributes = {

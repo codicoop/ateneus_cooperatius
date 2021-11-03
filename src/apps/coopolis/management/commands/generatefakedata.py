@@ -6,9 +6,9 @@ import factory.fuzzy as fuzzy
 from django.utils import timezone
 import datetime
 from cc_courses.models import Entity, Activity
-from src.apps.cc_lib.commands.generate_fakes_command import GenerateFakesCommand
+from apps.cc_lib.commands.generate_fakes_command import GenerateFakesCommand
 import factory
-from src.apps.cc_lib import tuplelize
+from apps.cc_lib import tuplelize
 
 
 class Command(GenerateFakesCommand):
@@ -32,7 +32,7 @@ class Command(GenerateFakesCommand):
         return entities
 
     def create_courses(self, factory, number=50, related=None):
-        from src.apps.cc_lib import fixture_helpers as helpers
+        from apps.cc_lib import fixture_helpers as helpers
         times = {
             'past': {
                 'date_start': helpers.one_past_moment_between_days(500, 365),

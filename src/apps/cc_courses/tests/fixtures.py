@@ -8,7 +8,7 @@ import datetime
 from django.conf import settings
 from django.utils import timezone
 from django.apps import apps
-from src.apps.cc_lib import storage_files
+from apps.cc_lib import storage_files
 
 
 fake = Faker()
