@@ -155,11 +155,14 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 name = "django-constance"
-version = "2.4.0"
+version = "2.8.0"
 description = "Django live settings with pluggable backends, including Redis."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
+
+[package.dependencies]
+django-picklefield = {version = "*", optional = true, markers = "extra == \"database\""}
 
 [package.extras]
 database = ["django-picklefield"]
@@ -654,7 +657,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "bb607ac986cd22ff9bef3e749df77cfd0453329c855fe6c6bd49edf8f302e6fa"
+content-hash = "b4d323a612213e7985c27d795ef1ae8b1a05e668decdd8ba3265127690155551"
 
 [metadata.files]
 ansicon = [
@@ -812,8 +815,8 @@ django = [
     {file = "Django-3.2.9.tar.gz", hash = "sha256:51284300f1522ffcdb07ccbdf676a307c6678659e1284f0618e5a774127a6a08"},
 ]
 django-constance = [
-    {file = "django-constance-2.4.0.tar.gz", hash = "sha256:417f9866a4fcd93c198acd16d5bc22b68e491eaabb18efea4c70d183d42daa45"},
-    {file = "django_constance-2.4.0-py2.py3-none-any.whl", hash = "sha256:19ff1ae8295aeffc2917ab67da4b310bfaf8c42f34d570f89e289fd54c4217b0"},
+    {file = "django-constance-2.8.0.tar.gz", hash = "sha256:0a492454acc78799ce7b9f7a28a00c53427d513f34f8bf6fdc90a46d8864b2af"},
+    {file = "django_constance-2.8.0-py3-none-any.whl", hash = "sha256:60fec73e397d5f4f7440f611b18d3e7ce5342647f316fedc47b62e1411c849e7"},
 ]
 django-environ = [
     {file = "django-environ-0.8.1.tar.gz", hash = "sha256:6f0bc902b43891656b20486938cba0861dc62892784a44919170719572a534cb"},
