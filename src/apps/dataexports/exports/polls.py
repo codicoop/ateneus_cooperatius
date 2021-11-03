@@ -1,5 +1,6 @@
 from statistics import mean
 
+from django.conf import settings
 from django.db.models import (
     Count, Avg, IntegerField, Case, When, Sum,
     Value
@@ -7,7 +8,6 @@ from django.db.models import (
 
 from apps.cc_courses.models import Organizer, Activity
 from apps.coopolis.models import ActivityPoll
-from coopolis_backoffice.settings import AXIS_OPTIONS
 from apps.dataexports.exports.exceptions import (
     MissingOrganizers,
     AxisDoesNotExistException
@@ -699,7 +699,7 @@ class ExportPolls:
         return 0
 
     def get_axis_title(self, axis):
-        for axis_tuple in AXIS_OPTIONS:
+        for axis_tuple in settings.AXIS_OPTIONS:
             if axis in axis_tuple:
                 return axis_tuple[1]
         raise AxisDoesNotExistException
