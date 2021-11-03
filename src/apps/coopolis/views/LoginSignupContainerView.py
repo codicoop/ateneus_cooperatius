@@ -8,8 +8,8 @@ from constance import config
 
 from cc_users.views import LoginView
 from cc_users.views import SignUpView
-from coopolis.models import User
-from coopolis.forms import MySignUpForm
+from apps.coopolis.models import User
+from apps.coopolis.forms import MySignUpForm
 from cc_users.forms import LogInForm
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 

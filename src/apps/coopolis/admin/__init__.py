@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.conf import settings
 
-from coopolis.models import (
+from apps.coopolis.models import (
     User, Project, ProjectStage, Derivation, EmploymentInsertion,
     ProjectsFollowUp, ProjectsConstituted, ActivityPoll, StageSubtype,
 )

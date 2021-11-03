@@ -4,8 +4,8 @@ from django.urls import reverse
 from django.views.generic import CreateView
 
 from cc_courses.models import Activity
-from coopolis.models import ActivityPoll
-from coopolis.forms import ActivityPollForm
+from apps.coopolis.models import ActivityPoll
+from apps.coopolis.forms import ActivityPollForm
 
 
 class ActivityPollView(CreateView):

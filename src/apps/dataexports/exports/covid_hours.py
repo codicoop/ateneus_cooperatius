@@ -1,4 +1,4 @@
-from coopolis.models import ProjectStage
+from apps.coopolis.models import ProjectStage
 from dataexports.exports.manager import ExcelExportManager
 
 

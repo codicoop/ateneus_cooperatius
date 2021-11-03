@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from coopolis.views import LoginSignupContainerView
+from apps.coopolis.views import LoginSignupContainerView
 
 
 class HomeView(LoginSignupContainerView):

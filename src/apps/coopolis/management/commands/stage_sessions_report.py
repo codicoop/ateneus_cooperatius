@@ -4,8 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from django.urls import reverse
 
-from coopolis.models import ProjectStage
-from coopolis.models.projects import ProjectStageSession, ProjectFile
+from apps.coopolis.models import ProjectStage
+from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
 from dataexports.models import SubsidyPeriod
 
 

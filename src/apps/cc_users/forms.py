@@ -3,8 +3,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 
-from coopolis.widgets import XDSoftDatePickerInput
-from coopolis.mixins import FormDistrictValidationMixin
+from apps.coopolis.widgets import XDSoftDatePickerInput
+from apps.coopolis.mixins import FormDistrictValidationMixin
 
 
 class SignUpForm(UserCreationForm):

@@ -1,8 +1,8 @@
 # From: https://docs.djangoproject.com/en/2.1/howto/custom-management-commands/
 
 from django.core.management.base import BaseCommand
-from coopolis.basedata import basedata_towns
-from coopolis.models import Town, User
+from apps.coopolis.basedata import basedata_towns
+from apps.coopolis.models import Town, User
 from django.core.management import call_command
 
 

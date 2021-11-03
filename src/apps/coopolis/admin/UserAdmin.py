@@ -8,7 +8,7 @@ from constance import config
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from coopolis.forms import MySignUpAdminForm
+from apps.coopolis.forms import MySignUpAdminForm
 from cc_courses.models import ActivityEnrolled
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 

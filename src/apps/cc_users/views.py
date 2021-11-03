@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm
-from coopolis.models import User
+from apps.coopolis.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 from urllib.parse import urljoin

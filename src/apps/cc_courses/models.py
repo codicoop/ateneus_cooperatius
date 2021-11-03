@@ -12,9 +12,9 @@ from django.apps import apps
 from django.core.validators import ValidationError
 
 from apps.cc_lib import slugify_model
-from coopolis.managers import Published
+from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
-from coopolis.helpers import get_subaxis_choices
+from apps.coopolis.helpers import get_subaxis_choices
 from apps.coopolis.storage_backends import (
     PrivateMediaStorage, PublicMediaStorage
 )

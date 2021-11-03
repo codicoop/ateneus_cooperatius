@@ -8,12 +8,12 @@ from constance import config
 from functools import update_wrapper
 from django.conf.urls import url
 
-from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
-from coopolis.forms import (
+from apps.coopolis.models import User, Project, ProjectStage, EmploymentInsertion
+from apps.coopolis.forms import (
     ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm,
     EmploymentInsertionInlineFormSet
 )
-from coopolis.models.projects import ProjectStageSession, ProjectFile
+from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 

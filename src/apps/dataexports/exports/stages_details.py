@@ -3,8 +3,8 @@ import numbers
 from django.db.models import Sum, Q, Count
 from openpyxl.styles.numbers import FORMAT_PERCENTAGE
 
-from coopolis.models import ProjectStage
-from coopolis.models.projects import ProjectStageSession, StageSubtype
+from apps.coopolis.models import ProjectStage
+from apps.coopolis.models.projects import ProjectStageSession, StageSubtype
 from dataexports.exports.manager import ExcelExportManager
 
 

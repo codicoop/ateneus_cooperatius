@@ -1,4 +1,4 @@
-from coopolis.models import ProjectStage
+from apps.coopolis.models import ProjectStage
 from django.http import HttpResponse
 from django.db.models import Q
 

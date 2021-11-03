@@ -5,9 +5,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from constance import config
 
-from coopolis.models import Project
-from coopolis.forms import ProjectForm
-from coopolis.views import LoginSignupContainerView
+from apps.coopolis.models import Project
+from apps.coopolis.forms import ProjectForm
+from apps.coopolis.views import LoginSignupContainerView
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 

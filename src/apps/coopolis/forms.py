@@ -6,16 +6,16 @@ from django.core.exceptions import ValidationError
 from django.forms import models
 from django.urls import reverse
 
-from coopolis.widgets import XDSoftDatePickerInput
+from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
 from django.conf import settings
 from datetime import datetime
 from django.utils.timezone import make_aware
 
-from coopolis.models import Project, User, ProjectStage, ActivityPoll
+from apps.coopolis.models import Project, User, ProjectStage, ActivityPoll
 from cc_courses.models import Activity, ActivityEnrolled
-from coopolis.mixins import FormDistrictValidationMixin
+from apps.coopolis.mixins import FormDistrictValidationMixin
 from facilities_reservations.models import Reservation
 
 

@@ -9,9 +9,9 @@ from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 import modelclone
 
-from coopolis.forms import ActivityForm, ActivityEnrolledForm
+from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
 from cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
-from coopolis.models import User
+from apps.coopolis.models import User
 from dataexports.models import SubsidyPeriod
 
 
