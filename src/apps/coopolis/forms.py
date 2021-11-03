@@ -16,7 +16,6 @@ from django.utils.timezone import make_aware
 from coopolis.models import Project, User, ProjectStage, ActivityPoll
 from cc_courses.models import Activity, ActivityEnrolled
 from coopolis.mixins import FormDistrictValidationMixin
-from dynamic_fields.fields import DynamicChoicesWidget
 from facilities_reservations.models import Reservation
 
 
@@ -239,27 +238,28 @@ class ProjectStageForm(forms.ModelForm):
     class Meta:
         model = ProjectStage
         fields = '__all__'
-        widgets = {
-            'subaxis': DynamicChoicesWidget(
-                depends_field='axis',
-                # This is supposed to be the model of a FK, but our subaxis
-                # field is not a FK
-                # but a dictionary in the settings. Turns out that it only
-                # wants the model to
-                # take its name and use it as identifier when rendering the
-                # HTML, so now that
-                # get_item_choices() is not using the model to return the
-                # values, we can put here
-                # any model, as a workaround.
-                # Best quality solution would be modify the library to make it
-                # model-optional.
-                model=ProjectStage,
-                callback=get_item_choices,
-                no_value_disable=True,
-                include_empty_choice=True,
-                empty_choice_label="Selecciona un sub-eix",
-            )
-        }
+        # TODO: Canviar això per una llibreria actualitzada
+        # widgets = {
+        #     'subaxis': DynamicChoicesWidget(
+        #         depends_field='axis',
+        #         # This is supposed to be the model of a FK, but our subaxis
+        #         # field is not a FK
+        #         # but a dictionary in the settings. Turns out that it only
+        #         # wants the model to
+        #         # take its name and use it as identifier when rendering the
+        #         # HTML, so now that
+        #         # get_item_choices() is not using the model to return the
+        #         # values, we can put here
+        #         # any model, as a workaround.
+        #         # Best quality solution would be modify the library to make it
+        #         # model-optional.
+        #         model=ProjectStage,
+        #         callback=get_item_choices,
+        #         no_value_disable=True,
+        #         include_empty_choice=True,
+        #         empty_choice_label="Selecciona un sub-eix",
+        #     )
+        # }
 
 
 class ActivityForm(forms.ModelForm):
@@ -273,27 +273,28 @@ class ActivityForm(forms.ModelForm):
             'minors_grade', 'minors_participants_number', 'minors_teacher',
             'room',
         )
-        widgets = {
-            'subaxis': DynamicChoicesWidget(
-                depends_field='axis',
-                # This is supposed to be the model of a FK, but our subaxis
-                # field is not a FK
-                # but a dictionary in the settings. Turns out that it only
-                # wants the model to
-                # take its name and use it as identifier when rendering the
-                # HTML, so now that
-                # get_item_choices() is not using the model to return the
-                # values, we can put here
-                # any model, as a workaround.
-                # Best quality solution would be modify the library to make it
-                # model-optional.
-                model=Activity,
-                callback=get_item_choices,
-                no_value_disable=True,
-                include_empty_choice=True,
-                empty_choice_label="Selecciona un sub-eix",
-            )
-        }
+        # TODO: Canviar això per una llibreria actualitzada
+        # widgets = {
+        #     'subaxis': DynamicChoicesWidget(
+        #         depends_field='axis',
+        #         # This is supposed to be the model of a FK, but our subaxis
+        #         # field is not a FK
+        #         # but a dictionary in the settings. Turns out that it only
+        #         # wants the model to
+        #         # take its name and use it as identifier when rendering the
+        #         # HTML, so now that
+        #         # get_item_choices() is not using the model to return the
+        #         # values, we can put here
+        #         # any model, as a workaround.
+        #         # Best quality solution would be modify the library to make it
+        #         # model-optional.
+        #         model=Activity,
+        #         callback=get_item_choices,
+        #         no_value_disable=True,
+        #         include_empty_choice=True,
+        #         empty_choice_label="Selecciona un sub-eix",
+        #     )
+        # }
 
     def clean(self):
         super(ActivityForm, self).clean()

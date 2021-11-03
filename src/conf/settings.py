@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'modelclone',
     'apps.coopolis.templatetags.my_tag_library',
-    'dynamic_fields',
     'mailqueue',
     'mailing_manager',
     'django.contrib.humanize',
