@@ -11,7 +11,7 @@ from apps.cc_users.views import SignUpView
 from apps.coopolis.models import User
 from apps.coopolis.forms import MySignUpForm
 from apps.cc_users.forms import LogInForm
-from coopolis_backoffice.custom_mail_manager import MyMailTemplate
+from conf.custom_mail_manager import MyMailTemplate
 
 
 class LoginSignupContainerView(TemplateView):

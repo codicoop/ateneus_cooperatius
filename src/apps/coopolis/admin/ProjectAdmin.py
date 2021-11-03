@@ -14,7 +14,7 @@ from apps.coopolis.forms import (
     EmploymentInsertionInlineFormSet
 )
 from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
-from coopolis_backoffice.custom_mail_manager import MyMailTemplate
+from conf.custom_mail_manager import MyMailTemplate
 
 
 class FilterByFounded(admin.SimpleListFilter):

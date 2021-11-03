@@ -18,7 +18,7 @@ from apps.coopolis.helpers import get_subaxis_choices
 from apps.coopolis.storage_backends import (
     PrivateMediaStorage, PublicMediaStorage
 )
-from coopolis_backoffice.custom_mail_manager import MyMailTemplate
+from conf.custom_mail_manager import MyMailTemplate
 
 
 class CoursePlace(models.Model):
