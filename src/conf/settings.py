@@ -88,7 +88,7 @@ MIDDLEWARE = [
     'maintenance_mode.middleware.MaintenanceModeMiddleware',
 ]
 
-ROOT_URLCONF = 'coopolis_backoffice.urls'
+ROOT_URLCONF = 'conf.urls'
 
 TEMPLATES = [
     {
@@ -108,7 +108,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'coopolis_backoffice.wsgi.application'
+WSGI_APPLICATION = 'conf.wsgi.application'
 
 
 # Password validation
@@ -160,8 +160,8 @@ LOGIN_URL = 'loginsignup'
 LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-AUTH_USER_MODEL = 'coopolis.User'
-DEV_SETTINGS_MODULE = 'coopolis_backoffice.settings.dev'
+AUTH_USER_MODEL = 'apps.coopolis.User'
+DEV_SETTINGS_MODULE = 'conf.settings'
 
 # APPS
 
