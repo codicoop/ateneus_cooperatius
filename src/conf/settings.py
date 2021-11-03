@@ -203,7 +203,7 @@ STATIC_URL = '/static/'
 LOGIN_URL = 'loginsignup'
 LOGIN_REDIRECT_URL = '/'
 
-AUTH_USER_MODEL = 'apps.coopolis.User'
+AUTH_USER_MODEL = 'coopolis.User'
 DEV_SETTINGS_MODULE = 'conf.settings'
 
 # APPS
@@ -513,7 +513,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
 # CC Courses
 
 COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
-COURSES_CLASS_TO_ENROLL = 'apps.coopolis.User'
+COURSES_CLASS_TO_ENROLL = 'coopolis.User'
 COURSES_CLASSES_CAN_ENROLL = ['apps.cc_courses.models.Course']
 
 FIXTURE_FACTORIES = [

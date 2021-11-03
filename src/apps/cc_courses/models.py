@@ -27,7 +27,7 @@ class CoursePlace(models.Model):
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     town = models.ForeignKey(
-        "apps.coopolis.Town",
+        "coopolis.Town",
         verbose_name="població",
         on_delete=models.SET_NULL,
         null=True,
@@ -193,7 +193,7 @@ class Activity(models.Model):
                   "s'activen si la sessió té una data futura."
     )
     enrolled = models.ManyToManyField(
-        "apps.coopolis.User",
+        "coopolis.User",
         blank=True,
         related_name='enrolled_activities',
         verbose_name="inscrites",
@@ -214,7 +214,7 @@ class Activity(models.Model):
         blank=True
     )
     responsible = models.ForeignKey(
-        "apps.coopolis.User",
+        "coopolis.User",
         verbose_name="persona responsable",
         blank=True,
         null=True,
@@ -282,7 +282,7 @@ class Activity(models.Model):
         null=True
     )
     minors_teacher = models.ForeignKey(
-        "apps.coopolis.User",
+        "coopolis.User",
         on_delete=models.SET_NULL,
         verbose_name="docent",
         null=True,
@@ -536,7 +536,7 @@ class ActivityEnrolled(models.Model):
         related_name="enrollments"
     )
     user = models.ForeignKey(
-        "apps.coopolis.User",
+        "coopolis.User",
         on_delete=models.CASCADE,
         verbose_name="persona",
         related_name="enrollments"
