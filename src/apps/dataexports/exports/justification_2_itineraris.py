@@ -1,4 +1,4 @@
-from dataexports.exports.justification import ExportJustification
+from apps.dataexports.exports.justification import ExportJustification
 
 
 class ExportJustification2Itineraris(ExportJustification):

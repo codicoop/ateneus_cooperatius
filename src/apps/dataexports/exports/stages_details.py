@@ -5,7 +5,7 @@ from openpyxl.styles.numbers import FORMAT_PERCENTAGE
 
 from apps.coopolis.models import ProjectStage
 from apps.coopolis.models.projects import ProjectStageSession, StageSubtype
-from dataexports.exports.manager import ExcelExportManager
+from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportStagesDetails:

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, reverse
 from django.utils.html import format_html
-from dataexports.models import DataExports, SubsidyPeriod
+from apps.dataexports.models import DataExports, SubsidyPeriod
 
 
 @admin.register(SubsidyPeriod)
@@ -51,7 +51,7 @@ class DataExportsAdmin(admin.ModelAdmin):
     export_data_field.short_description = 'Exportar'
 
     def export_data(self, request, _id):
-        from dataexports.export_functions import ExportFunctions
+        from apps.dataexports.export_functions import ExportFunctions
         obj = DataExports.objects.get(id=_id)
         instance = ExportFunctions()
         return instance.callmethod(obj)

@@ -1,14 +1,14 @@
 from django.http import HttpResponseNotFound
 
-from dataexports.exports.cofunded import ExportJustificationCofunded
-from dataexports.exports.covid_hours import ExportCovidHours
-from dataexports.exports.justification import ExportJustification
-from dataexports.exports.justification_2_itineraris import (
+from apps.dataexports.exports.cofunded import ExportJustificationCofunded
+from apps.dataexports.exports.covid_hours import ExportCovidHours
+from apps.dataexports.exports.justification import ExportJustification
+from apps.dataexports.exports.justification_2_itineraris import (
     ExportJustification2Itineraris
 )
-from dataexports.exports.memory import ExportMemory
-from dataexports.exports.polls import ExportPolls
-from dataexports.exports.stages_details import ExportStagesDetails
+from apps.dataexports.exports.memory import ExportMemory
+from apps.dataexports.exports.polls import ExportPolls
+from apps.dataexports.exports.stages_details import ExportStagesDetails
 
 
 class ExportFunctions:

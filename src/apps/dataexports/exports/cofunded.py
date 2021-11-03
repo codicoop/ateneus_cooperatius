@@ -1,5 +1,5 @@
 from apps.cc_courses.models import Activity
-from dataexports.exports.justification import ExportJustification
+from apps.dataexports.exports.justification import ExportJustification
 from django.conf import settings
 
 

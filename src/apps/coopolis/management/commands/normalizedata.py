@@ -7,7 +7,7 @@ from datetime import date
 from django.db import IntegrityError
 from django_q.tasks import schedule
 
-from dataexports.models import SubsidyPeriod, DataExports
+from apps.dataexports.models import SubsidyPeriod, DataExports
 
 
 class Command(BaseCommand):

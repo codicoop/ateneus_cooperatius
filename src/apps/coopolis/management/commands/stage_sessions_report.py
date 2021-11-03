@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from apps.coopolis.models import ProjectStage
 from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
-from dataexports.models import SubsidyPeriod
+from apps.dataexports.models import SubsidyPeriod
 
 
 class Command(BaseCommand):

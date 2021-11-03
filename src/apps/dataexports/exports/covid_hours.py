@@ -1,5 +1,5 @@
 from apps.coopolis.models import ProjectStage
-from dataexports.exports.manager import ExcelExportManager
+from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportCovidHours:

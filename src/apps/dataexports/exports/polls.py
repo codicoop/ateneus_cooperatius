@@ -8,12 +8,12 @@ from django.db.models import (
 from apps.cc_courses.models import Organizer, Activity
 from apps.coopolis.models import ActivityPoll
 from coopolis_backoffice.settings import AXIS_OPTIONS
-from dataexports.exports.exceptions import (
+from apps.dataexports.exports.exceptions import (
     MissingOrganizers,
     AxisDoesNotExistException
 )
-from dataexports.exports.manager import ExcelExportManager
-from dataexports.exports.row_factories import (
+from apps.dataexports.exports.manager import ExcelExportManager
+from apps.dataexports.exports.row_factories import (
     EmptyRow, TextWithValue,
     TitleRow, TextWithYesNoEmpty, GlobalReportRow, GlobalReportYesNoEmptyRow,
     TextRow

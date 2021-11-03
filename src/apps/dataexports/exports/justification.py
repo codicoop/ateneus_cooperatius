@@ -2,7 +2,7 @@ from django.db.models import Q
 
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Organizer, Activity
-from dataexports.exports.manager import ExcelExportManager
+from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportJustification:

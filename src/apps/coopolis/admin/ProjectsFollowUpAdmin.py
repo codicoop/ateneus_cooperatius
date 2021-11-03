@@ -10,7 +10,7 @@ from openpyxl.styles import Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
 
 from .ProjectAdmin import FilterByFounded
-from dataexports.models import SubsidyPeriod
+from apps.dataexports.models import SubsidyPeriod
 from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp
 from ..models import User
 
