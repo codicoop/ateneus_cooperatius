@@ -11,7 +11,7 @@ from .views import (
     LoginSignupContainerView,CoopolisSignUpView, CoopolisLoginView,
     HomeView, CustomPasswordResetView, ActivityPollView
 )
-from cc_users.decorators import anonymous_required
+from apps.cc_users.decorators import anonymous_required
 from .views.HomeView import StagesMigrationReportView
 
 urlpatterns = [
