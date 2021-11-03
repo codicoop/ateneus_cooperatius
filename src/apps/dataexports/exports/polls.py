@@ -32,7 +32,7 @@ class ExportPolls:
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.global_report()
-        for axis in AXIS_OPTIONS:
+        for axis in settings.AXIS_OPTIONS:
             self.global_report(axis[0])
         self.answers_list("also_interested_in", "AltresTemesInterès")
         self.answers_list("heard_about_it", "ComUsHeuAssabentat")
