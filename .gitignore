@@ -13,3 +13,4 @@ local_*.py
 /docker-develop/django-settings/
 /static/
 /dumps/
+src/conf/maintenance_mode_state.txt
