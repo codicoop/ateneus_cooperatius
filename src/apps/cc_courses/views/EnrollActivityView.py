@@ -1,7 +1,7 @@
 from django.views import generic
 from django.shortcuts import reverse
 
-from cc_courses.models import Activity, ActivityEnrolled
+from apps.cc_courses.models import Activity, ActivityEnrolled
 
 
 class EnrollActivityView(generic.RedirectView):

@@ -4,7 +4,7 @@ from django.db import connections, IntegrityError
 from django.core.management.base import BaseCommand
 from collections import namedtuple
 from apps.coopolis.models import Project, ProjectStage, User, Town, ProjectStageType
-from cc_courses.models import Course, Activity, CoursePlace, Entity
+from apps.cc_courses.models import Course, Activity, CoursePlace, Entity
 from django.forms.models import model_to_dict
 from django.core.management.commands.flush import Command as Flush
 import re

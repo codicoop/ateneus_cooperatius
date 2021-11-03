@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import ValidationError
 
-from cc_courses.models import CoursePlace
+from apps.cc_courses.models import CoursePlace
 from apps.coopolis.models import User
 
 

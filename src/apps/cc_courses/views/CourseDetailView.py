@@ -1,5 +1,5 @@
 from django.views.generic import DetailView
-from cc_courses.models import Course, Activity
+from apps.cc_courses.models import Course, Activity
 
 
 class CourseDetailView(DetailView):

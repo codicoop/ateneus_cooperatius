@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import DetailView
-from cc_courses.models import Activity
+from apps.cc_courses.models import Activity
 
 
 class ActivityDetailView(DetailView):

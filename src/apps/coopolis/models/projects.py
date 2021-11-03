@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
 
-from cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
+from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
 from apps.coopolis.helpers import get_subaxis_choices
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage

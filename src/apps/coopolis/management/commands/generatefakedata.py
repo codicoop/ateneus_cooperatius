@@ -5,7 +5,7 @@ import random
 import factory.fuzzy as fuzzy
 from django.utils import timezone
 import datetime
-from cc_courses.models import Entity, Activity
+from apps.cc_courses.models import Entity, Activity
 from apps.cc_lib.commands.generate_fakes_command import GenerateFakesCommand
 import factory
 from apps.cc_lib import tuplelize

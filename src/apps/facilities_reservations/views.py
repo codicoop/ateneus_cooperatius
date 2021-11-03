@@ -7,7 +7,7 @@ from django.utils.timezone import make_aware
 from django.conf import settings
 
 from facilities_reservations.models import Reservation, Room
-from cc_courses.models import Activity
+from apps.cc_courses.models import Activity
 
 
 class ReservationsCalendarView(TemplateView):

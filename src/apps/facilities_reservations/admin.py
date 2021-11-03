@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from .models import Room, Reservation
 from .forms import RoomForm, ReservationForm
 from apps.coopolis.models import User
-from cc_courses.models import CoursePlace
+from apps.cc_courses.models import CoursePlace
 
 
 class RoomAdmin(admin.ModelAdmin):

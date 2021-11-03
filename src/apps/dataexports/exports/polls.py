@@ -5,7 +5,7 @@ from django.db.models import (
     Value
 )
 
-from cc_courses.models import Organizer, Activity
+from apps.cc_courses.models import Organizer, Activity
 from apps.coopolis.models import ActivityPoll
 from coopolis_backoffice.settings import AXIS_OPTIONS
 from dataexports.exports.exceptions import (

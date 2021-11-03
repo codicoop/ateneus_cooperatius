@@ -1,6 +1,6 @@
 
 from django.views import generic
-from cc_courses.models import Course, Activity
+from apps.cc_courses.models import Course, Activity
 from django.utils import timezone
 
 

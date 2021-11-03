@@ -14,7 +14,7 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 
 from apps.coopolis.models import Project, User, ProjectStage, ActivityPoll
-from cc_courses.models import Activity, ActivityEnrolled
+from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.mixins import FormDistrictValidationMixin
 from facilities_reservations.models import Reservation
 

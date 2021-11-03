@@ -1,7 +1,7 @@
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
-from cc_courses.models import Activity, ActivityEnrolled, Course
+from apps.cc_courses.models import Activity, ActivityEnrolled, Course
 
 pre_save.connect(Course.pre_save, sender=Course)
 

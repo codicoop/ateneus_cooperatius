@@ -5,7 +5,7 @@ from apps.coopolis.models import (
     User, Project, ProjectStage, Derivation, EmploymentInsertion,
     ProjectsFollowUp, ProjectsConstituted, ActivityPoll, StageSubtype,
 )
-from cc_courses.models import (
+from apps.cc_courses.models import (
     Course, Activity, CoursePlace, Entity, Organizer, Cofunding, StrategicLine
 )
 from .ActivityAdmin import ActivityAdmin, CofundingAdmin, StrategicLineAdmin

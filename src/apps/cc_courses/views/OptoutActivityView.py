@@ -1,7 +1,7 @@
 
 from django.views import generic
 from django.shortcuts import reverse
-from cc_courses.models import Activity
+from apps.cc_courses.models import Activity
 
 
 class OptoutActivityView(generic.RedirectView):
