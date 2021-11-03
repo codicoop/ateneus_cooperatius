@@ -3,5 +3,5 @@ from django.conf import settings
 
 
 class CoopolisConfig(AppConfig):
-    name = 'coopolis'
+    name = 'apps.coopolis'
     verbose_name = settings.PROJECT_NAME
