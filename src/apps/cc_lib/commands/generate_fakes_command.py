@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 # From: https://docs.djangoproject.com/en/2.1/howto/custom-management-commands/
 

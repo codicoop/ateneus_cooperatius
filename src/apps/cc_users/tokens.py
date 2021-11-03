@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import six

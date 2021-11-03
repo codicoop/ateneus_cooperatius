@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from django.views import generic
 from cc_courses.models import Activity, ActivityEnrolled

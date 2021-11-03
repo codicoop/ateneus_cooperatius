@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 
 def slugify_model(instance, attrib, slug_attrib='slug', _iter=0):
