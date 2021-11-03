@@ -1,0 +1,68 @@
+version: "3.5"
+
+networks:
+  develop_ateneus_network:
+    name: develop_ateneus_network
+
+services:
+
+  # http://127.0.0.1 or http://localhost
+  develop_ateneus_app:
+    restart: on-failure
+    container_name: develop_ateneus_app
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: production
+    environment:
+      - DEBUG=false
+      - SECRET_KEY=
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - ABSOLUTE_URL=http://localhost:8000
+      # DB
+      - DB_NAME=
+      - DB_USER=
+      - DB_PASSWORD=
+      - DB_HOST=
+      - DB_PORT=
+      # SMTP
+      - EMAIL_HOST=
+      - EMAIL_PORT=
+      - EMAIL_USE_SSL=false
+      - EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+      - MAILING_MANAGER_DEFAULT_FROM=
+      - # Sendgrid
+        SENDGRID_API_KEY=
+        SENDGRID_SANDBOX_MODE_IN_DEBUG=off
+        SENDGRID_TRACK_EMAIL_OPENS=off
+        SENDGRID_TRACK_CLICKS_HTML=off
+        SENDGRID_TRACK_CLICKS_PLAIN=off
+      # Wasabi cloud storage configuration
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=
+      - AWS_STORAGE_BUCKET_NAME=
+      - AWS_S3_ENDPOINT_URL=
+      - AWS_DEFAULT_ACL=public-read
+      - AWS_S3_BASE_DOMAIN=s3.eu-central-1.wasabisys.com
+      - AWS_PUBLIC_MEDIA_LOCATION=media/public
+      - AWS_PRIVATE_MEDIA_LOCATION=media/private
+      # Local file storage
+      - MEDIA_ROOT=
+      - MEDIA_URL=
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000
+    depends_on:
+      - develop_ateneus_db
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 80:8000
+
+  develop_ateneus_db:
+    container_name: develop_ateneus_db
+    image: postgres:12.3
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ../dumps:/dumps
+    networks:
+      - develop_ateneus_network
