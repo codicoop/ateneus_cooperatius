@@ -178,7 +178,7 @@ AWS_STORAGE_BUCKET_NAME = ''
 AWS_S3_CUSTOM_DOMAIN = ''
 AWS_S3_ENDPOINT_URL = ''
 AWS_DEFAULT_ACL = 'public-read'
-DEFAULT_FILE_STORAGE = 'cc_lib.storages.MediaStorage'
+DEFAULT_FILE_STORAGE = 'apps.cc_lib.storages.MediaStorage'
 EXTERNAL_MEDIA_PATH = ''
 MEDIA_FILE_OVERWRITE = True
 
@@ -483,15 +483,15 @@ CONSTANCE_CONFIG_FIELDSETS = {
 
 COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
 COURSES_CLASS_TO_ENROLL = 'apps.coopolis.User'
-COURSES_CLASSES_CAN_ENROLL = ['cc_courses.models.Course']
+COURSES_CLASSES_CAN_ENROLL = ['apps.cc_courses.models.Course']
 
 FIXTURE_FACTORIES = [
     ('apps.coopolis.tests.fixtures.UserFactory', {}),
     ('apps.coopolis.tests.fixtures.ProjectFactory', {}),
-    ('cc_courses.tests.fixtures.CourseFactory', {}),
-    ('cc_courses.tests.fixtures.EntityFactory', {}),
-    ('cc_courses.tests.fixtures.CoursePlaceFactory', {}),
-    ('cc_courses.tests.fixtures.ActivityFactory', {
+    ('apps.cc_courses.tests.fixtures.CourseFactory', {}),
+    ('apps.cc_courses.tests.fixtures.EntityFactory', {}),
+    ('apps.cc_courses.tests.fixtures.CoursePlaceFactory', {}),
+    ('apps.cc_courses.tests.fixtures.ActivityFactory', {
         'number': 500
     }),
 ]
@@ -591,7 +591,7 @@ THUMBNAIL_ALIASES = {
         'course_list': {'size': (150, 200), 'scale-crop': True},
     },
 }
-THUMBNAIL_DEFAULT_STORAGE = 'cc_lib.storages.MediaStorage'
+THUMBNAIL_DEFAULT_STORAGE = 'apps.cc_lib.storages.MediaStorage'
 
 # MAIL-QUEUE SETTINGS
 MAILQUEUE_CELERY = False

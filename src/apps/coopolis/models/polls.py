@@ -7,7 +7,7 @@ class ActivityPoll(models.Model):
         verbose_name_plural = "enquestes de valoració"
 
     activity = models.ForeignKey(
-        'cc_courses.Activity', on_delete=models.CASCADE, related_name="polls")
+        'apps.cc_courses.Activity', on_delete=models.CASCADE, related_name="polls")
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
 
     # Organització
