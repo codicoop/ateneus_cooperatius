@@ -164,3 +164,15 @@ push a la branch `main` generi una nova imatge.
 
 Accedeix al compte de dockerhub per veure quines imatges hi ha generades, si
 l'última ja s'ha generat o ha fallat, etc.
+
+Si la vols pujar manualment:
+1. Crear la imatge, des de la carpeta /docker:
+`docker build --compress --target production --tag codicoop/ateneus:latest --file Dockerfile ../`
+
+2. Fer `docker login` si no has fet abans.
+3. Pujar la imatge:
+`docker push codicoop/ateneus:latest`
+
+## Testejar la imatge de producció en local o a develop
+Assumint que tens l'última versió a dockerhub, fes:
+`docker-compose -f compose-develop-hub.yml up`
