@@ -12,7 +12,7 @@ class ExportJustificationCofunded(ExportJustification):
     def export(self):
         self.export_manager.import_correlations(
             settings.BASE_DIR
-            + "/../apps/dataexports/fixtures/correlations_2019.json")
+            + "/apps/dataexports/fixtures/correlations_2019.json")
 
         # Each function called here handles the creation of each worksheets
         self.export_actuacions()

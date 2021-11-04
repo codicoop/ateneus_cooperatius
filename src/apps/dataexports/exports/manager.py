@@ -9,6 +9,8 @@ from django.conf import settings
 
 
 class ExportManager:
+    correlations = None
+
     def __init__(self, export_obj):
         self.error_message = set()
         self.ignore_errors = export_obj.ignore_errors
@@ -68,7 +70,7 @@ class ExcelExportManager(ExportManager):
 
         self.import_correlations(
             settings.BASE_DIR
-            + "/../apps/dataexports/fixtures/correlations_2019.json"
+            + "/apps/dataexports/fixtures/correlations_2019.json"
         )
 
     def return_document(self, name):
