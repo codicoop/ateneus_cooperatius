@@ -657,7 +657,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b4d323a612213e7985c27d795ef1ae8b1a05e668decdd8ba3265127690155551"
+content-hash = "627a17befa0bfbfb05e50d691de51b254232aaa42b16de4f8b031b1431d86acb"
 
 [metadata.files]
 ansicon = [
