@@ -7,9 +7,9 @@ networks:
 services:
 
   # http://127.0.0.1 or http://localhost
-  develop_ateneus_app:
+  develop_ateneus_coopolis:
     restart: on-failure
-    container_name: develop_ateneus_app
+    container_name: develop_ateneus_coopolis
     build:
       context: ..
       dockerfile: ./docker/Dockerfile

@@ -6,9 +6,9 @@ networks:
 
 services:
   # http://127.0.0.1:8000 or http://localhost:8000
-  develop_ateneus_app:
+  develop_ateneus_coopolis:
     restart: on-failure
-    container_name: develop_ateneus_app
+    container_name: develop_ateneus_coopolis
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -89,7 +89,7 @@ services:
       # To run multiple projects at once, change it to 8001:80 etc.
       - 8001:80
     depends_on:
-      - develop_ateneus_app
+      - develop_ateneus_coopolis
     networks:
       - develop_ateneus_network
 
