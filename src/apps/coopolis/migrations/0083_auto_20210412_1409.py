@@ -44,12 +44,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectstage',
             name='scanned_certificate',
-            field=models.FileField(blank=True, max_length=250, null=True, storage=coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='Certificat'),
+            field=models.FileField(blank=True, max_length=250, null=True, storage=apps.coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='Certificat'),
         ),
         migrations.AlterField(
             model_name='projectstage',
             name='scanned_signatures',
-            field=models.FileField(blank=True, max_length=250, null=True, storage=coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='[obsolet] Fitxa de projectes (document amb signatures)'),
+            field=models.FileField(blank=True, max_length=250, null=True, storage=apps.coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='[obsolet] Fitxa de projectes (document amb signatures)'),
         ),
         migrations.AlterField(
             model_name='projectstage',
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
             name='ProjectFile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.FileField(max_length=250, storage=coopolis.storage_backends.PublicMediaStorage(), upload_to='', verbose_name='fitxer')),
+                ('image', models.FileField(max_length=250, storage=apps.coopolis.storage_backends.PublicMediaStorage(), upload_to='', verbose_name='fitxer')),
                 ('name', models.CharField(help_text="Els fitxers antics tenen com a etiqueta el propi nom de l'arxiu, però aquí hi pot anar qualsevol text descriptiu.", max_length=250, verbose_name='Etiqueta')),
                 ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='files', to='coopolis.Project')),
             ],

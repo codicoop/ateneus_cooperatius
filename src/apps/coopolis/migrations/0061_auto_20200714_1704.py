@@ -14,26 +14,26 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='estatuts',
-            field=models.FileField(blank=True, max_length=250, null=True, storage=coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='estatuts'),
+            field=models.FileField(blank=True, max_length=250, null=True, storage=apps.coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='estatuts'),
         ),
         migrations.AlterField(
             model_name='project',
             name='sostenibility',
-            field=models.FileField(blank=True, max_length=250, null=True, storage=coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='pla de sostenibilitat'),
+            field=models.FileField(blank=True, max_length=250, null=True, storage=apps.coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='pla de sostenibilitat'),
         ),
         migrations.AlterField(
             model_name='project',
             name='viability',
-            field=models.FileField(blank=True, max_length=250, null=True, storage=coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='pla de viabilitat'),
+            field=models.FileField(blank=True, max_length=250, null=True, storage=apps.coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='pla de viabilitat'),
         ),
         migrations.AlterField(
             model_name='projectstage',
             name='scanned_certificate',
-            field=models.FileField(blank=True, max_length=250, null=True, storage=coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='certificat'),
+            field=models.FileField(blank=True, max_length=250, null=True, storage=apps.coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='certificat'),
         ),
         migrations.AlterField(
             model_name='projectstage',
             name='scanned_signatures',
-            field=models.FileField(blank=True, max_length=250, null=True, storage=coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='fitxa de projectes (document amb signatures)'),
+            field=models.FileField(blank=True, max_length=250, null=True, storage=apps.coopolis.storage_backends.PrivateMediaStorage(), upload_to='', verbose_name='fitxa de projectes (document amb signatures)'),
         ),
     ]

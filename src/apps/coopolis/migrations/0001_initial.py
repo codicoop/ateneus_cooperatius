@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'persones',
             },
             managers=[
-                ('objects', cc_users.managers.CCUserManager()),
+                ('objects', apps.cc_users.managers.CCUserManager()),
             ],
         ),
         migrations.CreateModel(
