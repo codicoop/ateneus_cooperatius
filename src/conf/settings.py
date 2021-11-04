@@ -44,7 +44,7 @@ MAILING_MANAGER_DEFAULT_FROM = env.str(
     default=None,
 )
 # Mails will be queued instead of sent immediately:
-MAILQUEUE_QUEUE_UP = True
+MAILQUEUE_QUEUE_UP = env.bool("MAILQUEUE_QUEUE_UP", default=False)
 # MAIL-QUEUE SETTINGS
 MAILQUEUE_CELERY = False
 # Maximum amount of emails to send during each queue run
