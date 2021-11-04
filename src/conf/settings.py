@@ -1,6 +1,5 @@
 import environ
 import os
-import sys
 
 from django.core.management.utils import get_random_secret_key
 
@@ -76,16 +75,13 @@ MEDIA_FILE_OVERWRITE = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, '../apps')))
+# TODO: delete this commented code if it proves to be deprecatred.
+# sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, '../apps')))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# Local strings (creating vars here to avoid compilation problems if running
-# in single-tenant mode)
-PROJECT_NAME = ""
-ADMIN_HEADER = ""
-GRAPPELLI_ADMIN_TITLE = ""
+# Local strings
+PROJECT_NAME = env.str("PROJECT_NAME", "")
+ADMIN_HEADER = env.str("ADMIN_HEADER", "")
+GRAPPELLI_ADMIN_TITLE = env.str("GRAPPELLI_ADMIN_TITLE", "")
 
 # Application definition
 INSTALLED_APPS = [
