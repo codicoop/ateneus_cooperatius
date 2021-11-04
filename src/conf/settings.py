@@ -119,6 +119,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -192,9 +193,12 @@ SERIALIZATION_MODULES = {
 }
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "assets"),
+]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 LOGIN_URL = 'loginsignup'
 LOGIN_REDIRECT_URL = '/'
@@ -522,8 +526,6 @@ FIXTURE_FACTORIES = [
         'number': 500
     }),
 ]
-
-STATIC_ROOT = 'static'
 
 SIGNUP_FORM = 'apps.coopolis.forms.MySignUpForm'
 
