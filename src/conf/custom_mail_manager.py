@@ -1,4 +1,3 @@
-from django.conf import settings
 from constance import config
 
 from mailing_manager.mail_queue_handler import MailQueueHandler
