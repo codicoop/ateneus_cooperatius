@@ -14,5 +14,4 @@ local_*.py
 /static/
 /dumps/
 src/conf/maintenance_mode_state.txt
-docker/compose-*
 /docker/settings/
