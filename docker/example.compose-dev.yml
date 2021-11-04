@@ -52,13 +52,16 @@ services:
       - AWS_S3_BASE_DOMAIN=s3.eu-central-1.wasabisys.com
       - AWS_PUBLIC_MEDIA_LOCATION=media/public
       - AWS_PRIVATE_MEDIA_LOCATION=media/private
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --reload
     volumes:
       - ../src/:/srv
     depends_on:
       - develop_ateneus_db
     networks:
       - develop_ateneus_network
+    ports:
+      # external:internal
+      - 5001:8001
 
   # http://localhost:8080/
 #  develop_ateneus_adminer:
@@ -80,18 +83,3 @@ services:
       - ../dumps:/dumps
     networks:
       - develop_ateneus_network
-
-  develop_ateneus_nginx:
-    container_name: develop_ateneus_nginx
-    image: nginx
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d
-      - ../:/srv
-    ports:
-      # To run multiple projects at once, change it to 8001:80 etc.
-      - 8001:80
-    depends_on:
-      - develop_ateneus_coopolis
-    networks:
-      - develop_ateneus_network
-
