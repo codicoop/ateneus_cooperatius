@@ -1,6 +1,8 @@
-
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
+from django.contrib.auth.forms import (
+    UserCreationForm, AuthenticationForm, UserChangeForm,
+    PasswordResetForm as BasePasswordResetForm,
+)
 from django.contrib.auth import get_user_model
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
@@ -50,3 +52,8 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
         super().__init__(*args, **kwargs)
         if 'password' in self.fields:
             self.fields.pop('password')
+
+
+class PasswordResetForm(BasePasswordResetForm):
+    pass
+    # TODO: sobreescriure mètode d'enviament d'emails
