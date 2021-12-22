@@ -336,10 +336,10 @@ class ProjectStage(models.Model):
         blank=True,
     )
     axis = models.CharField(
-        "eix", help_text="Eix de la convocatòria on es justificarà.",
+        "(OBSOLET) Eix", help_text="Eix de la convocatòria on es justificarà.",
         choices=settings.AXIS_OPTIONS, null=True, blank=True, max_length=1)
     subaxis = models.CharField(
-        "sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
+        "(OBSOLET) Sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
         null=True, blank=True, max_length=2, choices=get_subaxis_choices())
     entity = models.ForeignKey(
         Entity, verbose_name="[obsolet] Entitat", default=None, null=True,
