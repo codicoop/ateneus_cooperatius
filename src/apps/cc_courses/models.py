@@ -232,7 +232,7 @@ class Activity(models.Model):
         blank=True,
     )
     axis = models.CharField(
-        "eix",
+        "(OBSOLET) Eix",
         help_text="Eix de la convocatòria on es justificarà.",
         choices=settings.AXIS_OPTIONS,
         null=True,
@@ -240,7 +240,7 @@ class Activity(models.Model):
         max_length=1
     )
     subaxis = models.CharField(
-        "sub-eix",
+        "(OBSOLET) Sub-eix",
         help_text="Correspon a 'Tipus d'acció' a la justificació.",
         null=True,
         blank=True,
