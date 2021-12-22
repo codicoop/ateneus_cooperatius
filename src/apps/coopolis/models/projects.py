@@ -341,9 +341,6 @@ class ProjectStage(models.Model):
     subaxis = models.CharField(
         "(OBSOLET) Sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
         null=True, blank=True, max_length=2, choices=get_subaxis_choices())
-    entity = models.ForeignKey(
-        Entity, verbose_name="[obsolet] Entitat", default=None, null=True,
-        blank=True, on_delete=models.SET_NULL)
     # Entity was called "organizer" before, causing confusion, specially
     # because we wanted to add the Organizer field
     # here. We renamed 'organizer' to entity and made a migration for this
