@@ -198,8 +198,6 @@ class ExportJustification:
                         'participants': []
                     }
                 })
-            if item.hours is None:
-                item.hours = 0
             self.stages_obj[p_id][group]['total_hours'] += item.hours_sum()
 
             # Aprofitem per omplir les dades dels participants aquí per no
@@ -303,7 +301,8 @@ class ExportJustification:
                     len(group['participants']),  # Nombre de participants
                     "No",
                     "",
-                    str(item.entity) if item.entity else '',  # Entitat
+                    # En blanc pq cada stage session pot contenir una entitat
+                    "",  # Entitat
                     # Organitzadora
                     str(item.stage_organizer) if item.stage_organizer else '',
                     '(no aplicable)',  # Lloc
@@ -407,7 +406,8 @@ class ExportJustification:
                 stage.involved_partners.count(),
                 "No",
                 "",
-                str(stage.entity) if stage.entity else '',  # Entitat
+                # En blanc pq cada stage session pot contenir una entitat
+                "",  # Entitat
                 str(stage.stage_organizer) if stage.stage_organizer else '',
                 # Organitzadora
                 '(no aplicable)',  # Lloc
@@ -470,7 +470,7 @@ class ExportJustification:
                     town,
                     item.project.description,  # Breu descripció.
                     hours,  # Total hores d'acompanyament.
-                    item.date_end if item.date_end else '',
+                    item.latest_session.date if item.latest_session else '',
                 ]
                 self.export_manager.fill_row_data(row)
 
