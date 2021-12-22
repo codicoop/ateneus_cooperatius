@@ -12,6 +12,7 @@ from django.apps import apps
 from django.core.validators import ValidationError
 
 from apps.cc_lib.utils import slugify_model
+from apps.coopolis.choices import ServicesChoices
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -223,6 +224,12 @@ class Activity(models.Model):
         help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
                   "al desplegable, cal que la persona tingui activada l'opció "
                   "'Membre del personal'."
+    )
+    service = models.SmallIntegerField(
+        "Servei",
+        choices=ServicesChoices.choices,
+        null=True,
+        blank=True,
     )
     axis = models.CharField(
         "eix",
