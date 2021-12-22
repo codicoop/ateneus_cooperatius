@@ -317,18 +317,6 @@ class ProjectStage(models.Model):
         "data creació acompanyament", null=False, blank=False,
         auto_now_add=True
     )
-    date_end = models.DateField(
-        "[obsolet] data de finalització", null=True, blank=True,
-        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització"
-                  " de l'acompanyament es calcularà a partir de les dates de "
-                  "les Sessions d'Acompanyament."
-    )
-    follow_up = models.TextField(
-        "[obsolet] Seguiment", null=True, blank=True,
-        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que el seguiment "
-                  "el poseu en el nou format, mitjançant 'Sessions "
-                  "d'acompanyament'."
-    )
     service = models.SmallIntegerField(
         "Servei",
         choices=ServicesChoices.choices,
@@ -366,19 +354,9 @@ class ProjectStage(models.Model):
         help_text="Persona de l'equip al càrrec de l'acompanyament. Per "
                   "aparèixer al desplegable, cal que la persona tingui "
                   "activada la opció 'Membre del personal'.")
-    scanned_signatures = models.FileField(
-        "[obsolet] Fitxa de projectes (document amb signatures)", blank=True,
-        null=True, storage=PrivateMediaStorage(), max_length=250)
     scanned_certificate = models.FileField(
         "Certificat", blank=True, null=True,
         storage=PrivateMediaStorage(), max_length=250)
-    hours = models.IntegerField(
-        "[obsolet] Número d'hores",
-        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que les hores "
-                  "les poseu en el nou format, mitjançant 'Sessions "
-                  "d'acompanyament'.",
-        null=True, blank=True
-    )
     involved_partners = models.ManyToManyField(
         User, verbose_name="persones involucrades", blank=True,
         related_name='stage_involved_partners',
