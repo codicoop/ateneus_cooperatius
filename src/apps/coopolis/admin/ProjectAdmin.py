@@ -80,11 +80,14 @@ class ProjectStageAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': ['project', 'stage_type', 'covid_crisis',
-                       'subsidy_period', 'axis', 'subaxis',
+                       'subsidy_period', 'service',
                        'stage_organizer', 'stage_responsible',
                        'scanned_certificate',
                        'involved_partners', 'hours_sum', 'date_start',
                        "earliest_session_field", ]
+        }),
+        ("Camps convocatòries < 2020", {
+            'fields': ["axis", "subaxis", ]
         }),
     ]
     inlines = (ProjectStageSessionsInline, )
