@@ -406,10 +406,14 @@ class ProjectStage(models.Model):
 
         has_subsidy_period = (self.subsidy_period and
                               self.subsidy_period.name != 'Sense justificar')
-        if has_subsidy_period and self.date_end:
+        if (
+            has_subsidy_period
+            and self.latest_session
+            and self.latest_session.date
+        ):
             if (
-                    self.date_end < self.subsidy_period.date_start or
-                    self.date_end > self.subsidy_period.date_end
+                self.latest_session.date < self.subsidy_period.date_start or
+                self.latest_session.date > self.subsidy_period.date_end
             ):
                 raise ValidationError(
                     {'date_end': "La data de finalització ha d'estar dins del "
@@ -420,6 +424,13 @@ class ProjectStage(models.Model):
         if config.ENABLE_STAGE_SUBTYPES and self.stage_subtype:
             txt = f"{txt} ({self.stage_subtype.name})"
         return txt
+
+    @property
+    def latest_session(self):
+        try:
+            return self.stage_sessions.latest("date")
+        except ProjectStageSession.DoesNotExist:
+            return None
 
     def __str__(self):
         txt = (f"{str(self.project)}: {self.get_full_type_str()} "
