@@ -296,7 +296,12 @@ class ExportJustification:
                     subaxis,
                     item.project.name,
                     item.date_start if not None else '',
-                    self.get_organizer(getattr(item, self.stage_organizer_field)),
+                    # This used to be this code for the "Cercle = Entitat"
+                    # export:
+                    # self.get_organizer(getattr(item, self.stage_organizer_field)),
+                    # but now we deleted Entity from stages, so project stages
+                    # go back to showing only stage_organizer.
+                    item.stage_organizer.name if item.stage_organizer else "",
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
@@ -401,7 +406,12 @@ class ExportJustification:
                 subaxis,
                 project.name,
                 stage.date_start,
-                self.get_organizer(getattr(stage, self.stage_organizer_field)),
+                # This used to be this code for the "Cercle = Entitat"
+                # export:
+                # self.get_organizer(getattr(stage, self.stage_organizer_field)),
+                # but now we deleted Entity from stages, so project stages
+                # go back to showing only stage_organizer.
+                stage.stage_organizer.name if stage.stage_organizer else "",
                 town,
                 stage.involved_partners.count(),
                 "No",
