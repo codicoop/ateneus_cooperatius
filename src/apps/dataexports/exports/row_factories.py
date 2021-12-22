@@ -109,7 +109,10 @@ class TextWithValue(BaseRow):
         self.value = value
 
     def get_columns(self) -> list:
-        return [self.title, self.value]
+        return [
+            self.title,
+            round(self.value, 1) if type(self.value) is float else self.value
+        ]
 
 
 class TextWithYesNoEmpty(BaseRow):
