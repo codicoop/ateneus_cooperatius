@@ -61,7 +61,6 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
 class PasswordResetForm(BasePasswordResetForm):
     def send_mail(self, subject_template_name, email_template_name,
                   context, from_email, to_email, html_email_template_name=None):
-        print(context)
         mail = MyMailTemplate('EMAIL_PASSWORD_RESET')
         mail.to = to_email
         mail.subject_strings = {
