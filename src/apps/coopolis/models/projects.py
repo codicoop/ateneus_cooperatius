@@ -177,11 +177,25 @@ class Project(models.Model):
 
     @property
     def axis_list(self):
+        """
+        This method is not used in the new data, reports or exports
+        since 1/11/2021, but needs to be kept until it's confirmed that they
+        don't want the old exports.
+        :return:
+        """
         if not self.stages or self.stages.count() < 1:
             return None
         stages = []
         for stage in self.stages.all():
             stages.append(stage.axis_summary())
+        stages.sort()
+        return "; ".join(stages)
+
+    @property
+    def services_list(self):
+        if not self.stages or self.stages.count() < 1:
+            return None
+        stages = [stage.service for stage in self.stages.all()]
         stages.sort()
         return "; ".join(stages)
 

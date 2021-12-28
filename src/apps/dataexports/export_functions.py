@@ -6,6 +6,8 @@ from apps.dataexports.exports.justification import ExportJustification
 from apps.dataexports.exports.justification_2_itineraris import (
     ExportJustification2Itineraris
 )
+from apps.dataexports.exports.justification_service import \
+    ExportJustificationService
 from apps.dataexports.exports.memory import ExportMemory
 from apps.dataexports.exports.polls import ExportPolls
 from apps.dataexports.exports.stages_details import ExportStagesDetails
@@ -40,6 +42,10 @@ class ExportFunctions:
 
     def export(self, export_obj):
         controller = ExportJustification(export_obj)
+        return controller.export()
+
+    def export_service(self, export_obj):
+        controller = ExportJustificationService(export_obj)
         return controller.export()
 
     def export_by_entity(self, export_obj):
