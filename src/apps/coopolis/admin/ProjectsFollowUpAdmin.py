@@ -606,4 +606,4 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
 
 @admin.register(ProjectsConstitutedService)
 class ProjectsConstitutedServiceAdmin(ProjectsConstitutedAdmin):
-    pass
+    change_list_template = 'admin/projects_constituted_service.html'
