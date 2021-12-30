@@ -107,6 +107,7 @@ class ExportJustificationService:
             ("Municipi", 30),
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
+            ("[Document acreditatiu]", 21),
             ("Incidències", 20),
             ("[Entitat]", 20),
             ("[Organitzadora]", 20),
@@ -135,6 +136,9 @@ class ExportJustificationService:
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
+            document_acreditatiu = "No"
+            if item.photo2.name:
+                document_acreditatiu = "Sí"
 
             row = [
                 service,
@@ -144,6 +148,7 @@ class ExportJustificationService:
                 town,
                 item.enrolled.count(),
                 material_difusio,
+                document_acreditatiu,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
                 str(item.organizer) if item.organizer else '',  # Organitzadora
@@ -313,6 +318,9 @@ class ExportJustificationService:
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
+            document_acreditatiu = "No"
+            if item.photo2.name:
+                document_acreditatiu = "Sí"
 
             row = [
                 service,
@@ -322,6 +330,7 @@ class ExportJustificationService:
                 town,
                 item.minors_participants_number,
                 material_difusio,
+                document_acreditatiu,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
                 str(item.organizer) if item.organizer else '',  # Organitzadora
