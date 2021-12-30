@@ -195,8 +195,7 @@ class Project(models.Model):
     def services_list(self):
         if not self.stages or self.stages.count() < 1:
             return None
-        stages = [stage.service for stage in self.stages.all() if stage.service]
-        stages.sort()
+        stages = [stage.get_service_display() for stage in self.stages.all() if stage.service]
         return "; ".join(stages)
 
     @property
@@ -417,21 +416,6 @@ class ProjectStage(models.Model):
                     {'subaxis': "Has seleccionat un sub-eix que no es "
                                 "correspon a l'eix."}
                 )
-
-        has_subsidy_period = (self.subsidy_period and
-                              self.subsidy_period.name != 'Sense justificar')
-        if (
-            has_subsidy_period
-            and self.latest_session
-            and self.latest_session.date
-        ):
-            if (
-                self.latest_session.date < self.subsidy_period.date_start or
-                self.latest_session.date > self.subsidy_period.date_end
-            ):
-                raise ValidationError(
-                    {'date_end': "La data de finalització ha d'estar dins del "
-                                 "període de la convocatòria seleccionada."})
 
     def get_full_type_str(self):
         txt = self.get_stage_type_display()
