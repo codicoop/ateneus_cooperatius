@@ -14,9 +14,7 @@ from .ProjectAdmin import (
     ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin,
     StageSubtypeAdmin, ProjectFile, ProjectFileAdmin,
 )
-from .ProjectsFollowUpAdmin import (
-    ProjectsFollowUpAdmin, ProjectsConstitutedAdmin
-)
+from .ProjectsFollowUpAdmin import ProjectsConstitutedAdmin
 from .UserAdmin import UserAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
 from .ActivityPollAdmin import ActivityPollAdmin
