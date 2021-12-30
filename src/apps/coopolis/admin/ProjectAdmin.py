@@ -54,14 +54,14 @@ class ProjectStageAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
-        'covid_crisis', 'stage_responsible_field_ellipsis',
+        'stage_responsible_field_ellipsis',
         'axis_summary', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field'
     )
     list_filter = (
         'subsidy_period',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
-        'date_start', 'stage_type', 'covid_crisis', 'axis',
+        'date_start', 'stage_type', 'axis',
         'stage_organizer', 'project__sector'
     )
     actions = ["export_as_csv"]
@@ -72,7 +72,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type', 'covid_crisis',
+            'fields': ['project', 'stage_type',
                        'subsidy_period', 'service',
                        'stage_organizer', 'stage_responsible',
                        'scanned_certificate',
@@ -195,7 +195,7 @@ class ProjectStagesInline(admin.StackedInline):
     }
     fieldsets = (
         (None, {
-            'fields': ['project', 'stage_type', 'covid_crisis',
+            'fields': ['project', 'stage_type',
                        'subsidy_period', 'service',
                        'stage_organizer', 'stage_responsible',
                        'scanned_certificate',

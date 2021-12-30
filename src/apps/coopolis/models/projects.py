@@ -322,7 +322,6 @@ class ProjectStage(models.Model):
         StageSubtype, verbose_name="subtipus", default=None, null=True,
         blank=True, on_delete=models.SET_NULL
     )
-    covid_crisis = models.BooleanField("Crisi covid", default=False)
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
