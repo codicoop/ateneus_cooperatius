@@ -11,7 +11,8 @@ from openpyxl.utils import get_column_letter
 
 from .ProjectAdmin import FilterByFounded
 from apps.dataexports.models import SubsidyPeriod
-from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp
+from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp, \
+    ProjectsFollowUpService
 from ..models import User
 
 
@@ -22,6 +23,9 @@ class MissingCurrentSubsidyPeriod(Exception):
 @admin.register(ProjectsFollowUp)
 class ProjectsFollowUpAdmin(admin.ModelAdmin):
     """
+    Deprecated: from Nov 2021 the updated report is ProjectsFollowUpAdmin.
+    Keeping the deprecated one until we are sure that it's not needed anymore.
+
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
     """
     class Media:
@@ -330,6 +334,11 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         rows = self.get_rows(projects, request)
         sheet = FollowUpSpreadsheet(rows['rows'], rows['totals'])
         return sheet.export_seguiment_acompanyaments()
+
+
+@admin.register(ProjectsFollowUpService)
+class ProjectsFollowUpServicesAdmin(ProjectsFollowUpAdmin):
+    change_list_template = 'admin/projects_follow_up_services.html'
 
 
 class FollowUpSpreadsheet:
