@@ -12,7 +12,7 @@ from openpyxl.utils import get_column_letter
 from .ProjectAdmin import FilterByFounded
 from apps.dataexports.models import SubsidyPeriod
 from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp, \
-    ProjectsFollowUpService
+    ProjectsFollowUpService, ProjectsConstituted
 from ..models import User
 
 
@@ -522,6 +522,7 @@ class ConstitutionDateFilter(admin.SimpleListFilter):
         return queryset
 
 
+@admin.register(ProjectsConstituted)
 class ProjectsConstitutedAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad

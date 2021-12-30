@@ -3,7 +3,7 @@ from django.conf import settings
 
 from apps.coopolis.models import (
     User, Project, ProjectStage, Derivation, EmploymentInsertion,
-    ProjectsFollowUp, ProjectsConstituted, ActivityPoll, StageSubtype,
+    ActivityPoll, StageSubtype,
 )
 from apps.cc_courses.models import (
     Course, Activity, CoursePlace, Entity, Organizer, Cofunding, StrategicLine
@@ -30,7 +30,6 @@ admin.site.register(Entity)
 admin.site.register(Organizer)
 admin.site.register(Derivation, DerivationAdmin)
 admin.site.register(EmploymentInsertion, EmploymentInsertionAdmin)
-admin.site.register(ProjectsConstituted, ProjectsConstitutedAdmin)
 admin.site.register(Cofunding, CofundingAdmin)
 admin.site.register(StrategicLine, StrategicLineAdmin)
 admin.site.register(ActivityPoll, ActivityPollAdmin)
