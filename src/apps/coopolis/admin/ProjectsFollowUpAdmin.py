@@ -12,7 +12,7 @@ from openpyxl.utils import get_column_letter
 from .ProjectAdmin import FilterByFounded
 from apps.dataexports.models import SubsidyPeriod
 from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp, \
-    ProjectsFollowUpService, ProjectsConstituted
+    ProjectsFollowUpService, ProjectsConstituted, ProjectsConstitutedService
 from ..models import User
 
 
@@ -602,3 +602,8 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(ProjectsConstitutedService)
+class ProjectsConstitutedServiceAdmin(ProjectsConstitutedAdmin):
+    pass
