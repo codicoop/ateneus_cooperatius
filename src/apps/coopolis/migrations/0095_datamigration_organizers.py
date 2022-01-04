@@ -43,8 +43,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Coopcamp" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Coopcamp" in settings.PROJECT_NAME:
+        migrate_coopcamp(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "Coopmaresme" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
     # elif "Coòpolis" in settings.PROJECT_NAME:
@@ -176,6 +182,50 @@ def migrate_catcentral(
     print("eliminar tots els registres d'Entity")
     entity_model.objects.all().delete()
     print("eliminar tots els registres d'Organizer.")
+    organizer_model.objects.all().delete()
+
+
+def migrate_coopcamp(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    Els noms i IDs dels Organizers son:
+    Ateneu=1
+    CIRCLE_NAME_1=Agroecològic=4
+    CIRCLE_NAME_2=Baix Penedès=2
+    CIRCLE_NAME_3=Tarragonès=3
+    CIRCLE_NAME_4=Reus=5
+
+    Entitat ho tenen correcte.
+
+    Cal:
+    - per cada Activity, posar Activity.circle corresponent a Activity.organizer
+    - posar totes les Activity.organizer a None
+    - Organizer.delete()
+    """
+    print("REORGANITZANT CERCLES PER COOPCAMP")
+    print("Assignant Activity.circle segons l'Activity.organizer corresponent")
+    circles = {
+        1: CirclesChoices.CERCLE0,
+        4: CirclesChoices.CERCLE1,
+        2: CirclesChoices.CERCLE2,
+        3: CirclesChoices.CERCLE3,
+        5: CirclesChoices.CERCLE4,
+    }
+    updated = 0
+    for organizer_id, circle in circles.items():
+        updated += activity_model.objects.filter(organizer=organizer_id).update(
+            circle=circle,
+        )
+    print(f"Registres actualitzats: {updated}")
+    print("Establint tots els Activity.organizer a None")
+    updated = activity_model.objects.all().update(organizer=None)
+    print(f"Registres actualitzats: {updated}")
+    print("Eliminant tots els Organizers")
     organizer_model.objects.all().delete()
 
 
