@@ -35,10 +35,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Baix Llobregat" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
-    # elif "Catalunya Central" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Catalunya Central" in settings.PROJECT_NAME:
+        migrate_catcentral(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "Coopcamp" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
     # elif "Coopmaresme" in settings.PROJECT_NAME:
@@ -84,16 +88,22 @@ def migrate_altpirineu(
       seus ProjectStageSession.entity = ProjectStage.stage_organizer.
     - eliminar tots els registres d'Organizer.
     """
-    print("REORGRANITZANT CERCLES PER ALT PIRINEU I ARAN")
-    print("assignar totes les Activity i ProjectStage al circle.CERCLE0")
+    print("REORGANITZANT CERCLES PER ALT PIRINEU I ARAN")
+    print("assignar totes les Activity.organizer al circle.CERCLE0"
+          "i totes les Activity.entity a None")
     updated = activity_model.objects.all().update(
         circle=CirclesChoices.CERCLE0,
         entity=None,
     )
     print(f"{updated} registres actualitzats.")
-    print("assignar totes les Activity.entity i ProjectStageSession.entity a None.")
+    print("assignar totes les Activity.entity a None.")
     updated = stagesession_model.objects.all().update(
         entity=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les ProjectStageSession.entity a None.")
+    updated = stage_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
     )
     print(f"{updated} registres actualitzats.")
     print("eliminar tots (l'únic) registre d'Entity.")
@@ -114,6 +124,57 @@ def migrate_altpirineu(
         stage.stage_sessions.all().update(
             entity=stage.stage_organizer,
         )
+    print("eliminar tots els registres d'Organizer.")
+    organizer_model.objects.all().delete()
+
+
+def migrate_catcentral(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    A Organizer hi tenen 2 registres però que no han fet servir ni a Activity
+    ni a ProjectStage. Per tant es pot eliminar.
+
+    A Entity hi tenen els ateneu/cercles, però l'única que han fet servir a les
+    Activity i a les ProjectStageSession és l'Ateneu.
+
+    Caldria:
+    - assignar totes les Activity.circle al circle.CERCLE0,
+          totes les Activity.entity a None i totes les Activity.organizer
+          a None
+    - assignar totes ProjectStage.circle al circle.CERCLE0 i ProjectStage.stage_organizer a None
+
+    - assignar totes les ProjectStageSession.entity a None.
+    - eliminar tots els registres d'Entity.
+    - eliminar totes els registres d'Organizer.
+    """
+    print("REORGANITZANT CERCLES PER CATALUNYA CENTRAL")
+    print("assignar totes les Activity.circle al circle.CERCLE0,"
+          "totes les Activity.entity a None i totes les Activity.organizer"
+          "a None")
+    updated = activity_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+        entity=None,
+        organizer=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar tots els ProjectStage.circle al CERCLE0")
+    updated = stage_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+        stage_organizer=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les ProjectStageSession.entity a None")
+    updated = stagesession_model.objects.all().update(
+        entity=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("eliminar tots els registres d'Entity")
+    entity_model.objects.all().delete()
     print("eliminar tots els registres d'Organizer.")
     organizer_model.objects.all().delete()
 
