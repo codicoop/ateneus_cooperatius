@@ -51,8 +51,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Coopmaresme" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Coopmaresme" in settings.PROJECT_NAME:
+        migrate_coopmaresme(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "Coòpolis" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
     # elif "Coopsetània" in settings.PROJECT_NAME:
@@ -221,6 +227,34 @@ def migrate_coopcamp(
         updated += activity_model.objects.filter(organizer=organizer_id).update(
             circle=circle,
         )
+    print(f"Registres actualitzats: {updated}")
+    print("Establint tots els Activity.organizer a None")
+    updated = activity_model.objects.all().update(organizer=None)
+    print(f"Registres actualitzats: {updated}")
+    print("Eliminant tots els Organizers")
+    organizer_model.objects.all().delete()
+
+
+def migrate_coopmaresme(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    Coopmaresme ho tenen bé i únicament una organitzadora, el propi ateneu.
+
+    Cal:
+    - per cada Activity, posar Activity.circle a CERCLE0
+    - posar totes les Activity.organizer a None
+    - Organizer.delete()
+    """
+    print("REORGANITZANT CERCLES PER COOPMARESME")
+    print("Assignant Activity.circle a CIRCLE0")
+    updated = activity_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+    )
     print(f"Registres actualitzats: {updated}")
     print("Establint tots els Activity.organizer a None")
     updated = activity_model.objects.all().update(organizer=None)
