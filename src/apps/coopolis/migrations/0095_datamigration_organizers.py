@@ -102,7 +102,6 @@ def migrate_altpirineu(
     for organizer in organizer_model.objects.all():
         entity = entity_model(id=organizer.id, name=organizer.name)
         entity.save()
-    for entity in entity_model.objects.all():
     print("per cada Activity, assignar Activity.entity = Activity.organizer.")
     for activity in activity_model.objects.all():
         if not activity.organizer:
