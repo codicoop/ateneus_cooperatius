@@ -67,8 +67,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Coopsetània" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Coopsetània" in settings.PROJECT_NAME:
+        migrate_coopsetania(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "La Col·lectiva" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
     # elif "Ponent Coopera" in settings.PROJECT_NAME:
@@ -324,6 +330,64 @@ def migrate_coopolis(
     updated = activity_model.objects.all().update(organizer=None)
     print(f"Registres actualitzats: {updated}")
     print("Eliminant tots els Organizers")
+    organizer_model.objects.all().delete()
+
+
+def migrate_coopsetania(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    Coopsetània tenen entitats i organitzadores intercanviades.
+    Però no tenen cercles, només l'Ateneu, incloent tenen alguns (pocs)
+    registres assignats a un cercle "Coopsetània",
+    que podem assumir que és el mateix ateneu però que algú l'haurà creat per
+    error.
+
+    Per tant podem assignar-ho tot al CERCLE0 i eliminar les entitats.
+
+    Tots els d'organitzadora s'han de copiar a Entitat i assignar als registres.
+    """
+    print("REORGANITZANT CERCLES PER COOPSETÀNIA")
+    print("assignar totes les Activity.organizer al circle.CERCLE0"
+          "i totes les Activity.entity a None")
+    updated = activity_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+        entity=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les Activity.entity a None.")
+    updated = stagesession_model.objects.all().update(
+        entity=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les ProjectStageSession.entity a None.")
+    updated = stage_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("eliminar tots els registres d'Entity.")
+    entity_model.objects.all().delete()
+    print("copiar tots els Organizer cap a Entity.")
+    for organizer in organizer_model.objects.all():
+        entity = entity_model(id=organizer.id, name=organizer.name)
+        entity.save()
+    print("per cada Activity, assignar Activity.entity = Activity.organizer.")
+    for activity in activity_model.objects.all():
+        if not activity.organizer:
+            continue
+        activity.entity_id = activity.organizer.id
+        activity.save()
+    print("per cada ProjectStage, assignar a tots els "
+          "seus ProjectStageSession.entity = ProjectStage.stage_organizer.")
+    for stage in stage_model.objects.all():
+        stage.stage_sessions.all().update(
+            entity=stage.stage_organizer,
+        )
+    print("eliminar tots els registres d'Organizer.")
     organizer_model.objects.all().delete()
 
 
