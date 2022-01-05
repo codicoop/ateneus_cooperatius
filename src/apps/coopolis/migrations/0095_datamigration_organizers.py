@@ -91,8 +91,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Ponent Coopera" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Terres de l'Ebre" in settings.PROJECT_NAME:
+        migrate_terresebre(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "Terres de l'Ebre" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
     # elif "Terres Gironines" in settings.PROJECT_NAME:
@@ -499,6 +505,48 @@ def migrate_ponentcoopera(
         stage.stage_sessions.all().update(
             entity=stage.stage_organizer,
         )
+    print("eliminar tots els registres d'Organizer.")
+    organizer_model.objects.all().delete()
+
+
+def migrate_terresebre(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    Terres de l'Ebre no tenen cercles. No obstant, a Organitzadora hi tenen un
+    registre "Unió Social de Flix" que només té assignada una Activity, que
+    entenc que és una entitat.
+
+    Per tant podem assignar-ho tot al CERCLE0.
+
+    Cal moure aquesta organitzadora Unió Social de Flix cap a Entity.
+    Cal assignar l'Activity.entity que té Unió Social de Flix.
+    """
+    print("REORGANITZANT CERCLES PER TERRES DE L'EBRE")
+    print("assignar totes les Activity.circle al circle.CERCLE0"
+          "i totes les Activity.entity a None")
+    updated = activity_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les ProjectStage.circle a Ateneu.")
+    updated = stage_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("crear la Entity que ara hi ha a Organizer.")
+    new_entity = entity_model(name="Unió Social de Flix")
+    new_entity.save()
+    print("posar la (les?) Activity.entity a la que té com a organizer Unió Social "
+          "de Flix.")
+    updated = activity_model.objects.filter(organizer=5).update(
+        entity=new_entity,
+    )
+    print(f"{updated} registres actualitzats.")
     print("eliminar tots els registres d'Organizer.")
     organizer_model.objects.all().delete()
 
