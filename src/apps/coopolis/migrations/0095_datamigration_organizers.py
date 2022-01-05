@@ -99,10 +99,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Terres de l'Ebre" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
-    # elif "Terres Gironines" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Terres Gironines" in settings.PROJECT_NAME:
+        migrate_terresgironines(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "Vallès Occidental" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
 
@@ -548,6 +552,44 @@ def migrate_terresebre(
     )
     print(f"{updated} registres actualitzats.")
     print("eliminar tots els registres d'Organizer.")
+    organizer_model.objects.all().delete()
+
+
+def migrate_terresgironines(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    Terres Gironines ho tenen perfectament bé, només cal traslladar els
+    Organizers com a .circle i fer neteja.
+
+    """
+    print("REORGANITZANT CERCLES PER TERRES GIRONINES")
+    print("Assignant Activity.circle segons l'Activity.organizer corresponent")
+    circles = {
+        12: CirclesChoices.CERCLE0,
+        13: CirclesChoices.CERCLE1,
+        14: CirclesChoices.CERCLE2,
+        15: CirclesChoices.CERCLE3,
+    }
+    for organizer_id, circle in circles.items():
+        updated = activity_model.objects.filter(organizer=organizer_id).update(
+            circle=circle,
+        )
+        print(f"Activity actualitzats per organizer {organizer_id}: {updated}"
+              f"a cercle {circle}")
+        updated = stage_model.objects.filter(stage_organizer=organizer_id).update(
+            circle=circle,
+        )
+        print(f"ProjectStage actualitzats per organizer {organizer_id}: "
+              f"{updated} a cercle {circle}")
+    print("Establint tots els Activity.organizer a None")
+    updated = activity_model.objects.all().update(organizer=None)
+    print(f"Registres actualitzats: {updated}")
+    print("Eliminant tots els Organizers")
     organizer_model.objects.all().delete()
 
 
