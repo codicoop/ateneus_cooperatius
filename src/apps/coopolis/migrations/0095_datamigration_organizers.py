@@ -75,8 +75,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "La Col·lectiva" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "La Col·lectiva" in settings.PROJECT_NAME:
+        migrate_hospitalet(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "Ponent Coopera" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
     # elif "Terres de l'Ebre" in settings.PROJECT_NAME:
@@ -387,6 +393,49 @@ def migrate_coopsetania(
         stage.stage_sessions.all().update(
             entity=stage.stage_organizer,
         )
+    print("eliminar tots els registres d'Organizer.")
+    organizer_model.objects.all().delete()
+
+
+def migrate_hospitalet(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    La Col·lectiva tenen entitats i organitzadores intercanviades.
+    Però no tenen cercles, només l'Ateneu.
+
+    Per tant podem assignar-ho tot al CERCLE0 i eliminar les entitats.
+
+    Tampoc hi ha organitzadores així que podem eliminar els valors i ja està.
+    """
+    print("REORGANITZANT CERCLES PER LA COL·LECTIVA")
+    print("assignar totes les Activity.organizer al circle.CERCLE0,"
+          "totes les Activity.entity a None"
+          "i totes les Activity.organizer a None.")
+    updated = activity_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+        entity=None,
+        organizer=None
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les ProjectStage.circle a Ateneu"
+          "i les ProjectStage.organizer a None.")
+    updated = stage_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+        stage_organizer=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les ProjectStageSession.entity a None.")
+    updated = stagesession_model.objects.all().update(
+        entity=None,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("eliminar tots els registres d'Entity.")
+    entity_model.objects.all().delete()
     print("eliminar tots els registres d'Organizer.")
     organizer_model.objects.all().delete()
 
