@@ -83,7 +83,7 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    elif "Ponentcoopera" in settings.PROJECT_NAME:
+    elif "Ponent Coopera" in settings.PROJECT_NAME:
         migrate_ponentcoopera(
             activity_model,
             stage_model,
