@@ -59,8 +59,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Coòpolis" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Coòpolis" in settings.PROJECT_NAME:
+        migrate_coopolis(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
     # elif "Coopsetània" in settings.PROJECT_NAME:
     #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
     # elif "La Col·lectiva" in settings.PROJECT_NAME:
@@ -222,14 +228,21 @@ def migrate_coopcamp(
         3: CirclesChoices.CERCLE3,
         5: CirclesChoices.CERCLE4,
     }
-    updated = 0
     for organizer_id, circle in circles.items():
-        updated += activity_model.objects.filter(organizer=organizer_id).update(
+        updated = activity_model.objects.filter(organizer=organizer_id).update(
             circle=circle,
         )
+        print(f"Activity actualitzats per organizer {organizer_id}: {updated}")
+        updated = stage_model.objects.filter(stage_organizer=organizer_id).update(
+            circle=circle,
+        )
+        print(f"ProjectStage actualitzats per organizer {organizer_id}: {updated}")
     print(f"Registres actualitzats: {updated}")
     print("Establint tots els Activity.organizer a None")
     updated = activity_model.objects.all().update(organizer=None)
+    print(f"Registres actualitzats: {updated}")
+    print("Establint tots els ProjectStage.stage_organizer a None")
+    updated = stage_model.objects.all().update(stage_organizer=None)
     print(f"Registres actualitzats: {updated}")
     print("Eliminant tots els Organizers")
     organizer_model.objects.all().delete()
@@ -256,6 +269,57 @@ def migrate_coopmaresme(
         circle=CirclesChoices.CERCLE0,
     )
     print(f"Registres actualitzats: {updated}")
+    print("Establint tots els Activity.organizer a None")
+    updated = activity_model.objects.all().update(organizer=None)
+    print(f"Registres actualitzats: {updated}")
+    print("Eliminant tots els Organizers")
+    organizer_model.objects.all().delete()
+
+
+def migrate_coopolis(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    Els noms i IDs dels Organizers son:
+    Ateneu=5
+    CIRCLE_NAME_1=Consum i Transició Agroecològica=4
+    CIRCLE_NAME_2=Economies Feministes=7
+    CIRCLE_NAME_3=Incubació - Coòpolis=3
+    CIRCLE_NAME_4=Migracions - Coòpolis=2
+    CIRCLE_NAME_5=Transició Ecosocial=6
+
+    Entitat ho tenen correcte.
+
+    Cal:
+    - per cada Activity, posar Activity.circle corresponent a Activity.organizer
+    - posar totes les Activity.organizer a None
+    - Organizer.delete()
+    """
+    print("REORGANITZANT CERCLES PER COÒPOLIS")
+    print("Assignant Activity.circle segons l'Activity.organizer corresponent")
+    circles = {
+        5: CirclesChoices.CERCLE0,
+        4: CirclesChoices.CERCLE1,
+        7: CirclesChoices.CERCLE2,
+        3: CirclesChoices.CERCLE3,
+        2: CirclesChoices.CERCLE4,
+        6: CirclesChoices.CERCLE5,
+    }
+    for organizer_id, circle in circles.items():
+        updated = activity_model.objects.filter(organizer=organizer_id).update(
+            circle=circle,
+        )
+        print(f"Activity actualitzats per organizer {organizer_id}: {updated}"
+              f"a cercle {circle}")
+        updated = stage_model.objects.filter(stage_organizer=organizer_id).update(
+            circle=circle,
+        )
+        print(f"ProjectStage actualitzats per organizer {organizer_id}: "
+              f"{updated} a cercle {circle}")
     print("Establint tots els Activity.organizer a None")
     updated = activity_model.objects.all().update(organizer=None)
     print(f"Registres actualitzats: {updated}")
