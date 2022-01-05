@@ -358,19 +358,19 @@ def migrate_coopsetania(
     Tots els d'organitzadora s'han de copiar a Entitat i assignar als registres.
     """
     print("REORGANITZANT CERCLES PER COOPSETÀNIA")
-    print("assignar totes les Activity.organizer al circle.CERCLE0"
+    print("assignar totes les Activity.circle al circle.CERCLE0"
           "i totes les Activity.entity a None")
     updated = activity_model.objects.all().update(
         circle=CirclesChoices.CERCLE0,
         entity=None,
     )
     print(f"{updated} registres actualitzats.")
-    print("assignar totes les Activity.entity a None.")
+    print("assignar totes les ProjectStageSession.entity a None.")
     updated = stagesession_model.objects.all().update(
         entity=None,
     )
     print(f"{updated} registres actualitzats.")
-    print("assignar totes les ProjectStageSession.entity a None.")
+    print("assignar totes les ProjectStage.circle a Ateneu.")
     updated = stage_model.objects.all().update(
         circle=CirclesChoices.CERCLE0,
     )
