@@ -107,8 +107,14 @@ def migrate_organizer_to_circle(apps, schema_editor):
             entity_model,
             stagesession_model,
         )
-    # elif "Vallès Occidental" in settings.PROJECT_NAME:
-    #     migrate_altpirineu(activity_model, stage_model, organizer_model, entity_model)
+    elif "Vallès Occidental" in settings.PROJECT_NAME:
+        migrate_vallesoccidental(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        )
 
 
 def migrate_altpirineu(
@@ -591,6 +597,21 @@ def migrate_terresgironines(
     print(f"Registres actualitzats: {updated}")
     print("Eliminant tots els Organizers")
     organizer_model.objects.all().delete()
+
+
+def migrate_vallesoccidental(
+            activity_model,
+            stage_model,
+            organizer_model,
+            entity_model,
+            stagesession_model,
+        ):
+    """
+    Vallès Occidental té un embolic a tots dos camps que no sé interpretar.
+    Pendent que em truquin per parlar-ne.
+    """
+    print("REORGANITZANT CERCLES PER VALLÈS OCCIDENTAL")
+    print("Pendent de programar.")
 
 
 class Migration(migrations.Migration):
