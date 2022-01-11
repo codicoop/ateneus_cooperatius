@@ -607,11 +607,26 @@ def migrate_vallesoccidental(
             stagesession_model,
         ):
     """
-    Vallès Occidental té un embolic a tots dos camps que no sé interpretar.
-    Pendent que em truquin per parlar-ne.
+    Camp entitat: està tot correcte i no cal tocar res.
+    Camp organitzadora: el feien servir com a una dada interna que s'havien
+    inventat, es pot eliminar sense haver-lo de migrar enlloc.
+    Ateneu/Cercle: de moment ho assignem tot a Ateneu, però estic pendent que
+    em confirmin què passa amb el cercle que tenen.
     """
     print("REORGANITZANT CERCLES PER VALLÈS OCCIDENTAL")
-    print("Pendent de programar.")
+    print("assignar totes les Activity.circle al circle.CERCLE0"
+          "i totes les Activity.entity a None")
+    updated = activity_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("assignar totes les ProjectStage.circle a Ateneu.")
+    updated = stage_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+    )
+    print(f"{updated} registres actualitzats.")
+    print("Eliminant tots els Organizers")
+    organizer_model.objects.all().delete()
 
 
 class Migration(migrations.Migration):
