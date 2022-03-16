@@ -7,10 +7,10 @@ from django.db.models import (
 )
 from django.utils import formats
 
-from apps.cc_courses.models import Organizer, Activity, Entity
+from apps.cc_courses.models import Activity
+from apps.coopolis.choices import CirclesChoices
 from apps.coopolis.models import ActivityPoll
 from apps.dataexports.exports.exceptions import (
-    MissingOrganizers,
     AxisDoesNotExistException
 )
 from apps.dataexports.exports.manager import ExcelExportManager
@@ -22,13 +22,9 @@ from apps.dataexports.exports.row_factories import (
 
 
 class ExportPolls:
-    def __init__(self, export_obj, by_entity=False):
+    def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
-        self.organizers = dict()
-        self.import_organizers(by_entity)
-        self.organizer_field = "organizer" if not by_entity else "entity"
-        if not len(self.organizers):
-            raise MissingOrganizers
+        self.circles = self.import_circles()
 
     def export(self):
         """ Each function here called handles the creation of one of the
@@ -161,7 +157,7 @@ class ExportPolls:
                 ),
                 TextWithValue(
                     "Cercle / Ateneu",
-                    activity.organizer.name if activity.organizer else "-",
+                    activity.get_circle_display() if activity.circle else "-",
                 ),
                 TextWithValue(
                     "Municipi",
@@ -324,11 +320,12 @@ class ExportPolls:
 
         columns = [
             ("", 60),
-            (self.organizers.get(0), 20),
-            (self.organizers.get(1), 20),
-            (self.organizers.get(2), 20),
-            (self.organizers.get(3), 20),
-            (self.organizers.get(4), 20),
+            (self.circles[0][1], 20),
+            (self.circles[1][1], 20),
+            (self.circles[2][1], 20),
+            (self.circles[3][1], 20),
+            (self.circles[4][1], 20),
+            (self.circles[5][1], 20),
         ]
         self.export_manager.create_columns(columns)
 
@@ -336,11 +333,11 @@ class ExportPolls:
 
     def global_report_obj(self, axis: str = None):
         querysets = []
-        for organizer in self.organizers.values():
+        for circle_value, circle_label in self.circles:
             qs = ActivityPoll.objects.filter(
                 **{
                     "activity__date_start__range": self.export_manager.subsidy_period_range,
-                    f"activity__{self.organizer_field}": organizer,
+                    f"activity__circle": circle_value,
                 }
             )
             if axis:
@@ -348,24 +345,14 @@ class ExportPolls:
             querysets.append(
                 qs
             )
-        # qs.annotate(Count("id"))
-        # qs.order_by()
         averages = {
             "ateneu": self.get_averages_qs(querysets[0]),
-            "cercle1": {},
-            "cercle2": {},
-            "cercle3": {},
-            "cercle4": {},
+            "cercle1": self.get_averages_qs(querysets[1]),
+            "cercle2": self.get_averages_qs(querysets[2]),
+            "cercle3": self.get_averages_qs(querysets[3]),
+            "cercle4": self.get_averages_qs(querysets[4]),
+            "cercle5": self.get_averages_qs(querysets[5]),
         }
-        total_organizers = len(self.organizers)
-        if total_organizers > 1:
-            averages["cercle1"] = self.get_averages_qs(querysets[1])
-        if total_organizers > 2:
-            averages["cercle2"] = self.get_averages_qs(querysets[2])
-        if total_organizers > 3:
-            averages["cercle3"] = self.get_averages_qs(querysets[3])
-        if total_organizers > 4:
-            averages["cercle4"] = self.get_averages_qs(querysets[4])
 
         return querysets, averages
 
@@ -674,18 +661,8 @@ class ExportPolls:
         for row in rows:
             self.export_manager.fill_row_from_factory(row)
 
-    def import_organizers(self, by_entity):
-        if by_entity:
-            model = Entity
-        else:
-            model = Organizer
-        orgs = model.objects.all()
-        i = 0
-        for org in orgs:
-            self.organizers.update({
-                i: org
-            })
-            i += 1
+    def import_circles(self):
+        return CirclesChoices.choices_named()
 
     def get_global_average(self, values: dict):
         averageable_fields = [
