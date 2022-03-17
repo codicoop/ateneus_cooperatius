@@ -8,7 +8,7 @@ from apps.dataexports.exports.justification_2_itineraris import (
 from apps.dataexports.exports.justification_service import \
     ExportJustificationService
 from apps.dataexports.exports.memory import ExportMemory
-from apps.dataexports.exports.polls import ExportPolls
+from apps.dataexports.exports.polls import ExportPolls, ExportPollsByServices
 from apps.dataexports.exports.stages_details import ExportStagesDetails
 
 
@@ -69,4 +69,8 @@ class ExportFunctions:
 
     def export_polls(self, export_obj):
         controller = ExportPolls(export_obj)
+        return controller.export()
+
+    def export_polls_by_services(self, export_obj):
+        controller = ExportPollsByServices(export_obj)
         return controller.export()

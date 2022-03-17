@@ -8,7 +8,7 @@ from django.db.models import (
 from django.utils import formats
 
 from apps.cc_courses.models import Activity
-from apps.coopolis.choices import CirclesChoices
+from apps.coopolis.choices import CirclesChoices, ServicesChoices
 from apps.coopolis.models import ActivityPoll
 from apps.dataexports.exports.exceptions import (
     AxisDoesNotExistException
@@ -30,14 +30,20 @@ class ExportPolls:
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.global_report()
-        for axis in settings.AXIS_OPTIONS:
-            self.global_report(axis[0])
+        self.generate_dynamic_sheets()
         self.answers_list("also_interested_in", "AltresTemesInterès")
         self.answers_list("heard_about_it", "ComUsHeuAssabentat")
         self.answers_list("comments", "VolsComentarAlgunaCosaMés")
         self.all_activities()
 
         return self.export_manager.return_document("resultats_enquestes")
+
+    def get_sheets_list(self):
+        return settings.AXIS_OPTIONS
+
+    def generate_dynamic_sheets(self):
+        for sheet in self.get_sheets_list():
+            self.global_report(sheet[0])
 
     def all_activities(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
@@ -310,7 +316,7 @@ class ExportPolls:
     def global_report(self, axis: str = None):
         if axis:
             self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
-                self.get_axis_title(axis)
+                self.get_dynamic_sheet_title(axis)
             )
         else:
             # The first sheet is already created, just need to adjust name.
@@ -341,10 +347,8 @@ class ExportPolls:
                 }
             )
             if axis:
-                qs = qs.filter(activity__axis=axis)
-            querysets.append(
-                qs
-            )
+                qs = self.add_sheet_filter_to_qs(qs, axis)
+            querysets.append(qs)
         averages = {
             "ateneu": self.get_averages_qs(querysets[0]),
             "cercle1": self.get_averages_qs(querysets[1]),
@@ -693,8 +697,19 @@ class ExportPolls:
             return mean(numbers)
         return 0
 
-    def get_axis_title(self, axis):
-        for axis_tuple in settings.AXIS_OPTIONS:
+    def get_dynamic_sheet_title(self, axis):
+        for axis_tuple in self.get_sheets_list():
             if axis in axis_tuple:
                 return axis_tuple[1]
         raise AxisDoesNotExistException
+
+    def add_sheet_filter_to_qs(self, qs, axis):
+        return qs.filter(activity__axis=axis)
+
+
+class ExportPollsByServices(ExportPolls):
+    def add_sheet_filter_to_qs(self, qs, axis):
+        return qs.filter(activity__service=axis)
+
+    def get_sheets_list(self):
+        return ServicesChoices.choices
