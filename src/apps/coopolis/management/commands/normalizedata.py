@@ -135,15 +135,9 @@ class Command(BaseCommand):
                         'ignore_errors': True
                     },
                     {
-                        'name': "Resultats enquestes de satisfacció per organitzadora",
+                        'name': "Resultats enquestes de satisfacció",
                         'subsidy_period': period,
                         'function_name': 'export_polls',
-                        'ignore_errors': True
-                    },
-                    {
-                        'name': "Resultats enquestes de satisfacció per entitat",
-                        'subsidy_period': period,
-                        'function_name': 'export_polls_by_entity',
                         'ignore_errors': True
                     },
                 ]
