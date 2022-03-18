@@ -471,8 +471,8 @@ class FollowUpSpreadsheet:
                 follow_up_situation if follow_up_situation else '',
                 raw_row["project"].last_stage_circle,
                 raw_row['project'].name,
-                (raw_row['project'].axis_list
-                    if raw_row['project'].axis_list else ''),
+                (raw_row['project'].services_list
+                    if raw_row['project'].services_list else ''),
                 stage_responsible if stage_responsible else '',
                 raw_row['members_h'],
                 raw_row['members_d'],

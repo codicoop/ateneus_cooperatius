@@ -178,10 +178,9 @@ class Project(models.Model):
     @property
     def axis_list(self):
         """
-        This method is not used in the new data, reports or exports
-        since 1/11/2021, but needs to be kept until it's confirmed that they
-        don't want the old exports.
-        :return:
+        Justification export prior to 1/11/2021 still use this method as will
+        probably do so forever unless they decide to completely ditch the
+        information about axis and subaxis.
         """
         if not self.stages or self.stages.count() < 1:
             return None
