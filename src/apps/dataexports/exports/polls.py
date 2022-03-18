@@ -156,8 +156,7 @@ class ExportPolls:
                 EmptyRow(),
                 EmptyRow(),
                 TextWithValue("Nom de l'actuació", activity.name),
-                TextWithValue("Servei", activity.get_service_display()),
-                TextWithValue("Eix", activity.axis),
+                self.get_service_or_axis_row(activity),
                 TextWithValue(
                     "Tipus d'actuació",
                     "Per menors" if activity.for_minors else "Per adults",
@@ -278,6 +277,9 @@ class ExportPolls:
 
             for row in rows:
                 self.export_manager.fill_row_from_factory(row)
+
+    def get_service_or_axis_row(self, activity):
+        return TextWithValue("Eix", activity.axis)
 
     def answers_list(self, question, title):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
@@ -716,3 +718,6 @@ class ExportPollsByServices(ExportPolls):
 
     def get_sheets_list(self):
         return ServicesChoices.choices
+
+    def get_service_or_axis_row(self, activity):
+        return TextWithValue("Servei", activity.get_service_display())
