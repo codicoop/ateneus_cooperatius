@@ -433,9 +433,9 @@ class FollowUpSpreadsheet:
         columns = [
             ("ID", 10),
             ("Seguiment", 35),
-            ("Organitzadora", 20),
+            ("Ateneu/Cercle", 20),
             ("Nom", 50),
-            ("Eix-Subeix", 30),
+            ("Servei", 30),
             ("Tutoritza", 20),
             ("Membres H", 15),
             ("Membres D", 15),
@@ -463,14 +463,13 @@ class FollowUpSpreadsheet:
         for raw_row in self.raw_rows:
             self.row_number += 1
             print(raw_row)
-            stage_organizer = raw_row['project'].last_stage_organizer
             stage_responsible = raw_row['project'].last_stage_responsible
             follow_up_situation = \
                 raw_row['project'].get_follow_up_situation_display()
             row = [
                 raw_row['project'].id,
                 follow_up_situation if follow_up_situation else '',
-                stage_organizer if stage_organizer else '',
+                raw_row["project"].last_stage_circle,
                 raw_row['project'].name,
                 (raw_row['project'].axis_list
                     if raw_row['project'].axis_list else ''),
