@@ -62,7 +62,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
         'subsidy_period',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type', 'axis',
-        'stage_organizer', 'project__sector'
+        'circle', 'project__sector'
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
