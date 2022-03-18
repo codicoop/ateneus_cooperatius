@@ -700,7 +700,9 @@ class ExportPolls:
     def get_dynamic_sheet_title(self, axis):
         for axis_tuple in self.get_sheets_list():
             if axis in axis_tuple:
-                return axis_tuple[1]
+                # If you want to change the char limit trim, keep it below 32
+                # chars or you'll raise a warning.
+                return axis_tuple[1][:20]
         raise AxisDoesNotExistException
 
     def add_sheet_filter_to_qs(self, qs, axis):
