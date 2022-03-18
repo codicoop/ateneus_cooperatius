@@ -197,7 +197,7 @@ class ProjectStagesInline(admin.StackedInline):
         (None, {
             'fields': ['project', 'stage_type',
                        'subsidy_period', 'service',
-                       'stage_organizer', 'stage_responsible',
+                       'circle', 'stage_responsible',
                        'scanned_certificate',
                        'involved_partners', 'hours_sum', 'date_start',
                        "earliest_session_field", "stage_sessions_field", ]
