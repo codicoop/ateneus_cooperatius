@@ -156,6 +156,7 @@ class ExportPolls:
                 EmptyRow(),
                 EmptyRow(),
                 TextWithValue("Nom de l'actuació", activity.name),
+                TextWithValue("Servei", activity.get_service_display()),
                 TextWithValue("Eix", activity.axis),
                 TextWithValue(
                     "Tipus d'actuació",
