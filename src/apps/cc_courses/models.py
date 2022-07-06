@@ -57,7 +57,7 @@ class Entity(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.name if self.is_active else f"[desactivada] {self.name}"
 
 
 class Organizer(models.Model):
