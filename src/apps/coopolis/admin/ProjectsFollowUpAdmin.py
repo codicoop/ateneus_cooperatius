@@ -13,11 +13,8 @@ from .ProjectAdmin import FilterByFounded
 from apps.dataexports.models import SubsidyPeriod
 from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp, \
     ProjectsFollowUpService, ProjectsConstituted, ProjectsConstitutedService
+from ..exceptions import MissingCurrentSubsidyPeriod
 from ..models import User
-
-
-class MissingCurrentSubsidyPeriod(Exception):
-    pass
 
 
 @admin.register(ProjectsFollowUp)
