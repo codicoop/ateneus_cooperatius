@@ -120,6 +120,9 @@ CIRCLE_NAMES = [
     env.str("CIRCLE_NAME_5", ""),
 ]
 
+# Celery
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
+
 # Application definition
 INSTALLED_APPS = [
     'django_extensions',
@@ -135,6 +138,7 @@ INSTALLED_APPS = [
     'apps.cc_courses',
     'apps.facilities_reservations',
     'apps.coopolis',
+    'apps.celery',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',
