@@ -15,3 +15,4 @@ local_*.py
 /dumps/
 src/conf/maintenance_mode_state.txt
 /docker/settings/
+celerybeat-schedule
