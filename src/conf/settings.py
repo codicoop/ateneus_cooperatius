@@ -120,9 +120,6 @@ CIRCLE_NAMES = [
     env.str("CIRCLE_NAME_5", ""),
 ]
 
-# Celery
-CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
-
 # Application definition
 INSTALLED_APPS = [
     'django_extensions',
@@ -669,3 +666,13 @@ Q_CLUSTER = {
     "timeout": 30,
     "workers": 1,
 }
+
+# Celery
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
+CELERY_TIMEZONE = TIME_ZONE
+DAILY_TASKS_EXECUTION_TIME = env.int("DAILY_TASKS_EXECUTION_TIME", default=5)
+NOTIFY_SESSION_ORGANIZER_DAYS_BEFORE = env.int(
+    "NOTIFY_SESSION_ORGANIZER_DAYS_BEFORE",
+    default=3,
+)
+
