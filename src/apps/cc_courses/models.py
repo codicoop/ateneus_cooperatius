@@ -379,6 +379,11 @@ class Activity(models.Model):
         null=True,
         blank=True,
     )
+    organizer_reminded = models.DateTimeField(
+        "data d'enviament de recordatori a responsable",
+        null=True,
+        blank=True,
+    )
 
     objects = models.Manager()
     published = Published()
