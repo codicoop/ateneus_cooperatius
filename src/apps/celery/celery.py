@@ -6,7 +6,6 @@ from celery import Celery
 from celery.schedules import crontab
 from django.apps import apps
 from django.conf import settings
-from django.utils import timezone
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "conf.settings")
@@ -28,18 +27,15 @@ def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(10.0, function_name.s('hello'))
     """
 
-    sender.add_periodic_task(10.0, notify_activity_organizer.s())
-
     # Executes every day at settings.DAILY_TASKS_EXECUTION_TIME
-    # sender.add_periodic_task(
-    #     crontab(hour=settings.DAILY_TASKS_EXECUTION_TIME),
-    #     notify_activity_organizer.s(),
-    # )
+    sender.add_periodic_task(
+        crontab(hour=settings.DAILY_TASKS_EXECUTION_TIME),
+        notify_activity_organizer.s(),
+    )
 
 
 @app.task
 def test(arg):
-    # print(f"hora actual: {timezone.now()}")
     print(arg)
 
 
@@ -47,16 +43,17 @@ def test(arg):
 def notify_activity_organizer():
     activity_model = apps.get_model("cc_courses", "Activity")
     day = datetime.today() + timedelta(
-        days=settings.NOTIFY_SESSION_ORGANIZER_DAYS_BEFORE
+        days=settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE
     )
     print(f"{day=}")
 
     activities = activity_model.objects.filter(
+        responsible__isnull=False,
         organizer_reminded__isnull=True,
         date_start=day,
     )
     for activity in activities:
-        activity.send_notification_to_responsible()
+        activity.send_reminder_to_responsible()
 
     print(f"Notifications to responsibles for {len(activities)} sent.")
 

@@ -541,6 +541,30 @@ class Activity(models.Model):
         self.poll_sent = datetime.now()
         self.save()
 
+    def get_reminder_to_responsible_email(self):
+        mail = MyMailTemplate("EMAIL_ACTIVITY_RESPONSIBLE_REMINDER")
+        mail.subject_strings = {
+            "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
+            "activity_name": self.name
+        }
+        absolute_url_admin_activity = (
+                settings.ABSOLUTE_URL +
+                reverse(
+                    "admin:cc_courses_activity_change",
+                    kwargs={"object_id": self.id},
+                )
+        )
+        mail.body_strings = {
+            "absolute_url_admin_activity": absolute_url_admin_activity,
+        }
+        return mail
+
+    def send_reminder_to_responsible(self):
+        mail = self.get_reminder_to_responsible_email()
+        mail.to = self.responsible.email
+        mail.send()
+        print(f"Sending reminder to {self.responsible.email} for {self}")
+
 
 class ActivityResourceFile(models.Model):
     class Meta:
