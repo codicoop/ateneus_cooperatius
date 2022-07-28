@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 source sh_vars.conf
 day=$(date +%y%m%d)
 

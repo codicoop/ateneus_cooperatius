@@ -135,6 +135,7 @@ INSTALLED_APPS = [
     'apps.cc_courses',
     'apps.facilities_reservations',
     'apps.coopolis',
+    'apps.celery',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',
@@ -665,3 +666,13 @@ Q_CLUSTER = {
     "timeout": 30,
     "workers": 1,
 }
+
+# Celery
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
+CELERY_TIMEZONE = TIME_ZONE
+DAILY_TASKS_EXECUTION_TIME = env.int("DAILY_TASKS_EXECUTION_TIME", default=5)
+REMIND_SESSION_ORGANIZER_DAYS_BEFORE = env.int(
+    "REMIND_SESSION_ORGANIZER_DAYS_BEFORE",
+    default=3,
+)
+
