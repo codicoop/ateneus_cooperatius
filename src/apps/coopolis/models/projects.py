@@ -410,7 +410,7 @@ class ProjectStage(models.Model):
         "Certificat", blank=True, null=True,
         storage=PrivateMediaStorage(), max_length=250)
     involved_partners = models.ManyToManyField(
-        User, verbose_name="persones involucrades", blank=True,
+        User, verbose_name="(obsolet) Persones involucrades", blank=True,
         related_name='stage_involved_partners',
         help_text="Persones que apareixeran a la justificació com a que han "
                   "participat a l'acompanyament.")
@@ -508,6 +508,11 @@ class ProjectStageSession(models.Model):
     entity = models.ForeignKey(
         Entity, verbose_name="Entitat", default=None, null=True, blank=True,
         on_delete=models.SET_NULL)
+    involved_partners = models.ManyToManyField(
+        User, verbose_name="persones involucrades", blank=True,
+        related_name='stage_sessions_participated',
+        help_text="Persones que apareixeran a la justificació com a que han "
+                  "participat a la sessió d'acompanyament.")
 
     def __str__(self):
         return (f"Sessió d'acompanyament del {self.date} per "
