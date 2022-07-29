@@ -4,7 +4,7 @@ from constance import config
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
@@ -468,6 +468,15 @@ class ProjectStage(models.Model):
             return self.stage_sessions.latest("date")
         except ProjectStageSession.DoesNotExist:
             return None
+
+    @property
+    def involved_partners_count(self):
+        sessions = ProjectStageSession.objects.filter(
+            project_stage=self,
+        ).annotate(
+            count=Count('involved_partners', distinct=True),
+        ).aggregate(total=Sum('count'))
+        return sessions["total"]
 
     def __str__(self):
         txt = (f"{str(self.project)}: {self.get_full_type_str()} "

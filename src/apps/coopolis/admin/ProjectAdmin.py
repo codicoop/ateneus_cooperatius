@@ -111,7 +111,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     _has_certificate.short_description = "Certificat"
 
     def _participants_count(self, obj):
-        return len(obj.involved_partners.all())
+        return obj.involved_partners_count
     _participants_count.short_description = "Participants"
 
     def project_field_ellipsis(self, obj):
