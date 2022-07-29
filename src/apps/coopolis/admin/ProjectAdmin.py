@@ -44,6 +44,10 @@ class ProjectStageSessionsInline(admin.StackedInline):
     show_change_link = False
     can_delete = True
     empty_value_display = '(cap)'
+    raw_id_fields = ('involved_partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['involved_partners'],
+    }
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "session_responsible":
