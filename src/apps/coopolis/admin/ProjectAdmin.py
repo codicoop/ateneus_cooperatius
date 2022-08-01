@@ -48,6 +48,16 @@ class ProjectStageSessionsInline(admin.StackedInline):
     autocomplete_lookup_fields = {
         'm2m': ['involved_partners'],
     }
+    fields = (
+        "session_responsible",
+        "date",
+        "hours",
+        "follow_up",
+        "entity",
+        "involved_partners",
+        "project_partners",
+    )
+    readonly_fields = ("project_partners", )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "session_responsible":

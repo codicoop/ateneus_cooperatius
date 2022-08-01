@@ -540,6 +540,15 @@ class ProjectStageSession(models.Model):
         help_text="Persones que apareixeran a la justificació com a que han "
                   "participat a la sessió d'acompanyament.")
 
+    @property
+    def project_partners(self):
+        partners = self.project_stage.project.partners.all()
+        partners_list = [str(x) for x in partners]
+        partners_list.sort()
+        return ", ".join(partners_list)
+
+    project_partners.fget.short_description = "Persones sòcies"
+
     def __str__(self):
         return (f"Sessió d'acompanyament del {self.date} per "
                 f"{self.project_stage.project.name}")
