@@ -319,7 +319,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                        'solves_necessities', 'social_base']
         }),
         ("Dades internes gestionades per l'ateneu", {
-            'fields': ['partners', 'registration_date', 'cif',
+            'fields': ['partners', 'partners_participants',
+                       'registration_date', 'cif',
                        'constitution_date', 'subsidy_period', 'derivation',
                        'derivation_date', 'description',
                        'employment_estimation', 'other', 'follow_up_situation',
@@ -331,6 +332,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     )
     readonly_fields = (
         'id', 'follow_up_situation_update', 'partners_activities',
+        'partners_participants',
     )
     actions = ["export_as_csv"]
     change_actions = ('print', )

@@ -249,6 +249,23 @@ class Project(models.Model):
 
     partners_activities.fget.short_description = "Sessions"
 
+    @property
+    def partners_participants(self):
+        """
+        To display the list of all the people who participated in project
+        stage sessions.
+        """
+        participants = User.objects.filter(
+            stage_sessions_participated__project_stage__project=self,
+        ).distinct()
+        participants_strings = [str(x) for x in participants]
+        participants_strings.sort()
+        return mark_safe(", ".join(participants_strings))
+
+    partners_participants.fget.short_description = (
+        "Participants a sessions d'acompanyament"
+    )
+
     def save(self, *args, **kw):
         if self.pk is not None:
             orig = Project.objects.get(pk=self.pk)
