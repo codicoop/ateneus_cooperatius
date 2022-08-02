@@ -495,6 +495,12 @@ class ProjectStage(models.Model):
         ).aggregate(total=Sum('count'))
         return sessions["total"]
 
+    @property
+    def partners_involved_in_sessions(self):
+        return User.objects.filter(
+            stage_sessions_participated__in=self.stage_sessions.all()
+        ).distinct()
+
     def __str__(self):
         txt = (f"{str(self.project)}: {self.get_full_type_str()} "
                f"[{str(self.subsidy_period)}]")
