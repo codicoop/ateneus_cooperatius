@@ -82,17 +82,13 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
-    }
     fieldsets = [
         (None, {
             'fields': ['project', 'stage_type',
                        'subsidy_period', 'service', 'sub_service',
                        'circle', 'stage_responsible',
                        'scanned_certificate',
-                       'involved_partners', 'hours_sum', 'date_start',
+                       'hours_sum', 'date_start',
                        "earliest_session_field", ]
         }),
         ("Camps convocatòries < 2020", {
@@ -206,17 +202,13 @@ class ProjectStagesInline(admin.StackedInline):
     show_change_link = True
     can_delete = False
     empty_value_display = '(cap)'
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
-    }
     fieldsets = (
         (None, {
             'fields': ['project', 'stage_type',
                        'subsidy_period', 'service',
                        'circle', 'stage_responsible',
                        'scanned_certificate',
-                       'involved_partners', 'hours_sum', 'date_start',
+                       'hours_sum', 'date_start',
                        "earliest_session_field", "stage_sessions_field", ]
         }),
         ("Camps convocatòries < 2020", {
