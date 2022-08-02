@@ -488,12 +488,7 @@ class ProjectStage(models.Model):
 
     @property
     def involved_partners_count(self):
-        sessions = ProjectStageSession.objects.filter(
-            project_stage=self,
-        ).annotate(
-            count=Count('involved_partners', distinct=True),
-        ).aggregate(total=Sum('count'))
-        return sessions["total"]
+        return self.partners_involved_in_sessions.count()
 
     @property
     def partners_involved_in_sessions(self):
