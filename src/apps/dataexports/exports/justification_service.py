@@ -381,6 +381,7 @@ class ExportJustificationService:
             ("Breu descripció del projecte", 50),
             ("Total hores d'acompanyament", 10),
             ("[Data fi]", 13),
+            ("[Docs. justificació]", 10),
         ]
         self.export_manager.create_columns(columns)
 
@@ -395,7 +396,6 @@ class ExportJustificationService:
                 reference_number += 1
                 item = group['obj']
 
-                # hours = item.hours if item.hours is not None else ("", True)
                 hours = group['total_hours']
                 town = ("", True)
                 if item.project.town:
@@ -418,6 +418,7 @@ class ExportJustificationService:
                     item.project.description,  # Breu descripció.
                     hours,  # Total hores d'acompanyament.
                     item.latest_session.date if item.latest_session else '',
+                    item.justification_documents_total,
                 ]
                 self.export_manager.fill_row_data(row)
 
