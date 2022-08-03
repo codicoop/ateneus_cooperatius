@@ -9,6 +9,7 @@ from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 import modelclone
 
+from apps.coopolis.choices import ActivityFileType
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
 from apps.cc_courses.models import (
     Activity,
@@ -41,6 +42,33 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
             period = SubsidyPeriod.objects.get(id=value)
             return queryset.filter(date_start__range=(
                 period.date_start, period.date_end)
+            )
+        return queryset
+
+
+class FilterByJustificationFiles(admin.SimpleListFilter):
+    """
+    Allows Activities to be filtered by the existence of at least 1 internal
+    file of the type "justification".
+    """
+    title = "Fitxer justificació"
+    parameter_name = 'justification_file'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Sí'),
+            ('No', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "Yes":
+            queryset = Activity.objects.filter(
+                files__file_type=ActivityFileType.JUSTIFICATION,
+            )
+        if value == "No":
+            queryset = Activity.objects.exclude(
+                files__file_type=ActivityFileType.JUSTIFICATION,
             )
         return queryset
 
@@ -144,7 +172,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
-        FilterBySubsidyPeriod,
+        FilterBySubsidyPeriod, FilterByJustificationFiles,
         "service", ("place__town", admin.RelatedOnlyFieldListFilter),
         'course', 'date_start', 'room', 'circle', 'entity', 'place',
         'for_minors', 'cofunded',
