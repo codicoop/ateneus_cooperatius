@@ -56,6 +56,7 @@ class ProjectStageSessionsInline(admin.StackedInline):
         "entity",
         "involved_partners",
         "project_partners",
+        "justification_file",
     )
     readonly_fields = ("project_partners", )
 
