@@ -386,6 +386,20 @@ class Activity(models.Model):
         blank=True,
     )
 
+    # Camp per correu del recordatori d'omplir l'enquesta.
+    poll_reminder_body = models.TextField(
+        "Cos del correu de recordatori d'omplir l'enquesta",
+        null=True,
+        blank=True,
+        help_text=
+            "Aquest text s'inclourà al correu de recordatori. És molt "
+            "important que el formateig del text sigui el menor possible, i en"
+            " particular, que si copieu i enganxeu el text d'algun altre lloc "
+            "cap aquí, ho feu amb l'opció \"enganxar sense format\", ja que "
+            "sinó arrossegarà molta informació de formateig que "
+            "probablement farà que el correu es vegi malament."
+    )
+
     objects = models.Manager()
     published = Published()
 

@@ -445,7 +445,9 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     def send_poll(self, request, _id):
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
-            if 'send' in request.POST or 'send_all' in request.POST:
+            if 'send' in request.POST:
+                obj.poll_reminder_body = request.POST.get("poll_reminder_body")
+                obj.save()
                 obj.send_poll_email()
                 self.message_user(
                     request,
