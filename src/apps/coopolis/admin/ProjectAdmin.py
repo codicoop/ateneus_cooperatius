@@ -56,6 +56,7 @@ class ProjectStageSessionsInline(admin.StackedInline):
         "entity",
         "involved_partners",
         "project_partners",
+        "justification_file",
     )
     readonly_fields = ("project_partners", )
 
@@ -71,7 +72,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         'project_field_ellipsis', 'date_start', 'stage_type',
         'stage_responsible_field_ellipsis',
         'service', 'subsidy_period', '_has_certificate',
-        '_participants_count', 'project_field'
+        '_participants_count', 'project_field', 'justification_documents_total',
     )
     list_filter = (
         'subsidy_period',
@@ -84,19 +85,27 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     search_fields = ['project__name__unaccent']
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type',
-                       'subsidy_period', 'service', 'sub_service',
-                       'circle', 'stage_responsible',
-                       'scanned_certificate',
-                       'hours_sum', 'date_start',
-                       "earliest_session_field", ]
+            'fields': [
+                'project', 'stage_type',
+                'subsidy_period', 'service', 'sub_service',
+                'circle', 'stage_responsible',
+                'scanned_certificate',
+                'hours_sum', 'date_start',
+                "earliest_session_field",
+                "justification_documents_total",
+            ]
         }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
         }),
     ]
     inlines = (ProjectStageSessionsInline, )
-    readonly_fields = ('hours_sum', 'date_start', "earliest_session_field", )
+    readonly_fields = (
+        'hours_sum',
+        'date_start',
+        "earliest_session_field",
+        "justification_documents_total",
+    )
     subsidy_period_filter_param = "subsidy_period__id__exact"
 
     class Media:
@@ -204,19 +213,32 @@ class ProjectStagesInline(admin.StackedInline):
     empty_value_display = '(cap)'
     fieldsets = (
         (None, {
-            'fields': ['project', 'stage_type',
-                       'subsidy_period', 'service',
-                       'circle', 'stage_responsible',
-                       'scanned_certificate',
-                       'hours_sum', 'date_start',
-                       "earliest_session_field", "stage_sessions_field", ]
+            'fields': [
+                'project',
+                'stage_type',
+                'subsidy_period',
+                'service',
+                'circle',
+                'stage_responsible',
+                'scanned_certificate',
+                'hours_sum',
+                'date_start',
+                "earliest_session_field",
+                "stage_sessions_field",
+                "justification_documents_total",
+            ]
         }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
         }),
     )
-    readonly_fields = ('hours_sum', 'date_start', 'stage_sessions_field',
-                       "earliest_session_field",)
+    readonly_fields = (
+        'hours_sum',
+        'date_start',
+        'stage_sessions_field',
+        "earliest_session_field",
+        "justification_documents_total",
+    )
 
     def stage_sessions_field(self, obj):
         count = obj.sessions_count()

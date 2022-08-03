@@ -496,6 +496,14 @@ class ProjectStage(models.Model):
             stage_sessions_participated__in=self.stage_sessions.all()
         ).distinct()
 
+    @property
+    def justification_documents_total(self):
+        docs_count = self.stage_sessions.filter(
+            justification_file__isnull=False,
+        ).count()
+        return f"{docs_count} / {self.stage_sessions.count()}"
+    justification_documents_total.fget.short_description = "Docs justif."
+
     def __str__(self):
         txt = (f"{str(self.project)}: {self.get_full_type_str()} "
                f"[{str(self.subsidy_period)}]")
@@ -540,6 +548,12 @@ class ProjectStageSession(models.Model):
         related_name='stage_sessions_participated',
         help_text="Persones que apareixeran a la justificació com a que han "
                   "participat a la sessió d'acompanyament.")
+    justification_file = models.FileField(
+        "fitxer de justificació",
+        storage=PrivateMediaStorage(),
+        blank=True,
+        null=True,
+    )
 
     @property
     def project_partners(self):
