@@ -540,6 +540,12 @@ class ProjectStageSession(models.Model):
         related_name='stage_sessions_participated',
         help_text="Persones que apareixeran a la justificació com a que han "
                   "participat a la sessió d'acompanyament.")
+    justification_file = models.FileField(
+        "fitxer de justificació",
+        storage=PrivateMediaStorage(),
+        blank=True,
+        null=True,
+    )
 
     @property
     def project_partners(self):
