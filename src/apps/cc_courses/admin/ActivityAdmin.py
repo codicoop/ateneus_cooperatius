@@ -10,7 +10,13 @@ from constance import config
 import modelclone
 
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
-from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile, Entity
+from apps.cc_courses.models import (
+    Activity,
+    ActivityEnrolled,
+    ActivityResourceFile,
+    Entity,
+    ActivityFile,
+)
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
@@ -113,6 +119,15 @@ class ActivityResourcesInlineAdmin(admin.TabularInline):
     extra = 0
 
 
+class ActivityFileInlineAdmin(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    classes = ('grp-collapse', 'grp-closed')
+    model = ActivityFile
+    extra = 0
+
+
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -166,6 +181,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ('attendee_list_field', 'attendee_filter_field',
                        'send_reminder_field', 'activity_poll_field', ),
         }),
+        ("Fitxers interns", {
+            # Grappelli way for sorting inlines
+            'classes': ('placeholder files-group',),
+            'fields': (),
+        }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
         }),
@@ -178,7 +198,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
-    inlines = (ActivityResourcesInlineAdmin, ActivityEnrolledInline)
+    inlines = (
+        ActivityResourcesInlineAdmin,
+        ActivityEnrolledInline,
+        ActivityFileInlineAdmin,
+    )
     subsidy_period_filter_param = 'subsidy_period'
 
     def get_form(self, request, obj=None, **kwargs):
