@@ -44,6 +44,20 @@ class ProjectStageSessionsInline(admin.StackedInline):
     show_change_link = False
     can_delete = True
     empty_value_display = '(cap)'
+    raw_id_fields = ('involved_partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['involved_partners'],
+    }
+    fields = (
+        "session_responsible",
+        "date",
+        "hours",
+        "follow_up",
+        "entity",
+        "involved_partners",
+        "project_partners",
+    )
+    readonly_fields = ("project_partners", )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "session_responsible":
@@ -68,17 +82,13 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
-    }
     fieldsets = [
         (None, {
             'fields': ['project', 'stage_type',
                        'subsidy_period', 'service', 'sub_service',
                        'circle', 'stage_responsible',
                        'scanned_certificate',
-                       'involved_partners', 'hours_sum', 'date_start',
+                       'hours_sum', 'date_start',
                        "earliest_session_field", ]
         }),
         ("Camps convocatòries < 2020", {
@@ -107,7 +117,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     _has_certificate.short_description = "Certificat"
 
     def _participants_count(self, obj):
-        return len(obj.involved_partners.all())
+        return obj.involved_partners_count
     _participants_count.short_description = "Participants"
 
     def project_field_ellipsis(self, obj):
@@ -192,17 +202,13 @@ class ProjectStagesInline(admin.StackedInline):
     show_change_link = True
     can_delete = False
     empty_value_display = '(cap)'
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
-    }
     fieldsets = (
         (None, {
             'fields': ['project', 'stage_type',
                        'subsidy_period', 'service',
                        'circle', 'stage_responsible',
                        'scanned_certificate',
-                       'involved_partners', 'hours_sum', 'date_start',
+                       'hours_sum', 'date_start',
                        "earliest_session_field", "stage_sessions_field", ]
         }),
         ("Camps convocatòries < 2020", {
@@ -315,7 +321,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                        'solves_necessities', 'social_base']
         }),
         ("Dades internes gestionades per l'ateneu", {
-            'fields': ['partners', 'registration_date', 'cif',
+            'fields': ['partners', 'partners_participants',
+                       'registration_date', 'cif',
                        'constitution_date', 'subsidy_period', 'derivation',
                        'derivation_date', 'description',
                        'employment_estimation', 'other', 'follow_up_situation',
@@ -327,6 +334,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     )
     readonly_fields = (
         'id', 'follow_up_situation_update', 'partners_activities',
+        'partners_participants',
     )
     actions = ["export_as_csv"]
     change_actions = ('print', )

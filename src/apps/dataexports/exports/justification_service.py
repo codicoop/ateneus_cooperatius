@@ -167,10 +167,10 @@ class ExportJustificationService:
             # repetir el procés més endavant. La qüestió és que encara que un
             # participant hagi participat a diversos acompanyaments, aquí
             # només aparegui una vegada.
-            for participant in item.involved_partners.all():
+            for participant in item.partners_involved_in_sessions:
                 if (
-                        participant
-                        not in self.stages_obj[p_id][group]['participants']
+                    participant
+                    not in self.stages_obj[p_id][group]['participants']
                 ):
                     self.stages_obj[p_id][group]['participants'].append(
                         participant
@@ -352,7 +352,7 @@ class ExportJustificationService:
                 stage.date_start,
                 stage.get_circle_display(),
                 town,
-                stage.involved_partners.count(),
+                stage.partners_involved_in_sessions.count(),
                 "No",
                 "",
                 # En blanc pq cada stage session pot contenir una entitat

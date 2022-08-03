@@ -4,7 +4,7 @@ from constance import config
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
@@ -249,6 +249,23 @@ class Project(models.Model):
 
     partners_activities.fget.short_description = "Sessions"
 
+    @property
+    def partners_participants(self):
+        """
+        To display the list of all the people who participated in project
+        stage sessions.
+        """
+        participants = User.objects.filter(
+            stage_sessions_participated__project_stage__project=self,
+        ).distinct()
+        participants_strings = [str(x) for x in participants]
+        participants_strings.sort()
+        return mark_safe(", ".join(participants_strings))
+
+    partners_participants.fget.short_description = (
+        "Participants a sessions d'acompanyament"
+    )
+
     def save(self, *args, **kw):
         if self.pk is not None:
             orig = Project.objects.get(pk=self.pk)
@@ -410,7 +427,7 @@ class ProjectStage(models.Model):
         "Certificat", blank=True, null=True,
         storage=PrivateMediaStorage(), max_length=250)
     involved_partners = models.ManyToManyField(
-        User, verbose_name="persones involucrades", blank=True,
+        User, verbose_name="(obsolet) Persones involucrades", blank=True,
         related_name='stage_involved_partners',
         help_text="Persones que apareixeran a la justificació com a que han "
                   "participat a l'acompanyament.")
@@ -469,6 +486,16 @@ class ProjectStage(models.Model):
         except ProjectStageSession.DoesNotExist:
             return None
 
+    @property
+    def involved_partners_count(self):
+        return self.partners_involved_in_sessions.count()
+
+    @property
+    def partners_involved_in_sessions(self):
+        return User.objects.filter(
+            stage_sessions_participated__in=self.stage_sessions.all()
+        ).distinct()
+
     def __str__(self):
         txt = (f"{str(self.project)}: {self.get_full_type_str()} "
                f"[{str(self.subsidy_period)}]")
@@ -508,6 +535,20 @@ class ProjectStageSession(models.Model):
     entity = models.ForeignKey(
         Entity, verbose_name="Entitat", default=None, null=True, blank=True,
         on_delete=models.SET_NULL)
+    involved_partners = models.ManyToManyField(
+        User, verbose_name="persones involucrades", blank=True,
+        related_name='stage_sessions_participated',
+        help_text="Persones que apareixeran a la justificació com a que han "
+                  "participat a la sessió d'acompanyament.")
+
+    @property
+    def project_partners(self):
+        partners = self.project_stage.project.partners.all()
+        partners_list = [str(x) for x in partners]
+        partners_list.sort()
+        return ", ".join(partners_list)
+
+    project_partners.fget.short_description = "Persones sòcies"
 
     def __str__(self):
         return (f"Sessió d'acompanyament del {self.date} per "
