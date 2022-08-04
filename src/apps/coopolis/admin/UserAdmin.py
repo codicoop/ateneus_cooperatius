@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 
 from django.contrib import admin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.conf import settings
 from constance import config
@@ -10,6 +11,7 @@ from django.utils.safestring import mark_safe
 
 from apps.coopolis.forms import MySignUpAdminForm
 from apps.cc_courses.models import ActivityEnrolled
+from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
 
@@ -37,6 +39,33 @@ class ActivityEnrolledInline(admin.TabularInline):
     course_field.short_description = "Acció"
 
 
+class ParticipatedInSubsidyPeriodFilter(admin.SimpleListFilter):
+    title = "Participa a sessions de la convocatòria…"
+
+    parameter_name = 'participated_subsidy'
+
+    def lookups(self, request, model_admin):
+        qs = SubsidyPeriod.objects.all()
+        qs.order_by('name')
+        return list(qs.values_list('id', 'name'))
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            period = SubsidyPeriod.objects.get(id=value)
+            queryset = queryset.filter(
+                Q(
+                    stage_sessions_participated__project_stage__subsidy_period_id=value,
+                ) | Q(
+                    enrollments__activity__date_start__range=(
+                        period.date_start,
+                        period.date_end,
+                    )
+                )
+            )
+        return queryset
+
+
 class UserAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -56,6 +85,7 @@ class UserAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'gender', ('town', admin.RelatedOnlyFieldListFilter), 'district',
+        ParticipatedInSubsidyPeriodFilter,
         'is_staff', 'fake_email', 'authorize_communications', 'tags',
     )
     fields = (
