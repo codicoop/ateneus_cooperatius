@@ -528,6 +528,8 @@ class Activity(models.Model):
                 'activity_poll', kwargs={'uuid': self.uuid}
             )
         )
+        poll_reminder_body = self.poll_reminder_body or ""
+        poll_reminder_body = poll_reminder_body.replace('\n', '<br />')
         mail.body_strings = {
             'activitat_nom': self.name,
             'ateneu_nom': config.PROJECT_FULL_NAME,
@@ -542,6 +544,7 @@ class Activity(models.Model):
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'poll_reminder_body': poll_reminder_body,
         }
         return mail
 
