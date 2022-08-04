@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 
 from django.contrib import admin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.conf import settings
 from constance import config
@@ -51,13 +52,17 @@ class ParticipatedInSubsidyPeriodFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         value = self.value()
         if value:
+            period = SubsidyPeriod.objects.get(id=value)
             queryset = queryset.filter(
-                stage_sessions_participated__project_stage__subsidy_period_id=value,
+                Q(
+                    stage_sessions_participated__project_stage__subsidy_period_id=value,
+                ) | Q(
+                    enrollments__activity__date_start__range=(
+                        period.date_start,
+                        period.date_end,
+                    )
+                )
             )
-            # period = SubsidyPeriod.objects.get(id=value)
-            # return queryset.filter(constitution_date__range=(
-            #     period.date_start, period.date_end)
-            # )
         return queryset
 
 
