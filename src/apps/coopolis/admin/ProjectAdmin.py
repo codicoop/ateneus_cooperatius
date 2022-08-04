@@ -438,14 +438,15 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
             new_partner_objects = User.objects.filter(pk__in=new_partners_list)
             for new_partner in new_partner_objects:
-                self.send_added_to_project_email(new_partner.email,
-                                                 request.POST['name'])
+                self.send_added_to_project_email(
+                    new_partner,
+                    request.POST['name'],
+                )
 
         super().save_model(request, obj, form, change)
 
-    def send_added_to_project_email(self, mail_to, project_name):
+    def send_added_to_project_email(self, user_obj, project_name):
         mail = MyMailTemplate('EMAIL_ADDED_TO_PROJECT')
-        mail.to = mail_to
         mail.subject_strings = {
             'projecte_nom': project_name
         }
@@ -455,7 +456,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             'url_projectes': settings.ABSOLUTE_URL + reverse('project_info'),
             'url_backoffice': settings.ABSOLUTE_URL
         }
-        mail.send()
+        mail.send_to_user(user_obj)
 
     def _insertions_count(self, obj):
         if obj.employment_insertions:
