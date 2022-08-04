@@ -43,7 +43,7 @@ def populate_mail_templates(apps, schema_editor):
         gratuïta subvencionada.</p>
         <p style="padding-top: 20px">Si us plau, omple <a href="{absolute_url_poll}">l'enquesta de valoració</a>.
         </p> 
-        <p style="padding-top: 20px">Descàrrega del material formatiu: <a href="{absolute_url_activity}">Fitxa de la sessió</a>.</p>
+        <p style="padding-top: 20px">{absolute_url_activity}</p>
         <p>
           Pots gestionar les teves dades i inscripcions accedint a l'aplicació amb el teu compte i anant a 
         l'apartat <a href="{absolute_url_my_activities}">Perfil -> Els Meus Cursos</a>.</p>

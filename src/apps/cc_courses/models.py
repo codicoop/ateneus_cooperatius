@@ -518,10 +518,16 @@ class Activity(models.Model):
         mail.subject_strings = {
             'activitat_nom': self.name
         }
-        absolute_url_activity = (
-            settings.ABSOLUTE_URL +
-            reverse('activity', args=[self.uuid])
-        )
+        absolute_url_activity = ""
+        if self.resources.exists():
+            absolute_url_activity = (
+                settings.ABSOLUTE_URL +
+                reverse('activity', args=[self.uuid])
+            )
+            absolute_url_activity = (
+                "Descàrrega del material formatiu: <a "
+                f"href=\"{absolute_url_activity}\">Fitxa de la sessió</a>."
+            )
         absolute_url_poll = (
             settings.ABSOLUTE_URL +
             reverse(
