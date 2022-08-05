@@ -585,6 +585,8 @@ class Activity(models.Model):
     def send_reminder_to_responsible(self):
         mail = self.get_reminder_to_responsible_email()
         mail.send_to_user(self.responsible)
+        self.organizer_reminded = datetime.now()
+        self.save()
 
 
 class ActivityResourceFile(models.Model):
