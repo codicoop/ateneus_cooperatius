@@ -289,7 +289,6 @@ class Project(models.Model):
 
     def notify_request_confirmation(self):
         mail = MyMailTemplate('EMAIL_PROJECT_REQUEST_CONFIRMATION')
-        mail.to = self.partners.all()[0].email
         mail.subject_strings = {
             'projecte_nom': self.name
         }
@@ -297,7 +296,7 @@ class Project(models.Model):
             'projecte_nom': self.name,
             'url_backoffice': settings.ABSOLUTE_URL,
         }
-        mail.send()
+        mail.send_to_user(self.partners.all()[0])
 
     def __str__(self):
         return self.name

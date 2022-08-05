@@ -146,6 +146,8 @@ class UserAdmin(admin.ModelAdmin):
                 fields.remove('no_welcome_email')
             if 'resend_welcome_email' not in fields:
                 fields.append('resend_welcome_email')
+            if obj.fake_email:
+                fields.remove("resend_welcome_email")
 
         return fields
 
@@ -207,15 +209,6 @@ class UserAdmin(admin.ModelAdmin):
             )
 
     def save_model(self, request, obj, form, change):
-        # Sending welcome e-mail only if we're creating a new account.
-        #  and form.cleaned_data['resend_welcome_email']
-        resend_welcome_email = form.cleaned_data['resend_welcome_email']
-        no_welcome_email = form.cleaned_data['no_welcome_email']
-        send_welcome = (change and resend_welcome_email is True) or \
-                       (not change and no_welcome_email is False)
-        if send_welcome:
-            self.send_welcome_email(form.cleaned_data['email'])
-
         # Override this to set the password to the value in the field if it's
         # changed.
         if form.cleaned_data['new_password'] != '':
@@ -223,9 +216,19 @@ class UserAdmin(admin.ModelAdmin):
 
         super().save_model(request, obj, form, change)
 
-    def send_welcome_email(self, mail_to):
+        # Sending welcome e-mail only if we're creating a new account.
+        # and form.cleaned_data['resend_welcome_email']
+        resend_welcome_email = form.cleaned_data['resend_welcome_email']
+        no_welcome_email = form.cleaned_data['no_welcome_email']
+        send_welcome = (
+                (change and resend_welcome_email is True)
+                or (not change and no_welcome_email is False)
+        )
+        if send_welcome:
+            self.send_welcome_email(obj)
+
+    def send_welcome_email(self, user_obj):
         mail = MyMailTemplate('EMAIL_SIGNUP_WELCOME')
-        mail.to = mail_to
         mail.subject_strings = {
             'ateneu_nom': config.PROJECT_FULL_NAME
         }
@@ -235,4 +238,4 @@ class UserAdmin(admin.ModelAdmin):
             'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
             'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}"
         }
-        mail.send()
+        mail.send_to_user(user_obj)

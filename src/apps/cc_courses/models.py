@@ -560,8 +560,7 @@ class Activity(models.Model):
             if enrollment.user.fake_email:
                 continue
             mail = self.get_poll_email(enrollment.user)
-            mail.to = enrollment.user.email
-            mail.send()
+            mail.send_to_user(enrollment.user)
         self.poll_sent = datetime.now()
         self.save()
 
@@ -585,9 +584,9 @@ class Activity(models.Model):
 
     def send_reminder_to_responsible(self):
         mail = self.get_reminder_to_responsible_email()
-        mail.to = self.responsible.email
-        mail.send()
-        print(f"Sending reminder to {self.responsible.email} for {self}")
+        mail.send_to_user(self.responsible)
+        self.organizer_reminded = datetime.now()
+        self.save()
 
 
 class ActivityResourceFile(models.Model):
@@ -742,7 +741,6 @@ class ActivityEnrolled(models.Model):
 
     def send_confirmation_email(self):
         mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
-        mail.to = self.user.email
         mail.subject_strings = {
             'activitat_nom': self.activity.name
         }
@@ -758,11 +756,10 @@ class ActivityEnrolled(models.Model):
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_web_ateneu': config.PROJECT_WEBSITE_URL,
         }
-        mail.send()
+        mail.send_to_user(self.user)
 
     def send_waiting_list_email(self):
         mail = MyMailTemplate('EMAIL_ENROLLMENT_WAITING_LIST')
-        mail.to = self.user.email
         mail.subject_strings = {
             'activitat_nom': self.activity.name
         }
@@ -778,7 +775,7 @@ class ActivityEnrolled(models.Model):
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_ateneu': settings.ABSOLUTE_URL,
         }
-        mail.send()
+        mail.send_to_user(self.user)
 
     @staticmethod
     def get_reminder_email(user, activity):
@@ -809,8 +806,7 @@ class ActivityEnrolled(models.Model):
 
     def send_reminder_email(self):
         mail = self.get_reminder_email(self.user, self.activity)
-        mail.to = self.user.email
-        mail.send()
+        mail.send_to_user(self.user)
         self.reminder_sent = datetime.now()
         self.save()
 
