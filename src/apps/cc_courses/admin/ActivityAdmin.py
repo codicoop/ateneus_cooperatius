@@ -168,7 +168,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
-        'activity_poll_field', )
+        'activity_poll_field', 'organizer_reminded', )
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
@@ -183,7 +183,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
                        'service', 'sub_service', 'circle', 'entity',
-                       'responsible', 'publish', ]
+                       'responsible', 'organizer_reminded', 'publish', ]
         }),
         ("Documents per la justificació", {
             'classes': ('grp-collapse grp-closed',),
