@@ -676,3 +676,5 @@ REMIND_SESSION_ORGANIZER_DAYS_BEFORE = env.int(
     default=3,
 )
 
+# Maintenance mode
+MAINTENANCE_MODE = env.bool("MAINTENANCE_MODE", default=False)
