@@ -15,7 +15,7 @@ services:
       target: development
     env_file: ./settings/develop/altpirineu.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -36,7 +36,7 @@ services:
       target: development
     env_file: ./settings/develop/bnord.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8004 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8004  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -57,7 +57,7 @@ services:
       target: development
     env_file: ./settings/develop/catcentral.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8007 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8007  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -78,7 +78,7 @@ services:
       target: development
     env_file: ./settings/develop/coopcamp.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8002 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8002  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -99,7 +99,7 @@ services:
       target: development
     env_file: ./settings/develop/coopmaresme.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8003 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8003  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -120,7 +120,7 @@ services:
       target: development
     env_file: ./settings/develop/coopolis.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -141,7 +141,7 @@ services:
       target: development
     env_file: ./settings/develop/coopsetania.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8008 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8008  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -162,7 +162,7 @@ services:
       target: development
     env_file: ./settings/develop/hospitalet.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8010 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8010  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -183,7 +183,7 @@ services:
       target: development
     env_file: ./settings/develop/ponentcoopera.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8005 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8005  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -204,7 +204,7 @@ services:
       target: development
     env_file: ./settings/develop/terresebre.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8011 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8011  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -225,7 +225,7 @@ services:
       target: development
     env_file: ./settings/develop/terresgironines.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8009 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8009  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -246,7 +246,7 @@ services:
       target: development
     env_file: ./settings/develop/vallesoccidental.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8006 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8006  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
@@ -267,7 +267,7 @@ services:
       target: development
     env_file: ./settings/develop/baixllobregat.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8013 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8013  --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:
