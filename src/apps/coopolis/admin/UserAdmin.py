@@ -62,7 +62,7 @@ class ParticipatedInSubsidyPeriodFilter(admin.SimpleListFilter):
                         period.date_end,
                     )
                 )
-            )
+            ).distinct()
         return queryset
 
 
