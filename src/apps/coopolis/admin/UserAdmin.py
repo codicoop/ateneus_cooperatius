@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 
 from django.contrib import admin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.conf import settings
 from constance import config
@@ -10,6 +11,7 @@ from django.utils.safestring import mark_safe
 
 from apps.coopolis.forms import MySignUpAdminForm
 from apps.cc_courses.models import ActivityEnrolled
+from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
 
@@ -37,6 +39,33 @@ class ActivityEnrolledInline(admin.TabularInline):
     course_field.short_description = "Acció"
 
 
+class ParticipatedInSubsidyPeriodFilter(admin.SimpleListFilter):
+    title = "Participa a sessions de la convocatòria…"
+
+    parameter_name = 'participated_subsidy'
+
+    def lookups(self, request, model_admin):
+        qs = SubsidyPeriod.objects.all()
+        qs.order_by('name')
+        return list(qs.values_list('id', 'name'))
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            period = SubsidyPeriod.objects.get(id=value)
+            queryset = queryset.filter(
+                Q(
+                    stage_sessions_participated__project_stage__subsidy_period_id=value,
+                ) | Q(
+                    enrollments__activity__date_start__range=(
+                        period.date_start,
+                        period.date_end,
+                    )
+                )
+            ).distinct()
+        return queryset
+
+
 class UserAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -56,6 +85,7 @@ class UserAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'gender', ('town', admin.RelatedOnlyFieldListFilter), 'district',
+        ParticipatedInSubsidyPeriodFilter,
         'is_staff', 'fake_email', 'authorize_communications', 'tags',
     )
     fields = (
@@ -116,6 +146,8 @@ class UserAdmin(admin.ModelAdmin):
                 fields.remove('no_welcome_email')
             if 'resend_welcome_email' not in fields:
                 fields.append('resend_welcome_email')
+            if obj.fake_email:
+                fields.remove("resend_welcome_email")
 
         return fields
 
@@ -177,15 +209,6 @@ class UserAdmin(admin.ModelAdmin):
             )
 
     def save_model(self, request, obj, form, change):
-        # Sending welcome e-mail only if we're creating a new account.
-        #  and form.cleaned_data['resend_welcome_email']
-        resend_welcome_email = form.cleaned_data['resend_welcome_email']
-        no_welcome_email = form.cleaned_data['no_welcome_email']
-        send_welcome = (change and resend_welcome_email is True) or \
-                       (not change and no_welcome_email is False)
-        if send_welcome:
-            self.send_welcome_email(form.cleaned_data['email'])
-
         # Override this to set the password to the value in the field if it's
         # changed.
         if form.cleaned_data['new_password'] != '':
@@ -193,9 +216,19 @@ class UserAdmin(admin.ModelAdmin):
 
         super().save_model(request, obj, form, change)
 
-    def send_welcome_email(self, mail_to):
+        # Sending welcome e-mail only if we're creating a new account.
+        # and form.cleaned_data['resend_welcome_email']
+        resend_welcome_email = form.cleaned_data['resend_welcome_email']
+        no_welcome_email = form.cleaned_data['no_welcome_email']
+        send_welcome = (
+                (change and resend_welcome_email is True)
+                or (not change and no_welcome_email is False)
+        )
+        if send_welcome:
+            self.send_welcome_email(obj)
+
+    def send_welcome_email(self, user_obj):
         mail = MyMailTemplate('EMAIL_SIGNUP_WELCOME')
-        mail.to = mail_to
         mail.subject_strings = {
             'ateneu_nom': config.PROJECT_FULL_NAME
         }
@@ -205,4 +238,4 @@ class UserAdmin(admin.ModelAdmin):
             'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
             'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}"
         }
-        mail.send()
+        mail.send_to_user(user_obj)

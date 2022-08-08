@@ -44,6 +44,21 @@ class ProjectStageSessionsInline(admin.StackedInline):
     show_change_link = False
     can_delete = True
     empty_value_display = '(cap)'
+    raw_id_fields = ('involved_partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['involved_partners'],
+    }
+    fields = (
+        "session_responsible",
+        "date",
+        "hours",
+        "follow_up",
+        "entity",
+        "involved_partners",
+        "project_partners",
+        "justification_file",
+    )
+    readonly_fields = ("project_partners", )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "session_responsible":
@@ -57,7 +72,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         'project_field_ellipsis', 'date_start', 'stage_type',
         'stage_responsible_field_ellipsis',
         'service', 'subsidy_period', '_has_certificate',
-        '_participants_count', 'project_field'
+        '_participants_count', 'project_field', 'justification_documents_total',
     )
     list_filter = (
         'subsidy_period',
@@ -68,25 +83,29 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
-    }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type',
-                       'subsidy_period', 'service', 'sub_service',
-                       'circle', 'stage_responsible',
-                       'scanned_certificate',
-                       'involved_partners', 'hours_sum', 'date_start',
-                       "earliest_session_field", ]
+            'fields': [
+                'project', 'stage_type',
+                'subsidy_period', 'service', 'sub_service',
+                'circle', 'stage_responsible',
+                'scanned_certificate',
+                'hours_sum', 'date_start',
+                "earliest_session_field",
+                "justification_documents_total",
+            ]
         }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
         }),
     ]
     inlines = (ProjectStageSessionsInline, )
-    readonly_fields = ('hours_sum', 'date_start', "earliest_session_field", )
+    readonly_fields = (
+        'hours_sum',
+        'date_start',
+        "earliest_session_field",
+        "justification_documents_total",
+    )
     subsidy_period_filter_param = "subsidy_period__id__exact"
 
     class Media:
@@ -107,7 +126,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     _has_certificate.short_description = "Certificat"
 
     def _participants_count(self, obj):
-        return len(obj.involved_partners.all())
+        return obj.involved_partners_count
     _participants_count.short_description = "Participants"
 
     def project_field_ellipsis(self, obj):
@@ -192,25 +211,34 @@ class ProjectStagesInline(admin.StackedInline):
     show_change_link = True
     can_delete = False
     empty_value_display = '(cap)'
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
-    }
     fieldsets = (
         (None, {
-            'fields': ['project', 'stage_type',
-                       'subsidy_period', 'service',
-                       'circle', 'stage_responsible',
-                       'scanned_certificate',
-                       'involved_partners', 'hours_sum', 'date_start',
-                       "earliest_session_field", "stage_sessions_field", ]
+            'fields': [
+                'project',
+                'stage_type',
+                'subsidy_period',
+                'service',
+                'circle',
+                'stage_responsible',
+                'scanned_certificate',
+                'hours_sum',
+                'date_start',
+                "earliest_session_field",
+                "stage_sessions_field",
+                "justification_documents_total",
+            ]
         }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
         }),
     )
-    readonly_fields = ('hours_sum', 'date_start', 'stage_sessions_field',
-                       "earliest_session_field",)
+    readonly_fields = (
+        'hours_sum',
+        'date_start',
+        'stage_sessions_field',
+        "earliest_session_field",
+        "justification_documents_total",
+    )
 
     def stage_sessions_field(self, obj):
         count = obj.sessions_count()
@@ -315,7 +343,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                        'solves_necessities', 'social_base']
         }),
         ("Dades internes gestionades per l'ateneu", {
-            'fields': ['partners', 'registration_date', 'cif',
+            'fields': ['partners', 'partners_participants',
+                       'registration_date', 'cif',
                        'constitution_date', 'subsidy_period', 'derivation',
                        'derivation_date', 'description',
                        'employment_estimation', 'other', 'follow_up_situation',
@@ -327,6 +356,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     )
     readonly_fields = (
         'id', 'follow_up_situation_update', 'partners_activities',
+        'partners_participants',
     )
     actions = ["export_as_csv"]
     change_actions = ('print', )
@@ -408,14 +438,15 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
             new_partner_objects = User.objects.filter(pk__in=new_partners_list)
             for new_partner in new_partner_objects:
-                self.send_added_to_project_email(new_partner.email,
-                                                 request.POST['name'])
+                self.send_added_to_project_email(
+                    new_partner,
+                    request.POST['name'],
+                )
 
         super().save_model(request, obj, form, change)
 
-    def send_added_to_project_email(self, mail_to, project_name):
+    def send_added_to_project_email(self, user_obj, project_name):
         mail = MyMailTemplate('EMAIL_ADDED_TO_PROJECT')
-        mail.to = mail_to
         mail.subject_strings = {
             'projecte_nom': project_name
         }
@@ -425,7 +456,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             'url_projectes': settings.ABSOLUTE_URL + reverse('project_info'),
             'url_backoffice': settings.ABSOLUTE_URL
         }
-        mail.send()
+        mail.send_to_user(user_obj)
 
     def _insertions_count(self, obj):
         if obj.employment_insertions:

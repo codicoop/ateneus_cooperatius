@@ -1,6 +1,7 @@
 import uuid
 
 from constance import config
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models
 from django.shortcuts import reverse
 from django.conf import settings
@@ -13,7 +14,7 @@ from django.core.validators import ValidationError
 
 from apps.cc_lib.utils import slugify_model
 from apps.coopolis.choices import ServicesChoices, CirclesChoices, \
-    SubServicesChoices
+    SubServicesChoices, ActivityFileType
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -379,6 +380,25 @@ class Activity(models.Model):
         null=True,
         blank=True,
     )
+    organizer_reminded = models.DateTimeField(
+        "data d'enviament de recordatori a responsable",
+        null=True,
+        blank=True,
+    )
+
+    # Camp per correu del recordatori d'omplir l'enquesta.
+    poll_reminder_body = models.TextField(
+        "Cos del correu de recordatori d'omplir l'enquesta",
+        null=True,
+        blank=True,
+        help_text=
+            "Aquest text s'inclourà al correu de recordatori. És molt "
+            "important que el formateig del text sigui el menor possible, i en"
+            " particular, que si copieu i enganxeu el text d'algun altre lloc "
+            "cap aquí, ho feu amb l'opció \"enganxar sense format\", ja que "
+            "sinó arrossegarà molta informació de formateig que "
+            "probablement farà que el correu es vegi malament."
+    )
 
     objects = models.Manager()
     published = Published()
@@ -498,16 +518,24 @@ class Activity(models.Model):
         mail.subject_strings = {
             'activitat_nom': self.name
         }
-        absolute_url_activity = (
-            settings.ABSOLUTE_URL +
-            reverse('activity', args=[self.uuid])
-        )
+        absolute_url_activity = ""
+        if self.resources.exists():
+            absolute_url_activity = (
+                settings.ABSOLUTE_URL +
+                reverse('activity', args=[self.uuid])
+            )
+            absolute_url_activity = (
+                "Descàrrega del material formatiu: <a "
+                f"href=\"{absolute_url_activity}\">Fitxa de la sessió</a>."
+            )
         absolute_url_poll = (
             settings.ABSOLUTE_URL +
             reverse(
                 'activity_poll', kwargs={'uuid': self.uuid}
             )
         )
+        poll_reminder_body = self.poll_reminder_body or ""
+        poll_reminder_body = poll_reminder_body.replace('\n', '<br />')
         mail.body_strings = {
             'activitat_nom': self.name,
             'ateneu_nom': config.PROJECT_FULL_NAME,
@@ -522,6 +550,7 @@ class Activity(models.Model):
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'poll_reminder_body': poll_reminder_body,
         }
         return mail
 
@@ -531,9 +560,32 @@ class Activity(models.Model):
             if enrollment.user.fake_email:
                 continue
             mail = self.get_poll_email(enrollment.user)
-            mail.to = enrollment.user.email
-            mail.send()
+            mail.send_to_user(enrollment.user)
         self.poll_sent = datetime.now()
+        self.save()
+
+    def get_reminder_to_responsible_email(self):
+        mail = MyMailTemplate("EMAIL_ACTIVITY_RESPONSIBLE_REMINDER")
+        mail.subject_strings = {
+            "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
+            "activity_name": self.name
+        }
+        absolute_url_admin_activity = (
+                settings.ABSOLUTE_URL +
+                reverse(
+                    "admin:cc_courses_activity_change",
+                    kwargs={"object_id": self.id},
+                )
+        )
+        mail.body_strings = {
+            "absolute_url_admin_activity": absolute_url_admin_activity,
+        }
+        return mail
+
+    def send_reminder_to_responsible(self):
+        mail = self.get_reminder_to_responsible_email()
+        mail.send_to_user(self.responsible)
+        self.organizer_reminded = datetime.now()
         self.save()
 
 
@@ -558,6 +610,72 @@ class ActivityResourceFile(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ActivityFile(models.Model):
+    class Meta:
+        verbose_name = "fitxer"
+        verbose_name_plural = "fitxers i enllaços interns"
+        ordering = ["name"]
+
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name="files"
+    )
+    file = models.FileField(
+        "fitxer adjunt",
+        storage=PrivateMediaStorage(),
+        blank=True,
+        null=True,
+    )
+    file_type = models.CharField(
+        "tipus de fitxer",
+        choices=ActivityFileType.choices,
+        max_length=50,
+    )
+    url = models.URLField(
+        "fitxer enllaçat",
+        blank=True,
+        null=True,
+    )
+    name = models.CharField(
+        "nom del fitxer",
+        max_length=120,
+        null=False,
+        blank=False,
+        help_text="Pensa un nom prou descriptiu com perquè ajudi a altres "
+        "persones a preparar possibles requeriments d'aquí uns mesos o anys."
+    )
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        errors = {}
+        if self.file and self.url:
+            errors.update(
+                {
+                    "file": ValidationError(
+                        "No pots incloure un fitxer adjunt si també inclous "
+                        "un fitxer enllaçat."
+                    ),
+                    "url": ValidationError(
+                        "No pots incloure un fitxer enllaçat si també inclous "
+                        "un fitxer adjunt."
+                    ),
+                }
+            )
+        if not self.file and not self.url:
+            errors.update(
+                {
+                    NON_FIELD_ERRORS: ValidationError(
+                        "Cal indicar un fitxer ja sigui adjunt o enllaçat."
+                    ),
+                }
+            )
+        if errors:
+            raise ValidationError(errors)
 
 
 class ActivityEnrolled(models.Model):
@@ -623,7 +741,6 @@ class ActivityEnrolled(models.Model):
 
     def send_confirmation_email(self):
         mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
-        mail.to = self.user.email
         mail.subject_strings = {
             'activitat_nom': self.activity.name
         }
@@ -639,11 +756,10 @@ class ActivityEnrolled(models.Model):
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_web_ateneu': config.PROJECT_WEBSITE_URL,
         }
-        mail.send()
+        mail.send_to_user(self.user)
 
     def send_waiting_list_email(self):
         mail = MyMailTemplate('EMAIL_ENROLLMENT_WAITING_LIST')
-        mail.to = self.user.email
         mail.subject_strings = {
             'activitat_nom': self.activity.name
         }
@@ -659,7 +775,7 @@ class ActivityEnrolled(models.Model):
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_ateneu': settings.ABSOLUTE_URL,
         }
-        mail.send()
+        mail.send_to_user(self.user)
 
     @staticmethod
     def get_reminder_email(user, activity):
@@ -690,8 +806,7 @@ class ActivityEnrolled(models.Model):
 
     def send_reminder_email(self):
         mail = self.get_reminder_email(self.user, self.activity)
-        mail.to = self.user.email
-        mail.send()
+        mail.send_to_user(self.user)
         self.reminder_sent = datetime.now()
         self.save()
 

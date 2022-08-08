@@ -169,10 +169,10 @@ class ExportJustification:
             # repetir el procés més endavant. La qüestió és que encara que un
             # participant hagi participat a diversos acompanyaments, aquí
             # només aparegui una vegada.
-            for participant in item.involved_partners.all():
+            for participant in item.partners_involved_in_sessions:
                 if (
-                        participant
-                        not in self.stages_obj[p_id][group]['participants']
+                    participant
+                    not in self.stages_obj[p_id][group]['participants']
                 ):
                     self.stages_obj[p_id][group]['participants'].append(
                         participant
@@ -327,9 +327,9 @@ class ExportJustification:
         Els que tenen això vol dir que hi ha hagut un acompanyament 
         del projecte dins de la convocatòria.
         Poden haver-hi hagut varis acompanyaments, per tant, hem 
-        de d'obtenir l'acompanyament més recent.
+        d'obtenir l'acompanyament més recent.
 
-        Si tot això existeix mostrem les dades del més recent,
+        Si tot això existeix mostrem les dades del més recent
          sinó, ignorem el projecte.
 
         Després a la pestanya d'EntitatsCreades hem de fer el 
@@ -367,7 +367,7 @@ class ExportJustification:
                 stage.date_start,
                 stage.get_circle_display(),
                 town,
-                stage.involved_partners.count(),
+                stage.partners_involved_in_sessions.count(),
                 "No",
                 "",
                 # En blanc pq cada stage session pot contenir una entitat

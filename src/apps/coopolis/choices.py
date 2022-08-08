@@ -172,3 +172,8 @@ class CirclesChoices(models.IntegerChoices):
             settings.CIRCLE_NAMES[self.value] if settings.CIRCLE_NAMES[self.value]
             else self.label
         )
+
+
+class ActivityFileType(models.TextChoices):
+    WORK = "WORK", "De treball"
+    JUSTIFICATION = "JUSTIFICATION", "Justificatori"

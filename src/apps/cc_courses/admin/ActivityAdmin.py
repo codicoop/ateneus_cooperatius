@@ -9,8 +9,15 @@ from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 import modelclone
 
+from apps.coopolis.choices import ActivityFileType
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
-from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile, Entity
+from apps.cc_courses.models import (
+    Activity,
+    ActivityEnrolled,
+    ActivityResourceFile,
+    Entity,
+    ActivityFile,
+)
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
@@ -35,6 +42,33 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
             period = SubsidyPeriod.objects.get(id=value)
             return queryset.filter(date_start__range=(
                 period.date_start, period.date_end)
+            )
+        return queryset
+
+
+class FilterByJustificationFiles(admin.SimpleListFilter):
+    """
+    Allows Activities to be filtered by the existence of at least 1 internal
+    file of the type "justification".
+    """
+    title = "Fitxer justificació"
+    parameter_name = 'justification_file'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Sí'),
+            ('No', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "Yes":
+            queryset = Activity.objects.filter(
+                files__file_type=ActivityFileType.JUSTIFICATION,
+            )
+        if value == "No":
+            queryset = Activity.objects.exclude(
+                files__file_type=ActivityFileType.JUSTIFICATION,
             )
         return queryset
 
@@ -113,6 +147,15 @@ class ActivityResourcesInlineAdmin(admin.TabularInline):
     extra = 0
 
 
+class ActivityFileInlineAdmin(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    classes = ('grp-collapse', 'grp-closed')
+    model = ActivityFile
+    extra = 0
+
+
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -125,11 +168,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
-        'activity_poll_field', )
+        'activity_poll_field', 'organizer_reminded', )
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
-        FilterBySubsidyPeriod,
+        FilterBySubsidyPeriod, FilterByJustificationFiles,
         "service", ("place__town", admin.RelatedOnlyFieldListFilter),
         'course', 'date_start', 'room', 'circle', 'entity', 'place',
         'for_minors', 'cofunded',
@@ -140,7 +183,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
                        'service', 'sub_service', 'circle', 'entity',
-                       'responsible', 'publish', ]
+                       'responsible', 'organizer_reminded', 'publish', ]
         }),
         ("Documents per la justificació", {
             'classes': ('grp-collapse grp-closed',),
@@ -166,6 +209,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ('attendee_list_field', 'attendee_filter_field',
                        'send_reminder_field', 'activity_poll_field', ),
         }),
+        ("Fitxers interns", {
+            # Grappelli way for sorting inlines
+            'classes': ('placeholder files-group',),
+            'fields': (),
+        }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
         }),
@@ -178,7 +226,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
-    inlines = (ActivityResourcesInlineAdmin, ActivityEnrolledInline)
+    inlines = (
+        ActivityResourcesInlineAdmin,
+        ActivityEnrolledInline,
+        ActivityFileInlineAdmin,
+    )
     subsidy_period_filter_param = 'subsidy_period'
 
     def get_form(self, request, obj=None, **kwargs):
@@ -393,7 +445,9 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     def send_poll(self, request, _id):
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
-            if 'send' in request.POST or 'send_all' in request.POST:
+            if 'send' in request.POST:
+                obj.poll_reminder_body = request.POST.get("poll_reminder_body")
+                obj.save()
                 obj.send_poll_email()
                 self.message_user(
                     request,

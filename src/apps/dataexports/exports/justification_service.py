@@ -167,10 +167,10 @@ class ExportJustificationService:
             # repetir el procés més endavant. La qüestió és que encara que un
             # participant hagi participat a diversos acompanyaments, aquí
             # només aparegui una vegada.
-            for participant in item.involved_partners.all():
+            for participant in item.partners_involved_in_sessions:
                 if (
-                        participant
-                        not in self.stages_obj[p_id][group]['participants']
+                    participant
+                    not in self.stages_obj[p_id][group]['participants']
                 ):
                     self.stages_obj[p_id][group]['participants'].append(
                         participant
@@ -352,7 +352,7 @@ class ExportJustificationService:
                 stage.date_start,
                 stage.get_circle_display(),
                 town,
-                stage.involved_partners.count(),
+                stage.partners_involved_in_sessions.count(),
                 "No",
                 "",
                 # En blanc pq cada stage session pot contenir una entitat
@@ -381,6 +381,7 @@ class ExportJustificationService:
             ("Breu descripció del projecte", 50),
             ("Total hores d'acompanyament", 10),
             ("[Data fi]", 13),
+            ("[Docs. justificació]", 10),
         ]
         self.export_manager.create_columns(columns)
 
@@ -395,7 +396,6 @@ class ExportJustificationService:
                 reference_number += 1
                 item = group['obj']
 
-                # hours = item.hours if item.hours is not None else ("", True)
                 hours = group['total_hours']
                 town = ("", True)
                 if item.project.town:
@@ -418,6 +418,7 @@ class ExportJustificationService:
                     item.project.description,  # Breu descripció.
                     hours,  # Total hores d'acompanyament.
                     item.latest_session.date if item.latest_session else '',
+                    item.justification_documents_total,
                 ]
                 self.export_manager.fill_row_data(row)
 
