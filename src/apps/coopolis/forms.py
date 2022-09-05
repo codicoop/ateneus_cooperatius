@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
@@ -6,6 +8,7 @@ from django.contrib.auth.forms import (
 from django.core.exceptions import ValidationError
 from django.forms import models
 from django.urls import reverse
+from django.utils.timezone import make_aware
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
@@ -15,6 +18,7 @@ from django.conf import settings
 from apps.coopolis.models import Project, User, ActivityPoll
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.mixins import FormDistrictValidationMixin
+from apps.facilities_reservations.models import Reservation
 
 
 class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
@@ -255,8 +259,37 @@ class ActivityForm(forms.ModelForm):
         #     )
         # }
 
-    # def clean(self):
-    #     super(ActivityForm, self).clean()
+    def clean(self):
+        super().clean()
+        if self.cleaned_data['room']:
+            self.validate_room_availability()
+        return self.cleaned_data
+
+    def validate_room_availability(self):
+        date_end = self.cleaned_data['date_start']
+        if self.cleaned_data['date_end']:
+            date_end = self.cleaned_data['date_end']
+        id = None
+        if self.instance.room_reservation:
+            id = self.instance.room_reservation.id
+        values = {
+            'id': id,
+            'title': "foo",
+            'start': make_aware(
+                datetime.combine(
+                    self.cleaned_data['date_start'],
+                    self.cleaned_data['starting_time']
+                )
+            ),
+            'end': make_aware(
+                datetime.combine(date_end, self.cleaned_data['ending_time'])),
+            'room': self.cleaned_data['room'],
+        }
+        reservation_obj = Reservation(**values)
+        try:
+            reservation_obj.clean()
+        except ValidationError as e:
+            self.add_error("room", e)
 
 
 class ActivityEnrolledForm(forms.ModelForm):
