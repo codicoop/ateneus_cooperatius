@@ -5,8 +5,10 @@ from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse, reverse_lazy
 from django.utils.safestring import mark_safe
+from django.utils.timezone import make_aware
 from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
+from datetime import datetime
 import modelclone
 
 from apps.coopolis.choices import ActivityFileType
@@ -21,6 +23,7 @@ from apps.cc_courses.models import (
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
+from apps.facilities_reservations.models import Reservation
 
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
@@ -483,3 +486,52 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                         activity=obj['activity']
                     )
                 obj.send_confirmation_email()
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if config.ENABLE_ROOM_RESERVATIONS_MODULE:
+            self.synchronize_with_reserved_room(obj)
+
+    def synchronize_with_reserved_room(self, obj):
+        # Si estem editant una sessió que ja tenia una reserva però han
+        # deseleccionat la sala:
+        if obj.room_reservation and not obj.room:
+            self.delete_reservation(obj)
+
+        # Si estem editant una sessió que ja tenia reserva i que n'ha de
+        # continuar tenint:
+        if obj.room:
+            self.create_update_reservation(obj)
+
+    def create_update_reservation(self, obj):
+        date_end = obj.date_start
+        if obj.date_end:
+            date_end = obj.date_end
+        values = {
+            'title': obj.name,
+            'start': make_aware(
+                datetime.combine(
+                    obj.date_start,
+                    obj.starting_time
+                )
+            ),
+            'end': make_aware(
+                datetime.combine(date_end, obj.ending_time)),
+            'room': obj.room,
+            'responsible': self.request.user,
+            'created_by': self.request.user,
+            'url': obj.admin_url,
+        }
+        pk = obj.room_reservation.id if obj.room_reservation else None
+        obj_res, created = Reservation.objects.update_or_create(
+            id=pk,
+            defaults=values,
+        )
+        obj.save()
+        return obj_res
+
+    def delete_reservation(self, obj):
+        obj_res = Reservation.objects.filter(id=obj.room_reservation.id)
+        obj_res.delete()
+        obj.room_reservation = None
+        obj.save()
