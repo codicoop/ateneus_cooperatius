@@ -4,18 +4,12 @@
   {% load static %}
     <meta charset='utf-8' />
 
-    <link rel="stylesheet" href="{% static 'fullcalendar/main.css' %}" type="text/css">
-<!--    <link rel="stylesheet" href="{% static 'fullcalendar/daygrid/main.css' %}" type="text/css">-->
-<!--    <link rel="stylesheet" href="{% static 'fullcalendar/timegrid/main.css' %}" type="text/css">-->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <link href='https://fonts.googleapis.com/css?family=Comfortaa|Lato:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{% static 'styles/calendar.css' %}" type="text/css">
 
-    <script src="{% static 'fullcalendar/main.js' %}"></script>
-    <script src="{% static 'fullcalendar/locales/ca.js' %}"></script>
-<!--    <script src="{% static 'fullcalendar/daygrid/main.js' %}"></script>-->
-<!--    <script src="{% static 'fullcalendar/timegrid/main.js' %}"></script>-->
-<!--    <script src="{% static 'fullcalendar/interaction/main.js' %}"></script>-->
-
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ca.js"></script>
     <script>
 
     document.addEventListener('DOMContentLoaded', function() {
