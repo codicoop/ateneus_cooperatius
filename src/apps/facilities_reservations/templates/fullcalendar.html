@@ -16,7 +16,7 @@
       var calendarEl = document.getElementById('calendar');
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridWeek',
+        initialView: 'dayGridMonth',
         locale: 'ca',
 <!--        plugins: [ 'dayGrid', 'timeGrid' ],-->
         headerToolbar: {
@@ -32,8 +32,9 @@
 
             // Time Grid:
             allDaySlot: false,
-            maxTime: "22:00:00",
-            minTime: "08:00:00",
+            slotMaxTime: "22:00:00",
+            slotMinTime: "08:00:00",
+            expandRows: true,
           }
         },
 
@@ -41,9 +42,6 @@
         //select: function(info) {
         //  alert('Periode seleccionat: ' + info.startStr + ' a ' + info.endStr);
         //},
-
-        // Time Grid:
-        defaultView: 'timeGridWeek',
 
         // Date & Time Display:
         weekends: true,
