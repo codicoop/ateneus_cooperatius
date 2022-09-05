@@ -1,32 +1,29 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.lv = factory()));
-}(this, function () { 'use strict';
+FullCalendar.globalLocales.push(function () {
+  'use strict';
 
-    var lv = {
-        code: "lv",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
-        },
-        buttonText: {
-            prev: "Iepr.",
-            next: "Nāk.",
-            today: "Šodien",
-            month: "Mēnesis",
-            week: "Nedēļa",
-            day: "Diena",
-            list: "Dienas kārtība"
-        },
-        weekLabel: "Ned.",
-        allDayText: "Visu dienu",
-        eventLimitText: function (n) {
-            return "+vēl " + n;
-        },
-        noEventsMessage: "Nav notikumu"
-    };
+  var lv = {
+    code: "lv",
+    week: {
+      dow: 1,
+      doy: 4
+    },
+    buttonText: {
+      prev: "Iepr.",
+      next: "N\u0101k.",
+      today: "\u0160odien",
+      month: "M\u0113nesis",
+      week: "Ned\u0113\u013Ca",
+      day: "Diena",
+      list: "Dienas k\u0101rt\u012Bba"
+    },
+    weekText: "Ned.",
+    allDayText: "Visu dienu",
+    moreLinkText: function(n) {
+      return "+v\u0113l " + n;
+    },
+    noEventsText: "Nav notikumu"
+  };
 
-    return lv;
+  return lv;
 
-}));
+}());

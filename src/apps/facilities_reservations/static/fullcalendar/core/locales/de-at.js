@@ -4,8 +4,8 @@ FullCalendar.globalLocales.push(function () {
   function affix(buttonText) {
     return buttonText === "Tag" || buttonText === "Monat" ? "r" : buttonText === "Jahr" ? "s" : "";
   }
-  var de = {
-    code: "de",
+  var deAt = {
+    code: "de-at",
     week: {
       dow: 1,
       doy: 4
@@ -54,6 +54,6 @@ FullCalendar.globalLocales.push(function () {
     eventHint: "Ereignis"
   };
 
-  return de;
+  return deAt;
 
 }());

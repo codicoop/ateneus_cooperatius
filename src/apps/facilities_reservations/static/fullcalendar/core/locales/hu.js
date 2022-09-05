@@ -1,30 +1,27 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.hu = factory()));
-}(this, function () { 'use strict';
+FullCalendar.globalLocales.push(function () {
+  'use strict';
 
-    var hu = {
-        code: "hu",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
-        },
-        buttonText: {
-            prev: "vissza",
-            next: "előre",
-            today: "ma",
-            month: "Hónap",
-            week: "Hét",
-            day: "Nap",
-            list: "Napló"
-        },
-        weekLabel: "Hét",
-        allDayText: "Egész nap",
-        eventLimitText: "további",
-        noEventsMessage: "Nincs megjeleníthető esemény"
-    };
+  var hu = {
+    code: "hu",
+    week: {
+      dow: 1,
+      doy: 4
+    },
+    buttonText: {
+      prev: "vissza",
+      next: "el\u0151re",
+      today: "ma",
+      month: "H\xF3nap",
+      week: "H\xE9t",
+      day: "Nap",
+      list: "Lista"
+    },
+    weekText: "H\xE9t",
+    allDayText: "Eg\xE9sz nap",
+    moreLinkText: "tov\xE1bbi",
+    noEventsText: "Nincs megjelen\xEDthet\u0151 esem\xE9ny"
+  };
 
-    return hu;
+  return hu;
 
-}));
+}());

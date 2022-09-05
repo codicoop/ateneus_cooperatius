@@ -1,32 +1,29 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.et = factory()));
-}(this, function () { 'use strict';
+FullCalendar.globalLocales.push(function () {
+  'use strict';
 
-    var et = {
-        code: "et",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
-        },
-        buttonText: {
-            prev: "Eelnev",
-            next: "Järgnev",
-            today: "Täna",
-            month: "Kuu",
-            week: "Nädal",
-            day: "Päev",
-            list: "Päevakord"
-        },
-        weekLabel: "näd",
-        allDayText: "Kogu päev",
-        eventLimitText: function (n) {
-            return "+ veel " + n;
-        },
-        noEventsMessage: "Kuvamiseks puuduvad sündmused"
-    };
+  var et = {
+    code: "et",
+    week: {
+      dow: 1,
+      doy: 4
+    },
+    buttonText: {
+      prev: "Eelnev",
+      next: "J\xE4rgnev",
+      today: "T\xE4na",
+      month: "Kuu",
+      week: "N\xE4dal",
+      day: "P\xE4ev",
+      list: "P\xE4evakord"
+    },
+    weekText: "n\xE4d",
+    allDayText: "Kogu p\xE4ev",
+    moreLinkText: function(n) {
+      return "+ veel " + n;
+    },
+    noEventsText: "Kuvamiseks puuduvad s\xFCndmused"
+  };
 
-    return et;
+  return et;
 
-}));
+}());

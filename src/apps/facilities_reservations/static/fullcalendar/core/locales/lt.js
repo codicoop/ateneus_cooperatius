@@ -1,30 +1,27 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.lt = factory()));
-}(this, function () { 'use strict';
+FullCalendar.globalLocales.push(function () {
+  'use strict';
 
-    var lt = {
-        code: "lt",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
-        },
-        buttonText: {
-            prev: "Atgal",
-            next: "Pirmyn",
-            today: "Šiandien",
-            month: "Mėnuo",
-            week: "Savaitė",
-            day: "Diena",
-            list: "Darbotvarkė"
-        },
-        weekLabel: "SAV",
-        allDayText: "Visą dieną",
-        eventLimitText: "daugiau",
-        noEventsMessage: "Nėra įvykių rodyti"
-    };
+  var lt = {
+    code: "lt",
+    week: {
+      dow: 1,
+      doy: 4
+    },
+    buttonText: {
+      prev: "Atgal",
+      next: "Pirmyn",
+      today: "\u0160iandien",
+      month: "M\u0117nuo",
+      week: "Savait\u0117",
+      day: "Diena",
+      list: "Darbotvark\u0117"
+    },
+    weekText: "SAV",
+    allDayText: "Vis\u0105 dien\u0105",
+    moreLinkText: "daugiau",
+    noEventsText: "N\u0117ra \u012Fvyki\u0173 rodyti"
+  };
 
-    return lt;
+  return lt;
 
-}));
+}());
