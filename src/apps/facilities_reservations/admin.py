@@ -45,7 +45,7 @@ class ReservationAdmin(admin.ModelAdmin):
     list_display = ('start', 'end', 'room', 'title', 'responsible',)
     form = ReservationForm
     readonly_fields = ('created_by', 'created',)
-    fields = ('start', 'end', 'room', 'title', 'responsible', 'created_by', 'created',)
+    fields = ('start', 'end', 'room', 'title', 'responsible', 'created_by', 'created', 'url',)
     list_filter = ('room', 'start', ('responsible', admin.RelatedOnlyFieldListFilter))
     search_fields = ('title__unaccent', )
     date_hierarchy = 'start'
