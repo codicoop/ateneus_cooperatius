@@ -53,7 +53,14 @@
           error: function() {
               alert("No s'han pogut carregar les reserves. Recarrega la pàgina i si d'aquí uns minuts segueix fallant, si us plau avisa'ns.");
           }
-        }
+        },
+        eventClick: function(info) {
+          var eventObj = info.event;
+          if (eventObj.url) {
+            window.open(eventObj.url);
+            info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
+          }
+        },
       });
 
       calendar.render();

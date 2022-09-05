@@ -38,7 +38,8 @@ class AjaxCalendarFeed(View):
                     'title': f"{event.title} [{event.responsible}]",
                     'start': date_to_tull_calendar_format(event.start),
                     'end': date_to_tull_calendar_format(event.end),
-                    'color': event.room.color
+                    'color': event.room.color,
+                    'url': event.url,
                 }
             if event.url:
                 event_data['url'] = event.url
