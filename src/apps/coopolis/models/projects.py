@@ -255,6 +255,8 @@ class Project(models.Model):
         To display the list of all the people who participated in project
         stage sessions.
         """
+        if not self.id:
+            return "-"
         participants = User.objects.filter(
             stage_sessions_participated__project_stage__project=self,
         ).distinct()
