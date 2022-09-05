@@ -588,6 +588,15 @@ class Activity(models.Model):
         self.organizer_reminded = datetime.now()
         self.save()
 
+    @property
+    def admin_url(self):
+        if not self.id:
+            return ""
+        return reverse(
+            "admin:cc_courses_activity_change",
+            kwargs={'object_id': self.id},
+        )
+
 
 class ActivityResourceFile(models.Model):
     class Meta:
