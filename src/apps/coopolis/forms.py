@@ -269,9 +269,7 @@ class ActivityForm(forms.ModelForm):
         date_end = self.cleaned_data['date_start']
         if self.cleaned_data['date_end']:
             date_end = self.cleaned_data['date_end']
-        id = None
-        if self.instance.room_reservation:
-            id = self.instance.room_reservation.id
+        id = self.instance.room_reservation_id
         values = {
             'id': id,
             'title': "foo",

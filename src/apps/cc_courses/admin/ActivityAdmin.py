@@ -527,8 +527,9 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             id=pk,
             defaults=values,
         )
-        obj.save()
-        return obj_res
+        if created:
+            obj.room_reservation = obj_res
+            obj.save()
 
     def delete_reservation(self, obj):
         obj_res = Reservation.objects.filter(id=obj.room_reservation.id)
