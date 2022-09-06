@@ -81,6 +81,17 @@ class Reservation(models.Model):
         self.full_clean()
         return super(Reservation, self).save(force_insert, force_update, using, update_fields)
 
+    @property
+    def equipment_summary(self):
+        """
+        For the fullcalendar endpoint to include it in the title.
+        """
+        if not self.equipments:
+            return ""
+        equipment_str = [str(x.equipment.name) for x in self.equipments.all()]
+        equipment_str.sort()
+        return "+".join(equipment_str)
+
 
 class ReservationEquipment(models.Model):
     class Meta:
