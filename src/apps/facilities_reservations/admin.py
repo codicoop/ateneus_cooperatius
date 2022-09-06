@@ -3,8 +3,8 @@ import datetime
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Room, Reservation
-from .forms import RoomForm, ReservationForm
+from .models import Room, Reservation, ReservationEquipment, Equipment
+from .forms import RoomForm
 from apps.coopolis.models import User
 from apps.cc_courses.models import CoursePlace
 
@@ -37,6 +37,26 @@ class RoomAdmin(admin.ModelAdmin):
 admin.site.register(Room, RoomAdmin)
 
 
+@admin.register(Equipment)
+class EquipmentAdmin(admin.ModelAdmin):
+    list_display = ("name", "equipment__storing_place", )
+    readonly_fields = ("equipment__storing_place", )
+
+
+class ReservationEquipmentInlineAdmin(admin.TabularInline):
+    model = ReservationEquipment
+    extra = 0
+    fields = ("equipment", "reservation", "storage_room_field", )
+    readonly_fields = ("storage_room_field",)
+
+    def storage_room_field(self, obj):
+        if obj.id is None:
+            return '-'
+        return obj.equipment.storing_place
+    storage_room_field.allow_tags = True
+    storage_room_field.short_description = 'On es desa'
+
+
 class ReservationAdmin(admin.ModelAdmin):
     class Media:
         # Grappelli was not even loading this file (maybe jquery did, internally?)
@@ -45,12 +65,12 @@ class ReservationAdmin(admin.ModelAdmin):
         js = ("grappelli/js/jquery.grp_timepicker.js", 'js/grappellihacks.js',)
 
     list_display = ('start', 'end', 'room', 'title', 'responsible',)
-    form = ReservationForm
     readonly_fields = ('created_by', 'created',)
     fields = ('start', 'end', 'room', 'title', 'responsible', 'created_by', 'created', 'url',)
     list_filter = ('room', 'start', ('responsible', admin.RelatedOnlyFieldListFilter))
     search_fields = ('title__unaccent', )
     date_hierarchy = 'start'
+    inlines = (ReservationEquipmentInlineAdmin, )
 
     def get_object(self, request, object_id, from_field=None):
         obj = super(ReservationAdmin, self).get_object(request, object_id, from_field)
