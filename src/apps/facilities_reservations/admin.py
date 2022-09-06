@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
@@ -80,6 +82,14 @@ class ReservationAdmin(admin.ModelAdmin):
             return self.fields
         else:
             return super(ReservationAdmin, self).get_readonly_fields(request, obj)
+
+    def get_changeform_initial_data(self, request):
+        initial = super().get_changeform_initial_data(request)
+        if "end" in initial:
+            initial["end"] = datetime.datetime.strptime(initial["end"], "%d/%m/%Y %H:%M")
+        if "start" in initial:
+            initial["start"] = datetime.datetime.strptime(initial["start"], "%d/%m/%Y %H:%M")
+        return initial
 
 
 admin.site.register(Reservation, ReservationAdmin)

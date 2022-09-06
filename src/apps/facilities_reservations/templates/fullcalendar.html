@@ -16,6 +16,27 @@
       var calendarEl = document.getElementById('calendar');
       var newActivityURL = "/admin/cc_courses/activity/add/"
       var newReservationURL = "/admin/facilities_reservations/reservation/add/"
+      var newActivityParameters = ""
+      var newReservationParameters = ""
+
+      let dialog = document.getElementById("confirmation-dialog");
+      document.getElementById("cancel").addEventListener("click", function() {
+          dialog.close();
+          newEventParameters = ""
+      });
+      document.getElementById("confirm-activity").addEventListener("click", function() {
+        dialog.close();
+        params = "?" + newActivityParameters.join("&")
+        url = newActivityURL + params
+        window.open(url);
+      });
+      document.getElementById("confirm-reservation").addEventListener("click", function() {
+        dialog.close();
+        params = "?" + newReservationParameters.join("&")
+        url = newReservationURL + params
+        console.log(url)
+        window.open(url);
+      });
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
@@ -36,12 +57,29 @@
             selectMirror: false,
 
             select: function(info) {
-              console.log(info)
-              var date_start = info.start.toLocaleString("ca", {year: 'numeric', month: '2-digit', day: '2-digit'})
-              var date_end = info.end.toLocaleString("ca", {year: 'numeric', month: '2-digit', day: '2-digit'})
-              var starting_time = info.start.toLocaleString("ca", {hour: 'numeric', minute: 'numeric'})
-              var ending_time = info.end.toLocaleString("ca", {hour: 'numeric', minute: 'numeric'})
-              console.log(newActivityURL)
+              var date_start = info.start.toLocaleString(
+                "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
+              )
+              var date_end = info.end.toLocaleString(
+                "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
+              )
+              var starting_time = info.start.toLocaleString(
+                "ca", {hour: 'numeric', minute: 'numeric'}
+              )
+              var ending_time = info.end.toLocaleString(
+                "ca", {hour: 'numeric', minute: 'numeric'}
+              )
+              newActivityParameters = [
+                "date_start=" + date_start,
+                "date_end=" + date_end,
+                "starting_time=" + starting_time,
+                "ending_time=" + ending_time
+              ]
+              newReservationParameters = [
+                "start=" + date_start + " " + starting_time,
+                "end=" + date_end + " " + ending_time,
+              ]
+              dialog.showModal();
             },
 
             // Time Grid:
@@ -90,6 +128,13 @@
       {% endif %}
       <div id='calendar'></div>
     </div>
+
+  <dialog id="confirmation-dialog">
+    <h2>Crear una nova...</h2>
+    <button id="confirm-activity">Sessió</button>
+    <button id="confirm-reservation">Reserva</button>
+    <button id="cancel">Tancar</button>
+  </dialog>
 
   </body>
 </html>
