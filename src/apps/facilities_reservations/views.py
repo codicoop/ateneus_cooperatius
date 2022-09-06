@@ -34,8 +34,11 @@ class AjaxCalendarFeed(View):
 
         events = Reservation.objects.filter(start__gte=start, end__lte=end)
         for event in events:
+            equipment_summary = ""
+            if event.equipment_summary:
+                equipment_summary = f"[{event.equipment_summary}] "
             event_data = {
-                    'title': f"{event.title} [{event.responsible}]",
+                    'title': f"{event.title} {equipment_summary}[{event.responsible}]",
                     'start': date_to_tull_calendar_format(event.start),
                     'end': date_to_tull_calendar_format(event.end),
                     'color': event.room.color,
