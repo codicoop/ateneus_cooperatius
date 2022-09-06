@@ -28,8 +28,11 @@ class Equipment(models.Model):
         verbose_name_plural = "equipaments"
         ordering = ["name", ]
 
-    name = models.CharField("name", max_length=100)
-    storing_place = models.CharField("On es desa", max_length=250)
+    name = models.CharField("nom", max_length=100)
+    storing_place = models.CharField("on es desa", max_length=250)
+
+    def __str__(self):
+        return self.name
 
 
 class Reservation(models.Model):
@@ -59,22 +62,20 @@ class Reservation(models.Model):
         """
         If any events of the given room are inside the time span, return false.
         """
-        if not self.room:
-            pass
+        if hasattr(self, "room"):
+            q = Reservation.objects.filter(
+                models.Q(start__gte=self.start, start__lt=self.end)
+                | models.Q(end__gt=self.start, end__lte=self.end)
+                | models.Q(start__lte=self.start, end__gte=self.end)
+            )
 
-        q = Reservation.objects.filter(
-            models.Q(start__gte=self.start, start__lt=self.end)
-            | models.Q(end__gt=self.start, end__lte=self.end)
-            | models.Q(start__lte=self.start, end__gte=self.end)
-        )
+            q = q.filter(room=self.room)
 
-        q = q.filter(room=self.room)
+            if self.id:
+                q = q.exclude(id=self.id)
 
-        if self.id:
-            q = q.exclude(id=self.id)
-
-        if q.count() > 0:
-            raise ValidationError("La sala que has seleccionat no està disponible en aquest horari.")
+            if q.count() > 0:
+                raise ValidationError("La sala que has seleccionat no està disponible en aquest horari.")
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.full_clean()
