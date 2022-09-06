@@ -22,6 +22,16 @@ class Room(models.Model):
         return self.name
 
 
+class Equipment(models.Model):
+    class Meta:
+        verbose_name = "equipament"
+        verbose_name_plural = "equipaments"
+        ordering = ["name", ]
+
+    name = models.CharField("name", max_length=100)
+    storing_place = models.CharField("On es desa", max_length=250)
+
+
 class Reservation(models.Model):
     class Meta:
         verbose_name = "reserva"
@@ -69,3 +79,22 @@ class Reservation(models.Model):
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.full_clean()
         return super(Reservation, self).save(force_insert, force_update, using, update_fields)
+
+
+class ReservationEquipment(models.Model):
+    class Meta:
+        verbose_name = "equipament de la reserva"
+        verbose_name_plural = "equipaments de les reserves"
+
+    equipment = models.ForeignKey(
+        Equipment,
+        on_delete=models.CASCADE,
+        verbose_name="equipament",
+        related_name="reservations",
+    )
+    reservation = models.ForeignKey(
+        Reservation,
+        on_delete=models.CASCADE,
+        verbose_name="reserva",
+        related_name="equipments",
+    )
