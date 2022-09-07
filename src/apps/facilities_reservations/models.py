@@ -34,6 +34,10 @@ class Equipment(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains',)
+
 
 class Reservation(models.Model):
     class Meta:

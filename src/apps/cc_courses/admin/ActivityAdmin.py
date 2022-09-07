@@ -165,6 +165,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         css = {
             'all': ('styles/grappellihacks.css',)
         }
+
     form = ActivityForm
     list_display = (
         'date_start', 'spots', 'remaining_spots', 'name', 'service',
@@ -184,8 +185,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     fieldsets = [
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
-                       'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'sub_service', 'circle', 'entity',
+                       'date_end', 'starting_time', 'ending_time', 'equipments',
+                       'spots', 'service', 'sub_service', 'circle', 'entity',
                        'responsible', 'organizer_reminded', 'publish', ]
         }),
         ("Documents per la justificació", {
@@ -222,10 +223,10 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         }),
     ]
     # define the raw_id_fields
-    raw_id_fields = ('enrolled', 'course')
+    raw_id_fields = ('enrolled', 'course', 'equipments', )
     # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
-        'm2m': ['enrolled'],
+        'm2m': ['enrolled', 'equipments', ],
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
