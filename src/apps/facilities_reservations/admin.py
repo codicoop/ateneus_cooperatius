@@ -39,8 +39,8 @@ admin.site.register(Room, RoomAdmin)
 
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
-    list_display = ("name", "equipment__storing_place", )
-    readonly_fields = ("equipment__storing_place", )
+    list_display = ("name", "storing_place", )
+    readonly_fields = ("storing_place", )
 
 
 class ReservationEquipmentInlineAdmin(admin.TabularInline):
