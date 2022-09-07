@@ -598,6 +598,28 @@ class Activity(models.Model):
         )
 
 
+class ActivityEquipment(models.Model):
+    class Meta:
+        verbose_name = "equipament de la sessió"
+        verbose_name_plural = "equipaments de les sessions"
+
+    equipment = models.ForeignKey(
+        "facilities_reservations.Equipment",
+        on_delete=models.CASCADE,
+        verbose_name="equipament",
+        related_name="activities",
+    )
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        verbose_name="activitat",
+        related_name="equipments",
+    )
+
+    def __str__(self):
+        return f"{self.equipment.name} per la sessió {self.activity.name}"
+
+
 class ActivityResourceFile(models.Model):
     class Meta:
         verbose_name = "recurs"
