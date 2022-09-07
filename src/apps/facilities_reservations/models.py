@@ -63,6 +63,7 @@ class Reservation(models.Model):
 
     def clean(self):
         super().clean()
+        errors = {}
         """
         If any events of the given room are inside the time span, return false.
         """
@@ -79,7 +80,17 @@ class Reservation(models.Model):
                 q = q.exclude(id=self.id)
 
             if q.count() > 0:
-                raise ValidationError("La sala que has seleccionat no està disponible en aquest horari.")
+                errors.update(
+                    {
+                        "room": ValidationError(
+                            "La sala que has seleccionat no està disponible en "
+                            "aquest horari."
+                        ),
+                    }
+                )
+
+        if errors:
+            raise ValidationError(errors)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.full_clean()
