@@ -110,3 +110,6 @@ class ReservationEquipment(models.Model):
         verbose_name="reserva",
         related_name="equipments",
     )
+
+    def __str__(self):
+        return f"{self.equipment.name} per la reserva {self.reservation.title}"
