@@ -23,7 +23,8 @@ from apps.cc_courses.models import (
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
-from apps.facilities_reservations.models import Reservation
+from apps.facilities_reservations.models import Reservation, \
+    ReservationEquipment
 
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
@@ -491,6 +492,9 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         if config.ENABLE_ROOM_RESERVATIONS_MODULE:
+            # This will be called again at save_related(), but we need to
+            # enfore it here to be able to access the equipments list.
+            form.save_m2m()
             self.synchronize_with_reserved_room(obj)
 
     def synchronize_with_reserved_room(self, obj):
@@ -532,8 +536,22 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             obj.room_reservation = obj_res
             obj.save()
 
+        self.synchronize_with_equipment(obj, obj_res)
+
     def delete_reservation(self, obj):
         obj_res = Reservation.objects.filter(id=obj.room_reservation.id)
         obj_res.delete()
         obj.room_reservation = None
         obj.save()
+
+    def synchronize_with_equipment(self, activity_obj, reservation_obj):
+        ReservationEquipment.objects.filter(
+            reservation=reservation_obj
+        ).delete()
+        for equipment in activity_obj.equipments.all():
+            reservation_equipment_obj = ReservationEquipment(
+                equipment=equipment,
+                reservation=reservation_obj,
+            )
+            reservation_equipment_obj.clean()
+            reservation_equipment_obj.save()
