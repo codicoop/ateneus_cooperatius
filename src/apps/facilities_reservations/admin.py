@@ -56,6 +56,21 @@ class ReservationEquipmentInlineAdmin(admin.TabularInline):
     storage_room_field.allow_tags = True
     storage_room_field.short_description = 'On es desa'
 
+    def has_change_permission(self, request, obj=None):
+        if obj and obj.related_activities.count() > 0:
+            return None
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.related_activities.count() > 0:
+            return None
+        return super().has_delete_permission(request, obj)
+
+    def has_add_permission(self, request, obj):
+        if obj and obj.related_activities.count() > 0:
+            return None
+        return super().has_add_permission(request, obj)
+
 
 class ReservationAdmin(admin.ModelAdmin):
     class Media:
