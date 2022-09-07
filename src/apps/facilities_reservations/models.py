@@ -101,6 +101,7 @@ class ReservationEquipment(models.Model):
     class Meta:
         verbose_name = "equipament de la reserva"
         verbose_name_plural = "equipaments de les reserves"
+        unique_together = ("equipment", "reservation", )
 
     equipment = models.ForeignKey(
         Equipment,
