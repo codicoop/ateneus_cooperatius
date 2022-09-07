@@ -129,3 +129,44 @@ class ReservationEquipment(models.Model):
 
     def __str__(self):
         return f"{self.equipment.name} per la reserva {self.reservation.title}"
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        if hasattr(self, "equipment") and hasattr(self, "reservation"):
+            simultaneous_reservations = ReservationEquipment.objects.filter(
+                models.Q(
+                    reservation__start__gte=self.reservation.start,
+                    reservation__start__lt=self.reservation.end,
+                )
+                | models.Q(
+                    reservation__end__gt=self.reservation.start,
+                    reservation__end__lte=self.reservation.end,
+                )
+                | models.Q(
+                    reservation__start__lte=self.reservation.start,
+                    reservation__end__gte=self.reservation.end,
+                )
+            )
+
+            simultaneous_reservations = simultaneous_reservations.filter(
+                equipment=self.equipment,
+            )
+
+            if self.id:
+                simultaneous_reservations = simultaneous_reservations.exclude(
+                    id=self.id,
+                )
+
+            if simultaneous_reservations.count() > 0:
+                errors.update(
+                    {
+                        "equipment": ValidationError(
+                            "L'equipament seleccionat no està disponible en "
+                            "aquest horari."
+                        ),
+                    }
+                )
+
+        if errors:
+            raise ValidationError(errors)
