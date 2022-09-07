@@ -399,6 +399,11 @@ class Activity(models.Model):
             "sinó arrossegarà molta informació de formateig que "
             "probablement farà que el correu es vegi malament."
     )
+    # equipments = models.ManyToManyField(
+    #     verbose_name="equipaments",
+    #     through="cc_courses.ActivityEquipment",
+    #     blank=True,
+    # )
 
     objects = models.Manager()
     published = Published()
@@ -602,6 +607,7 @@ class ActivityEquipment(models.Model):
     class Meta:
         verbose_name = "equipament de la sessió"
         verbose_name_plural = "equipaments de les sessions"
+        unique_together = ("equipment", "activity")
 
     equipment = models.ForeignKey(
         "facilities_reservations.Equipment",
