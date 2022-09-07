@@ -399,11 +399,12 @@ class Activity(models.Model):
             "sinó arrossegarà molta informació de formateig que "
             "probablement farà que el correu es vegi malament."
     )
-    # equipments = models.ManyToManyField(
-    #     verbose_name="equipaments",
-    #     through="cc_courses.ActivityEquipment",
-    #     blank=True,
-    # )
+    equipments = models.ManyToManyField(
+        to="facilities_reservations.Equipment",
+        verbose_name="equipaments",
+        through="cc_courses.ActivityEquipment",
+        blank=True,
+    )
 
     objects = models.Manager()
     published = Published()
@@ -613,13 +614,11 @@ class ActivityEquipment(models.Model):
         "facilities_reservations.Equipment",
         on_delete=models.CASCADE,
         verbose_name="equipament",
-        related_name="activities",
     )
     activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
         verbose_name="activitat",
-        related_name="equipments",
     )
 
     def __str__(self):
