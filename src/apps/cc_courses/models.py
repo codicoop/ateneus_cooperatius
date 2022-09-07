@@ -402,7 +402,6 @@ class Activity(models.Model):
     equipments = models.ManyToManyField(
         to="facilities_reservations.Equipment",
         verbose_name="equipaments",
-        through="cc_courses.ActivityEquipment",
         blank=True,
     )
 
@@ -602,27 +601,6 @@ class Activity(models.Model):
             "admin:cc_courses_activity_change",
             kwargs={'object_id': self.id},
         )
-
-
-class ActivityEquipment(models.Model):
-    class Meta:
-        verbose_name = "equipament de la sessió"
-        verbose_name_plural = "equipaments de les sessions"
-        unique_together = ("equipment", "activity")
-
-    equipment = models.ForeignKey(
-        "facilities_reservations.Equipment",
-        on_delete=models.CASCADE,
-        verbose_name="equipament",
-    )
-    activity = models.ForeignKey(
-        Activity,
-        on_delete=models.CASCADE,
-        verbose_name="activitat",
-    )
-
-    def __str__(self):
-        return f"{self.equipment.name} per la sessió {self.activity.name}"
 
 
 class ActivityResourceFile(models.Model):
