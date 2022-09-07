@@ -263,6 +263,12 @@ class ActivityForm(forms.ModelForm):
         super().clean()
         if self.cleaned_data['room']:
             self.validate_room_availability()
+        if not self.cleaned_data['room'] and self.cleaned_data['equipments']:
+            self.add_error(
+                "equipments",
+                "Per reservar equipaments cal seleccionar "
+                "també una Sala.",
+            )
         return self.cleaned_data
 
     def validate_room_availability(self):
