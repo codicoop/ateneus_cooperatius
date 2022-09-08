@@ -235,7 +235,7 @@ class ActivityForm(forms.ModelForm):
             'organizer', 'axis', 'subaxis', 'photo1', 'photo2', 'publish',
             'for_minors', 'minors_school_name', 'minors_school_cif',
             'minors_grade', 'minors_participants_number', 'minors_teacher',
-            'room', 'equipments',
+            'room', 'equipments', 'confirmed',
         )
 
     def clean(self):

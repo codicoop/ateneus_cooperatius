@@ -186,7 +186,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     fieldsets = [
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
-                       'date_end', 'starting_time', 'ending_time', 'equipments',
+                       'date_end', 'starting_time', 'ending_time',
+                       'confirmed', 'equipments',
                        'spots', 'service', 'sub_service', 'circle', 'entity',
                        'responsible', 'organizer_reminded', 'publish', ]
         }),
@@ -526,6 +527,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'responsible': self.request.user,
             'created_by': self.request.user,
             'url': obj.admin_url,
+            'confirmed': obj.confirmed,
         }
         pk = obj.room_reservation.id if obj.room_reservation else None
         obj_res, created = Reservation.objects.update_or_create(
