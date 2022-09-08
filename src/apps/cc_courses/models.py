@@ -21,6 +21,7 @@ from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.storage_backends import (
     PrivateMediaStorage, PublicMediaStorage
 )
+from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
 
@@ -527,6 +528,23 @@ class Activity(models.Model):
                         "subaxis": ValidationError(
                             "Has seleccionat un sub-eix que no es "
                             "correspon a l'eix."
+                        )
+                    }
+                )
+
+        # Prevent using dates outside an existing subsidy period.
+        if self.date_start and self.date_end:
+            try:
+                SubsidyPeriod.objects.get(
+                    date_start__lte=self.date_start,
+                    date_end__gte=self.date_start
+                )
+            except SubsidyPeriod.DoesNotExist:
+                errors.update(
+                    {
+                        "date_start": ValidationError(
+                            "La data seleccionada correspon a una convocatòria "
+                            "que no existeix a la base de dades."
                         )
                     }
                 )
