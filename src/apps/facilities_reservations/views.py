@@ -37,9 +37,12 @@ class AjaxCalendarFeed(View):
         for event in events:
             equipment_summary = ""
             if event.equipment_summary:
-                equipment_summary = f"[{event.equipment_summary}] "
+                equipment_summary = f" [{event.equipment_summary}]"
+            responsible = ""
+            if event.responsible:
+                responsible = f" [{event.responsible}]"
             event_data = {
-                    'title': f"{event.title} {equipment_summary}[{event.responsible}]",
+                    'title': f"{event.title} {equipment_summary}{responsible}",
                     'start': date_to_tull_calendar_format(event.start),
                     'end': date_to_tull_calendar_format(event.end),
                     'color': event.room.color,
