@@ -4,7 +4,7 @@ from constance import config
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Q
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
@@ -499,8 +499,8 @@ class ProjectStage(models.Model):
 
     @property
     def justification_documents_total(self):
-        docs_count = self.stage_sessions.filter(
-            justification_file__isnull=False,
+        docs_count = self.stage_sessions.exclude(
+            Q(justification_file='') | Q(justification_file=None),
         ).count()
         return f"{docs_count} / {self.stage_sessions.count()}"
     justification_documents_total.fget.short_description = "Docs justif."
