@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
@@ -42,7 +43,10 @@ class AjaxCalendarFeed(View):
                     'start': date_to_tull_calendar_format(event.start),
                     'end': date_to_tull_calendar_format(event.end),
                     'color': event.room.color,
-                    'url': event.url if event.url else "",
+                    'url': event.url if event.url else reverse(
+                        "admin:facilities_reservations_reservation_change",
+                        kwargs={'object_id': event.id},
+                    ),
                 }
             data.append(event_data)
 
