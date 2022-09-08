@@ -39,14 +39,10 @@ class AjaxCalendarFeed(View):
             if not event.confirmed:
                 title_pieces.append("[provisional]")
             title_pieces.append(event.title)
-            title_pieces.append(
-                "" if event.equipment_summary
-                else f"[{event.equipment_summary}]"
-            )
-            title_pieces.append(
-                "" if event.responsible
-                else f"[{event.responsible}]"
-            )
+            if event.equipment_summary:
+                title_pieces.append(f"[{event.equipment_summary}]")
+            if event.responsible:
+                title_pieces.append(f"[{event.responsible}]")
             event_data = {
                     'title': " ".join(title_pieces),
                     'start': date_to_tull_calendar_format(event.start),
