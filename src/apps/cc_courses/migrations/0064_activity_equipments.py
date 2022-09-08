@@ -16,4 +16,11 @@ class Migration(migrations.Migration):
             name='equipments',
             field=models.ManyToManyField(blank=True, to='facilities_reservations.Equipment', verbose_name='equipaments'),
         ),
+        migrations.AddField(
+            model_name='activity',
+            name='confirmed',
+            field=models.BooleanField(default=True,
+                                      help_text='Per informació interna. No afecta la publicació.',
+                                      verbose_name='confirmada'),
+        ),
     ]

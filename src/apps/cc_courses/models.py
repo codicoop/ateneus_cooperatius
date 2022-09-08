@@ -194,6 +194,11 @@ class Activity(models.Model):
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
     ending_time = models.TimeField("hora de finalització")
+    confirmed = models.BooleanField(
+        "confirmada",
+        default=True,
+        help_text="Per informació interna. No afecta la publicació.",
+    )
     spots = models.IntegerField(
         'places totals',
         default=0,
