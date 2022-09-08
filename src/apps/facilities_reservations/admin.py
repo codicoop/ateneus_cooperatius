@@ -96,7 +96,8 @@ class ReservationAdmin(admin.ModelAdmin):
 
     list_display = ('start', 'end', 'room', 'title', 'responsible',)
     readonly_fields = ('created_by', 'created',)
-    fields = ('start', 'end', 'room', 'title', 'responsible', 'created_by', 'created', 'url',)
+    fields = ('start', 'end', 'room', 'title', 'responsible', 'confirmed',
+              'created_by', 'created', 'url', )
     list_filter = ('room', 'start', ('responsible', admin.RelatedOnlyFieldListFilter))
     search_fields = ('title__unaccent', )
     date_hierarchy = 'start'
