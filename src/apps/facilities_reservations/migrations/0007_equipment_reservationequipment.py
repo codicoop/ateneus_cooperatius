@@ -37,4 +37,9 @@ class Migration(migrations.Migration):
                 'unique_together': {('equipment', 'reservation')},
             },
         ),
+        migrations.AddField(
+            model_name='reservation',
+            name='confirmed',
+            field=models.BooleanField(default=False, verbose_name='confirmada'),
+        ),
     ]

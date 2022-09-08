@@ -64,6 +64,7 @@ class Reservation(models.Model):
         "al desplegable, cal que la persona tingui activada la opció 'Membre "
         "del personal'.",
     )
+    confirmed = models.BooleanField("confirmada", default=False)
     url = models.CharField(
         "enllaç web",
         blank=True,
