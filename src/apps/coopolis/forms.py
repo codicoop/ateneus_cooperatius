@@ -18,7 +18,8 @@ from django.conf import settings
 from apps.coopolis.models import Project, User, ActivityPoll
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.mixins import FormDistrictValidationMixin
-from apps.facilities_reservations.models import Reservation
+from apps.facilities_reservations.models import Reservation, \
+    ReservationEquipment
 
 
 class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
@@ -272,6 +273,23 @@ class ActivityForm(forms.ModelForm):
             reservation_obj.clean()
         except ValidationError as e:
             self.add_error("room", e)
+
+        for equipment in self.cleaned_data["equipments"]:
+            equipment_obj = ReservationEquipment(
+                reservation=reservation_obj,
+                equipment=equipment,
+            )
+            try:
+                equipment_obj.clean()
+            except ValidationError as e:
+                if "equipment" in e.message_dict:
+                    self.add_error(
+                        "equipments",
+                        f"L'equipament {equipment.name} no està disponible en "
+                        "aquest horari."
+                    )
+                else:
+                    self.add_error(None, e)
 
 
 class ActivityEnrolledForm(forms.ModelForm):

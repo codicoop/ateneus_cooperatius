@@ -153,10 +153,9 @@ class ReservationEquipment(models.Model):
                 equipment=self.equipment,
             )
 
-            if self.id:
-                simultaneous_reservations = simultaneous_reservations.exclude(
-                    id=self.id,
-                )
+            simultaneous_reservations = simultaneous_reservations.exclude(
+                reservation=self.reservation,
+            )
 
             if simultaneous_reservations.count() > 0:
                 errors.update(
