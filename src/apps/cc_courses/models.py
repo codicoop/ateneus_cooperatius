@@ -194,6 +194,11 @@ class Activity(models.Model):
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
     ending_time = models.TimeField("hora de finalització")
+    confirmed = models.BooleanField(
+        "confirmada",
+        default=True,
+        help_text="Per informació interna. No afecta la publicació.",
+    )
     spots = models.IntegerField(
         'places totals',
         default=0,
@@ -399,6 +404,11 @@ class Activity(models.Model):
             "sinó arrossegarà molta informació de formateig que "
             "probablement farà que el correu es vegi malament."
     )
+    equipments = models.ManyToManyField(
+        to="facilities_reservations.Equipment",
+        verbose_name="equipaments",
+        blank=True,
+    )
 
     objects = models.Manager()
     published = Published()
@@ -480,7 +490,16 @@ class Activity(models.Model):
         return False
 
     def clean(self):
+        """
+        There's a necessary validation that cannot be included here so it must
+        be done in corresponding forms' validations:
+        To be able to select any equipments, Room must be selected as well.
+        That way we make sure that a Reservation will always exist, to
+        prevent Activities from reserving the same equipment as another
+        Reservation.
+        """
         super().clean()
+        errors = {}
         if (
                 self.minors_grade or
                 self.minors_participants_number or
@@ -489,20 +508,31 @@ class Activity(models.Model):
                 self.minors_teacher
         ):
             if not self.for_minors:
-                raise ValidationError(
-                    {'for_minors': "Has omplert dades relatives a sessions "
-                                   "dirigides a menors però no has marcat "
-                                   "aquesta casella. Marca-la per tal que la "
-                                   "sessió es justifiqui com a tal."}
+                errors.update(
+                    {
+                        "for_minors": ValidationError(
+                            "Has omplert dades relatives a sessions "
+                            "dirigides a menors però no has marcat "
+                            "aquesta casella. Marca-la per tal que la "
+                            "sessió es justifiqui com a tal."
+                        ),
+                    }
                 )
 
         if self.axis:
             subaxis_options = get_subaxis_for_axis(str(self.axis))
             if self.subaxis not in subaxis_options:
-                raise ValidationError(
-                    {'subaxis': "Has seleccionat un sub-eix que no es "
-                                "correspon a l'eix."}
+                errors.update(
+                    {
+                        "subaxis": ValidationError(
+                            "Has seleccionat un sub-eix que no es "
+                            "correspon a l'eix."
+                        )
+                    }
                 )
+
+        if errors:
+            raise ValidationError(errors)
 
     def __str__(self):
         return self.name
@@ -587,6 +617,15 @@ class Activity(models.Model):
         mail.send_to_user(self.responsible)
         self.organizer_reminded = datetime.now()
         self.save()
+
+    @property
+    def admin_url(self):
+        if not self.id:
+            return ""
+        return reverse(
+            "admin:cc_courses_activity_change",
+            kwargs={'object_id': self.id},
+        )
 
 
 class ActivityResourceFile(models.Model):
