@@ -35,7 +35,11 @@ class MyDashboard(Dashboard):
                     title="Gestió de reserves d'aules i sales",
                     column=1,
                     collapsible=False,
-                    models=('apps.facilities_reservations.models.Reservation', 'apps.facilities_reservations.models.Room'),
+                    models=(
+                        'apps.facilities_reservations.models.Reservation',
+                        'apps.facilities_reservations.models.Room',
+                        'apps.facilities_reservations.models.Equipment',
+                    ),
                 )
             reservations_module_calendar = modules.LinkList(
                     title="Calendari de reserves",

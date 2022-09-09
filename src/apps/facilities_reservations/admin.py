@@ -1,8 +1,10 @@
+import datetime
+
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Room, Reservation
-from .forms import RoomForm, ReservationForm
+from .models import Room, Reservation, ReservationEquipment, Equipment
+from .forms import RoomForm
 from apps.coopolis.models import User
 from apps.cc_courses.models import CoursePlace
 
@@ -35,6 +37,56 @@ class RoomAdmin(admin.ModelAdmin):
 admin.site.register(Room, RoomAdmin)
 
 
+@admin.register(Equipment)
+class EquipmentAdmin(admin.ModelAdmin):
+    list_display = ("name", "storing_place", )
+    readonly_fields = ("storing_place", )
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
+
+
+class ReservationEquipmentInlineAdmin(admin.TabularInline):
+    model = ReservationEquipment
+    extra = 0
+    fields = ("equipment", "reservation", "storage_room_field", )
+    readonly_fields = ("storage_room_field",)
+
+    def storage_room_field(self, obj):
+        if obj.id is None:
+            return '-'
+        return obj.equipment.storing_place
+    storage_room_field.allow_tags = True
+    storage_room_field.short_description = 'On es desa'
+
+    def has_change_permission(self, request, obj=None):
+        if obj and obj.related_activities.count() > 0:
+            return None
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.related_activities.count() > 0:
+            return None
+        return super().has_delete_permission(request, obj)
+
+    def has_add_permission(self, request, obj):
+        if obj and obj.related_activities.count() > 0:
+            return None
+        return super().has_add_permission(request, obj)
+
+
 class ReservationAdmin(admin.ModelAdmin):
     class Media:
         # Grappelli was not even loading this file (maybe jquery did, internally?)
@@ -43,12 +95,13 @@ class ReservationAdmin(admin.ModelAdmin):
         js = ("grappelli/js/jquery.grp_timepicker.js", 'js/grappellihacks.js',)
 
     list_display = ('start', 'end', 'room', 'title', 'responsible',)
-    form = ReservationForm
     readonly_fields = ('created_by', 'created',)
-    fields = ('start', 'end', 'room', 'title', 'responsible', 'created_by', 'created',)
+    fields = ('start', 'end', 'room', 'title', 'responsible', 'confirmed',
+              'created_by', 'created', 'url', )
     list_filter = ('room', 'start', ('responsible', admin.RelatedOnlyFieldListFilter))
     search_fields = ('title__unaccent', )
     date_hierarchy = 'start'
+    inlines = (ReservationEquipmentInlineAdmin, )
 
     def get_object(self, request, object_id, from_field=None):
         obj = super(ReservationAdmin, self).get_object(request, object_id, from_field)
@@ -80,6 +133,14 @@ class ReservationAdmin(admin.ModelAdmin):
             return self.fields
         else:
             return super(ReservationAdmin, self).get_readonly_fields(request, obj)
+
+    def get_changeform_initial_data(self, request):
+        initial = super().get_changeform_initial_data(request)
+        if "end" in initial:
+            initial["end"] = datetime.datetime.strptime(initial["end"], "%d/%m/%Y %H:%M")
+        if "start" in initial:
+            initial["start"] = datetime.datetime.strptime(initial["start"], "%d/%m/%Y %H:%M")
+        return initial
 
 
 admin.site.register(Reservation, ReservationAdmin)

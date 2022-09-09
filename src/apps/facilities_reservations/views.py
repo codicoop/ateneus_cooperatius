@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
@@ -34,14 +35,24 @@ class AjaxCalendarFeed(View):
 
         events = Reservation.objects.filter(start__gte=start, end__lte=end)
         for event in events:
+            title_pieces = []
+            if not event.confirmed:
+                title_pieces.append("[provisional]")
+            title_pieces.append(event.title)
+            if event.equipment_summary:
+                title_pieces.append(f"[{event.equipment_summary}]")
+            if event.responsible:
+                title_pieces.append(f"[{event.responsible}]")
             event_data = {
-                    'title': f"{event.title} [{event.responsible}]",
+                    'title': " ".join(title_pieces),
                     'start': date_to_tull_calendar_format(event.start),
                     'end': date_to_tull_calendar_format(event.end),
-                    'color': event.room.color
+                    'color': event.room.color,
+                    'url': event.url if event.url else reverse(
+                        "admin:facilities_reservations_reservation_change",
+                        kwargs={'object_id': event.id},
+                    ),
                 }
-            if event.url:
-                event_data['url'] = event.url
             data.append(event_data)
 
         # Activity's date_end IS OPTIONAL, so here's the simple solution of filtering only by date_start.
@@ -54,7 +65,8 @@ class AjaxCalendarFeed(View):
                         make_aware(datetime.combine(activity.date_start, activity.starting_time))),
                     'end': date_to_tull_calendar_format(
                         make_aware(datetime.combine(activity.date_start, activity.ending_time))),
-                    'color': settings.CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE
+                    'color': settings.CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE,
+                    'url': activity.admin_url,
                 }
             data.append(event_data)
         return JsonResponse(data, safe=False)
