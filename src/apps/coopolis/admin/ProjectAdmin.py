@@ -15,6 +15,7 @@ from apps.coopolis.forms import (
     EmploymentInsertionInlineFormSet,
 )
 from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
+from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
 
@@ -66,6 +67,37 @@ class ProjectStageSessionsInline(admin.StackedInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class FilterBySubsidyPeriod(admin.SimpleListFilter):
+    """
+    Allows Activities to be filtered according to their date_start using a
+    dropdown with the subsidy periods.
+
+    In ProjectStage, we're using this instead of just specifying the field in
+    ProjectStageAdmin.list_filter because we wanted to skip the All option in
+    the filter, for consistency with the FilterByCurrentSubsidyPeriodMixin
+    behaviour.
+    """
+    title = "Convocatòria"
+    parameter_name = 'subsidy_period'
+
+    def lookups(self, request, model_admin):
+        qs = SubsidyPeriod.objects.all()
+        qs.order_by('name')
+        return list(qs.values_list('id', 'name'))
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            return queryset.filter(subsidy_period_id=value)
+        return queryset
+
+    def choices(self, changelist):
+        choices = super().choices(changelist)
+        choices.__next__()
+        for choice in choices:
+            yield choice
+
+
 class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = (
@@ -75,7 +107,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         '_participants_count', 'project_field', 'justification_documents_total',
     )
     list_filter = (
-        'subsidy_period',
+        FilterBySubsidyPeriod,
         'service',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type', 'axis',
@@ -106,7 +138,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "earliest_session_field",
         "justification_documents_total",
     )
-    subsidy_period_filter_param = "subsidy_period__id__exact"
+    subsidy_period_filter_param = "subsidy_period"
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
