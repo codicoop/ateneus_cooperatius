@@ -39,7 +39,8 @@ class FilterByCurrentSubsidyPeriodMixin:
     """
     Mixin for admin.ModelAdmin
 
-    The subsidy_period_filter_param needs to be filled with the GET param name that filters the subsidy period.
+    The subsidy_period_filter_param needs to be filled with the GET param name
+    that filters the subsidy period.
     An easy way to obtain it is:
     1. Use the filter in admin to chagne to another period.
     2. Look at the query params and copy the subsidy period one.
