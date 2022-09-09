@@ -49,6 +49,12 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
             )
         return queryset
 
+    def choices(self, changelist):
+        choices = super().choices(changelist)
+        choices.__next__()
+        for choice in choices:
+            yield choice
+
 
 class FilterByJustificationFiles(admin.SimpleListFilter):
     """
