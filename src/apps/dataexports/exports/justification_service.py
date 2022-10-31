@@ -71,13 +71,14 @@ class ExportJustificationService:
             ("Subservei", 70),
             ("Nom de l'actuació", 70),
             ("Data inici d'actuació", 16),
+            ("Període d'actuacions", 16),
+            ("Entitat que realitza l'actuació", 16),
             ("Cercle / Ateneu", 16),
             ("Municipi", 30),
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
             ("[Document acreditatiu]", 21),
             ("Incidències", 20),
-            ("[Entitat]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
@@ -113,13 +114,14 @@ class ExportJustificationService:
                 sub_service,
                 item.name,
                 item.date_start,
+                "",
+                str(item.entity) if item.entity else '',  # Entitat
                 item.get_circle_display(),
                 town,
                 item.enrolled.count(),
                 material_difusio,
                 document_acreditatiu,
                 "",
-                str(item.entity) if item.entity else '',  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
@@ -254,13 +256,14 @@ class ExportJustificationService:
                     sub_service,  # Subservei, pendent.
                     item.project.name,
                     item.date_start if not None else '',
+                    "",
+                    item.entities_str,  # Entitat/s
                     item.get_circle_display(),
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
                     "",
                     # En blanc pq cada stage session pot contenir una entitat
-                    "",  # Entitat
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
                     str(item.cofunded),  # Cofinançat
@@ -291,13 +294,14 @@ class ExportJustificationService:
                 sub_service,
                 item.name,
                 item.date_start,
+                "",
+                str(item.entity) if item.entity else '',  # Entitat
                 item.get_circle_display(),
                 town,
                 item.minors_participants_number,
                 material_difusio,
                 document_acreditatiu,
                 "",
-                str(item.entity) if item.entity else '',  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
@@ -350,13 +354,14 @@ class ExportJustificationService:
                 sub_service,
                 project.name,
                 stage.date_start,
+                "",
+                "",  # Entitat
                 stage.get_circle_display(),
                 town,
                 stage.partners_involved_in_sessions.count(),
                 "No",
                 "",
                 # En blanc pq cada stage session pot contenir una entitat
-                "",  # Entitat
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
                 str(stage.cofunded),  # Cofinançat
