@@ -150,7 +150,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
-        if model.objects.filter(id_number__iexact=value).exists():
+        if value and model.objects.filter(id_number__iexact=value).exists():
             raise ValidationError("El DNI ja existeix.")
         return value
 
@@ -203,6 +203,8 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
         if "town" in self.fields:
             self.fields['town'].required = False
 
+        self.fields["id_number"].required = False
+
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
@@ -210,6 +212,17 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
         if "password" in self.initial:
             return self.initial["password"]
         return None
+
+    def clean(self):
+        super().clean()
+        cannot_share_id = self.cleaned_data.get('cannot_share_id')
+        id_number = self.cleaned_data.get('id_number')
+        if not id_number and not cannot_share_id:
+            msg = ("Necessitem el DNI, NIF o passaport per justificar la "
+                   "participació davant dels organismes públics que financen "
+                   "aquestes activitats.")
+            self.add_error('id_number', msg)
+        return self.cleaned_data
 
 
 def get_item_choices(model, value):
