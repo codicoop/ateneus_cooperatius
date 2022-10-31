@@ -23,6 +23,7 @@ class ServicesChoices(models.IntegerChoices):
         "Intercooperació, treball en xarxa i dinamització territorial."
     )
     PUNT_INFO = 60, "Punt d'informació sobre l'ESS."
+    SERV_COMPLEMENTARIS = 70, "Serveis complementaris"
 
     def get_sub_services(self):
         range_start = self.value * 10
@@ -142,6 +143,9 @@ class SubServicesChoices(models.IntegerChoices):
         "Espai físic per proporcionar informació sobre ESS a diferents públics"
     )
     PUNT_INFO_DIFUSIO = 602, "Difusió del Punt o punts d'informació"
+
+    # 7. Serveis complementaris
+    SERV_COMPLEMENTARIS = 701, "Serveis complementaris"
 
 
 class CirclesChoices(models.IntegerChoices):
