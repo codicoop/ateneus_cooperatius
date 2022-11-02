@@ -8,7 +8,10 @@ from apps.dataexports.exports.manager import ExcelExportManager
 
 class ExportJustificationService:
     def __init__(self, export_obj):
-        self.export_manager = ExcelExportManager(export_obj)
+        self.export_manager = ExcelExportManager(
+            export_obj,
+            correlations_fixtures_filename="correlations_2021_2022.json",
+        )
         self.number_of_activities = 0
         self.number_of_stages = 0
         self.number_of_nouniversitaris = 0
