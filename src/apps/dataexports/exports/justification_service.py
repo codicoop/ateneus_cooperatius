@@ -1,5 +1,6 @@
 from django.db.models import Q
 
+from apps.coopolis.choices import CirclesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
 from apps.dataexports.exports.manager import ExcelExportManager
@@ -108,6 +109,11 @@ class ExportJustificationService:
             document_acreditatiu = "No"
             if item.photo2.name:
                 document_acreditatiu = "Sí"
+            circle = (
+                 CirclesChoices(item.circle).label
+                 if item.circle is not None
+                 else ""
+            )
 
             row = [
                 service,
@@ -116,7 +122,7 @@ class ExportJustificationService:
                 item.date_start,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
-                item.get_circle_display(),
+                circle,
                 town,
                 item.enrolled.count(),
                 material_difusio,
@@ -250,6 +256,11 @@ class ExportJustificationService:
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
+                circle = (
+                     CirclesChoices(item.circle).label
+                     if item.circle is not None
+                     else ""
+                )
 
                 row = [
                     service,
@@ -258,7 +269,7 @@ class ExportJustificationService:
                     item.date_start if not None else '',
                     "",
                     item.entities_str,  # Entitat/s
-                    item.get_circle_display(),
+                    circle,
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
@@ -288,6 +299,11 @@ class ExportJustificationService:
             document_acreditatiu = "No"
             if item.photo2.name:
                 document_acreditatiu = "Sí"
+            circle = (
+                 CirclesChoices(item.circle).label
+                 if item.circle is not None
+                 else ""
+            )
 
             row = [
                 service,
@@ -296,7 +312,7 @@ class ExportJustificationService:
                 item.date_start,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
-                item.get_circle_display(),
+                circle,
                 town,
                 item.minors_participants_number,
                 material_difusio,
@@ -348,6 +364,11 @@ class ExportJustificationService:
             town = ("", True)
             if project.town:
                 town = str(project.town)
+            circle = (
+                 CirclesChoices(stage.circle).label
+                 if stage.circle is not None
+                 else ""
+            )
 
             row = [
                 service,
@@ -356,7 +377,7 @@ class ExportJustificationService:
                 stage.date_start,
                 "",
                 "",  # Entitat
-                stage.get_circle_display(),
+                circle,
                 town,
                 stage.partners_involved_in_sessions.count(),
                 "No",
@@ -695,6 +716,11 @@ class ExportJustificationService:
             else:
                 gender = self.export_manager.get_correlation(
                     'gender', insertion.user.gender)
+            circle = (
+                 CirclesChoices(insertion.circle).label
+                 if insertion.circle is not None
+                 else ""
+            )
 
             row = [
                 '',  # Deixem referència en blanc pq la posin a ma.
@@ -710,7 +736,7 @@ class ExportJustificationService:
                 town,
                 cif,
                 insertion.project.name,  # Projecte
-                insertion.get_circle_display(),  # Cercle / Ateneu
+                circle,  # Cercle / Ateneu
                 str(insertion.subsidy_period),  # Convocatòria
             ]
             self.export_manager.fill_row_data(row)
