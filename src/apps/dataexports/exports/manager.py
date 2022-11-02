@@ -10,14 +10,17 @@ from django.conf import settings
 
 class ExportManager:
     correlations = None
+    correlations_fixtures_filename = "correlations_2019.json"
 
-    def __init__(self, export_obj):
+    def __init__(self, export_obj, correlations_fixtures_filename=None):
         self.error_message = set()
         self.ignore_errors = export_obj.ignore_errors
         self.subsidy_period = export_obj.subsidy_period
         self.subsidy_period_range = (
             export_obj.subsidy_period.range
         )
+        if correlations_fixtures_filename:
+            self.correlations_fixtures_filename = correlations_fixtures_filename
 
     def return_404(self, message=""):
         """When the exported data has to fit a specific format, there
@@ -69,8 +72,8 @@ class ExcelExportManager(ExportManager):
         self.correlations = dict()
 
         self.import_correlations(
-            settings.BASE_DIR
-            + "/apps/dataexports/fixtures/correlations_2019.json"
+            f"{settings.BASE_DIR}/apps/dataexports/fixtures/"
+            f"{self.correlations_fixtures_filename}"
         )
 
     def return_document(self, name):
