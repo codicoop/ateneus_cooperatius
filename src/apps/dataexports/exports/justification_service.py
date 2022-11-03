@@ -1,12 +1,14 @@
 from django.db.models import Q
 
-from apps.coopolis.choices import CirclesChoices
+from apps.coopolis.choices import CirclesChoices, SubServicesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportJustificationService:
+    subsidy_period_str = "2021-22"
+
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(
             export_obj,
@@ -55,11 +57,11 @@ class ExportJustificationService:
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.export_actuacions()
-        self.export_stages()
-        self.export_founded_projects()
         self.export_participants()
         self.export_nouniversitaris()
         self.export_insercionslaborals()
+        self.export_founded_projects()
+        self.export_stages()
 
         return self.export_manager.return_document("justificacio")
 
@@ -432,7 +434,12 @@ class ExportJustificationService:
                 crea_consolida = item.get_stage_type_display()
 
                 row = [
-                    f"{reference_number} {item.project.name}",  # Referència.
+                    self.get_formatted_reference(
+                        reference_number,
+                        item.sub_service,
+                        item.entities_str,
+                        item.circle,
+                    ),
                     item.project.name,
                     # Camp no editable, l'ha d'omplir l'excel automàticament.
                     "Entitat",
@@ -490,12 +497,18 @@ class ExportJustificationService:
                 project=project,
                 subsidy_period=self.export_manager.subsidy_period
             ).order_by("-date_start")[:1]
+            circle = ""
             if stages.count() > 0:
                 stage = stages.all()[0]
                 founded_projects_reference_number += 1
-                reference_number = (f"{founded_projects_reference_number} "
-                                    f"{project.name}")
+                reference_number = self.get_formatted_reference(
+                    founded_projects_reference_number,
+                    stage.sub_service,
+                    stage.entities_str,
+                    stage.circle,
+                )
                 name = project.name
+                circle = CirclesChoices(stage.circle).label
 
             self.export_manager.row_number += 1
             if project.cif is None:
@@ -518,7 +531,7 @@ class ExportJustificationService:
                 project.mail,
                 project.phone,
                 "Sí",  # Economia solidària
-                "",  # Ateneu / Cercle
+                circle,  # Ateneu / Cercle
                 project.stages_list
             ]
             self.export_manager.fill_row_data(row)
@@ -554,8 +567,8 @@ class ExportJustificationService:
     def participants_project_stages_rows(self):
         for project_id, project in self.stages_obj.items():
             for group_name, group in project.items():
-                activity = group['obj']
-                activity_reference_number = group['row_number']
+                stage = group['obj']
+                stage_reference_number = group['row_number']
                 for participant in group['participants']:
                     if participant.gender is None:
                         gender = ""
@@ -567,9 +580,13 @@ class ExportJustificationService:
                         town = participant.town.name
 
                     row = [
-                        f"{activity_reference_number} {activity.project.name}",
-                        # Referència.
-                        activity.project.name,
+                        self.get_formatted_reference(
+                            stage_reference_number,
+                            stage.sub_service,
+                            stage.entities_str,
+                            stage.circle,
+                        ),
+                        stage.project.name,
                         # Nom de l'actuació. Camp automàtic de l'excel.
                         participant.surname or "",
                         participant.first_name,
@@ -608,8 +625,12 @@ class ExportJustificationService:
                     town = participant.town.name
 
                 row = [
-                    f"{activity_reference_number} {activity.name}",
-                    # Referència.
+                    self.get_formatted_reference(
+                        activity_reference_number,
+                        activity.sub_service,
+                        str(activity.entity),
+                        activity.circle,
+                    ),
                     activity.name,
                     # Nom de l'actuació. Camp automàtic de l'excel.
                     participant.surname if participant.surname else "",
@@ -655,8 +676,12 @@ class ExportJustificationService:
             self.export_manager.row_number += 1
             nouniversitari_reference_number += 1
             row = [
-                f"{nouniversitari_reference_number} {activity.name}",
-                # Referència.
+                self.get_formatted_reference(
+                    nouniversitari_reference_number,
+                    activity.sub_service,
+                    str(activity.entity),
+                    activity.circle,
+                ),
                 activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
                 self.export_manager.get_correlation(
                     'minors_grade', activity.minors_grade),
@@ -783,3 +808,22 @@ class ExportJustificationService:
                 project.services_list if project.services_list else ""
             ]
             self.export_manager.fill_row_data(row)
+
+    def get_formatted_reference(
+        self,
+        ref_num,
+        sub_service_id,
+        name,
+        circle_id,
+        subsidy_period=None,
+    ):
+        if not sub_service_id or circle_id is None:
+            return ""
+        if not subsidy_period:
+            subsidy_period = self.subsidy_period_str
+        sub_service = SubServicesChoices(sub_service_id).label
+        circle = CirclesChoices(circle_id).label
+        return (
+            f"{ref_num} - {sub_service} {subsidy_period} {name} - {circle}"
+        )
+
