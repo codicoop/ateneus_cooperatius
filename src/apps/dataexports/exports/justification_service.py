@@ -562,11 +562,11 @@ class ExportJustificationService:
                 name,
                 # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
                 project.name,
-                project.cif,
+                project.cif or ("", True),
                 project.partners.all()[
-                    0].full_name if project.partners.all() else "",
-                project.mail,
-                project.phone,
+                    0].full_name if project.partners.all() else ("", True),
+                project.mail or ("", True),
+                project.phone or ("", True),
                 "Sí",  # Economia solidària
                 circle,  # Ateneu / Cercle
                 project.stages_list
