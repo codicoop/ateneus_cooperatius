@@ -104,8 +104,16 @@ class ExportJustificationService:
         for item in obj:
             self.export_manager.row_number += 1
 
-            service = item.get_service_display() if item.service else ""
-            sub_service = item.get_sub_service_display() if item.sub_service else ""
+            service = (
+                item.get_service_display()
+                if item.service
+                else ("", True)
+            )
+            sub_service = (
+                item.get_sub_service_display()
+                if item.sub_service
+                else ("", True)
+            )
             town = ("", True)
             if item.place is not None and item.place.town:
                 town = str(item.place.town)
@@ -118,7 +126,7 @@ class ExportJustificationService:
             circle = (
                  CirclesChoices(item.circle).label
                  if item.circle is not None
-                 else ""
+                 else ("", True)
             )
 
             row = [
