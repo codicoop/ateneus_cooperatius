@@ -608,11 +608,11 @@ class ExportJustificationService:
                 stage_reference_number = group['row_number']
                 for participant in group['participants']:
                     if participant.gender is None:
-                        gender = ""
+                        gender = ("", True)
                     else:
                         gender = self.export_manager.get_correlation(
                             'gender', participant.gender)
-                    town = ""
+                    town = ("", True)
                     if participant.town:
                         town = participant.town.name
 
@@ -627,9 +627,9 @@ class ExportJustificationService:
                         # Nom de l'actuació. Camp automàtic de l'excel.
                         participant.surname or "",
                         participant.first_name,
-                        participant.id_number,
-                        gender if gender else "",
-                        participant.birthdate or "",
+                        participant.id_number or ("", True),
+                        gender,
+                        participant.birthdate or ("", True),
                         town,
                         participant.get_employment_situation_display() or "",
                         participant.get_birth_place_display() or "",
@@ -653,11 +653,11 @@ class ExportJustificationService:
                 participant = enrollment.user
                 self.export_manager.row_number += 1
                 if participant.gender is None:
-                    gender = ""
+                    gender = ("", True)
                 else:
                     gender = self.export_manager.get_correlation(
                         'gender', participant.gender)
-                town = ""
+                town = ("", True)
                 if participant.town:
                     town = participant.town.name
 
@@ -670,11 +670,11 @@ class ExportJustificationService:
                     ),
                     activity.name,
                     # Nom de l'actuació. Camp automàtic de l'excel.
-                    participant.surname if participant.surname else "",
+                    participant.surname or ("", True),
                     participant.first_name,
                     participant.id_number,
-                    gender if gender else "",
-                    participant.birthdate if participant.birthdate else "",
+                    gender,
+                    participant.birthdate or ("", True),
                     town,
                     participant.get_employment_situation_display() or "",
                     participant.get_birth_place_display() or "",
@@ -855,7 +855,7 @@ class ExportJustificationService:
         subsidy_period=None,
     ):
         if not sub_service_id or circle_id is None:
-            return ""
+            return "", True
         if not subsidy_period:
             subsidy_period = self.subsidy_period_str
         sub_service = SubServicesChoices(sub_service_id).label
