@@ -484,12 +484,12 @@ class ExportJustificationService:
                     item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
                     self.export_manager.get_correlation(
                         "project_status", item.project.project_status),
-                    crea_consolida if crea_consolida else '',
+                    crea_consolida or ("", True),
                     # "Creació/consolidació".
-                    item.date_start if item.date_start else '',
+                    item.date_start or ("", True),
                     town,
-                    item.project.description,  # Breu descripció.
-                    hours,  # Total hores d'acompanyament.
+                    item.project.description or ("", True),  # Breu descripció.
+                    hours or ("", True),  # Total hores d'acompanyament.
                     item.latest_session.date if item.latest_session else '',
                     item.justification_documents_total,
                 ]
