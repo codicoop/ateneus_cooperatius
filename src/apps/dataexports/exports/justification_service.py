@@ -89,6 +89,7 @@ class ExportJustificationService:
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
             ("[Cofinançat amb AACC]", 20),
+            ("[Ateneu/Cercle]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -137,6 +138,7 @@ class ExportJustificationService:
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                item.get_circle_display(),
             ]
             self.export_manager.fill_row_data(row)
 
@@ -284,6 +286,7 @@ class ExportJustificationService:
                     '(no aplicable)',  # Acció
                     str(item.cofunded),  # Cofinançat
                     "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                    item.get_circle_display(),
                 ]
                 self.export_manager.fill_row_data(row)
 
@@ -327,6 +330,7 @@ class ExportJustificationService:
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                item.get_circle_display(),
             ]
             self.export_manager.fill_row_data(row)
 
@@ -392,6 +396,7 @@ class ExportJustificationService:
                 '(no aplicable)',  # Acció
                 str(stage.cofunded),  # Cofinançat
                 "Sí" if stage.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                stage.get_circle_display(),
             ]
             self.export_manager.fill_row_data(row)
 
