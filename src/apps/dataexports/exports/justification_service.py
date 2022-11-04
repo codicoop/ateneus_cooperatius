@@ -489,7 +489,7 @@ class ExportJustificationService:
                     item.date_start or ("", True),
                     town,
                     item.project.description or ("", True),  # Breu descripció.
-                    hours or ("", True),  # Total hores d'acompanyament.
+                    hours or ("0", True),  # Total hores d'acompanyament.
                     item.latest_session.date if item.latest_session else '',
                     item.justification_documents_total,
                 ]
