@@ -127,7 +127,13 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                 "justification_documents_total",
             ]
         }),
+        ("Sessions d'acompanyament", {
+            # Grappelli way for sorting inlines
+            'classes': ('placeholder stage_sessions-group',),
+            'fields': (),
+        }),
         ("Camps convocatòries < 2020", {
+            'classes': ('grp-collapse grp-closed',),
             'fields': ["axis", "subaxis", ]
         }),
     ]
@@ -234,6 +240,11 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                 type_index = fields.index('stage_type') + 1
             fields.insert(type_index, 'stage_subtype')
         return fields
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
+        return super().get_readonly_fields(request, obj)
 
 
 class ProjectStagesInline(admin.StackedInline):
