@@ -127,7 +127,13 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                 "justification_documents_total",
             ]
         }),
+        ("Sessions d'acompanyament", {
+            # Grappelli way for sorting inlines
+            'classes': ('placeholder stage_sessions-group',),
+            'fields': (),
+        }),
         ("Camps convocatòries < 2020", {
+            'classes': ('grp-collapse grp-closed',),
             'fields': ["axis", "subaxis", ]
         }),
     ]
@@ -235,6 +241,11 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             fields.insert(type_index, 'stage_subtype')
         return fields
 
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
+        return super().get_readonly_fields(request, obj)
+
 
 class ProjectStagesInline(admin.StackedInline):
     model = ProjectStage
@@ -250,6 +261,7 @@ class ProjectStagesInline(admin.StackedInline):
                 'stage_type',
                 'subsidy_period',
                 'service',
+                'sub_service',
                 'circle',
                 'stage_responsible',
                 'scanned_certificate',
@@ -310,6 +322,11 @@ class ProjectStagesInline(admin.StackedInline):
             )
 
         return fieldsets
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
+        return super().get_readonly_fields(request, obj)
 
 
 class EmploymentInsertionInline(admin.TabularInline):
@@ -543,3 +560,79 @@ class StageSubtypeAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         return False
+
+
+@admin.register(ProjectStageSession)
+class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
+    empty_value_display = '(cap)'
+    raw_id_fields = ('involved_partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['involved_partners'],
+    }
+    fields = (
+        "session_responsible",
+        "date",
+        "hours",
+        "follow_up",
+        "entity",
+        "involved_partners",
+        "project_partners",
+        "justification_file",
+    )
+    readonly_fields = (
+        "project_partners",
+        "project_field",
+        "stage_type_field",
+        "stage_responsible_field",
+        "stage_circle_field",
+    )
+    list_display = (
+        "date",
+        "project_field",
+        "stage_type_field",
+        "hours",
+        "session_responsible",
+        "stage_responsible_field",
+        "entity",
+        "stage_circle_field",
+        "justification_file",
+    )
+    list_filter = (
+        ("project_stage__subsidy_period", admin.RelatedOnlyFieldListFilter),
+        ("session_responsible", admin.RelatedOnlyFieldListFilter),
+        "project_stage__circle",
+    )
+    subsidy_period_filter_param = "project_stage__subsidy_period__id__exact"
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "session_responsible":
+            kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def project_field(self, obj):
+        if obj.project_stage.project:
+            url = reverse(
+                "admin:coopolis_project_change",
+                kwargs={'object_id': obj.project_stage.project.id}
+            )
+            return mark_safe(f'<a href="{ url }">{ obj.project_stage.project }</a>')
+        return None
+    project_field.short_description = 'Projecte'
+
+    def stage_type_field(self, obj):
+        if obj:
+            return obj.project_stage.get_stage_type_display()
+        return None
+    stage_type_field.short_description = 'Tipus'
+
+    def stage_responsible_field(self, obj):
+        if obj:
+            return obj.project_stage.stage_responsible
+        return None
+    stage_responsible_field.short_description = 'Responsable'
+
+    def stage_circle_field(self, obj):
+        if obj:
+            return obj.project_stage.get_circle_display()
+        return None
+    stage_circle_field.short_description = 'Cercle'

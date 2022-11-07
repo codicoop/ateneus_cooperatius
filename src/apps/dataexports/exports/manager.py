@@ -61,16 +61,21 @@ class ExportManager:
 
 
 class ExcelExportManager(ExportManager):
-    def __init__(self, export_obj):
+    correlations_fixtures_filename = "correlations_2019.json"
+
+    def __init__(self, export_obj, correlations_fixtures_filename=None):
         super().__init__(export_obj)
         self.workbook = Workbook()
         self.worksheet = self.workbook.active
         self.row_number = 1
         self.correlations = dict()
 
+        if correlations_fixtures_filename:
+            self.correlations_fixtures_filename = correlations_fixtures_filename
+
         self.import_correlations(
-            settings.BASE_DIR
-            + "/apps/dataexports/fixtures/correlations_2019.json"
+            f"{settings.BASE_DIR}/apps/dataexports/fixtures/"
+            f"{self.correlations_fixtures_filename}"
         )
 
     def return_document(self, name):
