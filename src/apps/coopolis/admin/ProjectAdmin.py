@@ -322,6 +322,11 @@ class ProjectStagesInline(admin.StackedInline):
 
         return fieldsets
 
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
+        return super().get_readonly_fields(request, obj)
+
 
 class EmploymentInsertionInline(admin.TabularInline):
     class Media:
