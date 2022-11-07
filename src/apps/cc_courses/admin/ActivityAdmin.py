@@ -563,3 +563,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             )
             reservation_equipment_obj.clean()
             reservation_equipment_obj.save()
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
+        return super().get_readonly_fields(request, obj)
