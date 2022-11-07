@@ -127,7 +127,13 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                 "justification_documents_total",
             ]
         }),
+        ("Sessions d'acompanyament", {
+            # Grappelli way for sorting inlines
+            'classes': ('placeholder stage_sessions-group',),
+            'fields': (),
+        }),
         ("Camps convocatòries < 2020", {
+            'classes': ('grp-collapse grp-closed',),
             'fields': ["axis", "subaxis", ]
         }),
     ]
@@ -235,6 +241,11 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             fields.insert(type_index, 'stage_subtype')
         return fields
 
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
+        return super().get_readonly_fields(request, obj)
+
 
 class ProjectStagesInline(admin.StackedInline):
     model = ProjectStage
@@ -250,6 +261,7 @@ class ProjectStagesInline(admin.StackedInline):
                 'stage_type',
                 'subsidy_period',
                 'service',
+                'sub_service',
                 'circle',
                 'stage_responsible',
                 'scanned_certificate',
@@ -310,6 +322,11 @@ class ProjectStagesInline(admin.StackedInline):
             )
 
         return fieldsets
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
+        return super().get_readonly_fields(request, obj)
 
 
 class EmploymentInsertionInline(admin.TabularInline):
