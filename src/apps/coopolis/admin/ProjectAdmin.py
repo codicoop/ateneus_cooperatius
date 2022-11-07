@@ -261,6 +261,7 @@ class ProjectStagesInline(admin.StackedInline):
                 'stage_type',
                 'subsidy_period',
                 'service',
+                'sub_service',
                 'circle',
                 'stage_responsible',
                 'scanned_certificate',
