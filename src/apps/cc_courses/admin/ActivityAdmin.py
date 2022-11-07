@@ -226,6 +226,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'classes': ('placeholder files-group',),
             'fields': (),
         }),
+        ("Inscripcions", {
+            # Grappelli way for sorting inlines
+            'classes': ('placeholder enrollments-group',),
+            'fields': (),
+        }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
         }),
