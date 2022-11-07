@@ -732,7 +732,7 @@ class ExportJustificationService:
         self.export_manager.row_number = 1
 
         columns = [
-            ("Referència (omplir a ma)", 20),
+            ("Referència", 20),
             ("Nom actuació", 20),
             ("Cognoms", 20),
             ("Nom", 20),
@@ -786,9 +786,48 @@ class ExportJustificationService:
                  if insertion.circle is not None
                  else ""
             )
+            reference = ("", True)
+            project = self.stages_obj.get(insertion.project.id)
+            """
+            Project en principì ha de contenir almenys un element que serà un
+            diccionari amb les dades de l'acompanyament.
+            En pot contenir diversos, i en volem agafar un d'ells, el que sigui,
+            així que iterem el diccionari 1 vegada per obtenir el primer.
+            
+            Això és un exemple del que pot contenir, tenint en compte que 
+            no podem saber segur el nom de la clau del o dels diccionaris.
+            'consolidacio': {
+                'obj': '<ProjectStage: La Providència SCCL: 04 Consolidació - acompanyament>',
+                'total_hours': 36,
+                'participants': [
+                    '<User: Teresa Trilla Ferré>',
+                    '<User: Marc Trilla Güell>',
+                    '<User: Gerard Nogués Balsells>',
+                    '<User: tais bastida aubareda>'
+                ],
+                'row_number': 126},
+            'nova_creacio': {
+                'obj': '<ProjectStage: La Providència SCCL: 02 Nova creació - constitució>',
+                'total_hours': 7,
+                'participants': [
+                    '<User: Marc Trilla Güell>',
+                    '<User: Esther Perello Piulats>'
+                ],
+                'row_number': 127
+            }
+            """
+            if project:
+                stage = next(iter(project.values()))
+                print(stage)
+                reference = self.get_formatted_reference(
+                    stage["row_number"],
+                    stage["obj"].sub_service,
+                    insertion.project.name,
+                    stage["obj"].circle,
+                )
 
             row = [
-                '',  # Deixem referència en blanc pq la posin a ma.
+                reference,  # Deixem referència en blanc pq la posin a ma.
                 '',  # Nom actuació
                 insertion.user.surname,
                 insertion.user.first_name,  # Persona
