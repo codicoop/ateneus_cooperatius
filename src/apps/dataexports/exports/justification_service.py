@@ -731,7 +731,7 @@ class ExportJustificationService:
                 self.export_manager.get_correlation(
                     'minors_grade', activity.minors_grade),
                 activity.minors_school_name,
-                str(activity.minors_participants_number),
+                activity.minors_participants_number,
             ]
             self.export_manager.fill_row_data(row)
 
