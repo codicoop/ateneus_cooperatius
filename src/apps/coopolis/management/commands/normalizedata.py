@@ -191,7 +191,7 @@ class Command(BaseCommand):
         print('Permisos del grup Permisos base actualitzats.')
 
         # formació / sessions
-        group, created = Group.objects.get_or_create(name="Gestió d'accions i sessions")
+        group, created = Group.objects.get_or_create(name="")
         add_thing = Permission.objects.filter(
             codename__in=[
                 'add_activity', 'change_activity', 'delete_activity', 'view_activity', 'add_course',
@@ -204,6 +204,7 @@ class Command(BaseCommand):
                 'change_thumbnaildimensions', 'delete_thumbnaildimensions', 'view_thumbnaildimensions',
                 'view_activityenrolled', 'delete_activityenrolled', 'change_activityenrolled', 'add_activityenrolled',
                 'view_activityresourcefile', 'delete_activityresourcefile', 'change_activityresourcefile', 'add_activityresourcefile',
+                'view_activityfile', 'delete_activityfile', 'change_activityfile', 'add_activityfile',
                 'view_activitypoll',
             ]
         )
