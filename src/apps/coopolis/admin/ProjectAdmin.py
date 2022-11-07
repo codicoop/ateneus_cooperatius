@@ -579,9 +579,54 @@ class ProjectStageSessions(admin.ModelAdmin):
         "project_partners",
         "justification_file",
     )
-    readonly_fields = ("project_partners", )
+    readonly_fields = (
+        "project_partners",
+        "project_field",
+        "stage_type_field",
+        "stage_responsible_field",
+        "stage_circle_field",
+    )
+    list_display = (
+        "date",
+        "project_field",
+        "stage_type_field",
+        "hours",
+        "session_responsible",
+        "stage_responsible_field",
+        "entity",
+        "stage_circle_field",
+        "justification_file",
+    )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "session_responsible":
             kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def project_field(self, obj):
+        if obj.project_stage.project:
+            url = reverse(
+                "admin:coopolis_project_change",
+                kwargs={'object_id': obj.project_stage.project.id}
+            )
+            return mark_safe(f'<a href="{ url }">{ obj.project_stage.project }</a>')
+        return None
+    project_field.short_description = 'Projecte'
+
+    def stage_type_field(self, obj):
+        if obj:
+            return obj.project_stage.get_stage_type_display()
+        return None
+    stage_type_field.short_description = 'Tipus'
+
+    def stage_responsible_field(self, obj):
+        if obj:
+            return obj.project_stage.stage_responsible
+        return None
+    stage_responsible_field.short_description = 'Responsable'
+
+    def stage_circle_field(self, obj):
+        if obj:
+            return obj.project_stage.get_circle_display()
+        return None
+    stage_circle_field.short_description = 'Cercle'
