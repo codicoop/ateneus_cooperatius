@@ -703,6 +703,7 @@ class ExportJustificationService:
             ("Nom actuació", 40),
             ("Grau d'estudis", 20),
             ("Nom centre educatiu", 20),
+            ("Nombre participants", 20),
         ]
         self.export_manager.create_columns(columns)
 
@@ -727,6 +728,7 @@ class ExportJustificationService:
                 self.export_manager.get_correlation(
                     'minors_grade', activity.minors_grade),
                 activity.minors_school_name,
+                str(activity.minors_participants_number),
             ]
             self.export_manager.fill_row_data(row)
 
