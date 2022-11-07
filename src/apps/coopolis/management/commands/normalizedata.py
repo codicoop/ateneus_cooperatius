@@ -141,6 +141,12 @@ class Command(BaseCommand):
         exports.extend(
             [
                 {
+                    'name': "Cofinançades",
+                    'subsidy_period': period,
+                    'function_name': 'export_cofunded_service',
+                    'ignore_errors': True
+                },
+                {
                     'name': "Memòria dels acompanyaments en fitxer de text",
                     'subsidy_period': period,
                     'function_name': 'export_stages_descriptions',
