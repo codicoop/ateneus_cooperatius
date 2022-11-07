@@ -563,7 +563,7 @@ class StageSubtypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProjectStageSession)
-class ProjectStageSessions(admin.ModelAdmin):
+class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     empty_value_display = '(cap)'
     raw_id_fields = ('involved_partners',)
     autocomplete_lookup_fields = {
@@ -597,6 +597,12 @@ class ProjectStageSessions(admin.ModelAdmin):
         "stage_circle_field",
         "justification_file",
     )
+    list_filter = (
+        ("project_stage__subsidy_period", admin.RelatedOnlyFieldListFilter),
+        ("session_responsible", admin.RelatedOnlyFieldListFilter),
+        "project_stage__circle",
+    )
+    subsidy_period_filter_param = "project_stage__subsidy_period__id__exact"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "session_responsible":
