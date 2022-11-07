@@ -472,7 +472,10 @@ class ExportJustificationService:
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
-                crea_consolida = item.get_stage_type_display()
+                crea_consolida = self.export_manager.get_correlation(
+                    "stage_type",
+                    item.stage_type,
+                )
 
                 row = [
                     self.get_formatted_reference(

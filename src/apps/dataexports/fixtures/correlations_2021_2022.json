@@ -16,5 +16,10 @@
     "IN_CONSTITUTION_PROCESS": "En procés de constitució",
     "RUNNING": "Constituïda",
     "DOWN": "No finalitzat"
+  },
+  "stage_type": {
+    "11": "Nova creació",
+    "12": "Creixement",
+    "9": "Incubació"
   }
 }
