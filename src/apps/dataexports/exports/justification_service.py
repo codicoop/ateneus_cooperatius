@@ -1,32 +1,42 @@
 from django.db.models import Q
 
+from apps.coopolis.choices import CirclesChoices, SubServicesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportJustificationService:
+    subsidy_period_str = "2021-22"
+
     def __init__(self, export_obj):
-        self.export_manager = ExcelExportManager(export_obj)
+        self.export_manager = ExcelExportManager(
+            export_obj,
+            correlations_fixtures_filename="correlations_2021_2022.json",
+        )
         self.number_of_activities = 0
         self.number_of_stages = 0
         self.number_of_nouniversitaris = 0
         self.number_of_founded_projects = 0
-        # La majoria d'ateneus volen que hi hagi una sola actuació per un
-        # projecte encara que hagi tingut diferents tipus d'acompanyament.
-        # CoopCamp (i potser algun altre?) volen separar-ho per itineraris,
-        # de manera que hi hagi una actuació per l'itinerari de Nova Creació i
-        # una pel de Consolidació.
-        # Per defecte ho definim per 1 itinerari.
+        # A 2021-22 decidim que exportem els projectes per duplicat en cas que
+        # hi hagi un itinerari de creació i un de consolidació.
+        # Per agrupar-ho en un sol itinerari, ho teníem així:
+        #             9: 'creacio',  # Incubació
+        #             11: 'creacio',  # Creació
+        #             12: 'creacio',  # Consolidació
+        #
+        # El que fa aquest dict és indicar quin nom tindrà cada ID de tipus
+        # d'acompanyament, per quan arriba el moment en que agafem les dades i
+        # generem el self.stages_obj, aquest nom es farà servir com a clau del
+        # diccionari.
+        # Per tant, si a tots els tipus d'acompanyament els hi posem la mateixa
+        # key, a l'excel tindrem una sola fila amb la suma de totes les hores.
+        # Però si cada un té una key diferent, apareixerà tantes vegades com
+        # tipus d'acompanyament hi hagi.
         self.stages_groups = {
-            # 1: 'nova_creacio',
-            # 2: 'nova_creacio',
-            # 6: 'nova_creacio',
-            # 7: 'nova_creacio',
-            # 8: 'nova_creacio',
-            9: 'creacio',  # Era Incubació
+            9: 'incubacio',  # Era Incubació
             11: 'creacio',  # Creació
-            12: 'creacio',  # Consolidació
+            12: 'consolidacio',  # Consolidació
         }
         self.stages_obj = None
 
@@ -51,11 +61,11 @@ class ExportJustificationService:
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.export_actuacions()
-        self.export_stages()
-        self.export_founded_projects()
         self.export_participants()
         self.export_nouniversitaris()
         self.export_insercionslaborals()
+        self.export_founded_projects()
+        self.export_stages()
 
         return self.export_manager.return_document("justificacio")
 
@@ -71,17 +81,19 @@ class ExportJustificationService:
             ("Subservei", 70),
             ("Nom de l'actuació", 70),
             ("Data inici d'actuació", 16),
+            ("Període d'actuacions", 16),
+            ("Entitat que realitza l'actuació", 16),
             ("Cercle / Ateneu", 16),
             ("Municipi", 30),
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
             ("[Document acreditatiu]", 21),
             ("Incidències", 20),
-            ("[Entitat]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
             ("[Cofinançat amb AACC]", 20),
+            ("[Ateneu/Cercle]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -96,8 +108,16 @@ class ExportJustificationService:
         for item in obj:
             self.export_manager.row_number += 1
 
-            service = item.get_service_display() if item.service else ""
-            sub_service = item.get_sub_service_display() if item.sub_service else ""
+            service = (
+                item.get_service_display()
+                if item.service
+                else ("", True)
+            )
+            sub_service = (
+                item.get_sub_service_display()
+                if item.sub_service
+                else ("", True)
+            )
             town = ("", True)
             if item.place is not None and item.place.town:
                 town = str(item.place.town)
@@ -107,23 +127,30 @@ class ExportJustificationService:
             document_acreditatiu = "No"
             if item.photo2.name:
                 document_acreditatiu = "Sí"
+            circle = (
+                 CirclesChoices(item.circle).label
+                 if item.circle is not None
+                 else ("", True)
+            )
 
             row = [
                 service,
                 sub_service,
                 item.name,
                 item.date_start,
-                item.get_circle_display(),
+                "",
+                str(item.entity) if item.entity else '',  # Entitat
+                circle,
                 town,
                 item.enrolled.count(),
                 material_difusio,
                 document_acreditatiu,
                 "",
-                str(item.entity) if item.entity else '',  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                item.get_circle_display(),
             ]
             self.export_manager.fill_row_data(row)
 
@@ -243,28 +270,43 @@ class ExportJustificationService:
                     'row_number'
                 ] = self.export_manager.row_number - 1
 
-                service = item.get_service_display() if item.service else ""
-                sub_service = item.get_sub_service_display() if item.sub_service else ""
+                service = (
+                    item.get_service_display()
+                    if item.service
+                    else ("", True)
+                )
+                sub_service = (
+                    item.get_sub_service_display()
+                    if item.sub_service
+                    else ("", True)
+                )
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
+                circle = (
+                     CirclesChoices(item.circle).label
+                     if item.circle is not None
+                     else ("", True)
+                )
 
                 row = [
                     service,
                     sub_service,  # Subservei, pendent.
                     item.project.name,
                     item.date_start if not None else '',
-                    item.get_circle_display(),
+                    "",
+                    item.entities_str,  # Entitat/s
+                    circle,
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
                     "",
                     # En blanc pq cada stage session pot contenir una entitat
-                    "",  # Entitat
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
                     str(item.cofunded),  # Cofinançat
                     "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                    item.get_circle_display(),
                 ]
                 self.export_manager.fill_row_data(row)
 
@@ -274,8 +316,16 @@ class ExportJustificationService:
         for item in obj:
             self.export_manager.row_number += 1
 
-            service = item.get_service_display() if item.service else ""
-            sub_service = item.get_sub_service_display() if item.sub_service else ""
+            service = (
+                item.get_service_display()
+                if item.service
+                else ("", True)
+            )
+            sub_service = (
+                item.get_sub_service_display()
+                if item.sub_service
+                else ("", True)
+            )
             town = ("", True)
             if item.place and item.place.town:
                 town = str(item.place.town)
@@ -285,23 +335,30 @@ class ExportJustificationService:
             document_acreditatiu = "No"
             if item.photo2.name:
                 document_acreditatiu = "Sí"
+            circle = (
+                 CirclesChoices(item.circle).label
+                 if item.circle is not None
+                 else ("", True)
+            )
 
             row = [
                 service,
                 sub_service,
                 item.name,
                 item.date_start,
-                item.get_circle_display(),
+                "",
+                str(item.entity) if item.entity else '',  # Entitat
+                circle,
                 town,
                 item.minors_participants_number,
                 material_difusio,
                 document_acreditatiu,
                 "",
-                str(item.entity) if item.entity else '',  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                item.get_circle_display(),
             ]
             self.export_manager.fill_row_data(row)
 
@@ -339,28 +396,43 @@ class ExportJustificationService:
             stage = stages.all()[0]
 
             self.export_manager.row_number += 1
-            service = stage.get_service_display() if stage.service else ""
-            sub_service = stage.get_sub_service_display() if stage.sub_service else ""
+            service = (
+                stage.get_service_display()
+                if stage.service
+                else ("", True)
+            )
+            sub_service = (
+                stage.get_sub_service_display()
+                if stage.sub_service
+                else ("", True)
+            )
             town = ("", True)
             if project.town:
                 town = str(project.town)
+            circle = (
+                 CirclesChoices(stage.circle).label
+                 if stage.circle is not None
+                 else ("", True)
+            )
 
             row = [
                 service,
                 sub_service,
                 project.name,
                 stage.date_start,
-                stage.get_circle_display(),
+                "",
+                "",  # Entitat
+                circle,
                 town,
                 stage.partners_involved_in_sessions.count(),
                 "No",
                 "",
                 # En blanc pq cada stage session pot contenir una entitat
-                "",  # Entitat
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
                 str(stage.cofunded),  # Cofinançat
                 "Sí" if stage.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                stage.get_circle_display(),
             ]
             self.export_manager.fill_row_data(row)
 
@@ -400,10 +472,18 @@ class ExportJustificationService:
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
-                crea_consolida = item.get_stage_type_display()
+                crea_consolida = self.export_manager.get_correlation(
+                    "stage_type",
+                    item.stage_type,
+                )
 
                 row = [
-                    f"{reference_number} {item.project.name}",  # Referència.
+                    self.get_formatted_reference(
+                        reference_number,
+                        item.sub_service,
+                        item.entities_str,
+                        item.circle,
+                    ),
                     item.project.name,
                     # Camp no editable, l'ha d'omplir l'excel automàticament.
                     "Entitat",
@@ -411,12 +491,12 @@ class ExportJustificationService:
                     item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
                     self.export_manager.get_correlation(
                         "project_status", item.project.project_status),
-                    crea_consolida if crea_consolida else '',
+                    crea_consolida or ("", True),
                     # "Creació/consolidació".
-                    item.date_start if item.date_start else '',
+                    item.date_start or ("", True),
                     town,
-                    item.project.description,  # Breu descripció.
-                    hours,  # Total hores d'acompanyament.
+                    item.project.description or ("", True),  # Breu descripció.
+                    hours or ("0", True),  # Total hores d'acompanyament.
                     item.latest_session.date if item.latest_session else '',
                     item.justification_documents_total,
                 ]
@@ -461,12 +541,18 @@ class ExportJustificationService:
                 project=project,
                 subsidy_period=self.export_manager.subsidy_period
             ).order_by("-date_start")[:1]
+            circle = ""
             if stages.count() > 0:
                 stage = stages.all()[0]
                 founded_projects_reference_number += 1
-                reference_number = (f"{founded_projects_reference_number} "
-                                    f"{project.name}")
+                reference_number = self.get_formatted_reference(
+                    founded_projects_reference_number,
+                    stage.sub_service,
+                    stage.entities_str,
+                    stage.circle,
+                )
                 name = project.name
+                circle = CirclesChoices(stage.circle).label
 
             self.export_manager.row_number += 1
             if project.cif is None:
@@ -483,13 +569,13 @@ class ExportJustificationService:
                 name,
                 # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
                 project.name,
-                project.cif,
+                project.cif or ("", True),
                 project.partners.all()[
-                    0].full_name if project.partners.all() else "",
-                project.mail,
-                project.phone,
+                    0].full_name if project.partners.all() else ("", True),
+                project.mail or ("", True),
+                project.phone or ("", True),
                 "Sí",  # Economia solidària
-                "",  # Ateneu / Cercle
+                circle,  # Ateneu / Cercle
                 project.stages_list
             ]
             self.export_manager.fill_row_data(row)
@@ -525,28 +611,32 @@ class ExportJustificationService:
     def participants_project_stages_rows(self):
         for project_id, project in self.stages_obj.items():
             for group_name, group in project.items():
-                activity = group['obj']
-                activity_reference_number = group['row_number']
+                stage = group['obj']
+                stage_reference_number = group['row_number']
                 for participant in group['participants']:
                     if participant.gender is None:
-                        gender = ""
+                        gender = ("", True)
                     else:
                         gender = self.export_manager.get_correlation(
                             'gender', participant.gender)
-                    town = ""
+                    town = ("", True)
                     if participant.town:
                         town = participant.town.name
 
                     row = [
-                        f"{activity_reference_number} {activity.project.name}",
-                        # Referència.
-                        activity.project.name,
+                        self.get_formatted_reference(
+                            stage_reference_number,
+                            stage.sub_service,
+                            stage.entities_str,
+                            stage.circle,
+                        ),
+                        stage.project.name,
                         # Nom de l'actuació. Camp automàtic de l'excel.
                         participant.surname or "",
                         participant.first_name,
-                        participant.id_number,
-                        gender if gender else "",
-                        participant.birthdate or "",
+                        participant.id_number or ("", True),
+                        gender,
+                        participant.birthdate or ("", True),
                         town,
                         participant.get_employment_situation_display() or "",
                         participant.get_birth_place_display() or "",
@@ -570,24 +660,28 @@ class ExportJustificationService:
                 participant = enrollment.user
                 self.export_manager.row_number += 1
                 if participant.gender is None:
-                    gender = ""
+                    gender = ("", True)
                 else:
                     gender = self.export_manager.get_correlation(
                         'gender', participant.gender)
-                town = ""
+                town = ("", True)
                 if participant.town:
                     town = participant.town.name
 
                 row = [
-                    f"{activity_reference_number} {activity.name}",
-                    # Referència.
+                    self.get_formatted_reference(
+                        activity_reference_number,
+                        activity.sub_service,
+                        str(activity.entity),
+                        activity.circle,
+                    ),
                     activity.name,
                     # Nom de l'actuació. Camp automàtic de l'excel.
-                    participant.surname if participant.surname else "",
+                    participant.surname or ("", True),
                     participant.first_name,
                     participant.id_number,
-                    gender if gender else "",
-                    participant.birthdate if participant.birthdate else "",
+                    gender,
+                    participant.birthdate or ("", True),
                     town,
                     participant.get_employment_situation_display() or "",
                     participant.get_birth_place_display() or "",
@@ -612,6 +706,7 @@ class ExportJustificationService:
             ("Nom actuació", 40),
             ("Grau d'estudis", 20),
             ("Nom centre educatiu", 20),
+            ("Nombre participants", 20),
         ]
         self.export_manager.create_columns(columns)
 
@@ -626,12 +721,17 @@ class ExportJustificationService:
             self.export_manager.row_number += 1
             nouniversitari_reference_number += 1
             row = [
-                f"{nouniversitari_reference_number} {activity.name}",
-                # Referència.
+                self.get_formatted_reference(
+                    nouniversitari_reference_number,
+                    activity.sub_service,
+                    str(activity.entity),
+                    activity.circle,
+                ),
                 activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
                 self.export_manager.get_correlation(
                     'minors_grade', activity.minors_grade),
                 activity.minors_school_name,
+                activity.minors_participants_number,
             ]
             self.export_manager.fill_row_data(row)
 
@@ -641,7 +741,7 @@ class ExportJustificationService:
         self.export_manager.row_number = 1
 
         columns = [
-            ("Referència (omplir a ma)", 20),
+            ("Referència", 20),
             ("Nom actuació", 20),
             ("Cognoms", 20),
             ("Nom", 20),
@@ -690,9 +790,53 @@ class ExportJustificationService:
             else:
                 gender = self.export_manager.get_correlation(
                     'gender', insertion.user.gender)
+            circle = (
+                 CirclesChoices(insertion.circle).label
+                 if insertion.circle is not None
+                 else ""
+            )
+            reference = ("", True)
+            project = self.stages_obj.get(insertion.project.id)
+            """
+            Project en principì ha de contenir almenys un element que serà un
+            diccionari amb les dades de l'acompanyament.
+            En pot contenir diversos, i en volem agafar un d'ells, el que sigui,
+            així que iterem el diccionari 1 vegada per obtenir el primer.
+            
+            Això és un exemple del que pot contenir, tenint en compte que 
+            no podem saber segur el nom de la clau del o dels diccionaris.
+            'consolidacio': {
+                'obj': '<ProjectStage: La Providència SCCL: 04 Consolidació - acompanyament>',
+                'total_hours': 36,
+                'participants': [
+                    '<User: Teresa Trilla Ferré>',
+                    '<User: Marc Trilla Güell>',
+                    '<User: Gerard Nogués Balsells>',
+                    '<User: tais bastida aubareda>'
+                ],
+                'row_number': 126},
+            'nova_creacio': {
+                'obj': '<ProjectStage: La Providència SCCL: 02 Nova creació - constitució>',
+                'total_hours': 7,
+                'participants': [
+                    '<User: Marc Trilla Güell>',
+                    '<User: Esther Perello Piulats>'
+                ],
+                'row_number': 127
+            }
+            """
+            if project:
+                stage = next(iter(project.values()))
+                print(stage)
+                reference = self.get_formatted_reference(
+                    stage["row_number"],
+                    stage["obj"].sub_service,
+                    insertion.project.name,
+                    stage["obj"].circle,
+                )
 
             row = [
-                '',  # Deixem referència en blanc pq la posin a ma.
+                reference,  # Deixem referència en blanc pq la posin a ma.
                 '',  # Nom actuació
                 insertion.user.surname,
                 insertion.user.first_name,  # Persona
@@ -705,7 +849,7 @@ class ExportJustificationService:
                 town,
                 cif,
                 insertion.project.name,  # Projecte
-                insertion.get_circle_display(),  # Cercle / Ateneu
+                circle,  # Cercle / Ateneu
                 str(insertion.subsidy_period),  # Convocatòria
             ]
             self.export_manager.fill_row_data(row)
@@ -749,3 +893,22 @@ class ExportJustificationService:
                 project.services_list if project.services_list else ""
             ]
             self.export_manager.fill_row_data(row)
+
+    def get_formatted_reference(
+        self,
+        ref_num,
+        sub_service_id,
+        name,
+        circle_id,
+        subsidy_period=None,
+    ):
+        if not sub_service_id or circle_id is None:
+            return "", True
+        if not subsidy_period:
+            subsidy_period = self.subsidy_period_str
+        sub_service = SubServicesChoices(sub_service_id).label
+        circle = CirclesChoices(circle_id).label
+        return (
+            f"{ref_num} - {sub_service} {subsidy_period} {name} - {circle}"
+        )
+

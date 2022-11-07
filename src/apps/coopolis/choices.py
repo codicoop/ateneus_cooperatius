@@ -6,24 +6,22 @@ from django.db import models
 
 class ServicesChoices(models.IntegerChoices):
     __empty__ = "Cap"
-    MAP_DIAGNOSI = 10, "Servei de mapatge i diagnosi"
+    MAP_DIAGNOSI = 10, "1) Mapeig i diagnosi"
     DIV_SENS_GEN_CONEIXEMENT = 20, (
-        "Servei de Divulgació, Sensibilització i Generació de Coneixement."
+        "2) Divulgació, sensibilització i generació coneixement"
     )
     FORM_PROM_CREA_CONS = 30, (
-        "Servei de Formació per a la promoció, creació i consolidació de "
-        "cooperatives i projectes de l'ESS."
+        "3) Formació per a la promoció, creació i consolidació "
     )
     ACOM_CREA_CONS = 40, (
-        "Servei d'Acompanyament per la creació i "
-        "consolidació de cooperatives i projectes de l'ESS."
+        "4) Acompanyament per a la creació i consolidació "
     )
     INTERCOOP_XARXA_TERRITORI = 50, (
-        "Servei de Facilitació de la "
-        "Intercooperació, treball en xarxa i dinamització territorial."
+        "5) Facilitació intercooperació, treball en xarxa i dinamització "
+        "territori"
     )
-    PUNT_INFO = 60, "Punt d'informació sobre l'ESS."
-    SERV_COMPLEMENTARIS = 70, "Serveis complementaris"
+    PUNT_INFO = 60, "6) Punt d'informació sobre ESS"
+    SERV_COMPLEMENTARIS = 70, "7) Serveis Complementaris"
 
     def get_sub_services(self):
         range_start = self.value * 10
@@ -40,112 +38,105 @@ class SubServicesChoices(models.IntegerChoices):
 
     # 1. Servei de mapeig i diagnosi
     MAP_DIAGNOSI_TAULA = 101, (
-        "Taula territorial per l'articulació conjunta de l'economia social amb "
-        "els diversos actors."
+        "1 a  Taula territorial per l'articulació conjunta de l'economia "
+        "social amb els diversos actors."
     )
-    MAP_DIAGNOSI_CATALEG = 102, "Elaboració d'un catàleg bones pràctiques."
+    MAP_DIAGNOSI_CATALEG = 102, "1 b  Elaboració d'un catàleg bones pràctiques."
     MAP_DIAGNOSI_ORGANITZACIO = 103, (
-        "Organització de jornades per visibilitzar experiències, presència "
-        "als mitjans de comunicació locals, assistència a fires, actes i "
-        "premis, trobades sectorials, col·laboracions amb altres iniciatives."
+        "1 c Organització de jornades, assistència a fires, actes i premis, "
+        "trobades sectorials i col·laboracions."
     )
     MAP_DIAGNOSI_ALTRES = 199, (
-        "Altres accions dins del servei de mapeig i diagnosi (si s'escau "
-        "desenvolupeu a la memòria)"
+        "1 d Altres accions dins del servei de mapeig i diagnosi."
     )
 
     # 2. Servei de divulgació, sensibilització i generació de coneixement
     DIV_SENS_GEN_CONEIXEMENT_CAMPANYA = 201, (
-        "Campanya de Comunicació i difusió a col·lectius d'especial atenció. "
-        "Materials específic de difusió sobre la fórmula cooperativa."
+        "2 a Campanya de comunicació i difusió col·lectius especial atenció. "
+        "Materials difusió fórmula cooperativa."
     )
     DIV_SENS_GEN_CONEIXEMENT_TALLERS = 202, (
-        "Tallers dirigits a joves estudiants de cicles formatius "
-        "presencials o virtuals ."
+        "2 b Tallers dirigits a joves estudiants de cicles formatius."
     )
     DIV_SENS_GEN_CONEIXEMENT_ACCIONS = 203, (
-        "Accions per a la creació de diferents classes de cooperatives "
-        "(concursos i tallers sensibilització)"
+        "2 c Accions per a la creació de diferents classes de cooperatives."
     )
     DIV_SENS_GEN_CONEIXEMENT_DIAGNOSI = 204, (
-        "Diagnosi sobre les mancances i oportunitats socioeconòmiques i "
-        "identificació de les empreses participants."
+        "2 d Diagnosi sobre les mancances i oportunitats socioeconòmiques i "
+        "identificació empreses participants."
     )
     DIV_SENS_GEN_CONEIXEMENT_SESSIONS = 205, (
-        "Sessions col·lectives i d'acompanyament expert individual."
+        "2 e Sessions col·lectives i d'acompanyament expert individual."
     )
     DIV_SENS_GEN_CONEIXEMENT_ALTRES = 299, (
-        "Altres accions dins del servei de "
-        "divulgació, sensibilitzacio i generació de coneixement (si s'escau " 
-        "desenvolupeu a la memòria)"
+        "2 f Altres accions dins del servei de divulgació, sensibilització i "
+        "generació de coneixement."
     )
 
     # 3. Servei de Formació per a la promoció, creació i consolidació de
     # cooperatives i projectes d'ESS
-    FORM_PROM_CREA_CONS_ACTIVITATS = 301, "Activitats formatives i informatives."
+    FORM_PROM_CREA_CONS_ACTIVITATS = 301, "3 a Accions formatives i informatives."
     FORM_PROM_CREA_CONS_FORMACIO = 302, (
-        "Tallers de formació bàsica a persones emprenedores interessades en la "
-        "fòrmula cooperativa ."
+        "3 b Tallers de formació bàsica a persones emprenedores interessades "
+        "en la fòrmula cooperativa."
     )
-    FORM_PROM_CREA_CONS_SESSIONS = 303, "Sessions col·lectives"
-    FORM_PROM_CREA_CONS_ACOMPANYAMENT = 304, "Acompanyament expert"
+    FORM_PROM_CREA_CONS_SESSIONS = 303, "3 c Sessions col·lectives."
+    FORM_PROM_CREA_CONS_ACOMPANYAMENT = 304, "3 d Acompanyament expert."
     FORM_PROM_CREA_CONS_SENSIBILITZACIO = 305, (
-        "Tallers de sensibilització o dinamització adreçada al teixit "
+        "3 e Tallers de sensibilització o dinamització adreçada al teixit "
         "associatiu, empreses o professionals."
     )
     FORM_PROM_CREA_CONS_ALTRES = 399, (
-        "Altres accions dins del servei de formació (si s'escau desenvolupeu a "
-        "la memòria)"
+        "3 f Altres accions dins del servei de formació."
     )
 
     # 4. Servei d'acompanyament per a la creació i consolidació de cooperatives
     # i projectes d'ESS
     ACOM_CREA_CONS_CREACIO = 401, (
-        "Assessorament a mida per a la creació de cooperatives i altres "
-        "organitzacions d'ESS"
+        "4 a Assessorament a mida per a la creació de cooperatives i altres "
+        "organitzacions d'ESS."
     )
     ACOM_CREA_CONS_CONSOLIDACIO = 402, (
-        "Acompanyament a la consolidació i creixement de cooperatives existents"
+        "4 b Acompanyament a la consolidació i creixement de cooperatives "
+        "existents."
     )
     ACOM_CREA_CONS_TRANSFORMACIO = 403, (
-        "Acompanyament a la transformació d'empreses"
+        "4 c Acompanyament a la transformació d'empreses."
     )
-    ACOM_CREA_CONS_CAMPANYA = 404, "Campanya de comunicació i difusió"
+    ACOM_CREA_CONS_CAMPANYA = 404, "4 d Campanya de comunicació i difusió."
     ACOM_CREA_CONS_SENSIBILITZACIO = 405, (
-        "Accions de sensibilització o dinamització"
+        "4 e Accions de sensibilització o dinamització."
     )
     ACOM_CREA_CONS_ALTRES = 499, (
-        "Altres accions dins del servei d'acompanyament (si s'escau "
-        "desenvolupeu a la memòria)"
+        "4 f Altres accions dins del servei d'acompanyament."
     )
 
     # 5. Servei de facilitació de la intercooperació, treball en xarxa i
     # dinamització territorial
     INTERCOOP_XARXA_TERRITORI_INTERCOOPERACIO = 501, (
-        "Generar espais d'intercooperació i treball en xarxa dins del "
-        "territori, intercooperació local, creació d'espais i grups "
-        "d'intercooperació"
+        "5 a Generar espai d'intercooperació i treball en xarxa dins del "
+        "territori."
     )
     INTERCOOP_XARXA_TERRITORI_INCORPORACIO = 502, (
-        "Incorporació d'empreses a l'ateneu cooperatiu i assemblea"
+        "5 b Incorporació d'empreses a l'ateneu cooperatiu i assemblea."
     )
     INTERCOOP_XARXA_TERRITORI_TREBALL = 503, (
-        "Treball en xarxa amb altres ateneus: assistir a reunions i col·laborar"
-        " en iniciatives conjuntes."
+        "5 c Treball en xarxa amb altres ateneus (reunions i iniciatives "
+        "conjuntes)."
     )
     INTERCOOP_XARXA_TERRITORI_ALTRES = 599, (
-        "Altres accions dins del servei de facilitació (si s'escau "
-        "desenvolupeu a la memòria)"
+        "5 d Altres accions dins del servei de facilitació."
     )
 
     # 6. Punt d'informació sobre l'ESS
     PUNT_INFO_ESPAI = 601, (
-        "Espai físic per proporcionar informació sobre ESS a diferents públics"
+        "6 a  Espai físic per proporcional informació sobre ESS a diferents "
+        "públics."
     )
-    PUNT_INFO_DIFUSIO = 602, "Difusió del Punt o punts d'informació"
+    PUNT_INFO_DIFUSIO = 602, "6 b Difusió del punt o punts d'informació."
 
     # 7. Serveis complementaris
-    SERV_COMPLEMENTARIS = 701, "Serveis complementaris"
+    SERV_COMPLEMENTARIS = 701, "7 a Serveis complementaris."
 
 
 class CirclesChoices(models.IntegerChoices):

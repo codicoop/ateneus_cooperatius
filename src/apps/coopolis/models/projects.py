@@ -505,6 +505,13 @@ class ProjectStage(models.Model):
         return f"{docs_count} / {self.stage_sessions.count()}"
     justification_documents_total.fget.short_description = "Docs justif."
 
+    @property
+    def entities_str(self):
+        sessions = self.stage_sessions.filter(entity__isnull=False).distinct("entity")
+        entities_list = [str(x.entity) for x in sessions]
+        entities_list.sort()
+        return ", ".join(entities_list)
+
     def __str__(self):
         txt = (f"{str(self.project)}: {self.get_full_type_str()} "
                f"[{str(self.subsidy_period)}]")

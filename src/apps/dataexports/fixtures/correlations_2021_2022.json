@@ -1,0 +1,25 @@
+{
+  "gender": {
+    "FEMALE": "D",
+    "MALE": "H",
+    "OTHER": "NB"
+  },
+  "minors_grade": {
+    "PRIM": "Prim\u00e0ria",
+    "ESO": "Secund\u00e0ria obligat\u00f2ria",
+    "BATX": "Batxillerat",
+    "FPGM": "Formaci\u00f3 professional grau mig",
+    "FPGS": "Formaci\u00f3 professional grau superior"
+  },
+  "project_status": {
+    "IN_MEDITATION_PROCESS": "En procés de constitució",
+    "IN_CONSTITUTION_PROCESS": "En procés de constitució",
+    "RUNNING": "Constituïda",
+    "DOWN": "No finalitzat"
+  },
+  "stage_type": {
+    "11": "Nova creació",
+    "12": "Creixement",
+    "9": "Incubació"
+  }
+}
