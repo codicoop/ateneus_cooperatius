@@ -232,6 +232,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': (),
         }),
         ("Camps convocatòries < 2020", {
+            'classes': ('grp-collapse grp-closed',),
             'fields': ["axis", "subaxis", ]
         }),
     ]
