@@ -66,8 +66,12 @@ class MyDashboard(Dashboard):
                 title='Acompanyament de projectes',
                 column=1,
                 collapsible=False,
-                models=('apps.coopolis.models.projects.Project', 'apps.coopolis.models.projects.ProjectStage',
-                        'apps.coopolis.models.projects.EmploymentInsertion', ),
+                models=(
+                    'apps.coopolis.models.projects.Project',
+                    'apps.coopolis.models.projects.ProjectStage',
+                    'apps.coopolis.models.projects.EmploymentInsertion',
+                    'apps.coopolis.models.projects.ProjectStageSession',
+                ),
             ),
             modules.ModelList(
                 title='Seguiment de projectes',

@@ -560,3 +560,28 @@ class StageSubtypeAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         return False
+
+
+@admin.register(ProjectStageSession)
+class ProjectStageSessions(admin.ModelAdmin):
+    empty_value_display = '(cap)'
+    raw_id_fields = ('involved_partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['involved_partners'],
+    }
+    fields = (
+        "session_responsible",
+        "date",
+        "hours",
+        "follow_up",
+        "entity",
+        "involved_partners",
+        "project_partners",
+        "justification_file",
+    )
+    readonly_fields = ("project_partners", )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "session_responsible":
+            kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
