@@ -18,21 +18,25 @@ class ExportJustificationService:
         self.number_of_stages = 0
         self.number_of_nouniversitaris = 0
         self.number_of_founded_projects = 0
-        # La majoria d'ateneus volen que hi hagi una sola actuació per un
-        # projecte encara que hagi tingut diferents tipus d'acompanyament.
-        # CoopCamp (i potser algun altre?) volen separar-ho per itineraris,
-        # de manera que hi hagi una actuació per l'itinerari de Nova Creació i
-        # una pel de Consolidació.
-        # Per defecte ho definim per 1 itinerari.
+        # A 2021-22 decidim que exportem els projectes per duplicat en cas que
+        # hi hagi un itinerari de creació i un de consolidació.
+        # Per agrupar-ho en un sol itinerari, ho teníem així:
+        #             9: 'creacio',  # Incubació
+        #             11: 'creacio',  # Creació
+        #             12: 'creacio',  # Consolidació
+        #
+        # El que fa aquest dict és indicar quin nom tindrà cada ID de tipus
+        # d'acompanyament, per quan arriba el moment en que agafem les dades i
+        # generem el self.stages_obj, aquest nom es farà servir com a clau del
+        # diccionari.
+        # Per tant, si a tots els tipus d'acompanyament els hi posem la mateixa
+        # key, a l'excel tindrem una sola fila amb la suma de totes les hores.
+        # Però si cada un té una key diferent, apareixerà tantes vegades com
+        # tipus d'acompanyament hi hagi.
         self.stages_groups = {
-            # 1: 'nova_creacio',
-            # 2: 'nova_creacio',
-            # 6: 'nova_creacio',
-            # 7: 'nova_creacio',
-            # 8: 'nova_creacio',
-            9: 'creacio',  # Era Incubació
+            9: 'incubacio',  # Era Incubació
             11: 'creacio',  # Creació
-            12: 'creacio',  # Consolidació
+            12: 'consolidacio',  # Consolidació
         }
         self.stages_obj = None
 
