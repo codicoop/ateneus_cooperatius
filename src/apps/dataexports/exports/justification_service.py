@@ -522,7 +522,7 @@ class ExportJustificationService:
             ("Correu electrònic", 12),
             ("Telèfon", 10),
             ("Economia solidària (revisar)", 35),
-            ("Ateneu / Cercle (omplir a ma)", 35),
+            ("Ateneu / Cercle", 35),
             ("[Acompanyaments]", 10),
         ]
         self.export_manager.create_columns(columns)
@@ -620,11 +620,12 @@ class ExportJustificationService:
                 stage = group['obj']
                 stage_reference_number = group['row_number']
                 for participant in group['participants']:
-                    if participant.gender is None:
-                        gender = ("", True)
-                    else:
+                    gender = ("", True)
+                    if participant.gender:
                         gender = self.export_manager.get_correlation(
-                            'gender', participant.gender)
+                            'gender',
+                            participant.gender,
+                        )
                     town = ("", True)
                     if participant.town:
                         town = participant.town.name
@@ -836,7 +837,7 @@ class ExportJustificationService:
                 reference = self.get_formatted_reference(
                     stage["row_number"],
                     stage["obj"].sub_service,
-                    insertion.project.name,
+                    stage["obj"].entities_str,
                     stage["obj"].circle,
                 )
 
@@ -903,7 +904,7 @@ class ExportJustificationService:
         self,
         ref_num,
         sub_service_id,
-        name,
+        entity_name,
         circle_id,
         subsidy_period=None,
     ):
@@ -914,6 +915,6 @@ class ExportJustificationService:
         sub_service = SubServicesChoices(sub_service_id).label
         circle = CirclesChoices(circle_id).label
         return (
-            f"{ref_num} - {sub_service} {subsidy_period} {name} - {circle}"
+            f"{ref_num} - {sub_service} {subsidy_period} {entity_name} - {circle}"
         )
 
