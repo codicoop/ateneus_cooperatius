@@ -156,7 +156,13 @@ class ExportJustificationService:
 
     def get_stages_obj(self):
         return ProjectStage.objects.order_by('date_start').filter(
-            subsidy_period=self.export_manager.subsidy_period
+            Q(
+                subsidy_period=self.export_manager.subsidy_period
+            ) & (
+                Q(cofunded__isnull=True) | (
+                    Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
+                )
+            )
         )
 
     def actuacions_rows_stages(self):
