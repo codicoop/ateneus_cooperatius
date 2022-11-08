@@ -88,7 +88,7 @@ class ExportJustificationService:
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
             ("[Document acreditatiu]", 21),
-            ("Incidències", 20),
+            ("[Incidències]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
@@ -148,7 +148,7 @@ class ExportJustificationService:
                 "",
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
-                str(item.cofunded),  # Cofinançat
+                str(item.cofunded or "No"),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 item.get_circle_display(),
             ]
@@ -301,10 +301,10 @@ class ExportJustificationService:
                     len(group['participants']),  # Nombre de participants
                     "No",
                     "",
-                    # En blanc pq cada stage session pot contenir una entitat
+                    "",  # Incidències
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
-                    str(item.cofunded),  # Cofinançat
+                    str(item.cofunded or "No"),  # Cofinançat
                     "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                     item.get_circle_display(),
                 ]
@@ -356,7 +356,7 @@ class ExportJustificationService:
                 "",
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
-                str(item.cofunded),  # Cofinançat
+                str(item.cofunded or "No"),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 item.get_circle_display(),
             ]
@@ -827,7 +827,6 @@ class ExportJustificationService:
             """
             if project:
                 stage = next(iter(project.values()))
-                print(stage)
                 reference = self.get_formatted_reference(
                     stage["row_number"],
                     stage["obj"].sub_service,
