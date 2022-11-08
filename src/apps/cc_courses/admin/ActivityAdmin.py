@@ -226,6 +226,10 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'classes': ('placeholder files-group',),
             'fields': (),
         }),
+        ('Opcions de cofinançament', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
+        }),
         ("Inscripcions", {
             # Grappelli way for sorting inlines
             'classes': ('placeholder enrollments-group',),
@@ -269,16 +273,6 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             if 'place' in self.fieldsets[0][1]['fields']:
                 index = self.fieldsets[0][1]['fields'].index('place') + 1
             self.fieldsets[0][1]['fields'].insert(index, 'room')
-
-        """
-        For ateneus enabling cofunded options: Adding the Cofinançades fieldset
-        """
-        fs = ('Opcions de cofinançament', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
-        })
-        if config.ENABLE_COFUNDED_OPTIONS and fs not in self.fieldsets:
-            self.fieldsets.insert(1, fs)
 
         return self.fieldsets
 
