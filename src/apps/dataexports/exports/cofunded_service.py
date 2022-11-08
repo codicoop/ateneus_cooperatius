@@ -1,5 +1,5 @@
 from apps.cc_courses.models import Activity
-from django.conf import settings
+from apps.coopolis.models import ProjectStage
 
 from apps.dataexports.exports.justification_service import \
     ExportJustificationService
@@ -24,3 +24,9 @@ class ExportJustificationCofundedService(ExportJustificationService):
             cofunded__isnull=False
         )
         return obj
+
+    def get_stages_obj(self):
+        return ProjectStage.objects.order_by('date_start').filter(
+            subsidy_period=self.export_manager.subsidy_period,
+            cofunded__isnull=False,
+        )
