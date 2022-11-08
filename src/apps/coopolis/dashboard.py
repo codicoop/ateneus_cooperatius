@@ -28,32 +28,29 @@ class MyDashboard(Dashboard):
 
     def init_with_context(self, context):
         # 'Disabling' reservations module by default, by assigning an empty link module:
-        reservations_module_app = modules.LinkList()
-        reservations_module_calendar = modules.LinkList()
-        if config.ENABLE_ROOM_RESERVATIONS_MODULE:
-            reservations_module_app = modules.ModelList(
-                    title="Gestió de reserves d'aules i sales",
-                    column=1,
-                    collapsible=False,
-                    models=(
-                        'apps.facilities_reservations.models.Reservation',
-                        'apps.facilities_reservations.models.Room',
-                        'apps.facilities_reservations.models.Equipment',
-                    ),
-                )
-            reservations_module_calendar = modules.LinkList(
-                    title="Calendari de reserves",
-                    column=1,
-                    collapsible=False,
-                    children=(
-                        {
-                            'title': 'Obrir el calendari (pestanya nova)',
-                            'url': reverse('fullcalendar'),
-                            'external': False,
-                            'target': True,
-                        },
-                    ),
-                )
+        reservations_module_app = modules.ModelList(
+                title="Gestió de reserves d'aules i sales",
+                column=1,
+                collapsible=False,
+                models=(
+                    'apps.facilities_reservations.models.Reservation',
+                    'apps.facilities_reservations.models.Room',
+                    'apps.facilities_reservations.models.Equipment',
+                ),
+            )
+        reservations_module_calendar = modules.LinkList(
+                title="Calendari de reserves",
+                column=1,
+                collapsible=False,
+                children=(
+                    {
+                        'title': 'Obrir el calendari (pestanya nova)',
+                        'url': reverse('fullcalendar'),
+                        'external': False,
+                        'target': True,
+                    },
+                ),
+            )
 
         group_children = [
             modules.ModelList(

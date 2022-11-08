@@ -191,7 +191,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     )
     fieldsets = [
         (None, {
-            'fields': ['course', 'name', 'objectives', 'place', 'date_start',
+            'fields': ['course', 'name', 'objectives', 'place', 'room',
+                       'date_start',
                        'date_end', 'starting_time', 'ending_time',
                        'confirmed', 'equipments',
                        'spots', 'service', 'sub_service', 'circle', 'entity',
@@ -260,21 +261,6 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         form = super(ActivityAdmin, self).get_form(request, obj=obj, **kwargs)
         form.request = request
         return form
-
-    def get_fieldsets(self, request, obj=None):
-        """
-        For ateneus using room reservations module: Adding the room field.
-        """
-        if (
-            config.ENABLE_ROOM_RESERVATIONS_MODULE
-            and 'room' not in self.fieldsets[0][1]['fields']
-        ):
-            index = 0
-            if 'place' in self.fieldsets[0][1]['fields']:
-                index = self.fieldsets[0][1]['fields'].index('place') + 1
-            self.fieldsets[0][1]['fields'].insert(index, 'room')
-
-        return self.fieldsets
 
     def get_queryset(self, request):
         qs = super(ActivityAdmin, self).get_queryset(request)
@@ -498,11 +484,10 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        if config.ENABLE_ROOM_RESERVATIONS_MODULE:
-            # This will be called again at save_related(), but we need to
-            # enfore it here to be able to access the equipments list.
-            form.save_m2m()
-            self.synchronize_with_reserved_room(obj)
+        # This will be called again at save_related(), but we need to
+        # enforce it here to be able to access the equipments list.
+        form.save_m2m()
+        self.synchronize_with_reserved_room(obj)
 
     def synchronize_with_reserved_room(self, obj):
         # Si estem editant una sessió que ja tenia una reserva però han
