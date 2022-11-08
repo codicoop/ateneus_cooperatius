@@ -127,6 +127,10 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                 "justification_documents_total",
             ]
         }),
+        ('Opcions de cofinançament', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
+        }),
         ("Sessions d'acompanyament", {
             # Grappelli way for sorting inlines
             'classes': ('placeholder stage_sessions-group',),
@@ -202,15 +206,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
 
-        # For ateneus enabling cofunded options: Adding the Cofinançades
-        # fieldset.
-        fs = ('Opcions de cofinançament', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
-        })
-        if config.ENABLE_COFUNDED_OPTIONS and fs not in self.fieldsets:
-            fieldsets.insert(1, fs)
-
         # For ateneus enabling stage_subtype: Adding the Subtype field.
         if config.ENABLE_STAGE_SUBTYPES is True:
             fieldsets[0][1]['fields'] = self.get_fields_with_type(
@@ -271,6 +266,9 @@ class ProjectStagesInline(admin.StackedInline):
                 "stage_sessions_field",
                 "justification_documents_total",
             ]
+        }),
+        ('Opcions de cofinançament', {
+            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
         }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]

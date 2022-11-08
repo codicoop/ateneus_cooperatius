@@ -88,7 +88,7 @@ class ExportJustificationService:
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
             ("[Document acreditatiu]", 21),
-            ("Incidències", 20),
+            ("[Incidències]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
@@ -148,7 +148,7 @@ class ExportJustificationService:
                 "",
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
-                str(item.cofunded),  # Cofinançat
+                str(item.cofunded or "No"),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 item.get_circle_display(),
             ]
@@ -156,7 +156,13 @@ class ExportJustificationService:
 
     def get_stages_obj(self):
         return ProjectStage.objects.order_by('date_start').filter(
-            subsidy_period=self.export_manager.subsidy_period
+            Q(
+                subsidy_period=self.export_manager.subsidy_period
+            ) & (
+                Q(cofunded__isnull=True) | (
+                    Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
+                )
+            )
         )
 
     def actuacions_rows_stages(self):
@@ -301,10 +307,10 @@ class ExportJustificationService:
                     len(group['participants']),  # Nombre de participants
                     "No",
                     "",
-                    # En blanc pq cada stage session pot contenir una entitat
+                    "",  # Incidències
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
-                    str(item.cofunded),  # Cofinançat
+                    str(item.cofunded or "No"),  # Cofinançat
                     "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                     item.get_circle_display(),
                 ]
@@ -356,7 +362,7 @@ class ExportJustificationService:
                 "",
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
-                str(item.cofunded),  # Cofinançat
+                str(item.cofunded or "No"),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 item.get_circle_display(),
             ]
@@ -516,7 +522,7 @@ class ExportJustificationService:
             ("Correu electrònic", 12),
             ("Telèfon", 10),
             ("Economia solidària (revisar)", 35),
-            ("Ateneu / Cercle (omplir a ma)", 35),
+            ("Ateneu / Cercle", 35),
             ("[Acompanyaments]", 10),
         ]
         self.export_manager.create_columns(columns)
@@ -614,11 +620,12 @@ class ExportJustificationService:
                 stage = group['obj']
                 stage_reference_number = group['row_number']
                 for participant in group['participants']:
-                    if participant.gender is None:
-                        gender = ("", True)
-                    else:
+                    gender = ("", True)
+                    if participant.gender:
                         gender = self.export_manager.get_correlation(
-                            'gender', participant.gender)
+                            'gender',
+                            participant.gender,
+                        )
                     town = ("", True)
                     if participant.town:
                         town = participant.town.name
@@ -827,11 +834,10 @@ class ExportJustificationService:
             """
             if project:
                 stage = next(iter(project.values()))
-                print(stage)
                 reference = self.get_formatted_reference(
                     stage["row_number"],
                     stage["obj"].sub_service,
-                    insertion.project.name,
+                    stage["obj"].entities_str,
                     stage["obj"].circle,
                 )
 
@@ -898,7 +904,7 @@ class ExportJustificationService:
         self,
         ref_num,
         sub_service_id,
-        name,
+        entity_name,
         circle_id,
         subsidy_period=None,
     ):
@@ -909,6 +915,6 @@ class ExportJustificationService:
         sub_service = SubServicesChoices(sub_service_id).label
         circle = CirclesChoices(circle_id).label
         return (
-            f"{ref_num} - {sub_service} {subsidy_period} {name} - {circle}"
+            f"{ref_num} - {sub_service} {subsidy_period} {entity_name} - {circle}"
         )
 
