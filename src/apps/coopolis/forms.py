@@ -255,11 +255,14 @@ class ActivityForm(forms.ModelForm):
         super().clean()
         if self.cleaned_data['room']:
             self.validate_room_availability()
-        if not self.cleaned_data['room'] and self.cleaned_data['equipments']:
+        if (
+            not self.cleaned_data.get('room')
+            and self.cleaned_data.get('equipments')
+        ):
             self.add_error(
                 "equipments",
                 "Per reservar equipaments cal seleccionar "
-                "també una Sala.",
+                "també una Sala que estigui disponible.",
             )
         return self.cleaned_data
 
@@ -285,7 +288,7 @@ class ActivityForm(forms.ModelForm):
         try:
             reservation_obj.clean()
         except ValidationError as e:
-            self.add_error("room", e)
+            self.add_error(None, e)
 
         for equipment in self.cleaned_data["equipments"]:
             equipment_obj = ReservationEquipment(
