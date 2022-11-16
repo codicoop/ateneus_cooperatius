@@ -558,7 +558,8 @@ class ExportJustificationService:
                     stage.circle,
                 )
                 name = project.name
-                circle = CirclesChoices(stage.circle).label
+                if stage.circle:
+                    circle = CirclesChoices(stage.circle).label
 
             self.export_manager.row_number += 1
             if project.cif is None:
