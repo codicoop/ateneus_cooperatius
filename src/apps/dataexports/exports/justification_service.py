@@ -680,7 +680,7 @@ class ExportJustificationService:
                     self.get_formatted_reference(
                         activity_reference_number,
                         activity.sub_service,
-                        str(activity.entity),
+                        activity.entity,
                         activity.circle,
                     ),
                     activity.name,
@@ -732,7 +732,7 @@ class ExportJustificationService:
                 self.get_formatted_reference(
                     nouniversitari_reference_number,
                     activity.sub_service,
-                    str(activity.entity),
+                    activity.entity,
                     activity.circle,
                 ),
                 activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
@@ -905,17 +905,17 @@ class ExportJustificationService:
         self,
         ref_num,
         sub_service_id,
-        entity_name,
+        entity,
         circle_id,
         subsidy_period=None,
     ):
-        if not sub_service_id or circle_id is None:
+        if not sub_service_id or circle_id is None or not entity:
             return "", True
         if not subsidy_period:
             subsidy_period = self.subsidy_period_str
         sub_service = SubServicesChoices(sub_service_id).label
         circle = CirclesChoices(circle_id).label
         return (
-            f"{ref_num} - {sub_service} {subsidy_period} {entity_name} - {circle}"
+            f"{ref_num} - {sub_service} {subsidy_period} {entity} - {circle}"
         )
 
