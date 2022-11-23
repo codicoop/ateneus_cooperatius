@@ -1,20 +1,13 @@
 // Dynamic variables
-.header {
-}
+// .header {
+// }
 
-@media (min-width: 768px) {
-  .header {
-    
-    &.main__extra-pad {
-      margin: 0 auto;
-    }
-  }
-}
+// @media (min-width: 768px) {
+//   .header {
+// }
 
 // Layout
 .header {
-  grid-column: 1;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -44,7 +37,7 @@
     bottom: 0;
     display: flex;
     flex-direction: column;
-    width: 128px;
+    width: var(--pad8);
 
   &__item {
     position: relative;
@@ -52,9 +45,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 13px;
+    gap: var(--pad1);
     background-color: var(--second);
-    padding: 40px 0;
+    padding: var(--pad2) 0;
     color: var(--white);
 
     &.is-active {
@@ -79,8 +72,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24px;
-    height: 24px;
+    width: var(--pad1-5);
+    height: var(--pad1-5);
     border: 1px solid white;
   }
 }

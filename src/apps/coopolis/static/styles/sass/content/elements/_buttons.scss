@@ -1,72 +1,48 @@
 // Dynamic variables
+.btn {
+  --width: 100%;
+}
+
+@media (min-width: 900px) {
+  .btn {
+    --width: auto;
+  }
+}
 
 // Layout
 .btn {
-  padding: var(--padding-xsm) var(--padding-sm);
-  margin: var(--padding-xsm) 0;
-  text-align: center;
-
-  &.btn--full-width {
-    width: 100%;
-  }
-  &.btn--text-left {
-    text-align: left;
-  }
-}
-.btn--solid {
-  background-color: var(--grey-dark);
-  border: var(--b-thick-dark);
-  color: var(--white);
-  transition: 200ms background-color ease-in-out;
-
-  &:hover {
-    background-color: var(--grey);
-  }
-}
-.btn--empty {
-  background-color: var(--white);
-  border: var(--b-thick-dark);
-  transition: 200ms background-color ease-in-out;
-
-  &:hover {
-    background-color: var(--whitish);
-  }
-}
-.btn--sec-solid {
-  background-color: var(--second);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--width);
+  padding: var(--pad1) var(--pad2);
   border-radius: var(--br);
-  transition: 200ms background-color ease-in-out;
 
-  &:hover {
-    background-color: var(--second-dark);
+  &.btn--second {
+    background-color: var(--second);
     color: var(--white);
   }
-}
-.btn--sec-empty {
-  background-color: var(--white);
-  border: var(--b-thick-sec);
-  border-radius: var(--br);
-  transition: 200ms background-color ease-in-out;
-
-  &:hover {
-    background-color: var(--whitish);
+  &.btn--white {
+    background-color: var(--white);
+    color: var(--second);
+  }
+  &.btn--primary {
+    background-color: var(--primary);
+    color: var(--white);
+  }
+  &__text {
+    font-size: 12px;
+    line-height: 12px;
+    text-transform: uppercase;
+    font-weight: 700;
   }
 }
 
-.back-btn {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--padding-md);
-  text-transform: uppercase;
-
-  svg {
-    margin-right: var(--padding-xxsm);
-  }
-}
-.back-btn--person-edit {
-  cursor: pointer;
-  
-  &:hover {
-    color: #1890ff;
-  }
-}
+// Exemple de botó que és un enllaç
+// <a href="{% url 'loginsignup' %}">
+//    <div class="btn btn--second">
+//       <div class="btn__text">
+//           Registrar-se
+//        </div>
+//    </div>
+// </a>

@@ -1,0 +1,121 @@
+// Dynamic variables
+.home {
+}
+
+@media (min-width: 768px) {
+  .home {
+  }
+}
+
+// Layout
+.home {
+  // Secció de la portada sense login on arribes primer
+  &__welcome {
+    height: 100vh;
+    background-color: var(--primary);
+  }
+  &__intro {
+    background-color: var(--second-3);
+  }
+
+  .welcome {
+    &__topbar {
+      grid-column: 1 / span 6;
+      grid-row: 1;
+    }
+    &__content {
+      grid-column: 1 / span 6;
+      grid-row: 1 / span 2;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--white)
+    }
+    &__logo {
+      width: var(--pad9);
+      height: auto;
+    }
+    &__text {
+      width: var(--pad20);
+      height: auto;
+    }
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: fit-content;
+    padding: var(--pad2) 0;
+    color: var(--white);
+
+    &__left {
+      display: flex;
+      gap: 0 var(--pad4);
+    }
+    &__right {
+      display: flex;
+      gap: 0 var(--pad1);
+    }
+  }
+
+  .intro {
+    color: var(--primary);
+    border-bottom: 1px solid var(--primary-lightest);
+    
+    &__title {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: var(--pad4);
+      padding-bottom: var(--pad8);
+      border-bottom: 1px solid var(--primary-lightest);
+    }
+    &__bloc {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-top: var(--pad1);
+      padding-bottom: var(--pad6);
+
+      & + .intro__bloc {
+        padding-left: var(--pad2);
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          height: 80%;
+          width: 1px;
+          background-color: var(--primary-lightest);
+        }
+      }
+    }
+    &__bloc-title {
+      padding-bottom: var(--pad4);
+    }
+    &__bloc-text {
+      padding-bottom: var(--pad6);
+    }
+    &__bloc-btn {
+      align-self: center;
+    }
+  }
+  .outro {
+    padding-top: var(--pad8);
+    padding-bottom: var(--pad9);
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+    }
+    &__text {
+      color: var(--primary-dark);
+    }
+    &__btn {
+      align-self: center;
+      padding-top: var(--pad4);
+    }
+  }
+}
