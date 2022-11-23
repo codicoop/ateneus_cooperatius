@@ -30,6 +30,9 @@
     background-color: var(--primary);
     color: var(--white);
   }
+  &.btn--empty {
+    background-color: transparent;
+  }
   &__text {
     font-size: 12px;
     line-height: 12px;

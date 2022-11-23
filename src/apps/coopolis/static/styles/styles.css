@@ -411,6 +411,9 @@ body {
   background-color: var(--primary);
   color: var(--white);
 }
+.btn.btn--empty {
+  background-color: transparent;
+}
 .btn__text {
   font-size: 12px;
   line-height: 12px;
@@ -720,6 +723,10 @@ body {
   cursor: pointer;
 }
 
+a {
+  cursor: pointer;
+}
+
 .header {
   display: flex;
   flex-direction: column;
@@ -881,10 +888,14 @@ body {
   height: fit-content;
   padding: var(--pad2) 0;
   color: var(--white);
+  z-index: 1;
 }
 .home .topbar__left {
   display: flex;
-  gap: 0 var(--pad4);
+  gap: 0 var(--pad1-5);
+}
+.home .topbar__left .btn {
+  margin-top: calc(var(--pad1) * -1);
 }
 .home .topbar__right {
   display: flex;

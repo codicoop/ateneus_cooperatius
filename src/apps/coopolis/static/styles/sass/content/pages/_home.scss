@@ -49,10 +49,15 @@
     height: fit-content;
     padding: var(--pad2) 0;
     color: var(--white);
+    z-index: 1;
 
     &__left {
       display: flex;
-      gap: 0 var(--pad4);
+      gap: 0 var(--pad1-5);
+      
+      .btn {
+        margin-top: calc(var(--pad1) * -1);
+      }
     }
     &__right {
       display: flex;
