@@ -792,16 +792,49 @@ body {
 }
 
 .menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
+  width: 128px;
+}
+.menu__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+  background-color: var(--second);
+  padding: 40px 0;
+  color: var(--white);
 }
 .menu__item.is-active {
-  background-color: var(--second-dark);
+  background-color: var(--second-med);
 }
 .menu__item.is-disabled {
   cursor: not-allowed;
   pointer-events: none;
   background-color: var(--grey-light);
+}
+.menu__item::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  width: 75%;
+  height: 2px;
+  background-color: var(--second-light);
+  z-index: 1;
+}
+.menu__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid white;
 }
 
 .footer {

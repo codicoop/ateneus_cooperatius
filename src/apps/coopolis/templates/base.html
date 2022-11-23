@@ -44,7 +44,7 @@
           </li>
         {% else %}
           <li>
-            <a href="{% url 'home' %}" class="menu__item">
+            <a href="{% url 'home' %}">
               <div class="menu__item is-active">
                 <div class="menu__icon">😀</div>
               </div>
@@ -52,8 +52,8 @@
           </li>
         {% endif %}
           <li>
-            <a href="{% url 'courses' %}" class="menu__item">
-              <div class="menu__item is-active">
+            <a href="{% url 'courses' %}">
+              <div class="menu__item">
                 <div class="menu__icon">🥨</div>
                 <div class="text-menu">
                   <p>Inscripcions</p>
@@ -62,8 +62,8 @@
             </a>
           </li>
           <li>
-            <a href="{% url 'project_info' %}" class="menu__item">
-              <div class="menu__item is-active">
+            <a href="{% url 'project_info' %}">
+              <div class="menu__item">
                 <div class="menu__icon">🍩</div>
                 <div class="text-menu">
                   <p>Projectes</p>
