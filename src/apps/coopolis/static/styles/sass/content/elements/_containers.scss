@@ -1,0 +1,109 @@
+// Dynamic variables
+
+@media (min-width: 1024px) {
+
+}
+
+.container {
+  position: relative;
+  min-height: 88px;
+  width: 100%;
+  padding: var(--padding-xsm);
+  border: 3px solid var(--grey-dark);
+  overflow: hidden;
+
+  & p:nth-child(1) {
+    margin-top: 0;
+  }
+  // Tipus de contenidor que té una icona a al dreta
+  &.container--icon {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+  }
+  &.container--icon-date {
+    display: grid;
+    grid-template-columns: 1fr 133px;
+  }
+  // Tipus de contenidor que és més estret
+  &.container--narrow {
+    min-height: 0;
+    align-items: center;
+
+    .title-2 {
+      text-transform: none;
+    }
+
+    .container__icon {
+      padding-top: 0;
+    }
+  }
+  
+  &.container--solid {
+    background-color: var(--grey-dark);
+    color: var(--white);
+
+    .title-2, .title-3, .title-4,
+    .ant-typography {
+      color: var(--white);
+    }
+  }
+  &.container--extra-pad {
+    padding: var(--padding-md) var(--padding-md) var(--padding-sm) var(--padding-md);
+  }
+  &.container--form-pad {
+    padding: var(--padding-sm) var(--padding-md) var(--padding-sm) var(--padding-sm);
+  }
+  &__icon {
+    grid-column: 2;
+    align-self: end;
+    justify-self: end;
+
+    padding-left: var(--padding-xsm);
+    padding-top: var(--padding-xsm);
+    cursor: pointer
+  }
+  &__icon-download {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: start;
+    justify-self: end;
+    cursor: pointer
+  }
+  &__data {
+    grid-column: 1;
+    margin-top: var(--padding-xsm);
+
+    &.viewlist {
+      padding-bottom: 0;
+    }
+  }
+  div.container__data.ant-typography {
+    margin-bottom: 0;
+  }
+  &__data-list {
+    grid-column: 1;
+    margin-top: var(--padding-xsm);
+    font-weight: 600;
+    margin-bottom: var(--padding-xlg);
+
+    li {
+      position: relative;
+      margin-top: var(--padding-sm);
+      padding-left: var(--padding-lg);
+      font-weight: 300;
+
+      &::before {
+        content: "·";
+        position: absolute;
+        left: 10px;
+        top: 0;
+        font-size: 18px;
+        font-weight: 900;
+        padding-right: var(--padding-xxsm);
+      }
+    }
+  }
+  & + .container {
+    margin-top: var(--padding-xsm);
+  }
+}

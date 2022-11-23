@@ -1,0 +1,71 @@
+:root {
+  // Basic Colors
+  --black: #000;
+  --grey: #707070;
+  --grey-light: #D3BFC6;
+  --white: #fff;
+
+  --red: #FF0000;
+  --orange: #E99401;
+  --yellow: #F6BF00;
+  --violet: #A77F8D;
+  
+  // App colors
+  --primary-lightest: #FFC5D9;
+  --primary-light: #FE8CB3;
+  --primary: #D6085B;
+  --primary-med: #720027;
+  --primary-dark: #51001C;
+
+  --second-3: #EAF3FB;
+  --second-2: #C7E3FB;
+  --second-1: #A0EDF9;
+  --second-lighter: #8ECAFD;
+  --second-light: #1E96FC;
+  --second: #146CD7;
+  --second-med: #08259B;
+  --second-dark: #00132B;
+  
+  // Border radius
+  --br: 8px;
+  
+  // --unnamed-color-ff0000: #FF0000; // red 
+  // --unnamed-color-e99401: #E99401; // orange
+  // --unnamed-color-f6bf00: #F6BF00; // yellow
+  // --unnamed-color-a77f8d: #A77F8D; // violet
+
+  // --unnamed-color-707070: #707070; // grey
+  // --unnamed-color-d3bfc6: #D3BFC6; // grey-light
+  // --unnamed-color-ffffff: #FFFFFF; // white
+
+  // --unnamed-color-ffc5d9: #FFC5D9; // primary lightest
+  // --unnamed-color-fe8cb3: #FE8CB3; // primary light
+  // --unnamed-color-d6085b: #D6085B; // primary
+  // --unnamed-color-720027: #720027; // primary med
+  // --unnamed-color-51001c: #51001C; // primary dark
+
+  // --unnamed-color-eaf3fb: #EAF3FB; // second-3
+  // --unnamed-color-c7e3fb: #C7E3FB; // second-2
+  // --unnamed-color-a0edf9: #A0EDF9; // second-1
+  // --unnamed-color-8ecafd: #8ECAFD; // second lighter
+  // --unnamed-color-1e96fc: #1E96FC; // second light
+  // --unnamed-color-146cd7: #146CD7; // second
+  // --unnamed-color-08259b: #08259B; // second med
+  // --unnamed-color-00132b: #00132B; // second dark
+
+  // // Paddings
+  // --padding-base: 16px;
+
+  // --padding-xxsm: calc(var(--padding-base) / 3); // 5
+  // --padding-xsm: calc(var(--padding-base) / 2); // 8
+  // --padding-sm: var(--padding-base); // 16
+  // --padding-md: calc(var(--padding-base) * 1.5); // 24
+  // --padding-lg: calc(var(--padding-base) * 2); // 32
+  // --padding-xlg: calc(var(--padding-base) * 3); // 48
+  // --padding-xxlg: calc(var(--padding-base) * 4); // 64
+
+
+  .is-hidden {
+    display: none;
+  }
+}

@@ -1,0 +1,55 @@
+// Dynamic variables
+.header {
+}
+
+@media (min-width: 768px) {
+  .header {
+    
+    &.main__extra-pad {
+      margin: 0 auto;
+    }
+  }
+}
+
+// Layout
+.header {
+  grid-column: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: var(--second);
+
+  // &.header--is-open {
+  //   // position: absolute;
+  //   // top: 0;
+  //   // left: 0;
+  //   // right: 0;
+  //   height: 100vh;
+  //   background-color: var(--white);
+  //   padding: var(--padding-sm) 0 0 0;
+  //   z-index: 10;
+
+  //   .menu {
+  //     padding-left: var(--padding-xlg);
+  //     padding-top: var(--padding-lg);
+  //   }
+  // }
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+
+  &__item {
+
+    &.is-active {
+      background-color: var(--second-dark);
+    }
+    &.is-disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      background-color: var(--grey-light);
+    }
+  }
+}

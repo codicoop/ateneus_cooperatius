@@ -31,7 +31,7 @@
   <div class="courses-container">
     {% with optout_button=True %}
     {% for enrollment in enrolled_activities %}
-    {% include "reusable/my_courses_activity.html" %}
+    {% include "components/my_courses_activity.html" %}
     {% endfor %}
     {% endwith %}
   </div>
@@ -42,7 +42,7 @@
   <div class="courses-container">
     {% with optout_button=True button_text_waiting_list=True %}
     {% for enrollment in waiting_list_activities %}
-    {% include "reusable/my_courses_activity.html" %}
+    {% include "components/my_courses_activity.html" %}
     {% endfor %}
     {% endwith %}
   </div>
@@ -52,7 +52,7 @@
   <h1>Activitats a les que has assistit anteriorment:</h1><br/>
   <div class="courses-container">
     {% for enrollment in past_enrolled_activities %}
-    {% include "reusable/my_courses_activity.html" %}
+    {% include "components/my_courses_activity.html" %}
     {% endfor %}
   </div>
   {% endif %}

@@ -1,0 +1,72 @@
+// Dynamic variables
+
+// Layout
+.btn {
+  padding: var(--padding-xsm) var(--padding-sm);
+  margin: var(--padding-xsm) 0;
+  text-align: center;
+
+  &.btn--full-width {
+    width: 100%;
+  }
+  &.btn--text-left {
+    text-align: left;
+  }
+}
+.btn--solid {
+  background-color: var(--grey-dark);
+  border: var(--b-thick-dark);
+  color: var(--white);
+  transition: 200ms background-color ease-in-out;
+
+  &:hover {
+    background-color: var(--grey);
+  }
+}
+.btn--empty {
+  background-color: var(--white);
+  border: var(--b-thick-dark);
+  transition: 200ms background-color ease-in-out;
+
+  &:hover {
+    background-color: var(--whitish);
+  }
+}
+.btn--sec-solid {
+  background-color: var(--second);
+  border-radius: var(--br);
+  transition: 200ms background-color ease-in-out;
+
+  &:hover {
+    background-color: var(--second-dark);
+    color: var(--white);
+  }
+}
+.btn--sec-empty {
+  background-color: var(--white);
+  border: var(--b-thick-sec);
+  border-radius: var(--br);
+  transition: 200ms background-color ease-in-out;
+
+  &:hover {
+    background-color: var(--whitish);
+  }
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--padding-md);
+  text-transform: uppercase;
+
+  svg {
+    margin-right: var(--padding-xxsm);
+  }
+}
+.back-btn--person-edit {
+  cursor: pointer;
+  
+  &:hover {
+    color: #1890ff;
+  }
+}
