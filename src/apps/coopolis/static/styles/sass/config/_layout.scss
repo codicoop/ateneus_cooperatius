@@ -48,7 +48,7 @@ body {
 @media (min-width: 900px) {
   .grid-base {
     display: grid;
-    grid-template-columns: 128px 1fr;
+    grid-template-columns: var(--pad8) 1fr;
 
     &__side {
       grid-column: 1;
@@ -60,12 +60,7 @@ body {
   .grid-content {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 0 16px;
-    padding: 0 70px;
+    gap: 0 var(--pad1);
+    padding: 0 var(--pad4-5);
   }
 }
-
-// // Versió monitor
-// @media (min-width: 1900px) {
-
-// }

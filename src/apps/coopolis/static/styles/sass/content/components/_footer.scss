@@ -1,46 +1,43 @@
 // Dynamic variables
 .footer {
-  --padding-header:  var(--padding-md);
-  
-  &__social-icon {
-    --width: var(--padding-sm);
-  }
+
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   .footer {
-    --padding-header: var(--padding-md) var(--padding-lg);
-    
-    &__social-icon {
-      --width:  var(--padding-md);
-    }
   }
 }
 
 // Layout
 .footer {
-  margin-top: auto;
-  padding: var(--padding-header);
-  background-color: var(--grey);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--pad1);
+  padding: 0 var(--pad4-5);
+  background-color: var(--primary);
   color: var(--white);
-
-  &__top {
+  
+  &__author {
     display: flex;
-    justify-content: space-between;
-  }
-  &__social ul {
-    display: flex;
-    flex-wrap: nowrap;
-    gap:  var(--padding-xsm);
+    flex-direction: column;
+    gap: var(--pad2);
+    width: var(--pad12);
+    font-size: 12px;
+    line-height: 16px;
 
-    .footer__social-icon {
-      width: var(--width);
-      max-height: var(--width);
+    &-links {
+      display: flex;
+      gap: var(--pad1);
+      text-transform: uppercase;
     }
   }
-  &__bottom {
-    display: flex;
-    justify-content: center;
-    gap:  var(--padding-xsm);
+  &__logo {
+    padding: var(--pad5) 0;
+
+    img {
+      width: auto;
+      max-height: 40px;
+    }
   }
 }

@@ -1,16 +1,25 @@
 {% load static %}
-<footer>
-    <div class="logos">
-        <img src="{% static 'images/logo_ateneus_cooperatius.png' %}" />
-        <img src="{% static 'images/logo_economia_social.png' %}" />
-        <img src="{% static 'images/logo_generalitat.png' %}" />
+<footer class="footer">
+  <div class="footer__author">
+    <div class="footer__author-text">
+      <p>Aquest web ha sigut dissenyat per 
+        <a class="link" href="https://www.bildi.net/">Bildi</a>
+        i feliçment desenvolupat per 
+        <a class="link" href="https://www.codi.coop/">Codi Cooperatiu</a>
+      </p>
     </div>
-
-    <p>
-        Aquest web ha sigut feliçment desenvolupat per <a class="link-codi-cooperatiu" href="http://codi.coop">Codi Cooperatiu</a>.
-    </p>
-    <p>
-        <span><a href="{{ config.PROJECT_LEGAL_URL }}">Avís legal</a></span>
-        <span><a href="{{ config.PROJECT_CONTACT_URL }}">Contacte</a></span>
-    </p>
+    <div class="footer__author-links">
+      <a class="link" href="{{ config.PROJECT_LEGAL_URL }}">Avís legal</a>
+      <a class="link" href="{{ config.PROJECT_CONTACT_URL }}">Contacte</a>
+    </div>
+  </div>
+  <div class="footer__logo">
+    <img src="{% static 'images/logo_economia_social.png' %}" />
+  </div>
+  <div class="footer__logo">
+    <img src="{% static 'images/logo_generalitat.png' %}" />
+  </div>
+  <div class="footer__logo">
+    <img src="{% static 'images/logo_generalitat.png' %}" />
+  </div>
 </footer>
