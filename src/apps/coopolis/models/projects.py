@@ -105,10 +105,10 @@ class Project(models.Model):
         help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una "
                   "convocatòria posterior a l'ultima "
                   "intervenció de l'ateneu, podeu indicar-ho aquí, per tal "
-                  "que aparegui a l'informe de Projectes "
-                  "Constituïts. Aquest camp NO farà aparèixer el projecte a "
-                  "l'excel de justificació (per aparèixer a "
-                  "l'excel cal crear una Justificació d'Acompanyament)"
+                  "que aparegui com a Entitat Creada a l'informe de Projectes "
+                  "Constituïts i a l'excel de justificació. Només es consideren"
+                  " entitats creades les que tenen el NIF i la data de "
+                  "constitució introduïdes."
     )
     estatuts = models.FileField("estatuts", blank=True, null=True,
                                 storage=PrivateMediaStorage(), max_length=250)
