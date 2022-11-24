@@ -11,6 +11,7 @@
 .home {
   // Secció de la portada sense login on arribes primer
   &__welcome {
+    position: relative;
     height: 100vh;
     background-color: var(--primary);
   }
@@ -121,6 +122,25 @@
     &__btn {
       align-self: center;
       padding-top: var(--pad4);
+    }
+  }
+  // LOGIN inventat
+  .login {
+    position: absolute;
+    right: 50px;
+    top: 100px;
+    border: 1px solid hsla(0, 0%, 100%, 0.3);
+    padding: 10px;
+    color: white;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .btn {
+      align-self: flex-end;
+      text-transform: uppercase;
     }
   }
 }

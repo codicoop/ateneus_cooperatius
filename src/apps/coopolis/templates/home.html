@@ -4,6 +4,22 @@
 {% block content %}
 <div class="home">
 	<section class="home__welcome welcome grid-content">
+		{% if not user.is_authenticated %}
+		<div class="login">
+			<form action="{% url 'login_post' %}" method="POST">
+				{% csrf_token %}
+				<label for="username">
+					Adreça d'e-mail
+					<input type="text" name="username" placeholder="Adreça d'e-mail">
+				</label>
+				<label for="password">
+					Contrasenya
+					<input type="password" name="password" placeholder="Contrasenya">
+				</label>
+				<input class="btn btn--white" type='submit' value='Accedir'>
+			</form>
+		</div>
+		{% endif %}
 		<div class="welcome__topbar topbar">
 			<div class="topbar__left">
 				<a href="{{ config.PROJECT_WEBSITE_URL }}" class="text-menu">
