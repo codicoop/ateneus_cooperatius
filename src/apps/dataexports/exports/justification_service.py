@@ -390,6 +390,8 @@ class ExportJustificationService:
         """
         obj = Project.objects.filter(
             subsidy_period=self.export_manager.subsidy_period,
+            cif__isnull=False,
+            constitution_date__isnull=False,
         )
         self.number_of_founded_projects = len(obj)
         for project in obj:
@@ -540,7 +542,10 @@ class ExportJustificationService:
             + self.number_of_activities \
             + self.number_of_nouniversitaris
         obj = Project.objects.filter(
-            constitution_date__range=self.export_manager.subsidy_period_range)
+            subsidy_period=self.export_manager.subsidy_period,
+            cif__isnull=False,
+            constitution_date__isnull=False,
+        )
         for project in obj:
             # Repeating the same filter than in Actuacions to determine if we 
             # have an Actuació or not
@@ -550,7 +555,7 @@ class ExportJustificationService:
                 project=project,
                 subsidy_period=self.export_manager.subsidy_period
             ).order_by("-date_start")[:1]
-            circle = ""
+            circle = ("", True)
             if stages.count() > 0:
                 stage = stages.all()[0]
                 founded_projects_reference_number += 1
