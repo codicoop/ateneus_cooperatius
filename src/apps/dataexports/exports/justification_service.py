@@ -370,8 +370,7 @@ class ExportJustificationService:
 
     def actuacions_rows_founded_projects(self):
         """
-        Tots els projectes que tinguin data de constitució dins de 
-        les dates de la convocatòria apareixeran
+        Tots els projectes vinculats a la convocatòria seleccionada apareixeran
         a la pestanya d'EntitatsCreades.
         No obstant només aquells que tinguin una actuació vinculada 
         durant el període de la convocatòria han de
@@ -390,55 +389,59 @@ class ExportJustificationService:
         actuació creada, i deduïr per l'ordre quina ID li toca.
         """
         obj = Project.objects.filter(
-            constitution_date__range=self.export_manager.subsidy_period_range)
+            subsidy_period=self.export_manager.subsidy_period,
+        )
         self.number_of_founded_projects = len(obj)
         for project in obj:
+            service = ("", True)
+            sub_service = ("", True)
+            circle = ("", True)
+            date = ("", True)
+            partners_involved = ""
+            cofunded = ""
+            cofunded_aacc = ""
+            circle_name = ""
             stages = ProjectStage.objects.filter(
                 project=project,
                 subsidy_period=self.export_manager.subsidy_period
             ).order_by("-date_start")[:1]
-            if stages.count() < 1:
-                continue
-            stage = stages.all()[0]
+            if stages:
+                stage = stages.all()[0]
+                if stage.service:
+                    service = stage.get_service_display()
+                if stage.sub_service:
+                    sub_service = stage.get_sub_service_display()
+                if stage.circle is not None:
+                    circle = CirclesChoices(stage.circle).label
+                date = stage.date_start
+                partners_involved = stage.partners_involved_in_sessions.count()
+                cofunded = str(stage.cofunded)
+                cofunded_aacc = "Sí" if stage.cofunded_ateneu else "No"
+                circle_name = stage.get_circle_display()
 
             self.export_manager.row_number += 1
-            service = (
-                stage.get_service_display()
-                if stage.service
-                else ("", True)
-            )
-            sub_service = (
-                stage.get_sub_service_display()
-                if stage.sub_service
-                else ("", True)
-            )
             town = ("", True)
             if project.town:
                 town = str(project.town)
-            circle = (
-                 CirclesChoices(stage.circle).label
-                 if stage.circle is not None
-                 else ("", True)
-            )
 
             row = [
                 service,
                 sub_service,
                 project.name,
-                stage.date_start,
+                date,
                 "",
                 "",  # Entitat
                 circle,
                 town,
-                stage.partners_involved_in_sessions.count(),
+                partners_involved,
                 "No",
                 "",
                 # En blanc pq cada stage session pot contenir una entitat
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
-                str(stage.cofunded),  # Cofinançat
-                "Sí" if stage.cofunded_ateneu else "No",  # Cofinançat amb AACC
-                stage.get_circle_display(),
+                cofunded,  # Cofinançat
+                cofunded_aacc,  # Cofinançat amb AACC
+                circle_name,
             ]
             self.export_manager.fill_row_data(row)
 
