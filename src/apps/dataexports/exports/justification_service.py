@@ -2,7 +2,7 @@ from django.db.models import Q
 
 from apps.coopolis.choices import CirclesChoices, SubServicesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
-from apps.cc_courses.models import Activity
+from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
@@ -132,6 +132,10 @@ class ExportJustificationService:
                  if item.circle is not None
                  else ("", True)
             )
+            participants_count = ActivityEnrolled.objects.filter(
+                    activity=item,
+                    waiting_list=False
+                ).count()
 
             row = [
                 service,
@@ -142,7 +146,7 @@ class ExportJustificationService:
                 str(item.entity) if item.entity else '',  # Entitat
                 circle,
                 town,
-                item.enrolled.count(),
+                participants_count,
                 material_difusio,
                 document_acreditatiu,
                 "",
