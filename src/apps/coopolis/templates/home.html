@@ -4,6 +4,8 @@
 {% block content %}
 <div class="home">
 	<section class="home__welcome welcome grid-content">
+
+		<!-- TODO Login inventat per poder-lo fer servir -->
 		{% if not user.is_authenticated %}
 		<div class="login">
 			<form action="{% url 'login_post' %}" method="POST">
@@ -20,6 +22,8 @@
 			</form>
 		</div>
 		{% endif %}
+
+		{% if not user.is_authenticated %}
 		<div class="welcome__topbar topbar">
 			<div class="topbar__left">
 				<a href="{{ config.PROJECT_WEBSITE_URL }}" class="text-menu">
@@ -50,7 +54,9 @@
 				</a>
 			</div>
 		</div>
-		<div class="welcome__content">
+		{% endif %}
+
+		<div class="welcome__content {% if user.is_authenticated %}is-logged{% endif %}">
 			<div class="welcome__logo">
 				<img src="{% static '/logo.png' %}" alt="Logo Ateneu Cooperatiu">
 			</div>
@@ -62,6 +68,20 @@
 					<p>Plataforma de gestió de projectes i inscripcions</p>
 				</div>
 			</div>
+			{% if user.is_authenticated %}
+			<div class="welcome__btns">
+				<a href="{{ config.PROJECT_WEBSITE_URL }}" class="text-menu">
+					<div class="btn btn--empty">
+						<p>Web</p>
+					</div>
+				</a>
+				<a href="{{ config.PROJECT_CONTACT_URL }}" class="text-menu">
+					<div class="btn btn--empty">
+						<p>Contacte</p>
+					</div>
+				</a>
+			</div>
+			{% endif %}
 		</div>
 	</section>
 	<section class="home__intro intro grid-content">

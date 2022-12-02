@@ -1,46 +1,136 @@
 // Dynamic variables
-// .sidebar {
-// }
+.sidebar {
+  --bottom-sidebar: auto;
+  --right-sidebar: 0;
+  --flex-direction-sidebar: row;
 
-// @media (min-width: 768px) {
-//   .sidebar {
-// }
+  &__topbar {
+    --display-topbar: flex;
+  }
+  .burguer {
+    --display: block;
+  }
+  .close,
+  &__menu {
+    --display: none;
+  }
+  &__middle,
+  &__logout {
+    --display: none;
+  }
+  // Canvis quan el menú és obert
+  &.menu-is-open {
+    --flex-direction-sidebar: column;
+
+    .burguer {
+      --display: none;
+    }
+    .close,
+    .sidebar__menu {
+      --display: block;
+    }
+    .menu {
+      .is-active {
+        --background-color: var(--second);
+      }
+    }
+  }
+}
+.menu {
+  --display-menu: grid;
+  --width-menu: 100%;
+
+  .is-active {
+    --background-color: var(--second-med);
+  }
+  &__item {
+    --padding: var(--pad4-5) 0;
+    --height: auto;
+    }
+  &__home {
+    --display: none;
+  }
+}
+
+
+@media (min-width: 900px) {
+  .sidebar {
+    --bottom-sidebar: 0;
+    --right-sidebar: auto;
+    --flex-direction-sidebar: column;
+
+    &__topbar {
+      --display-topbar: none;
+    }
+    &__middle,
+    &__logout {
+      --display: flex;
+    }
+  }
+  .menu {
+    --display-menu: flex;
+    --width-menu: var(--pad8);
+
+    &__item {
+    --padding: var(--pad2) 0;
+    --height: 128px;
+    }
+    &__home {
+      --display: flex;
+    }
+  }
+}
 
 // Layout
 .sidebar {
   position: fixed;
   left: 0;
   top: 0;
-  bottom: 0;
+  bottom: var(--bottom-sidebar);
+  right: var(--right-sidebar);
 
   display: flex;
-  flex-direction: column;
+  flex-direction: var(--flex-direction-sidebar);
   justify-content: flex-start;
   background-color: var(--second);
-
-  // &.sidebar--is-open {
-  //   // position: absolute;
-  //   // top: 0;
-  //   // left: 0;
-  //   // right: 0;
-  //   height: 100vh;
-  //   background-color: var(--white);
-  //   padding: var(--padding-sm) 0 0 0;
-  //   z-index: 10;
-
-  //   .menu {
-  //     padding-left: var(--padding-xlg);
-  //     padding-top: var(--padding-lg);
-  //   }
-  // }
-
-  // Canvis quan estem loggejats
-  &.sidebar--logged {
+  z-index: 200;
+  
+  // barra de versió mòvil
+  &__topbar {
+    display: var(--display-topbar);
     justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .topbar__home {
+      div {
+        padding: var(--pad1);
+      }
+
+    }
+    .topbar__middle {
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar__action {
+      margin: var(--pad1);
+      padding: var(--pad1);
+      cursor: pointer;
+      
+      div {
+        display: var(--display);
+        width: var(--pad1-5);
+        height: var(--pad1-5);
+        border: 1px solid white;
+      }
+    }
   }
-  // &__menu {}
+
+  &__menu {
+    display: var(--display);
+  }
   &__middle {
-    display: flex;
+    display: var(--display);
     justify-content: center;
     align-items: center;
     writing-mode: sideways-lr;
@@ -50,6 +140,8 @@
     color: var(--second-light);
   }
   &__logout {
+    display: var(--display);
+
     .menu__item::before {
       content: "";
       position: absolute;
@@ -63,38 +155,66 @@
 }
 
 .menu {
-    display: flex;
-    flex-direction: column;
-    width: var(--pad8);
+  position: relative;
+  display: var(--display-menu);
+  flex-direction: var(--flex-direction-sidebar);
+  grid-template-columns: 1fr 1fr;
+  width: var(--width-menu);
+
+  li {
+    position: relative;
+    border-top: 2px solid var(--second-light);
+
+    &:nth-child(3) {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 23px;
+        width: 2px;
+        height: 75%;
+        background-color: var(--second-light);
+        z-index: 1;
+      }
+    }
+    &:nth-child(5) {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        width: 2px;
+        height: 75%;
+        background-color: var(--second-light);
+        z-index: 1;
+      }
+    }
+  }
 
   &__item {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: var(--pad1);
-    padding: var(--pad2) 0;
-    height: 128px;
+    padding: var(--padding);
+    height: var(--height);
     background-color: var(--second);
     color: var(--white);
 
     &.is-active {
-      background-color: var(--second-med);
+      background-color: var(--background-color);
     }
     &.is-disabled {
       cursor: not-allowed;
       pointer-events: none;
       background-color: var(--grey-light);
     }
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -2px;
-      width: 75%;
-      height: 2px;
-      background-color: var(--second-light);
-      z-index: 1;
+    // Difference in some btns
+    &.menu__item--narrow {
+      padding: var(--pad2);
+
+      &::after {
+        background-color: transparent;
+      }
     }
   }
   &__icon {
@@ -114,5 +234,9 @@
     border: 1px solid white;
     border-radius: 50%;
     overflow: clip;
+  }
+  // Icona del menu d'inici - només dektop
+  &__home {
+    display: var(--display);
   }
 }

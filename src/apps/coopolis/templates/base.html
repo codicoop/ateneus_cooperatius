@@ -24,33 +24,54 @@
     <script src="{% static 'js/js.cookie-2.2.0.min.js' %}"></script>
     <!-- XDSoft DateTimePicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/script.js' %}"></script>
   </head>
     
   <body class="grid-base">
-    <sidebar class="grid-base__side sidebar {% if user.is_authenticated %}sidebar--logged{% endif %}">
+    <sidebar class="grid-base__side sidebar {% if user.is_authenticated %}is-logged{% endif %}">
+      <div class="sidebar__topbar">
+        <div class="topbar__home">
+          <a href="{% url 'home' %}">
+            <div class="">🍕</div>
+            {% if user.is_authenticated %}
+            <div class="">😀</div>
+            {% endif %}
+          </a>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="topbar__middle">
+          <p>{{ user.email }}</p>
+          <a href="{% url 'logout' %}">
+            <div>
+              <div class="text-menu">
+                <p>Tancar sessió</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endif %}
+      <div class="topbar__action">
+        <div class="burguer" onclick="openMenu()">🍔</div>
+        <div class="close" onclick="closeMenu()">✖</div>
+      </div>
+      </div>
       <nav class="sidebar__menu">
         <ul class="menu">
-        {% if not user.is_authenticated %}
-          <li>
+          <li class="menu__home">
             <a href="{% url 'home' %}">
-              <div class="menu__item is-active">
+              <div class="menu__item is-active ">
+                {% if not user.is_authenticated %}
                 <div class="menu__icon">🍕</div>
                 <div class="text-menu">
                   <p>Inici</p>
                 </div>
-              </div>
-            </a>
-          </li>
-        {% else %}
-          <li>
-            <a href="{% url 'home' %}">
-              <div class="menu__item is-active">
+                {% else %}
                 <div class="menu__user">😀</div>
+                {% endif %}
               </div>
             </a>
           </li>
-        {% endif %}
           <li>
             <a href="{% url 'courses' %}">
               <div class="menu__item">
@@ -67,6 +88,24 @@
                 <div class="menu__icon">🍩</div>
                 <div class="text-menu">
                   <p>Projectes</p>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="{{ config.PROJECT_WEBSITE_URL }}">
+              <div class="menu__item menu__item--narrow">
+                <div class="text-menu">
+                  <p>Web</p>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="{{ config.PROJECT_CONTACT_URL }}">
+              <div class="menu__item menu__item--narrow">
+                <div class="text-menu">
+                  <p>Contacte</p>
                 </div>
               </div>
             </a>

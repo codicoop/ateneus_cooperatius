@@ -1,9 +1,73 @@
 // Dynamic variables
 .home {
+  .welcome {
+    &__content {
+      --flex-direction: column;
+      --justify-content: center;
+      --align-items: center;
+      --padding: var(--pad2) var(--pad1);
+      --height: 450px;
+
+      .welcome__logo {
+        --display: block;
+        --width: var(--pad9)
+      }
+      .welcome__btns {
+        --display: none;
+      }
+
+      &.is-logged {
+        --justify-content: flex-start;
+        --align-items: center;
+        --padding: var(--pad1);
+        --height: auto;
+
+        .welcome__logo {
+          --display: none;
+        }
+        .title-1 {
+          font-size: 14px;
+          line-height: 18px;
+        }
+      }
+    }
+  }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .home {
+    .welcome {
+      &__content {
+        --flex-direction: row;
+        --justify-content: center;
+        --align-items: center;
+        --padding: 0;
+        --height: 100vh;
+
+        .welcome__logo {
+          --display: block;
+          --width: var(--pad9);
+        }
+        .welcome__btns {
+          --display: flex;
+        }
+
+        &.is-logged {
+          --justify-content: space-between;
+          --align-items: flex-start;
+          --padding:  var(--pad2) 0;
+          --height: var(--pad8);
+  
+          .welcome__logo {
+            --display: block;
+            --width: var(--pad5);
+          }
+          .title-1 {
+            font-size: 16px;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -12,7 +76,6 @@
   // Secció de la portada sense login on arribes primer
   &__welcome {
     position: relative;
-    height: 100vh;
     background-color: var(--primary);
   }
   &__intro {
@@ -29,17 +92,26 @@
       grid-row: 1 / span 2;
 
       display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--white)
+      flex-direction: var(--flex-direction);
+      justify-content: var(--justify-content);
+      align-items: var(--align-items);
+      height: var(--height);
+      padding: var(--padding);
+      color: var(--white);
     }
     &__logo {
-      width: var(--pad9);
+      display: var(--display);
+      width: var(--width);
       height: auto;
     }
     &__text {
       width: var(--pad20);
       height: auto;
+    }
+    &__btns {
+      display: var(--display);
+      margin-top: -12px;
+      color: var(--second-3);
     }
   }
 
@@ -124,7 +196,7 @@
       padding-top: var(--pad4);
     }
   }
-  // LOGIN inventat
+  // TODO LOGIN inventat
   .login {
     position: absolute;
     right: 50px;
