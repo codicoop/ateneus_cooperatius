@@ -33,20 +33,21 @@
       <div class="sidebar__topbar">
         <div class="topbar__home">
           <a href="{% url 'home' %}">
+            {% if not user.is_authenticated %}
             <div class="">🍕</div>
-            {% if user.is_authenticated %}
+            {% else %}
             <div class="">😀</div>
             {% endif %}
           </a>
         </div>
         {% if user.is_authenticated %}
         <div class="topbar__middle">
-          <p>{{ user.email }}</p>
+          <div class="text-menu">
+            <p>{{ user.email }}</p>
+          </div>
           <a href="{% url 'logout' %}">
-            <div>
-              <div class="text-menu">
-                <p>Tancar sessió</p>
-              </div>
+            <div class="text-menu">
+              <p>Tancar sessió</p>
             </div>
           </a>
         </div>
@@ -60,7 +61,7 @@
         <ul class="menu">
           <li class="menu__home">
             <a href="{% url 'home' %}">
-              <div class="menu__item is-active ">
+              <div class="menu__item is-active">
                 {% if not user.is_authenticated %}
                 <div class="menu__icon">🍕</div>
                 <div class="text-menu">
@@ -92,7 +93,7 @@
               </div>
             </a>
           </li>
-          <li>
+          <li class="mobile-only">
             <a href="{{ config.PROJECT_WEBSITE_URL }}">
               <div class="menu__item menu__item--narrow">
                 <div class="text-menu">
@@ -101,7 +102,7 @@
               </div>
             </a>
           </li>
-          <li>
+          <li class="mobile-only">
             <a href="{{ config.PROJECT_CONTACT_URL }}">
               <div class="menu__item menu__item--narrow">
                 <div class="text-menu">
