@@ -985,30 +985,85 @@ a {
 }
 
 .footer {
+  --flex-direction-footer: column;
+  --padding-footer: var(--pad1);
+  --align-items: flex-start;
+}
+.footer__author {
+  --padding-bottom: var(--pad4);
+}
+.footer__author-text {
+  --grid-colum: 1;
+}
+.footer__author-links {
+  --grid-colum: 2;
+  --justify-self: end;
+}
+.footer__logo-container {
+  --border-top: 1px solid var(--white);
+  --padding-top: var(--pad1);
+}
+
+@media (min-width: 900px) {
+  .footer {
+    --flex-direction-footer: row;
+    --padding-footer: var(--pad4) var(--pad4-5) var(--pad2) var(--pad4-5);
+    --align-items: center;
+  }
+  .footer__author {
+    --padding-bottom: 0;
+  }
+  .footer__author-text {
+    --grid-colum: 1 / span 2;
+  }
+  .footer__author-links {
+    --grid-colum: 1 / span 2;
+    --justify-self: start;
+  }
+  .footer__logo-container {
+    --border-top: none;
+    --padding-top: 0;
+  }
+}
+.footer {
   display: flex;
+  flex-direction: var(--flex-direction-footer);
   justify-content: space-between;
-  align-items: center;
+  align-items: var(--align-items);
   gap: var(--pad1);
-  padding: 0 var(--pad4-5);
+  padding: var(--padding-footer);
   margin-top: auto;
   background-color: var(--primary);
   color: var(--white);
 }
 .footer__author {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--pad2);
-  width: var(--pad12);
+  padding-bottom: var(--padding-bottom);
   font-size: 12px;
   line-height: 16px;
 }
+.footer__author-text {
+  grid-column: var(--grid-colum);
+}
 .footer__author-links {
+  grid-column: var(--grid-colum);
+  justify-self: var(--justify-self);
   display: flex;
+  flex-direction: var(--flex-direction-footer);
   gap: var(--pad1);
   text-transform: uppercase;
 }
-.footer__logo {
-  padding: var(--pad5) 0;
+.footer__logo-container {
+  align-self: start;
+  padding-top: var(--padding-top);
+  border-top: var(--border-top);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--pad1);
+  width: 100%;
 }
 .footer__logo img {
   width: auto;
