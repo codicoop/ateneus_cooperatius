@@ -3,31 +3,65 @@
   .welcome {
     &__content {
       --flex-direction: column;
-      --justify-content: center;
+      --justify-content: flex-start;
       --align-items: center;
-      --padding: var(--pad2) var(--pad1);
-      --height: 450px;
+      --padding: var(--pad1);
+      --height: auto;
 
       .welcome__logo {
-        --display: block;
-        --width: var(--pad9)
+        --display: none;
       }
       .welcome__btns {
         --display: none;
       }
+      .title-1 {
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
+  }
+  .intro {
+    --padding-intro: var(--pad1);
+    --padding-hello-out: var(--pad1) 0 var(--pad4) 0;
 
-      &.is-logged {
-        --justify-content: flex-start;
-        --align-items: center;
-        --padding: var(--pad1);
-        --height: auto;
-
-        .welcome__logo {
-          --display: none;
-        }
-        .title-1 {
-          font-size: 14px;
-          line-height: 18px;
+    &__bloc {
+      --padding-left-bloc: 0;
+      --padding-bottom-bloc: var(--pad2);
+      --height: 2px;
+      --width: 100%;
+      --top: 0;
+    }
+    &__bloc-title {
+      --padding-bottom: var(--pad1);
+    }
+    &__bloc-text {
+      --padding-bottom: var(--pad4);
+    }
+    &__bloc-btn {
+      --align-self: auto;
+    }
+  }
+  .outro {
+    --padding-outro: var(--pad4) var(--pad1);
+    
+    &__btn {
+      --align-self: auto;
+    }
+  }
+  // Diferències quan no estem loggejats
+  &.not-logged {
+    .home {
+      .welcome {
+        &__content {
+          --justify-content: center;
+          --align-items: center;
+          --padding: var(--pad2) var(--pad1);
+          --height: 450px;
+          
+          .welcome__logo {
+            --display: block;
+            --width: var(--pad9)
+          }
         }
       }
     }
@@ -68,12 +102,39 @@
         }
       }
     }
+    .intro {
+      --padding-intro: var(--pad2) var(--pad4-5) 0 var(--pad4-5);
+      --padding-hello-out: var(--pad4) 0 var(--pad8) 0;
+
+      &__bloc {
+        --padding-left-bloc: var(--pad2);
+        --padding-bottom-bloc: var(--pad6);
+        --height: 80%;
+        --width: 2px;
+        --top: auto;
+      }
+      &__bloc-title {
+        --padding-bottom: var(--pad4);
+      }
+      &__bloc-text {
+        --padding-bottom: var(--pad6);
+      }
+      &__bloc-btn {
+        --align-self: center;
+      }
+    }
+    .outro {
+      --padding-outro: var(--pad8) 0 var(--pad9) 0;
+
+      &__btn {
+        --align-self: center;
+      }
+    }
   }
 }
 
 // Layout
 .home {
-  // Secció de la portada sense login on arribes primer
   &__welcome {
     position: relative;
     background-color: var(--primary);
@@ -81,7 +142,6 @@
   &__intro {
     background-color: var(--second-3);
   }
-
   .welcome {
     &__topbar {
       grid-column: 1 / span 6;
@@ -114,7 +174,6 @@
       color: var(--second-3);
     }
   }
-
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -137,17 +196,51 @@
       gap: 0 var(--pad1);
     }
   }
-
   .intro {
     color: var(--primary);
-    border-bottom: 1px solid var(--primary-lightest);
+    border-bottom: 2px solid var(--primary-lightest);
+    padding: var(--padding-intro);
     
     &__title {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 2px solid var(--primary-lightest);
+    }
+    // Element of welcome when not logged
+    &__hello-out {
+      width: var(--width);
+      padding: var(--padding-hello-out);
+    }
+    &__submenu {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      padding-top: var(--pad4);
-      padding-bottom: var(--pad8);
-      border-bottom: 1px solid var(--primary-lightest);
+      border-bottom: 2px solid var(--primary-lightest);
+      color: var(--primary-light);
+      font-weight: bold;
+      
+      .submenu__item {
+        padding-bottom: var(--pad1);
+
+        &.is-active {
+          position: relative;
+          color: var(--primary);
+
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+          }
+        }
+      }
+    }
+    &__hello {
+      padding: var(--pad6);
+      font-size: 35px;
+      line-height: 40px;
+      text-align: center;
     }
     &__bloc {
       position: relative;
@@ -155,34 +248,34 @@
       flex-direction: column;
       justify-content: space-between;
       padding-top: var(--pad1);
-      padding-bottom: var(--pad6);
+      padding-bottom: var(--padding-bottom-bloc);
 
       & + .intro__bloc {
-        padding-left: var(--pad2);
+        padding-left: var(--padding-left-bloc);
 
         &::before {
           content: "";
           position: absolute;
           left: 0;
-          height: 80%;
-          width: 1px;
+          top: var(--top);
+          height: var(--height);
+          width: var(--width);
           background-color: var(--primary-lightest);
         }
       }
     }
     &__bloc-title {
-      padding-bottom: var(--pad4);
+      padding-bottom: var(--padding-bottom);
     }
     &__bloc-text {
-      padding-bottom: var(--pad6);
+      padding-bottom: var(--padding-bottom);
     }
     &__bloc-btn {
-      align-self: center;
+      align-self: var(--align-self);
     }
   }
   .outro {
-    padding-top: var(--pad8);
-    padding-bottom: var(--pad9);
+    padding: var(--padding-outro);
 
     &__item {
       display: flex;
@@ -192,7 +285,7 @@
       color: var(--primary-dark);
     }
     &__btn {
-      align-self: center;
+      align-self: var(--align-self);
       padding-top: var(--pad4);
     }
   }
