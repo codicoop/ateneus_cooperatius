@@ -1,36 +1,42 @@
 // Dynamic variables
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
 
 }
 
 // Layout
-.form--flex {
-  display: flex;
-  flex-direction: column;
-}
 .form {
   form {
     display: flex;
     flex-direction: column;
   }
+  // Estils pels camps automàtics de django
+  li {
+    list-style: none;
+    padding-bottom: var(--pad-2) ;
 
-  // Title for the form
-  &__title {
-    padding-bottom: var(--padding-sm);
+    label {
+      display: block;
+      padding-bottom: var(--pad-2);
+      font-weight: 700;
+      font-size: 10px;
+      line-height: 12px;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+    input {
+      background-color: var(--white);
+      padding: var(--pad-2);
+      border-radius: var(--br);
+      border: 2px solid var(--second-2);
+      text-align: left;
+
+      &:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px white inset;
+    }
+    }
   }
-  // If the form has some intro text
-  &__intro {
-    padding-bottom: var(--padding-xsm);
-  }
-  // If the form has some outro text
-  &__outro {
-    padding: var(--padding-xsm) 0;
-  }
-  // If the form has section, each section title
-  // &__legend {}
-  // If the form has notes of some type
-  // &__note {}
+  // Missatge per seleccionar si volem mantenir la sessió connectada
 
   // Non-field error
   &__error {
@@ -41,53 +47,6 @@
   }
   // The submit button of the form
   &__submit {
-    align-self: flex-end;
-  }
-
-  // The server error
-  // &__server-error {
-  //   position: relative;
-  //   background-color: var(--red);
-  //   text-align: center;
-
-  //   &::before {
-  //     content: "";
-  //     position: absolute;
-  //     top: -10px;
-  //     right: 33px;
-  //     width: 5px;
-  //     height: 10px;
-  //     border-right: 5px solid transparent;
-  //     border-bottom: 10px solid var(--red);
-  //     border-left: 5px solid transparent;
-  //   }
-  //   &:hover {
-  //     color: var(--red);
-  //     border-color: var(--red);
-  //     pointer-events: none;
-  //   }
-  // }
-}
-
-// Container for two fields that need to be side to side
-// Ex: GPS coordinates
-.form-inline-fields {
-  display: flex;
-  gap: var(--padding-xsm);
-
-  .ant-row {
-    width: 48%;
-  }
-}
-
-// .form__general-error {}
-
-.field--error {
-  .ant-input, 
-  .ant-input-affix-wrapper {
-    border-color: var(--red-error);
-  }
-  .ant-form-item-explain {
-    color: var(--red-error);
+    align-self: stretch;
   }
 }

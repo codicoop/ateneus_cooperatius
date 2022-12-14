@@ -1,0 +1,30 @@
+// Dynamic variables
+.card {
+
+}
+
+@media (min-width: 900px) {
+  .card {
+
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+  border-radius: var(--br);
+  padding: var(--pad2);
+  box-shadow: 3px 3px 10px #FE1A681A;
+}
+.card__title {
+  padding-bottom: var(--pad4);
+}
+.card__close {
+  position: absolute;
+  top: var(--pad1);
+  right: var(--pad1);
+  padding: var(--pad1);
+  cursor: pointer;
+}

@@ -3,25 +3,8 @@
 
 {% block content %}
 <div class="home {% if not user.is_authenticated %}not-logged{% endif %}">
+	{% include './components/login_float.html' %}
 	<section class="home__welcome welcome grid-content">
-
-		<!-- TODO Login inventat per poder-lo fer servir -->
-		{% if not user.is_authenticated %}
-		<div class="login">
-			<form action="{% url 'login_post' %}" method="POST">
-				{% csrf_token %}
-				<label for="username">
-					Adreça d'e-mail
-					<input type="text" name="username" placeholder="Adreça d'e-mail">
-				</label>
-				<label for="password">
-					Contrasenya
-					<input type="password" name="password" placeholder="Contrasenya">
-				</label>
-				<input class="btn btn--white" type='submit' value='Accedir'>
-			</form>
-		</div>
-		{% endif %}
 
 		{% if not user.is_authenticated %}
 		<div class="welcome__topbar topbar">
@@ -45,13 +28,11 @@
 						</div>
 					</div>
 				</a>
-				<a href="{% url 'loginsignup' %}">
-					<div class="btn btn--white">
-						<div class="btn__text">
-							Accedir
-						</div>
+				<div class="btn btn--white" onclick="showLoginFloat()">
+					<div class="btn__text">
+						Accedir
 					</div>
-				</a>
+				</div>
 			</div>
 		</div>
 		{% endif %}

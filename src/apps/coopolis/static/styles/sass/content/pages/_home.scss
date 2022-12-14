@@ -289,23 +289,23 @@
       padding-top: var(--pad4);
     }
   }
-  // TODO LOGIN inventat
-  .login {
-    position: absolute;
-    right: 50px;
-    top: 100px;
-    border: 1px solid hsla(0, 0%, 100%, 0.3);
-    padding: 10px;
-    color: white;
+  // // TODO LOGIN inventat
+  // .login {
+  //   position: absolute;
+  //   right: 50px;
+  //   top: 100px;
+  //   border: 1px solid hsla(0, 0%, 100%, 0.3);
+  //   padding: 10px;
+  //   color: white;
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .btn {
-      align-self: flex-end;
-      text-transform: uppercase;
-    }
-  }
+  //   form {
+  //     display: flex;
+  //     flex-direction: column;
+  //     gap: 16px;
+  //   }
+  //   .btn {
+  //     align-self: flex-end;
+  //     text-transform: uppercase;
+  //   }
+  // }
 }

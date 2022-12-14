@@ -265,7 +265,7 @@ body,
   }
 }
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
   color: var(--blackish);
 }
 
@@ -472,96 +472,6 @@ body {
   padding-top: 1em;
 }
 
-.field {
-  width: 100%;
-}
-.field.is-disabled .field__input {
-  cursor: not-allowed;
-}
-.field.error input {
-  border: var(--b-thin-error);
-}
-.field label {
-  color: var(--black);
-}
-.field label span {
-  color: var(--primary);
-  font-size: 13px;
-  font-weight: bold;
-}
-.field input {
-  height: 36px;
-  width: 100%;
-  padding: 0 var(--padding-sm);
-  margin-top: var(--padding-xxsm);
-  margin-bottom: var(--padding-xsm);
-  background-color: var(--white);
-  border: var(--b-thin-dark);
-  text-align: left;
-  color: var(--grey);
-}
-.field input.is-disabled, .field inputdisabled {
-  background-color: var(--grey);
-  cursor: not-allowed;
-}
-.field::placeholder {
-  font-size: 13px;
-  line-height: 16px;
-  color: var(--grey);
-  opacity: 1;
-}
-.field__error {
-  display: block;
-  color: var(--red);
-  margin-bottom: -5px;
-}
-.field__helptext {
-  margin-top: -7px;
-  margin-bottom: 14px;
-}
-
-.field-checkbox {
-  position: relative;
-  max-width: 400px;
-  margin: 4px 0 12px 0;
-  cursor: pointer;
-}
-.field-checkbox label {
-  width: 100%;
-  padding-left: 24px;
-  cursor: pointer;
-}
-.field-checkbox label a {
-  font-style: italic;
-}
-.field-checkbox input:checked ~ .field-checkbox__custom::before {
-  content: "✔";
-  font-size: 16px;
-}
-.field-checkbox__custom::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 1px solid #bbb;
-  background-color: var(--white);
-  pointer-events: none;
-}
-.field-checkbox__error {
-  position: absolute;
-  top: -10px;
-  left: 23px;
-  color: var(--red);
-  pointer-events: none;
-}
-
-.field___label--not-bold label {
-  font-weight: normal;
-}
-
 .container {
   position: relative;
   min-height: 88px;
@@ -731,6 +641,28 @@ body {
 }
 
 a {
+  cursor: pointer;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+  border-radius: var(--br);
+  padding: var(--pad2);
+  box-shadow: 3px 3px 10px rgba(254, 26, 104, 0.1019607843);
+}
+
+.card__title {
+  padding-bottom: var(--pad4);
+}
+
+.card__close {
+  position: absolute;
+  top: var(--pad1);
+  right: var(--pad1);
+  padding: var(--pad1);
   cursor: pointer;
 }
 
@@ -1070,23 +1002,32 @@ a {
   max-height: 40px;
 }
 
-.form--flex {
-  display: flex;
-  flex-direction: column;
-}
-
 .form form {
   display: flex;
   flex-direction: column;
 }
-.form__title {
-  padding-bottom: var(--padding-sm);
+.form li {
+  list-style: none;
+  padding-bottom: var(--pad-2);
 }
-.form__intro {
-  padding-bottom: var(--padding-xsm);
+.form li label {
+  display: block;
+  padding-bottom: var(--pad-2);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 12px;
+  text-transform: uppercase;
+  color: var(--primary);
 }
-.form__outro {
-  padding: var(--padding-xsm) 0;
+.form li input {
+  background-color: var(--white);
+  padding: var(--pad-2);
+  border-radius: var(--br);
+  border: 2px solid var(--second-2);
+  text-align: left;
+}
+.form li input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 .form__error {
   grid-column: 1/-1;
@@ -1095,25 +1036,106 @@ a {
   color: var(--red);
 }
 .form__submit {
-  align-self: flex-end;
+  align-self: stretch;
 }
 
-.form-inline-fields {
+.login__background {
+  --top: 87px;
+}
+
+@media (min-width: 900px) {
+  .login__background {
+    --top: 0;
+  }
+}
+.login {
   display: flex;
-  gap: var(--padding-xsm);
+  align-items: center;
+  justify-content: center;
 }
-.form-inline-fields .ant-row {
-  width: 48%;
+.login__background {
+  position: fixed;
+  top: var(--top);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--violet);
+  z-index: 100;
 }
-
-.field--error .ant-input,
-.field--error .ant-input-affix-wrapper {
-  border-color: var(--red-error);
+.login__card {
+  z-index: 110;
+  margin-top: 200px;
 }
-.field--error .ant-form-item-explain {
-  color: var(--red-error);
+.login__form form {
+  display: flex;
+  flex-direction: column;
 }
-
+.login__form form input:nth-child(1) {
+  order: 1;
+}
+.login__form form li:nth-child(2) {
+  order: 2;
+}
+.login__form form li:nth-child(3) {
+  order: 3;
+}
+.login__form form li:nth-child(4) {
+  order: 6;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: var(--pad-2);
+  padding-bottom: var(--pad3);
+}
+.login__form form li:nth-child(4) label {
+  display: inline;
+  text-transform: none;
+  color: var(--primary-dark);
+  padding-bottom: 0;
+  padding-left: var(--pad-2);
+  cursor: pointer;
+}
+.login__form form li:nth-child(4) input {
+  position: relative;
+  width: var(--pad1);
+  height: var(--pad1);
+  padding: 0;
+}
+.login__form form li:nth-child(4) input::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 20px;
+  background-color: var(--white);
+}
+.login__form form li:nth-child(4) input:checked {
+  background-color: var(--second-lighter);
+}
+.login__form form li:nth-child(4) input:checked::after {
+  background-color: var(--second);
+}
+.login__form form a:nth-child(5) {
+  order: 4;
+  color: var(--second);
+  font-weight: bold;
+  padding-bottom: var(--pad1);
+}
+.login__form form input:nth-child(6) {
+  order: 5;
+}
+.login__signup {
+  border-top: 2px solid var(--grey-light);
+}
+.login__signup-text {
+  padding-bottom: var(--pad1);
+  padding-top: var(--pad-3);
+  color: var(--grey-light);
+}
 .home .welcome__content {
   --flex-direction: column;
   --justify-content: flex-start;
@@ -1363,23 +1385,6 @@ a {
 .home .outro__btn {
   align-self: var(--align-self);
   padding-top: var(--pad4);
-}
-.home .login {
-  position: absolute;
-  right: 50px;
-  top: 100px;
-  border: 1px solid hsla(0deg, 0%, 100%, 0.3);
-  padding: 10px;
-  color: white;
-}
-.home .login form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.home .login .btn {
-  align-self: flex-end;
-  text-transform: uppercase;
 }
 
 /*# sourceMappingURL=styles.css.map */
