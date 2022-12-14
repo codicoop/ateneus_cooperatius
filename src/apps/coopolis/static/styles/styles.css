@@ -879,6 +879,9 @@ a {
   background-color: var(--second);
   color: var(--white);
 }
+.menu__item:hover {
+  background-color: var(--second-med);
+}
 .menu__item.is-active {
   background-color: var(--background-color);
   width: var(--pad8);

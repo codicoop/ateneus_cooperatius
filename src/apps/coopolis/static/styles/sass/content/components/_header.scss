@@ -243,6 +243,10 @@
     background-color: var(--second);
     color: var(--white);
 
+    &:hover {
+      background-color: var(--second-med);
+    }
+
     &.is-active {
       background-color: var(--background-color);
       width: var(--pad8);
