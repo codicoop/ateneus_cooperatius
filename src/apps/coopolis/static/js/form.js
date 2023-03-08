@@ -1,6 +1,7 @@
 
 // Estilar checkboxes
 function onLoadFunction(){
+  console.log("Executing onLoadFunction")
   // Trobar els inputs de la pàgina
   const allInputs = document.querySelectorAll("input")
   // Afegint clases pels diferents tipus de inputs
@@ -21,10 +22,15 @@ function onLoadFunction(){
     selectParent.classList.add("field")
     selectParent.classList.add("field-select")
   })
-  // Afegint una clase a casos específics de checkbox
-  const readAcceptedOne = document.querySelector("#id_accept_conditions").parentElement
-  const readAcceptedTwo = document.querySelector("#id_accept_conditions2").parentElement
 
-  readAcceptedOne.classList.add("field-checkbox--long")
-  readAcceptedTwo.classList.add("field-checkbox--long")
+  const registerPage = document.querySelector("signup")
+
+  if (registerPage) {
+    // Afegint una clase a casos específics de checkbox
+    const readAcceptedOne = document.querySelector("#id_accept_conditions").parentElement
+    const readAcceptedTwo = document.querySelector("#id_accept_conditions2").parentElement
+  
+    readAcceptedOne.classList.add("field-checkbox--long")
+    readAcceptedTwo.classList.add("field-checkbox--long")
+  }
 }

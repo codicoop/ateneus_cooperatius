@@ -5,7 +5,11 @@
 
 @media (min-width: 900px) {
   .form {
-    --display: grid;
+  }
+  .signup {
+    .form {
+      --display: grid;
+    }
   }
 }
 

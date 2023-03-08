@@ -193,7 +193,7 @@ img {
   --red: #FF0000;
   --orange: #E99401;
   --yellow: #F6BF00;
-  --violet: #A77F8D;
+  --violet: #c4b6c3;
   --primary-lightest: #FFC5D9;
   --primary-light: #FE8CB3;
   --primary: #D6085B;
@@ -698,7 +698,7 @@ a {
 }
 
 @media (min-width: 900px) {
-  .form {
+  .signup .form {
     --display: grid;
   }
 }
