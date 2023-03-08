@@ -1,0 +1,36 @@
+// Dynamic variables
+.submenu {
+
+}
+
+@media (min-width: 900px) {
+  .submenu {
+
+  }
+}
+
+.submenu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 2px solid var(--primary-lightest);
+  color: var(--primary-light);
+  font-weight: bold;
+  
+  .submenu__item {
+    padding-bottom: var(--pad1);
+
+    &.is-active {
+      position: relative;
+      color: var(--primary);
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary);
+      }
+    }
+  }
+}

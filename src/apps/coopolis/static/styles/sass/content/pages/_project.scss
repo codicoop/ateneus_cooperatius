@@ -1,0 +1,62 @@
+// Dynamic variables
+.project {
+
+}
+
+@media (min-width: 900px) {
+  .project {
+
+  }
+}
+
+// Layout
+.project {
+  padding: var(--pad1);
+  background-color: var(--second-3);
+
+  &__intro {
+    padding-top: var(--pad1);
+    padding-bottom: var(--pad8);
+    color: var(--primary);
+  }
+  // &__form {  }
+  .form {
+    form ul {
+      display: flex;
+      flex-direction: column;
+    }
+    // Changing the order in the fields
+    &__field {
+      &-name{
+        order: 1;
+      }
+      &-sector {
+        order: 2;
+      }
+      &-web {
+        order: 8;
+      }
+      &-status {
+        order: 3;
+      }
+      &-mail {
+        order: 6;
+      }
+      &-phone {
+        order: 7;
+      }
+      &-town {
+        order: 9;
+      }
+      &-district {
+        order: 10;
+      }
+      &-number {
+        order: 4;
+      }
+      &-motivation {
+        order: 5;
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+// Dynamic variables
+.header-topbar {
+  --padding: var(--pad1);
+
+  &__logo {
+    --display: none;
+  }
+  &__links {
+    --display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .header-topbar {
+  --padding: var(--pad2) var(--pad4);
+
+    &__logo {
+      --display: block;
+    }
+    &__links {
+      --display: flex;
+    }
+  }
+}
+
+// Layout
+
+.header-topbar {
+  padding: var(--padding);
+  background-color: var(--primary);
+  color: var(--white);
+  align-items: center;
+
+  &__logo {
+    grid-column: 1;
+    display: var(--display);
+  }
+  &__text {
+    grid-column: 2 / span 4;
+  }
+  &__links {
+    grid-column: 6;
+    display: var(--display);
+    flex-direction: row;
+    gap: var(--pad1);
+  }
+}

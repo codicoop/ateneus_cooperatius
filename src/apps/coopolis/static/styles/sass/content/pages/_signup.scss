@@ -1,0 +1,24 @@
+// Dynamic variables
+.signup {
+  --padding-signup: var(--pad1);
+}
+
+@media (min-width: 900px) {
+  .signup {
+    --padding-signup: var(--pad8) 0;
+  }
+}
+
+// Layout
+.signup {
+  padding: var(--padding-signup);
+  background-color: var(--second-3);
+
+  &__welcome {
+    width: 100%;
+    p {
+      padding-bottom: var(--pad4-5);
+      color: var(--primary);
+    }
+  }
+}

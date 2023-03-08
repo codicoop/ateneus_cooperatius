@@ -62,10 +62,14 @@
         
         label {
           display: inline;
-          text-transform: none;
-          color: var(--primary-dark);
           padding-bottom: 0;
           padding-left: var(--pad-2);
+          width: 80%;
+          font-weight: 300;
+          font-size: 12px;
+          line-height: 16px;
+          text-transform: none;
+          color: var(--primary-dark);
           cursor: pointer;
         }
         input {
@@ -116,7 +120,6 @@
     padding-top: var(--pad-3);
     color: var(--grey-light);
   }
-  &__signup-btn {
-  }
+  // &__signup-btn { }
 }
 

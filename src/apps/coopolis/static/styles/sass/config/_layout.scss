@@ -24,6 +24,9 @@ body {
 .grid-item-full {
   grid-column: 1 / -1;
 }
+.grid-item-wide {
+  grid-column: 2 / span 4;
+}
 // items que es reparteixen en 2 columnes
 .grid-item-span-3 {
   grid-column: span 3;

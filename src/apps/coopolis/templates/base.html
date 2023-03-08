@@ -28,7 +28,7 @@
     <script src="{% static 'js/script.js' %}"></script>
   </head>
     
-  <body class="grid-base">
+  <body class="grid-base" onload="onLoadFunction()">
     <sidebar class="grid-base__side sidebar {% if user.is_authenticated %}is-logged{% endif %}">
       <div class="sidebar__topbar">
         <div class="topbar__home">
@@ -161,5 +161,6 @@
             </script>
         </div> -->
     </main>
+    {% block extra_js %}{% endblock %}
   </body>
 </html>

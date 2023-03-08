@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="project">
+	<div class="project__submenu submenu">
+		<a href="{% url 'new_project' %}">
+			<div class="submenu__item is-active">
+				<p>El meu projecte</p>
+			</div>
+		</a>
+	</div>
+	<div class="project__intro title-1">
+		<p>Omple les dades del teu projecte. En qualsevol moment les podràs modificar.</p>
+	</div>
+	<div class="project__form form">
+		{% if messages %}
+		<ul class="message-container">
+		{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+
+		{% if form.errors %}
+		<div class="message-container">
+			<p class="error-message">No s'ha pogut completar el registre, si
+				us plau, revisa els errors del formulari.
+			</p>
+			{% for error in form.non_field_errors %}
+			<p class="error-message">{{ error }}</p>
+			{% endfor %}
+		</div>
+		{% endif %}
+		<form 
+				method="post" 
+				action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+				enctype="multipart/form-data" 
+				id="project-form"
+		>
+			{% csrf_token %}
+			<ul>
+				<li class="form__field-name">
+					{{ form.name.errors }}
+					{{ form.name.label_tag }}
+					{{ form.name }}
+				</li>
+				<li class="form__field-sector select">
+					{{ form.sector.errors }}
+					{{ form.sector.label_tag }}
+					{{ form.sector }}
+				</li>
+				<li class="form__field-web">
+					{{ form.web.errors }}
+					{{ form.web.label_tag }}
+					{{ form.web }}
+				</li>
+				<li class="form__field-status">
+					{{ form.project_status.errors }}
+					{{ form.project_status.label_tag }}
+					{{ form.project_status }}
+				</li>
+				<li class="form__field-motivation">
+					{{ form.motivation.errors }}
+					{{ form.motivation.label_tag }}
+					{{ form.motivation }}
+				</li>
+				<li class="form__field-mail">
+					{{ form.mail.errors }}
+					{{ form.mail.label_tag }}
+					{{ form.mail }}
+				</li>
+				<li class="form__field-phone">
+					{{ form.phone.errors }}
+					{{ form.phone.label_tag }}
+					{{ form.phone }}
+				</li>
+				<li class="form__field-town">
+						{{ form.town.errors }}
+						{{ form.town.label_tag }}
+						{{ form.town }}
+				</li>
+				<li class="form__field-district">
+						{{ form.district.errors }}
+						{{ form.district.label_tag }}
+						{{ form.district }}
+				</li>
+				<li class="form__field-number">
+						{{ form.number_people.errors }}
+						{{ form.number_people.label_tag }}
+						{{ form.number_people }}
+				</li>
+			</ul>
+			<ul>
+				<li class="form__field-estatuts">
+					{{ form.estatuts.errors }}
+					{{ form.estatuts.label_tag }}
+					{{ form.estatuts }}
+					<div class="field-file-custom"></div>
+				</li>
+				<li class="form__field-viability">
+						{{ form.viability.errors }}
+						{{ form.viability.label_tag }}
+						{{ form.viability }}
+				</li>
+				<li class="form__field-sostenibility">
+						{{ form.sostenibility.errors }}
+						{{ form.sostenibility.label_tag }}
+						{{ form.sostenibility }}
+				</li>
+			</ul>
+			<ul>
+				<li class="form__field-finality">
+					{{ form.object_finality.errors }}
+					{{ form.object_finality.label_tag }}
+					{{ form.object_finality }}
+				</li>
+				<li class="form__field-origins">
+					{{ form.project_origins.errors }}
+					{{ form.project_origins.label_tag }}
+					{{ form.project_origins }}
+				</li>
+				<li class="form__field-necessities">
+					{{ form.solves_necessities.errors }}
+					{{ form.solves_necessities.label_tag }}
+					{{ form.solves_necessities }}
+				</li>
+				<li class="form__field-social-base">
+					{{ form.social_base.errors }}
+					{{ form.social_base.label_tag }}
+					{{ form.social_base }}
+				</li>
+			</ul>
+			<button type="submit">Guardar els canvis</button>
+	</form>
+	</div>		
+	<div></div>		
+	<div></div>		
+	<div></div>		
+	<div></div>
+	<div class="page-content">
+			<div class="generated-form">
+
+					<h1>Dades del vostre projecte</h1>
+
+			</div>
+	</div>
+</div>
+
+{% include 'components/town_district_validation_js.html' %}
+
+{% endblock %}
