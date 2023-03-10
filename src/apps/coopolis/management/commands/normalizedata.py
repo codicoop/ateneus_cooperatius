@@ -137,41 +137,45 @@ class Command(BaseCommand):
             )
 
         # Different exports since 2021-2022
-        period = SubsidyPeriod.objects.get(name="2021-2022")
-        exports.extend(
-            [
-                {
-                    'name': "Cofinançades",
-                    'subsidy_period': period,
-                    'function_name': 'export_cofunded_service',
-                    'ignore_errors': True
-                },
-                {
-                    'name': "Memòria dels acompanyaments en fitxer de text",
-                    'subsidy_period': period,
-                    'function_name': 'export_stages_descriptions',
-                    'ignore_errors': True
-                },
-                {
-                    'name': "Exportació justificació",
-                    'subsidy_period': period,
-                    'function_name': 'export_service',
-                    'ignore_errors': True
-                },
-                {
-                    'name': "Detall dels acompanyaments",
-                    'subsidy_period': period,
-                    'function_name': 'export_stages_details_services',
-                    'ignore_errors': True
-                },
-                {
-                    'name': "Resultats enquestes de satisfacció",
-                    'subsidy_period': period,
-                    'function_name': 'export_polls_by_services',
-                    'ignore_errors': True
-                },
-            ]
-        )
+        periods = [
+            SubsidyPeriod.objects.get(name="2021-2022"),
+            SubsidyPeriod.objects.get(name="2022-2023"),
+        ]
+        for period in periods:
+            exports.extend(
+                [
+                    {
+                        'name': "Cofinançades",
+                        'subsidy_period': period,
+                        'function_name': 'export_cofunded_service',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Memòria dels acompanyaments en fitxer de text",
+                        'subsidy_period': period,
+                        'function_name': 'export_stages_descriptions',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Exportació justificació",
+                        'subsidy_period': period,
+                        'function_name': 'export_service',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Detall dels acompanyaments",
+                        'subsidy_period': period,
+                        'function_name': 'export_stages_details_services',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Resultats enquestes de satisfacció",
+                        'subsidy_period': period,
+                        'function_name': 'export_polls_by_services',
+                        'ignore_errors': True
+                    },
+                ]
+            )
         for export in exports:
             print(f"Updating or creating {export['function_name']}")
             DataExports.objects.create(**export)
