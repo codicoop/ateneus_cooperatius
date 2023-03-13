@@ -1212,6 +1212,27 @@ a {
   max-height: 40px;
 }
 
+.form__submit {
+  --margin: var(--pad2) 0;
+}
+
+.signup .form__submit {
+  --margin: var(--pad4) 0;
+}
+
+.login .form__submit {
+  --margin: var(--pad1) 0 0 0;
+}
+
+@media (min-width: 900px) {
+  .form__submit {
+    --margin: var(--pad4) 0;
+  }
+
+  .signup .form__submit {
+    --margin: var(--pad6) 0;
+  }
+}
 .form form {
   display: flex;
   flex-direction: column;
@@ -1226,8 +1247,8 @@ a {
   color: var(--second);
 }
 .form__submit {
-  margin: var(--pad4) 0;
   align-self: stretch;
+  margin: var(--margin);
 }
 
 .login__background {
@@ -1627,17 +1648,11 @@ a {
   --padding-intro: var(--pad1) 0 var(--pad8) 0;
   --margin-intro: 0 0 var(--pad1-5) 0;
 }
-.project .form__submit {
-  --margin: var(--pad2);
-}
 
 @media (min-width: 900px) {
   .project__intro {
     --padding-intro: var(--pad2) 0 var(--pad4) 0;
     --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
-  }
-  .project .form__submit {
-    --margin: var(--pad4);
   }
 }
 .project {
@@ -1670,7 +1685,6 @@ a {
   grid-row: 10;
   grid-column: 1/span 2;
   justify-self: center;
-  margin: var(--margin);
 }
 
 .profile {

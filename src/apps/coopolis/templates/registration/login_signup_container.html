@@ -13,7 +13,12 @@
 		</div>
 	</section>
 	<section class="signup__form grid-content">
-		<div class="form grid-item-wide">
+		<form 
+				class="form grid-item-wide"
+				method="post" 
+				action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+		>
+			{% csrf_token %}
 			{{ signup_form.as_ul }}
 			<div class="form__text">
 				<p>Consulta el
@@ -22,13 +27,10 @@
 				</p>
 			</div>
 			<div class="form__submit">
-				<button type="submit" class="btn btn--second">
-					<p class="btn__text">
-						Crear compte
-					</p>
-				</button>
+				<input type="submit" class="btn btn--second btn__text" value="Crear compte" />
 			</div>
-		</div>
+			<input type="hidden" name="next" value="{{ next }}" />
+		</form>
 	</section>
 </div>
 {% endblock %}

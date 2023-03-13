@@ -1,7 +1,6 @@
 
 // Estilar checkboxes
 function onLoadFunction(){
-  console.log("Executing onLoadFunction")
   // Trobar els inputs de la pàgina
   const allInputs = document.querySelectorAll("input")
   // Afegint clases pels diferents tipus de inputs
@@ -41,7 +40,7 @@ function onLoadFunction(){
     textareaParent.classList.add("field-textarea")
   })
 
-  const registerPage = document.querySelector("signup")
+  const registerPage = document.querySelector(".signup")
 
   if (registerPage) {
     // Afegint una clase a casos específics de checkbox
