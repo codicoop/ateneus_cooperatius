@@ -1,17 +1,17 @@
 // Dynamic variables
 .submenu {
-
+  --grid-template-columns: 1fr 1fr;
 }
 
 @media (min-width: 900px) {
   .submenu {
-
+    --grid-template-columns: var(--pad11) var(--pad11);
   }
 }
 
 .submenu {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: var(--grid-template-columns);
   border-bottom: 2px solid var(--primary-lightest);
   color: var(--primary-light);
   font-weight: bold;

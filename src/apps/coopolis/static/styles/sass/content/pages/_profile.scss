@@ -3,8 +3,9 @@
   --padding-profile: var(--pad1);
 
   &__intro {
+    --display: flex;
     --padding-intro: var(--pad4) 0;
-    --margin-intro: var(--pad1-5);
+    --margin-intro: 0 0 var(--pad1-5) 0;
     --text-align: center;
   }
   &__title {
@@ -16,15 +17,16 @@
 
 @media (min-width: 900px) {
   .profile {
-    --padding-profile: var(--pad8) 0;
+    --padding-profile: var(--pad2) 0 var(--pad8) 0;
 
     &__intro {
+      --display: grid;
       --padding-intro: var(--pad4) 0 var(--pad6) 0;
-      --margin-intro: var(--pad6);
+      --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
       --text-align: left;
     }
     &__title {
-      --max-width: none;
+      --max-width: 500px;
       --font-size: 64px;
       --line-height: 64px;
     }
@@ -37,12 +39,12 @@
     padding: var(--padding-profile);
 
   &__intro {
-    display: flex;
+    display: var(--display);
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: var(--padding-intro);
-    margin-bottom: var(--margin-intro);
+    margin: var(--margin-intro);
     border-bottom: 1px solid var(--primary-lightest);
     color: var(--primary);
   }
@@ -56,5 +58,13 @@
   &__info {
     text-align: var(--text-align);
     color: var(--primary);
+  }
+  &__form {
+    .form {
+      flex-direction: column;
+    }
+    .form__submit {
+      align-self: center;
+    }
   }
 }

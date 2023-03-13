@@ -11,6 +11,11 @@
       --display: grid;
     }
   }
+  .profile {
+    .form {
+      --display: flex;
+    }
+  }
 }
 
 .form {

@@ -5,7 +5,7 @@
 {% include '../components/header_topbar.html' %}
 <div class="profile {% if not user.is_authenticated %}not-logged{% endif %}">
 	<section class="profile__submenu grid-content">
-		<div class="profile__submenu grid-item-full">
+		<div class="grid-item-full">
 			<div class="submenu">
 				<a href="{% url 'home' %}">
 					<div class="submenu__item">
