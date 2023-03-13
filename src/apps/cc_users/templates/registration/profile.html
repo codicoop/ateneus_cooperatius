@@ -1,6 +1,55 @@
-{% extends "generic.html" %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block generic %}
+{% block content %}
+{% include '../components/header_topbar.html' %}
+<div class="profile {% if not user.is_authenticated %}not-logged{% endif %}">
+	<section class="profile__submenu grid-content">
+		<div class="profile__submenu grid-item-full">
+			<div class="submenu">
+				<a href="{% url 'home' %}">
+					<div class="submenu__item">
+						<p>Tauler d'inici</p>
+					</div>
+				</a>
+				<a href="{% url 'user_profile' %}">
+					<div class="submenu__item is-active">
+						<p>Les meves dades</p>
+					</div>
+				</a>
+			</div>
+		</div>
+
+	</section>
+	<section class="profile__intro grid-content">
+		<div class="profile__title grid-item-wide">
+			<p>Marta Ricart Fincias</p>
+		</div>
+		<div class="profile__info grid-item-wide text-md">
+			<p>46873657M</p>
+			<p>marta@codi.coop</p>
+			<p>Mataró</p>
+		</div>
+	</section>
+	<section class="profile__form grid-content">
+		<div class="form grid-item-wide">
+            {{ form.as_ul }}
+			<div class="form__submit">
+				<button type="submit" class="btn btn--second">
+					<p class="btn__text">
+						Guardar canvis
+					</p>
+				</button>
+			</div>
+		</div>
+	</section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/form.js' %}"></script>
+{% endblock %}
+
 
 <div class="generated-form">
     {% if form.errors %}
@@ -28,4 +77,3 @@
 
 {% include 'components/town_district_validation_js.html' %}
 
-{% endblock %}

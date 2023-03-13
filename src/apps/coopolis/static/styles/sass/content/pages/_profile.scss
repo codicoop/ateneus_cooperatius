@@ -1,0 +1,60 @@
+// Dynamic variables
+.profile {
+  --padding-profile: var(--pad1);
+
+  &__intro {
+    --padding-intro: var(--pad4) 0;
+    --margin-intro: var(--pad1-5);
+    --text-align: center;
+  }
+  &__title {
+    --max-width: 300px;
+    --font-size: 35px;
+    --line-height: 40px;
+  }
+}
+
+@media (min-width: 900px) {
+  .profile {
+    --padding-profile: var(--pad8) 0;
+
+    &__intro {
+      --padding-intro: var(--pad4) 0 var(--pad6) 0;
+      --margin-intro: var(--pad6);
+      --text-align: left;
+    }
+    &__title {
+      --max-width: none;
+      --font-size: 64px;
+      --line-height: 64px;
+    }
+  }
+}
+
+// Layout
+.profile {
+    background-color: var(--second-3);
+    padding: var(--padding-profile);
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--padding-intro);
+    margin-bottom: var(--margin-intro);
+    border-bottom: 1px solid var(--primary-lightest);
+    color: var(--primary);
+  }
+  &__title {
+    max-width: var(--max-width);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    text-align: var(--text-align);
+    padding-bottom: var(--pad1);
+  }
+  &__info {
+    text-align: var(--text-align);
+    color: var(--primary);
+  }
+}

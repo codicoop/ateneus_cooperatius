@@ -158,10 +158,6 @@ button, input {
   -moz-appearance: none;
 }
 
-p + p {
-  margin-top: 1em;
-}
-
 a {
   text-decoration: none;
   color: inherit;
@@ -1646,6 +1642,61 @@ a {
 }
 .project .form__field-motivation {
   order: 5;
+}
+
+.profile {
+  --padding-profile: var(--pad1);
+}
+.profile__intro {
+  --padding-intro: var(--pad4) 0;
+  --margin-intro: var(--pad1-5);
+  --text-align: center;
+}
+.profile__title {
+  --max-width: 300px;
+  --font-size: 35px;
+  --line-height: 40px;
+}
+
+@media (min-width: 900px) {
+  .profile {
+    --padding-profile: var(--pad8) 0;
+  }
+  .profile__intro {
+    --padding-intro: var(--pad4) 0 var(--pad6) 0;
+    --margin-intro: var(--pad6);
+    --text-align: left;
+  }
+  .profile__title {
+    --max-width: none;
+    --font-size: 64px;
+    --line-height: 64px;
+  }
+}
+.profile {
+  background-color: var(--second-3);
+  padding: var(--padding-profile);
+}
+.profile__intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--padding-intro);
+  margin-bottom: var(--margin-intro);
+  border-bottom: 1px solid var(--primary-lightest);
+  color: var(--primary);
+}
+.profile__title {
+  max-width: var(--max-width);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  text-align: var(--text-align);
+  padding-bottom: var(--pad1);
+}
+.profile__info {
+  text-align: var(--text-align);
+  color: var(--primary);
 }
 
 /*# sourceMappingURL=styles.css.map */
