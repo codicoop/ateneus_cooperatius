@@ -1,18 +1,37 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="project">
-	<div class="project__submenu submenu">
-		<a href="{% url 'new_project' %}">
-			<div class="submenu__item is-active">
-				<p>El meu projecte</p>
+	<section class="project__submenu grid-content">
+		<div class="grid-item-full">
+			<div class="submenu">
+				<a href="{% url 'new_project' %}">
+					<div class="submenu__item is-active">
+						<p>El meu projecte</p>
+					</div>
+				</a>
 			</div>
-		</a>
-	</div>
-	<div class="project__intro title-1">
-		<p>Omple les dades del teu projecte. En qualsevol moment les podràs modificar.</p>
-	</div>
-	<div class="project__form form">
+		</div>
+	</section>
+	<section class="project__intro grid-content">
+		<div class="grid-item-full project__title title-1">
+			<p>Omple les dades del teu projecte. En qualsevol moment les podràs modificar.</p>
+		</div>
+	</section>
+	<section class="project__form grid-content">
+		<div class="form grid-item-wide">
+			{{ form.as_ul }}
+			<div class="form__submit">
+				<button type="submit" class="btn btn--second">
+					<p class="btn__text">
+						Guardar projecte
+					</p>
+				</button>
+			</div>
+		</div>
+	</section>
+	<!-- <div class="project__form form">
 		{% if messages %}
 		<ul class="message-container">
 		{% for message in messages %}
@@ -132,20 +151,11 @@
 			</ul>
 			<button type="submit">Guardar els canvis</button>
 	</form>
-	</div>		
-	<div></div>		
-	<div></div>		
-	<div></div>		
-	<div></div>
-	<div class="page-content">
-			<div class="generated-form">
-
-					<h1>Dades del vostre projecte</h1>
-
-			</div>
-	</div>
+	</div>		 -->
 </div>
 
-{% include 'components/town_district_validation_js.html' %}
+{% endblock %}
 
+{% block extra_js %}
+<script src="{% static 'js/form.js' %}"></script>
 {% endblock %}

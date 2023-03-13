@@ -1,11 +1,23 @@
 // Dynamic variables
 .project {
-
+  &__intro {
+    --padding-intro: var(--pad1) 0 var(--pad8) 0;
+    --margin-intro: 0 0 var(--pad1-5) 0;
+  }
+  .form__submit {
+    --margin: var(--pad2);
+  }
 }
 
 @media (min-width: 900px) {
   .project {
-
+    &__intro {
+      --padding-intro: var(--pad2) 0 var(--pad4) 0;
+      --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
+    }
+    .form__submit {
+      --margin: var(--pad4);
+    }
   }
 }
 
@@ -15,47 +27,36 @@
   background-color: var(--second-3);
 
   &__intro {
-    padding-top: var(--pad1);
-    padding-bottom: var(--pad8);
+    // padding-top: var(--pad1);
+    // padding-bottom: var(--pad8);
+    padding: var(--padding-intro);
+    margin: var(--margin-intro);
+    border-bottom: 1px solid var(--primary-lightest);
     color: var(--primary);
   }
-  // &__form {  }
-  .form {
-    form ul {
-      display: flex;
-      flex-direction: column;
-    }
-    // Changing the order in the fields
-    &__field {
-      &-name{
-        order: 1;
+  &__form {
+    .form {
+      li:nth-child(14) {
+        grid-row: 8;
+        grid-column: 1;
       }
-      &-sector {
-        order: 2;
+      li:nth-child(15) {
+        grid-row: 8;
+        grid-column: 2;
       }
-      &-web {
-        order: 8;
+      li:nth-child(16) {
+        grid-row: 9;
+        grid-column: 1;
       }
-      &-status {
-        order: 3;
+      li:nth-child(17) {
+        grid-row: 9;
+        grid-column: 2;
       }
-      &-mail {
-        order: 6;
-      }
-      &-phone {
-        order: 7;
-      }
-      &-town {
-        order: 9;
-      }
-      &-district {
-        order: 10;
-      }
-      &-number {
-        order: 4;
-      }
-      &-motivation {
-        order: 5;
+      .form__submit {
+        grid-row: 10;
+        grid-column: 1 / span 2;
+        justify-self: center;
+        margin: var(--margin);
       }
     }
   }

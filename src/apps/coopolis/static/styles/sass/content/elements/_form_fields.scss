@@ -16,6 +16,11 @@
       --display: flex;
     }
   }
+  .project {
+    .form {
+      --display: grid;
+    }
+  }
 }
 
 .form {
@@ -45,7 +50,8 @@
     }
     // Camp de text normal
     input,
-    select {
+    select,
+    textarea {
       width: 100%;
       padding: var(--pad-2);
       background-color: var(--white);
@@ -186,4 +192,10 @@
   line-height: 16px;
   color: var(--primary-light);
   cursor: pointer;
+}
+
+.field-textarea {
+  textarea {
+    resize: vertical;
+  }
 }

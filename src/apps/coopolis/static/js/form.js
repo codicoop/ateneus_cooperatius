@@ -14,6 +14,16 @@ function onLoadFunction(){
       let checkboxParent = el.parentElement
       checkboxParent.classList.add("field-checkbox")
     }
+    if (el.type === "number") {
+      let numberParent = el.parentElement
+      numberParent.classList.add("field")
+      numberParent.classList.add("field-number")
+    }
+    if (el.type === "file") {
+      let fileParent = el.parentElement
+      fileParent.classList.add("field")
+      fileParent.classList.add("field-file")
+    }
   })
   // Afegint clases pels selects
   const allSelects = document.querySelectorAll("select")
@@ -21,6 +31,14 @@ function onLoadFunction(){
     let selectParent = el.parentElement
     selectParent.classList.add("field")
     selectParent.classList.add("field-select")
+  })
+
+  // Afegint clases per les textareas
+  const allTeextareas = document.querySelectorAll("textarea")
+  allTeextareas.forEach(el => {
+    let textareaParent = el.parentElement
+    textareaParent.classList.add("field")
+    textareaParent.classList.add("field-textarea")
   })
 
   const registerPage = document.querySelector("signup")
