@@ -1,43 +1,62 @@
 {% extends "base.html" %}
-{% load thumbnail %}
+{% load thumbnail static %}
 
 {% block content %}
-    <div class="breadcrumb">
-        <span><a href="{% url 'home' %}">Inici</a> > Formacions</span>
-    </div>
-    <div class="introduction">
-        <p>
-            {{ config.CONTENT_COURSES_INTRODUCTION }}
-        </p>
-    </div>
-    <div class="page-content">
-        <h2 class="subtitle">Oferta formativa</h2>
-        <div class="courses-container">
-            {% for course in future_courses %}
-                <div class="course">
-                    <div class="course-data">
-                        {% if course.banner %}
-                        <a class="course-image" href="{{ course.absolute_url }}"><img src="{{ course.banner.course_list.url }}" alt=""></a>
-                        {% endif %}
-                        <div class="course-description">
-                            <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>
-                            <p>Inici de les sessions: {{ course.date_start }}</p>
-                            <br />
-                            <p>Horaris: {{ course.hours }}</p>
-                            <br />
-                            <p>{{ course.description|safe }}</p>
-                        </div>
-                    </div>
-                    <div class="course-button">
-                        <a href="{{ course.absolute_url }}" class="enroll-button">
-                            <div>Veure les sessions</div>
-                        </a>
-                    </div>
-                </div>
-            {% endfor %}
-            {% if not future_courses %}
-                <p class="margin-block">En aquests moments no hi ha cap formació programada.</p>
-            {% endif %}
+{% include './components/header_topbar.html' %}
+<div class="courses-list">
+    <section class="courses-list__submenu grid-content">
+		<div class="grid-item-full">
+			<div class="submenu">
+				<a href="{% url 'courses' %}">
+					<div class="submenu__item is-active">
+						<p>Oferta formativa</p>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+  <section class="courses-list__grid">
+    {% for course in future_courses %}
+      <div class="course-card">
+        <div class="course-card__title text-md">
+          <h2>{{ course.title }}</h2>
         </div>
-    </div>
+        <div class="course-card__bloc">          
+          <div class="course-card__subtitle text-menu">
+            <p>Descripció</p>
+          </div>
+          <div class="course-card__text richtext">
+            <p>{{ course.description|safe }}</p>
+          </div>
+        </div>
+        <div class="course-card__bloc">          
+          <div class="course-card__subtitle text-menu">
+            <p>Inici de les sessions</p>
+          </div>
+          <div class="course-card__text richtext">
+            <p>{{ course.date_start }}</p>
+          </div>
+        </div>
+        <div class="course-card__bloc">          
+          <div class="course-card__subtitle text-menu">
+            <p>Horaris</p>
+          </div>
+          <div class="course-card__text richtext">
+            <p>{{ course.hours }}</p>
+          </div>
+        </div>
+        <div class="course-card__btn">
+          <a href="{{ course.absolute_url }}">
+            <div class="btn btn--primary btn__text">
+              <p>Veure les sessions</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+    {% if not future_courses %}
+      <p class="margin-block">En aquests moments no hi ha cap formació programada.</p>
+    {% endif %}
+  </section>
+</div>
 {% endblock %}

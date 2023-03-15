@@ -1,2 +1,41 @@
-{% extends "home.html" %}
+{% extends "base.html" %}
+{% load static %}
 
+{% block content %}
+<div class="home logout">
+	<section class="home__intro intro grid-content">
+		<div class="intro__title grid-item-full">
+			<div class="intro__hello-out title-1">
+				<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de {{ PROJECT_NAME }}!</p>
+			</div>
+		</div>
+		<div class="intro__bloc grid-item-1-3">
+			<div class="intro__bloc-title text-md">
+				<p>Sessió tancada!</p>
+			</div>
+        <div class="intro__bloc-text text-sm richtext">
+          <p>
+            Fes click 
+            <a href="/" >
+              <b>aquí</b>
+            </a>
+            per tornar a la portada
+          </p>
+        </div>
+			<div class="intro__bloc-btn">
+				<a href="{% url 'courses' %}">
+					<div class="btn btn--primary">
+						<div class="btn__text">
+							Anar a l'oferta formativa
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+	<script src="{% static 'js/form.js' %}"></script>
+{% endblock %}
