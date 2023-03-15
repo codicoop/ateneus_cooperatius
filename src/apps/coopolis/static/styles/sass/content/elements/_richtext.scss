@@ -11,11 +11,11 @@
 .richtext i {
   font-style: italic;
 }
-// Estils per quotes
-.richtext blockquote {
-  
+.richtext ol {
+  padding: var(--pad-2) var(--pad2);
+	list-style: decimal;
 }
-// Separació de paràgrafs de text
-.richtext p + p {
-  padding-top: 1em;
+.richtext ul {
+  padding: var(--pad-2) var(--pad2);
+	list-style: disc;
 }
