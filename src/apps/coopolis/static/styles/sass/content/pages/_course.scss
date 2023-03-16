@@ -1,0 +1,87 @@
+// Dynamic variables
+.course {
+  --padding-page: var(--pad1);
+  --display: flex;
+  --padding: 0;
+
+  &__title {
+    --padding-bottom: var(--pad8);
+  }
+  .intro {
+    --padding-top: var(--pad1);
+    --padding-top: 0;
+  }
+  .course-bloc {
+    --padding-bottom: var(--pad1);
+  }
+}
+
+@media (min-width: 900px) {
+  .course {
+    --padding-page: var(--pad2) 0 var(--pad4) 0;
+    --display: grid;
+    --padding: 0 var(--pad4-5);
+
+    &__title {
+      --padding-bottom: var(--pad4);
+    }
+    .intro {
+      --padding-top: var(--pad2);
+      --padding-bottom: var(--pad3);
+    }
+    .course-bloc {
+      --padding-bottom: var(--pad4);
+    }
+  }
+}
+
+// Layout
+.course {
+  height: 100%;
+  padding: var(--padding-page);
+
+  &__back {
+    display: flex;
+    align-items: center;
+    gap: var(--pad-2);
+    color: var(--second);
+    margin-bottom: var(--pad-2);
+
+    &::before {
+      content: "<--";
+    }
+  }
+  &__title {
+    color: var(--primary);
+    padding-bottom: var(--padding-bottom);
+  }
+  .course-bloc {
+    border-top: 1px solid var(--grey-light);
+    padding-top: var(--pad1);
+    padding-bottom: var(--padding-bottom);
+
+    &__title {
+      color: var(--primary);
+      padding-bottom: var(--pad-2);
+    }
+    &__text {
+
+    }
+  }
+  &__grid {
+    display: var(--display);
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: var(--pad1);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: var(--padding);
+
+    .intro {
+      padding-top: var(--padding-top);
+      padding-bottom: var(--padding-bottom);
+      border-top: 1px solid var(--grey-light);
+      color: var(--primary);
+      width: 100%;
+    }
+  }
+}

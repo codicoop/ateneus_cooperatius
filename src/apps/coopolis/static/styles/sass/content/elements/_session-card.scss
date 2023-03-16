@@ -1,0 +1,148 @@
+// Dynamic variables
+.session-card {
+  --padding-card: var(--pad1);
+  --max-width: 500px;
+  --display-card: flex;
+  --align-items: flex-start;
+
+  &__title {
+    --padding-bottom: var(--pad2);
+  }
+  &__action {
+    --padding: var(--pad1) 0 0 0;
+    --text-align: left;
+    --width-text: auto;
+    --width-action: 100%;
+    --border-bottom: 2px solid var(--grey-light);
+    --content: none;
+  }
+  &__btn {
+    --margin: var(--pad2) var(--pad1) var(--pad1) var(--pad1);
+    --position: relative;
+  }
+  &__time {
+    --display: none;
+    --padding: var(--pad2) 0 var(--pad1) 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .session-card {
+    --padding-card: var(--pad2);
+    --max-width: none;
+    --display-card: grid;
+    --align-items: center;
+    
+    &__title {
+      --padding-bottom: var(--pad1-5);
+    }
+    &__action {
+      --padding: var(--pad1);
+      --text-align: center;
+      --width-text: 70px;
+      --width-action: auto;
+      --border-bottom: none;
+      --content: "";
+    }
+    &__btn {
+      --margin: var(--pad2) 0 0 0;
+      --position: absolute;
+    }
+    &__time {
+      --display: grid;
+      --padding: 0;
+    }
+  }
+}
+
+.session-card {
+  position: relative;
+  display: var(--display-card);
+  flex-direction: column;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: var(--align-items);
+  max-width: var(--max-width);
+  padding: var(--padding-card);
+  background-color: var(--second-3);
+  border-radius: var(--br);
+  box-shadow: 3px 3px 10px #FE1A6826;
+
+
+  &.is-open {
+    
+    .session-card__bloc,
+    .session-card__btn {
+      display: block;
+    }
+    .session-card__time {
+      display: grid;
+    }
+    .session-card__action {
+      padding-bottom: var(--pad1);
+      border-bottom: var(--border-bottom);
+    }
+  }
+  
+  &__title {
+    grid-column: 1 / span 4;
+    padding-bottom: var(--padding-bottom);
+
+    .text-menu {
+      color: var(--primary);
+      padding-bottom: var(--pad-3);
+    }
+  }
+  &__action {
+    position: relative;
+    grid-column: 6;
+    justify-self: end;
+    padding: var(--padding);
+    width: var(--width-action);
+    color: var(--second);
+    font-weight: 500;
+    cursor: pointer;
+    text-align: var(--text-align);
+
+    &::before {
+      content: var(--content);
+      position: absolute;
+      top: -24px;
+      left: -1.7vw;
+      display: block;
+      height: 100px;
+      width: 1.5px;
+      background-color: var(--grey-light);
+    }
+    p {
+      pointer-events: none;
+      width: var(--width-text);
+    }
+  }
+  &__bloc {
+    grid-column: span 2;
+    align-self: start;
+    display: none;
+    padding-top: var(--pad1);
+
+    .title {
+      color: var(--primary);
+      padding-bottom: var(--pad1);
+    }
+  }
+  &__btn {
+    position: var(--position);
+    bottom: var(--pad1);
+    right: var(--pad1);
+    display: none;
+    margin-top: var(--pad3);
+  }
+  &__time {
+    grid-column: 5;
+    grid-row: 1;
+    display: var(--display);
+    grid-template-columns: 15px 1fr;
+    gap: var(--pad-2);
+    padding: var(--padding);
+    color: var(--violet-dark);
+  }
+}

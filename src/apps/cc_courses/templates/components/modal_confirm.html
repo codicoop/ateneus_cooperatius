@@ -1,0 +1,40 @@
+<div id="modal-confirm" class="modal">
+  <span class="modal-close" onclick="javascript:hideModal('#modal-confirm');">&times;</span>
+  <div class="modal-container">
+      <div class="modal-title">
+          Confirmació
+      </div>
+      <div class="modal-content">
+          <p>Ets a punt d'inscriure't a l'activitat: <span id="modal-title-text"></span></p>
+          <p class="waiting_list_p" style="margin-top: 10px;">Degut a que les places disponibles estan plenes entraràs en llista d'espera, per tant
+              <strong>aquesta incripció no serà efectiva fins que no s'alliberin places.</strong></p>
+          <p class="waiting_list_p" style="margin-top: 10px;">Només cal que confirmis aquest pas, i quan s'alliberin places la teva inscripció
+          automàticament passarà de <em>Llista d'espera</em> a <em>Confirmada</em>, cosa que se't notificarà per
+          correu electrònic.</p>
+          {% if user.is_anonymous %}
+          <p style="margin-top: 10px;">Però per fer-ho has d'accedir al teu compte o bé registrar-te.</p>
+          {% endif %}
+      </div>
+      <form action="{% url 'enroll_course' %}" method="post">
+          <div class="modal-buttons">
+              {% if user.is_anonymous %}
+              <a id="button1" href="#" class="enroll-button">
+              <div>
+                  Fes login // Registra't
+              </div>
+              </a>
+              {% else %}
+              <p>Hi ha res que vulguis que tinguem en compte?</p>
+              {% csrf_token %}
+              <input name="user_comments" id="user_comments">
+              <input type="hidden" id="activity_id" name="activity_id">
+              <a onclick="$(this).closest('form').submit()" id="button3" href="#" class="enroll-button">
+              <div id="enroll_button">
+                  Incriure's-hi
+              </div>
+              </a>
+          {% endif %}
+          </div>
+      </form>
+  </div>
+</div>

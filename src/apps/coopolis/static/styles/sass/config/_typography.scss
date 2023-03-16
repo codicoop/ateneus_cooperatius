@@ -12,6 +12,10 @@ body,
   --font-size: 20px;
   --line-height: 24px;
 }
+.title-2 {
+  --font-size: 35px;
+  --line-height: 40px;
+}
 
 @media (min-width: 900px) {
   body,
@@ -27,6 +31,10 @@ body,
   .title-1 {
     --font-size: 28px;
     --line-height: 32px;
+  }
+  .title-2 {
+    --font-size: 64px;
+    --line-height: 64px;
   }
 }
 
@@ -68,6 +76,11 @@ body,
 }
 .title-1 {
   font-weight: 300;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+}
+.title-2 {
+  font-weight: 500;
   font-size: var(--font-size);
   line-height: var(--line-height);
 }

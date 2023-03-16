@@ -9,6 +9,7 @@
   --orange: #E99401;
   --yellow: #F6BF00;
   --violet: #c4b6c3;
+  --violet-dark: #a77f8d;
   
   // App colors
   --primary-lightest: #FFC5D9;
@@ -33,7 +34,7 @@
   --pad-base: 16px;
 
   --pad-3: calc(var(--pad-base) / 3); // 5
-  --pad-2: calc(var(--pad-base) / 2); // 8
+  --pad-2: calc(var(--pad-base) / 2); // 8 
   --pad1: var(--pad-base); // 16
   --pad1-5: calc(var(--pad-base) * 1.5); // 24
   --pad2: calc(var(--pad-base) * 2); // 32
