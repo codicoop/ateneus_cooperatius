@@ -49,3 +49,20 @@ function closeSessionCard(event) {
   const closeBtn = card.querySelector(".action-close")
   closeBtn.classList.add("is-hidden")
 }
+
+function showModal(event) {
+  const card = event.target.parentElement.parentElement.parentElement
+  const modal = card.querySelector(".modal")
+  modal.classList.remove("is-hidden")
+}
+
+function hideModal(event) {
+  if (event.target.classList.contains("modal__close")) {
+    const modal = event.target.parentElement.parentElement
+    modal.classList.add("is-hidden")
+  }
+  if (event.target.classList.contains("modal__background")) {
+    const modal = event.target.parentElement
+    modal.classList.add("is-hidden")
+  }
+}

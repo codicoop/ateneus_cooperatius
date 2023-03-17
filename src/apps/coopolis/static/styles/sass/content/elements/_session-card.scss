@@ -65,9 +65,10 @@
   padding: var(--padding-card);
   background-color: var(--second-3);
   border-radius: var(--br);
+  border: 1px solid var(--grey-lighter);
   box-shadow: 3px 3px 10px #FE1A6826;
 
-
+  // Desplegable obert
   &.is-open {
     
     .session-card__bloc,
@@ -82,7 +83,39 @@
       border-bottom: var(--border-bottom);
     }
   }
-  
+  // Si la sessió està conclosa
+  &.is-past {
+    box-shadow: none;
+    background-color: var(--white);
+    border: none;
+    opacity: 0.4;
+    
+    .action-none {
+      display: block;
+    }
+    .action-open {
+      display: none;
+    }
+  }
+  // Si la sessió està plena
+  &.is-full {
+    background-color: var(--grey-lighter);
+    
+    .session-card__title {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      &::before {
+        content: "Llista d'espera";
+        padding-bottom: var(--pad-3);
+        font-size: 10px;
+        line-height: 12px;
+        color: var(--primary-light);
+        text-transform: uppercase;
+      }
+    }
+  }
   &__title {
     grid-column: 1 / span 4;
     padding-bottom: var(--padding-bottom);
@@ -117,6 +150,10 @@
       pointer-events: none;
       width: var(--width-text);
     }
+    &.action-none {
+      display: none;
+      color: var(--primary);
+    }
   }
   &__bloc {
     grid-column: span 2;
@@ -130,11 +167,17 @@
     }
   }
   &__btn {
+    align-self: center;
     position: var(--position);
     bottom: var(--pad1);
     right: var(--pad1);
     display: none;
     margin-top: var(--pad3);
+    cursor: pointer;
+
+    p {
+      pointer-events: none;
+    }
   }
   &__time {
     grid-column: 5;

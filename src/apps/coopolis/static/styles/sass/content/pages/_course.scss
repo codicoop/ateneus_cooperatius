@@ -1,6 +1,6 @@
 // Dynamic variables
 .course {
-  --padding-page: var(--pad1);
+  --padding-page: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
   --display: flex;
   --padding: 0;
 
@@ -9,7 +9,7 @@
   }
   .intro {
     --padding-top: var(--pad1);
-    --padding-top: 0;
+    --padding-bottom: 0;
   }
   .course-bloc {
     --padding-bottom: var(--pad1);

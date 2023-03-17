@@ -196,6 +196,13 @@
 
 .field-textarea {
   textarea {
+    font-family: inherit;
     resize: vertical;
+
+    &::placeholder {
+      font-family: inherit;
+      color: var(--primary-dark);
+      opacity: 1;
+    }
   }
 }
