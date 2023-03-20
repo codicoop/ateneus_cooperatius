@@ -45,11 +45,11 @@
 							<div class="text-md">
 								<p>{{ activity.name }}</p>
 							</div>
-							{# if llista espera #}
-							<div class="text-menu is-hidden">
+							{% if activity.remaining_spots < 1 %}
+							<div class="text-menu">
 								<p>Llista d'espera</p>
 							</div>
-							<div class="text-sm is-hidden">
+							<div class="text-sm">
 								<p>Degut a que les places disponibles estan plenes entraràs en llista d'espera, per tant
 									<b>aquesta incripció no serà efectiva fins que no s'alliberin places.</b>
 								</p>
@@ -58,9 +58,9 @@
 									, cosa que se't notificarà per correu electrònic.
 								</p>
 							</div>
-							{# endif #}
+							{% endif %}
 						</div>
-						<form method="post" action="{% url 'enroll_course' %}" id="form_{{activity_id}}">
+						<form method="post" action="{% url 'enroll_course' %}" id="{{ activity.id }}">
 							{% csrf_token %}
 							<li class="required field field-textarea">
 								<textarea 
@@ -69,23 +69,49 @@
 									placeholder="Hi ha res que vulguis que tinguem en compte? Explica'ns-ho aquí."
 								></textarea>
 							</li>
-							<input type="hidden" name="next" value="{{ next }}" />
-							<input type="hidden" id="{{ activity_id }}" name="{{ activity_id }}">
-							<!-- <a onclick="$(this).closest('form').submit()" id="button3" href="#" class="enroll-button"></a> -->
+							<input type="hidden" id="activity_id" name="activity_id" value="{{ activity.id }}">
 						</form>
 					</div>
-					<button form="form_{{activity_id}}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
+					<button form="{{ activity.id }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
 						Confirmar i anar als meus cursos
 					</button>
-					<button form="form_{{activity_id}}" class="modal__submit modal__submit2 btn btn--empty btn__text" type="submit">
+					<button form="{{ activity.id }}" class="modal__submit modal__submit2 btn btn--empty btn__text" type="submit">
 						Confirmar i tornar enrere
 					</button>
 				</div>
 			</div>
-      <div 
-				class="session-card grid-item-full
+			<div class="delete-modal is-hidden">
+				<div class="modal__background" onclick="hideModal(event)"></div>
+				<div class="modal__card">
+					<div class="modal__title title-1">
+						<p>Confirmació d'anul·lació</p>
+					</div>
+					<div class="modal__close" onclick="hideModal(event)">
+						<span>✖</span>
+					</div>
+					<div class="modal__form form">
+						<div class="modal__intro text-md">
+							<div class="text-md">
+								<p>{{ activity.name }}</p>
+							</div>
+							<div class="text-sm">
+								<p>Segur que vols continuar? </br> (si t'ho repenses, i queden places, podràs tornar-t'hi a inscriure) </p>
+							</div>
+						</div>
+						<form method="post" action="{% url 'activity_optout' id=activity.id %}" id="delete_{{ activity.id }}">
+							{% csrf_token %}
+							<input type="hidden" id="activity_id" name="activity_id" value="{{ activity.id }}">
+						</form>
+					</div>
+					<button form="delete_{{ activity.id }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
+						Anul·lar l'inscripció
+					</button>
+				</div>
+			</div>
+      <div class="session-card grid-item-full
 				{% if activity.is_past_due is True %} is-past{% endif %}
-				{% if activity.remaining_spots > 0 %} is-full{% endif %}
+				{% if activity.remaining_spots < 1 %} is-full{% endif %}
+				{% if user in activity.enrolled.all %} is-inscribed{% endif %}
 				"
 			>
         <div class="session-card__title text-md">
@@ -127,7 +153,7 @@
 					<!-- Si l'activitat està activa -->
 					{% if activity.is_past_due is False %}
 						<!-- Si NO estàs inscrit -->
-						{# {% if not activity|is_enrolled:user %} #}
+						{% if not user in activity.enrolled.all %}
 							<!-- Si encara hi ha places -->
 							{% if activity.remaining_spots > 0 %}
 								<div 
@@ -138,18 +164,22 @@
 								</div>
 							{% else %}
 							<!-- Si no hi ha places -->
-								<div class="btn btn--empty btn__text">
+								<div 
+									class="btn btn--second btn__text"
+									onclick="showModal(event)"
+								>
 									<p>Entrar en llista d'espera</p>
 								</div>
 							{% endif %}
-						{# {% endif %} #}
+						{% endif %}
 						<!-- Si JA estàs incrit -->
 						{% if user in activity.enrolled.all %}
-							<div class="btn btn--empoty btn__text">
-								<p>Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a 
-									<b><a href="{% url 'my_activities' %}">les meves activitats.</a></b>
-								</p>
-							</div>
+						<div 
+							class="btn btn--empty btn__text"
+							onclick="showDeleteModal(event)"
+						>
+							<p>Eliminar inscripció</p>
+						</div>
 						{% endif %}
 					{% endif %}
 				</div>

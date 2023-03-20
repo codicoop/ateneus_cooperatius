@@ -66,3 +66,9 @@ function hideModal(event) {
     modal.classList.add("is-hidden")
   }
 }
+
+function showDeleteModal(event) {
+  const card = event.target.parentElement.parentElement.parentElement
+  const modal = card.querySelector(".delete-modal")
+  modal.classList.remove("is-hidden")
+}

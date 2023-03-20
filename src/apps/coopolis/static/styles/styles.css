@@ -963,6 +963,8 @@ a {
 .session-card__btn {
   --margin: var(--pad2) var(--pad1) var(--pad1) var(--pad1);
   --position: relative;
+  --bottom: 0;
+  --right: 0;
 }
 .session-card__time {
   --display: none;
@@ -990,6 +992,8 @@ a {
   .session-card__btn {
     --margin: var(--pad2) 0 0 0;
     --position: absolute;
+    --bottom: var(--pad1);
+    --right: var(--pad1);
   }
   .session-card__time {
     --display: grid;
@@ -1048,6 +1052,23 @@ a {
   color: var(--primary-light);
   text-transform: uppercase;
 }
+.session-card.is-inscribed .session-card__title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.session-card.is-inscribed .session-card__title::before {
+  content: "Ja estàs inscrit";
+  padding-bottom: var(--pad-3);
+  font-size: 10px;
+  line-height: 12px;
+  color: var(--primary-light);
+  text-transform: uppercase;
+}
+.session-card.is-inscribed .btn__text {
+  color: var(--second);
+  font-weight: 400;
+}
 .session-card__title {
   grid-column: 1/span 4;
   padding-bottom: var(--padding-bottom);
@@ -1098,14 +1119,17 @@ a {
 .session-card__btn {
   align-self: center;
   position: var(--position);
-  bottom: var(--pad1);
-  right: var(--pad1);
+  bottom: var(--bottom);
+  right: var(--right);
   display: none;
   margin-top: var(--pad3);
   cursor: pointer;
 }
 .session-card__btn p {
   pointer-events: none;
+}
+.session-card__btn .text-md {
+  cursor: auto;
 }
 .session-card__time {
   grid-column: 5;
@@ -1140,7 +1164,8 @@ a {
     --padding: 0 0 var(--pad2) var(--pad1);
   }
 }
-.modal {
+.modal,
+.delete-modal {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -1152,7 +1177,8 @@ a {
   padding: 0 var(--pad2);
   z-index: 100;
 }
-.modal__background {
+.modal__background,
+.delete-modal__background {
   position: fixed;
   top: var(--top);
   bottom: 0;
@@ -1160,7 +1186,8 @@ a {
   right: 0;
   background-color: var(--violet);
 }
-.modal__card {
+.modal__card,
+.delete-modal__card {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1172,36 +1199,44 @@ a {
   box-shadow: 3px 3px 10px rgba(254, 26, 104, 0.1019607843);
   z-index: 110;
 }
-.modal__title {
+.modal__title,
+.delete-modal__title {
   grid-column: 1/span 2;
   color: var(--primary);
   padding: 0 var(--pad3) var(--pad2) var(--pad1);
 }
-.modal__close {
+.modal__close,
+.delete-modal__close {
   position: absolute;
   top: 0;
   right: var(--pad2);
   padding: var(--pad1);
   cursor: pointer;
 }
-.modal__close span {
+.modal__close span,
+.delete-modal__close span {
   pointer-events: none;
 }
-.modal__intro {
+.modal__intro,
+.delete-modal__intro {
   padding: var(--padding);
 }
-.modal__intro .text-md {
+.modal__intro .text-md,
+.delete-modal__intro .text-md {
   color: var(--primary);
 }
-.modal__intro .text-menu {
+.modal__intro .text-menu,
+.delete-modal__intro .text-menu {
   padding-top: var(--pad1);
   padding-bottom: var(--pad-3);
   color: var(--grey);
 }
-.modal__intro .text-sm p + p {
+.modal__intro .text-sm p + p,
+.delete-modal__intro .text-sm p + p {
   padding-top: var(--pad-2);
 }
-.modal__form {
+.modal__form,
+.delete-modal__form {
   grid-column: 1/span 2;
   display: var(--display);
   grid-template-columns: 1fr 1fr;
@@ -1209,28 +1244,35 @@ a {
   padding: var(--padding);
   background-color: hsla(208deg, 87%, 88%, 0.25);
 }
-.modal__form form {
+.modal__form form,
+.delete-modal__form form {
   justify-content: center;
 }
-.modal__form li.field {
+.modal__form li.field,
+.delete-modal__form li.field {
   height: 100%;
   padding-bottom: 0;
 }
-.modal__form textarea {
+.modal__form textarea,
+.delete-modal__form textarea {
   height: 100%;
 }
-.modal__submit {
+.modal__submit,
+.delete-modal__submit {
   grid-column: 1/span 2;
   justify-self: center;
   width: fit-content;
 }
-.modal__submit1 {
+.modal__submit1,
+.delete-modal__submit1 {
   margin-top: var(--pad3);
 }
-.modal__submit2 {
+.modal__submit2,
+.delete-modal__submit2 {
   color: var(--second);
 }
-.modal__submit2::before {
+.modal__submit2::before,
+.delete-modal__submit2::before {
   content: "<--";
   padding-right: var(--pad-2);
 }
