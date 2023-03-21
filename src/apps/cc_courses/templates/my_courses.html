@@ -1,94 +1,208 @@
 {% extends "base.html" %}
-
-{% block head %}
-{% load static %}
-<script src="{% static 'js/modal.js' %}"></script>
-{% endblock %}
+{% load thumbnail static %}
 
 {% block content %}
+{% include './components/header_topbar.html' %}
+<div class="courses-list">
+  <section class="courses-list__submenu grid-content">
+		<div class="grid-item-full">
+			<div class="submenu">
+				<a href="{% url 'courses' %}">
+					<div class="submenu__item">
+						<p>Oferta formativa</p>
+					</div>
+				</a>
+				<a href="{% url 'my_activities' %}">
+					<div class="submenu__item is-active">
+						<p>Els meus cursos</p>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+  <section class="courses-list__grid grid-content">
+      {% if enrolled_activities.count is 0 %}
+        <div class="courses-list__subtitle text-md grid-item-full">
+          <p>No tens cap inscripció confirmada.</p>
+        </div>
+      {% else %}
 
-<div class="page-content">
+        {% for enrollment in enrolled_activities %}
+          <div class="delete-modal is-hidden">
+            <div class="modal__background" onclick="hideModal(event)"></div>
+            <div class="modal__card">
+              <div class="modal__title title-1">
+                <p>Confirmació d'anul·lació</p>
+              </div>
+              <div class="modal__close" onclick="hideModal(event)">
+                <span>✖</span>
+              </div>
+              <div class="modal__form form">
+                <div class="modal__intro text-md">
+                  <div class="text-md">
+                    <p>{{ activity.name }}</p>
+                  </div>
+                  <div class="text-sm">
+                    <p>Segur que vols continuar? </br> (si t'ho repenses, i queden places, podràs tornar-t'hi a inscriure) </p>
+                  </div>
+                </div>
+                <form 
+                  method="post" 
+                  action="{% url 'activity_optout' id=enrollment.activity.id %}" 
+                  id="delete_{{ enrollment.activity.id }}"
+                >
+                  {% csrf_token %}
+                  <input type="hidden" id="enrollment_activity_id" name="enrollment_activity_id" value="{{ enrollment.activity.id }}">
+                </form>
+              </div>
+              <button form="delete_{{ enrollment.activity.id }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
+                Anul·lar l'inscripció
+              </button>
+            </div>
+          </div>
+          <div class="my-course-card grid-item-full">
+            <div class="my-course-card__pretitle text-sm">
+              <h2>{{ enrollment.activity.course }}</h2>
+            </div>
+            <div class="my-course-card__title text-md">
+              <h2>{{ enrollment.activity.name }}</h2>
+            </div>
+            <div class="my-course-card__section section">
+              <div class="section__label text-sm" onclick="toggleSection(event)">
+                <p>Informació de la sessió</p>
+                <div class="section__action">
+                  <span class="open">🥓</span>
+                  <span class="close">🍧</span>
+                </div>
+              </div>
+              <div class="section__info">
+                <div class="my-course-card__subtitle text-menu">
+                  <p>Dia</p>
+                </div>
+                <div class="my-course-card__text richtext">
+                  <p>{{ enrollment.activity.date_start }}</p>
+                </div>
+                <div class="my-course-card__subtitle text-menu">
+                  <p>Hora</p>
+                </div>
+                <div class="my-course-card__text richtext">
+                  <p>{{ enrollment.activity.starting_time }} - {{ enrollment.activity.ending_time }} H</p>
+                </div>
+                <div class="my-course-card__subtitle text-menu">
+                  <p>Descripció</p>
+                </div>
+                <div class="my-course-card__text richtext">
+                  <p>{{ enrollment.activity.objectives|safe }}</p>
+                </div>
+                <div class="my-course-card__subtitle text-menu">
+                  <p>Lloc</p>
+                </div>
+                <div class="my-course-card__text richtext">
+                  <p>{{ enrollment.activity.place }}</p>
+                </div>
 
+              </div>
+            </div>
 
-  {% if messages %}
-  <div class="generated-form">
-    <ul class="message-container">
-      {% for message in messages %}
-      <li
-      {% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
+            {% if enrollment.activity.videocall_url %}
+              <div class="my-course-card__section section">
+                <div class="section__label text-sm" onclick="toggleSection(event)">
+                  <p>Enllaç de la videotrucada</p>
+                  <div class="section__action">
+                    <span class="open">🥓</span>
+                    <span class="close">🍧</span>
+                  </div>
+                </div>
+                <div class="section__info section__info--centered">
+                  <a href="{{ enrollment.activity.videocall_url }}" target="_blank">
+                    <div class="section__link">
+                      {{ enrollment.activity.videocall_url }}
+                    </div>
+                  </a>
+                  <div class="section__btn">
+                    <div class="btn btn--primary2 btn__text"
+                      onclick="copyVideocallUrl({{ enrollment.activity.videocall_url }})"
+                    >
+                      <p>Copiar l'enllaç
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
 
+            <div class="my-course-card__section section">
+              <div class="section__label text-sm" onclick="toggleSection(event)">
+                <p>Instruccions sobre el funcionament de la sessió</p>
+                <div class="section__action">
+                  <span class="open">🥓</span>
+                  <span class="close">🍧</span>
+                </div>
+              </div>
+              <div class="section__info">
+                <div class="my-course-card__subtitle text-menu">
+                  <p>Descripció</p>
+                </div>
+                <div class="my-course-card__text richtext">
+                  <p>{{ enrollment.activity.instructions|safe }}</p>
+                </div>
 
-  {% if enrolled_activities.count is 0 %}
-  <h1>No tens cap inscripció confirmada.</h1>
-  <p>Aquí podràs veure i gestionar les activitats a les que t'hagis inscrit. Per veure quins cursos i activitats hi
-    ha programades, accedeix al <a href="{% url 'courses' %}">llistat de cursos</a>. </p>
-  {% else %}
-  <h1>Estàs inscrit/a a les següents activitats:</h1><br/>
-  <div class="courses-container">
-    {% with optout_button=True %}
-    {% for enrollment in enrolled_activities %}
-    {% include "components/my_courses_activity.html" %}
-    {% endfor %}
-    {% endwith %}
-  </div>
-  {% endif %}
+                {% if enrollment.activity.resources.all %}
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Material formatiu</p>
+                  </div>
+                  {% for resource in enrollment.activity.resources.all %}
+                    <a href="{{ resource.image.url }}" target="_blank">
+                      <div class="section__material text-sm">
+                        <span>🍭</span>
+                        <p>{{ resource.name }}</p>
+                      </div>
+                    </a>
+                  {% endfor %}
+                {% endif %}
+
+                {% if enrollment.activity.poll_access_allowed %}
+                  <a href="{% url 'activity_poll' uuid=enrollment.activity.uuid %}">
+                    <div class="btn-btn--primary btn__text">
+                      <p>Anar a l'enquesta</p>
+                    </div>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="my-course-card__btn">
+              <div 
+                class="btn btn--second btn__text"
+                onclick="showDeleteModal(event)"
+              >
+                <p>Eliminar inscripció</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+      {% endif %}
+  </section>
 
   {% if waiting_list_activities %}
-  <h1>Ets en llista d'espera per les següents activitats:</h1><br/>
-  <div class="courses-container">
-    {% with optout_button=True button_text_waiting_list=True %}
-    {% for enrollment in waiting_list_activities %}
-    {% include "components/my_courses_activity.html" %}
-    {% endfor %}
-    {% endwith %}
-  </div>
+  <section class="courses-list__grid">
+    <div class="courses-list__subtitle text-md">
+      <p>Ets en llista d'espera per les següents activitats:</p>
+    </div>
+  </section>
   {% endif %}
 
   {% if past_enrolled_activities.count %}
-  <h1>Activitats a les que has assistit anteriorment:</h1><br/>
-  <div class="courses-container">
-    {% for enrollment in past_enrolled_activities %}
-    {% include "components/my_courses_activity.html" %}
-    {% endfor %}
-  </div>
+  <section class="courses-list__grid">
+    <div class="courses-list__subtitle text-md">
+      <p>Activitats a les que has assistit anteriorment:</p>
+    </div>
+  </section>
   {% endif %}
 </div>
+{% endblock %}
 
-<div id="modal-confirm" class="modal">
-  <span class="modal-close" onclick="javascript:hideModal('#modal-confirm');">&times;</span>
-  <div class="modal-container">
-    <div class="modal-title">
-      Confirmació
-    </div>
-    <div class="modal-content">
-      Ets a punt d'eliminar la inscripció a l'activitat:
-      <p><strong id="modal-title-text"></strong></p>
-      <br>
-      Segur que vols continuar? (si t'ho repenses, i queden places, podràs tornar-t'hi a inscriure)
-    </div>
-    <div class="modal-buttons">
-      <a id="button3" href="#" class="enroll-button">
-        <div>
-          Anul·lar la inscripció
-        </div>
-      </a>
-    </div>
-  </div>
-</div>
-<script>
-    $( document ).ready(function() {
-        makeModal('#modal-confirm');
-    });
-
-    function onOptoutButtonClick (activityName, activityUrl) {
-        $('#modal-title-text').text(activityName);
-        $("#button3").attr("href", activityUrl);
-        showModal('#modal-confirm');
-    }
-
-</script>
+{% block extra_js %}
+	<script src="{% static 'js/course.js' %}"></script>
 {% endblock %}

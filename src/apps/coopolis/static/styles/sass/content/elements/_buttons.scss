@@ -30,6 +30,10 @@
     background-color: var(--primary);
     color: var(--white);
   }
+  &.btn--primary2 {
+    background-color: #feeef3;
+    color: var(--primary);
+  }
   &.btn--empty {
     background-color: transparent;
   }

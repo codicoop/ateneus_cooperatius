@@ -72,3 +72,17 @@ function showDeleteModal(event) {
   const modal = card.querySelector(".delete-modal")
   modal.classList.remove("is-hidden")
 }
+
+function copyVideocallUrl(link) {
+  console.log("url trucada", link)
+}
+
+function toggleSection(event) {
+  const parent = event.target.parentElement.parentElement
+  const thisSection = event.target.parentElement
+  const allSections = parent.querySelectorAll(".section")
+  allSections.forEach(el => {
+    el.classList.remove("is-open")
+  });
+  thisSection.classList.add("is-open")
+}

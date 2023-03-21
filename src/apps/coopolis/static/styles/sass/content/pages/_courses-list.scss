@@ -31,4 +31,8 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     padding: var(--padding);
   }
+  &__subtitle {
+    width: 100%;
+    color: var(--primary);
+  }
 }
