@@ -74,7 +74,15 @@ function showDeleteModal(event) {
 }
 
 function copyVideocallUrl(link) {
-  console.log("url trucada", link)
+  const alert = document.querySelector(".copied_alert")
+  // Copiem el link
+  navigator.clipboard.writeText(link)
+  // Mostrem el missatge
+  alert.classList.remove("is-hidden")
+  // L'amaguem al cap de poc
+  setTimeout(el => {
+    alert.classList.add("is-hidden")
+  }, 1000)
 }
 
 function toggleSection(event) {

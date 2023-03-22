@@ -130,11 +130,12 @@
                   </a>
                   <div class="section__btn">
                     <div class="btn btn--primary2 btn__text"
-                      onclick="copyVideocallUrl({{ enrollment.activity.videocall_url }})"
+                      onclick="javascript:copyVideocallUrl('{{ enrollment.activity.videocall_url }}');"
                     >
                       <p>Copiar l'enllaç
                       </p>
                     </div>
+                    <div class="copied_alert text-sm is-hidden">Enllaç copiat</div>
                   </div>
                 </div>
               </div>
@@ -183,7 +184,7 @@
                   </a>
                 </div>
                 {% endif %}
-                
+
               </div>
             </div>
 

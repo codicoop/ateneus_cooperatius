@@ -207,10 +207,19 @@
       color: var(--grey);
     }
     &__btn {
+      position: relative;
       width: 100%;
       max-width: 330px;
       padding: 0 var(--pad1);
       cursor: pointer;
+    }
+    .copied_alert {
+      position: absolute;
+      bottom: -24px;
+      right: var(--pad2);
+      text-align: right;
+      color: var(--primary);
+      cursor: auto;
     }
     &__material {
       display: flex;

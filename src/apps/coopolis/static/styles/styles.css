@@ -1140,10 +1140,19 @@ a {
   color: var(--grey);
 }
 .my-course-card .section__btn {
+  position: relative;
   width: 100%;
   max-width: 330px;
   padding: 0 var(--pad1);
   cursor: pointer;
+}
+.my-course-card .section .copied_alert {
+  position: absolute;
+  bottom: -24px;
+  right: var(--pad2);
+  text-align: right;
+  color: var(--primary);
+  cursor: auto;
 }
 .my-course-card .section__material {
   display: flex;
