@@ -193,6 +193,10 @@
         justify-content: center;
         gap: var(--pad2);
       }
+      // boto enquesta
+      .poll {
+        padding: var(--pad4) var(--pad1) var(--pad2) var(--pad1);
+      }
     }
     &__link {
       margin: var(--pad3) var(--pad1) 0 var(--pad1);
