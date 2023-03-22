@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static my_tag_library %}
 
 {% block content %}
 <div class="home {% if not user.is_authenticated %}not-logged{% endif %}">
@@ -39,7 +39,7 @@
 
 		<div class="welcome__content {% if user.is_authenticated %}is-logged{% endif %}">
 			<div class="welcome__logo">
-				<img src="{% static '/logo.png' %}" alt="Logo Ateneu Cooperatiu">
+				<img src="{% external_static '/logo.png' %}" alt="Logo Ateneu Cooperatiu">
 			</div>
 			<div class="welcome__text">
 				<div class="title-1 is-bold">
