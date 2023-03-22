@@ -67,8 +67,8 @@
             <div class="my-course-card__title text-md">
               <h2>{{ enrollment.activity.name }}</h2>
             </div>
-            <div class="my-course-card__section section">
-              <div class="section__label text-sm" onclick="toggleSection(event)">
+            <div class="my-course-card__section section is-open">
+              <div class="section__label label1 text-sm" onclick="toggleSection(event)">
                 <p>Informació de la sessió</p>
                 <div class="section__action">
                   <span class="open">🥓</span>
@@ -76,37 +76,46 @@
                 </div>
               </div>
               <div class="section__info">
-                <div class="my-course-card__subtitle text-menu">
-                  <p>Dia</p>
+                <div class="day">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Dia</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.date_start }}</p>
+                  </div>
                 </div>
-                <div class="my-course-card__text richtext">
-                  <p>{{ enrollment.activity.date_start }}</p>
+                <div class="time">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Hora</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.starting_time }} - {{ enrollment.activity.ending_time }} H</p>
+                  </div>
                 </div>
-                <div class="my-course-card__subtitle text-menu">
-                  <p>Hora</p>
+                <div class="description">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Descripció</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.objectives|safe }}</p>
+                  </div>
                 </div>
-                <div class="my-course-card__text richtext">
-                  <p>{{ enrollment.activity.starting_time }} - {{ enrollment.activity.ending_time }} H</p>
+                {% if enrollment.activity.place %}
+                <div class="place">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Lloc</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.place }}</p>
+                  </div>
                 </div>
-                <div class="my-course-card__subtitle text-menu">
-                  <p>Descripció</p>
-                </div>
-                <div class="my-course-card__text richtext">
-                  <p>{{ enrollment.activity.objectives|safe }}</p>
-                </div>
-                <div class="my-course-card__subtitle text-menu">
-                  <p>Lloc</p>
-                </div>
-                <div class="my-course-card__text richtext">
-                  <p>{{ enrollment.activity.place }}</p>
-                </div>
-
+                {% endif %}
               </div>
             </div>
 
             {% if enrollment.activity.videocall_url %}
               <div class="my-course-card__section section">
-                <div class="section__label text-sm" onclick="toggleSection(event)">
+                <div class="section__label label2 text-sm" onclick="toggleSection(event)">
                   <p>Enllaç de la videotrucada</p>
                   <div class="section__action">
                     <span class="open">🥓</span>
@@ -132,7 +141,7 @@
             {% endif %}
 
             <div class="my-course-card__section section">
-              <div class="section__label text-sm" onclick="toggleSection(event)">
+              <div class="section__label label3 text-sm" onclick="toggleSection(event)">
                 <p>Instruccions sobre el funcionament de la sessió</p>
                 <div class="section__action">
                   <span class="open">🥓</span>
@@ -140,14 +149,17 @@
                 </div>
               </div>
               <div class="section__info">
-                <div class="my-course-card__subtitle text-menu">
-                  <p>Descripció</p>
-                </div>
-                <div class="my-course-card__text richtext">
-                  <p>{{ enrollment.activity.instructions|safe }}</p>
+                <div class="instructions">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Descripció</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.instructions|safe }}</p>
+                  </div>
                 </div>
 
                 {% if enrollment.activity.resources.all %}
+                <div class="material">
                   <div class="my-course-card__subtitle text-menu">
                     <p>Material formatiu</p>
                   </div>
@@ -159,6 +171,7 @@
                       </div>
                     </a>
                   {% endfor %}
+                </div>
                 {% endif %}
 
                 {% if enrollment.activity.poll_access_allowed %}
