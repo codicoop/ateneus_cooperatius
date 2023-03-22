@@ -135,6 +135,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         if "accept_conditions2" in self.fields:
             self.fields['accept_conditions2'].help_text = mark_safe(
                 config.CONTENT_SIGNUP_LEGAL2)
+        self.label_suffix = ""
 
     def clean(self):
         super().clean()
