@@ -1069,6 +1069,10 @@ a {
   grid-column: 3;
   grid-row: 1/span 2;
   margin: var(--margin);
+  cursor: pointer;
+}
+.my-course-card__btn p {
+  pointer-events: none;
 }
 .my-course-card .section {
   grid-column: 1/span 3;

@@ -130,6 +130,10 @@
     grid-column: 3;
     grid-row: 1 / span 2;
     margin: var(--margin);
+    cursor: pointer;
+    p {
+      pointer-events: none;
+    }
   }
   // &__section {}
   .section {
