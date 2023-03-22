@@ -72,6 +72,10 @@
     top: 0;
     right: var(--pad2);
     padding: var(--pad1);
+    svg {
+      width: 12px;
+      height: 12px;
+    }
     cursor: pointer;
     span {
       pointer-events: none;

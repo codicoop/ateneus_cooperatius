@@ -42,7 +42,7 @@
     }
   }
   .outro {
-    --padding-outro: var(--pad4) var(--pad1);
+    --padding-outro: var(--pad4) var(--pad1) var(--pad2) var(--pad1);
     
     &__btn {
       --align-self: auto;
@@ -256,6 +256,7 @@
       flex-direction: column;
     }
     &__text {
+      padding: 0 var(--pad3);
       color: var(--primary-dark);
     }
     &__btn {

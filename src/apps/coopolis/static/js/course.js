@@ -1,31 +1,3 @@
-$( document ).ready(function() {
-  makeModal('#modal-confirm');
-
-  var urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('act')) {
-      var id = urlParams.get('act');
-      $("#actButton" + id).click();
-  }
-});
-
-function onInscriptionButtonClick (activityId, activityName, loginsignupUrl, waitingList) {
-  console.log(activityId, activityName, loginsignupUrl, waitingList)
-  $('#modal-title-text').text(activityName);
-  $("#button1").attr("href", loginsignupUrl);
-  $('#activity_id').val(activityId);
-
-  if (waitingList) {
-      $('#enroll_button').text("Incriure's-hi");
-      $('.modal').height(220);
-      $('.waiting_list_p').hide();
-  } else {
-      $('#enroll_button').text("Entrar en llista d'espera");
-      $('.modal').height(290);
-      $('.waiting_list_p').show();
-  }
-  showModal('#modal-confirm');
-}
-
 function openSessionCard(event) {
   const card = event.target.parentElement
   // Adding class for styling
@@ -93,4 +65,9 @@ function toggleSection(event) {
     el.classList.remove("is-open")
   });
   thisSection.classList.add("is-open")
+}
+
+function goToMyCourses(url) {
+  console.log(url)
+  window.location.replace(url)
 }

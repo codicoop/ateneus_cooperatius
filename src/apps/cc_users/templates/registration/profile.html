@@ -22,19 +22,22 @@
 	</section>
 	<section class="profile__intro grid-content">
 		<div class="profile__title grid-item-wide">
-			<p>Marta Ricart Fincias</p>
+			<p>{{ user.first_name }} {{ user.last_name }} {{ user.surname2 }}</p>
 		</div>
 		<div class="profile__info grid-item-wide text-md">
-			<p>46873657M</p>
-			<p>marta@codi.coop</p>
-			<p>Mataró</p>
+			<p>{{ user.id_number }}</p>
+			<p>{{ user.email }}</p>
+			<p>{{ user.town }}</p>
 		</div>
 	</section>
 	<section class="profile__form grid-content">
 		<div class="form grid-item-wide">
-			{{ form.as_ul }}
+			<form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" id="profile_form">
+				{% csrf_token %}
+				{{ form.as_ul }}
+			</form>
 			<div class="form__submit">
-				<button type="submit" class="btn btn--second">
+				<button form="profile_form" type="submit" class="btn btn--second">
 					<p class="btn__text">
 						Guardar canvis
 					</p>
@@ -43,10 +46,6 @@
 		</div>
 	</section>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/form.js' %}"></script>
 {% endblock %}
 
 
@@ -74,5 +73,4 @@
     </form>
 </div>
 
-{% include 'components/town_district_validation_js.html' %}
 

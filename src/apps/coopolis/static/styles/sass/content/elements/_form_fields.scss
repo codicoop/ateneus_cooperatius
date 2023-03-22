@@ -169,7 +169,11 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     line-height: 20px;
-    color: var(--primary-light);
+    color: var(--primary-dark);
+    
+    option {
+      color: var(--primary-light);
+    }
 
     &::placeholder {
       color: var(--primary-light);

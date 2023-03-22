@@ -218,8 +218,14 @@
     grid-row: 1;
     display: var(--display);
     grid-template-columns: 15px 1fr;
+    align-items: center;
     gap: var(--pad-2);
     padding: var(--padding);
     color: var(--violet-dark);
+
+    div {
+      display: flex;
+      align-items: center;
+    }
   }
 }

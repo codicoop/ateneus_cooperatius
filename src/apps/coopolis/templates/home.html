@@ -74,19 +74,19 @@
 			{% else %}
 			<div class="intro__submenu submenu">
 				<a href="{% url 'home' %}">
-					<div class="submenu__item">
+					<div class="submenu__item is-active">
 						<p>Tauler d'inici</p>
 					</div>
 				</a>
 				<a href="{% url 'user_profile' %}">
-					<div class="submenu__item is-active">
+					<div class="submenu__item">
 						<p>Les meves dades</p>
 					</div>
 				</a>
 			</div>
 			<div class="intro__hello title-2">
 				<p>Hola</p>
-				<p> {{ user.name }}guapu😎!</p>
+				<p>{{ user.first_name }}!</p>
 			</div>
 			{% endif %}
 		</div>
@@ -127,7 +127,7 @@
 	</section>
 	<section class="home__outro outro grid-content">
 		<div class="outro__item grid-item-3-4">
-			<div class="outro__text">
+			<div class="outro__text richtext">
 				<p>Cal que us doneu d’alta amb les vostres dades personals, i podreu realitzar les inscripcions de les formacions, i sol·licitar assessorament per a la creació de projectes cooperatius.</p>
 				<p>Si tenieu un compte creat amb l'anterior sistema, heu de fer RECORDAR CONTRASENYA i podreu recuperar l'accès.</p>
 				<p>Si teniu dificultats, podeu escriure un correu a <a href="mailto:formacio@bcn.coop" class="link">formacio@bcn.coop</a> o trucar a <span class="is-bold">{{ PROJECT_NAME }}: 93 432 00 63</span></p>

@@ -1,7 +1,8 @@
 // Dynamic variables
 .header-topbar {
   --padding: var(--pad1);
-
+  --height: auto;
+  
   &__logo {
     --display: none;
   }
@@ -12,7 +13,8 @@
 
 @media (min-width: 900px) {
   .header-topbar {
-  --padding: var(--pad2) var(--pad4);
+    --padding: var(--pad2) var(--pad4);
+    --height: 132px;
 
     &__logo {
       --display: block;
@@ -27,6 +29,7 @@
 
 .header-topbar {
   padding: var(--padding);
+  height: var(--height);
   background-color: var(--primary);
   color: var(--white);
   align-items: center;
@@ -34,6 +37,9 @@
   &__logo {
     grid-column: 1;
     display: var(--display);
+    img {
+      max-height: 65px;
+    }
   }
   &__text {
     grid-column: 2 / span 4;

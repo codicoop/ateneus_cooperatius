@@ -481,23 +481,22 @@ body {
   font-weight: bold;
   color: var(--brown);
 }
-
 .richtext b {
   font-weight: bold;
 }
-
 .richtext i {
   font-style: italic;
 }
-
+.richtext ul {
+  padding: var(--pad-2) var(--pad2);
+  list-style: disc;
+}
 .richtext ol {
   padding: var(--pad-2) var(--pad2);
   list-style: decimal;
 }
-
-.richtext ul {
-  padding: var(--pad-2) var(--pad2);
-  list-style: disc;
+.richtext p + p {
+  margin-top: var(--pad-2);
 }
 
 .container {
@@ -593,13 +592,6 @@ body {
   margin-top: var(--padding-xsm);
 }
 
-.icon-pathfill-grey {
-  fill: none;
-}
-.icon-pathfill-grey path {
-  fill: var(--grey-dark);
-}
-
 .icon-pathfill-white {
   fill: none;
 }
@@ -607,60 +599,25 @@ body {
   fill: var(--white);
 }
 
-.icon-pathstroke-grey {
+.icon-pathfill-second-3 {
   fill: none;
 }
-.icon-pathstroke-grey path {
-  stroke: var(--grey-dark);
-  stroke-width: 3;
-  stroke-linecap: square;
-  stroke-linejoin: round;
+.icon-pathfill-second-3 path {
+  fill: var(--second-3);
 }
 
-.icon-close-grey {
+.icon-pathfill-lilac {
   fill: none;
 }
-.icon-close-grey path {
-  stroke: var(--grey-dark);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.icon-close-grey rect {
-  fill: var(--grey-dark);
+.icon-pathfill-lilac path {
+  fill: #d3bfc6;
 }
 
-.icon-help-grey {
+.icon-pathfill-primary {
   fill: none;
 }
-.icon-help-grey path:nth-child(1) {
-  stroke: var(--grey-dark);
-  stroke-width: 2;
-}
-.icon-help-grey path:nth-child(2) {
-  stroke: var(--grey-dark);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.icon-download {
-  width: 20px;
-  height: 15px;
-}
-
-.icon-16 {
-  width: 16px;
-  height: 16px;
-}
-
-.icon-24 {
-  width: 24px;
-  height: 24px;
-}
-
-.icon-36 {
-  width: 36px;
-  height: 36px;
+.icon-pathfill-primary path {
+  fill: var(--primary);
 }
 
 .link {
@@ -874,6 +831,9 @@ a {
   font-family: "Inter", sans-serif;
   font-size: 14px;
   line-height: 20px;
+  color: var(--primary-dark);
+}
+.field-select select option {
   color: var(--primary-light);
 }
 .field-select select::placeholder {
@@ -919,7 +879,7 @@ a {
     --padding-bottom: var(--pad7);
   }
   .course-card__btn {
-    --margin: var(--pad2) 0 0 0;
+    --margin: auto 0 0 0;
   }
 }
 .course-card {
@@ -1390,9 +1350,14 @@ a {
   grid-row: 1;
   display: var(--display);
   grid-template-columns: 15px 1fr;
+  align-items: center;
   gap: var(--pad-2);
   padding: var(--padding);
   color: var(--violet-dark);
+}
+.session-card__time div {
+  display: flex;
+  align-items: center;
 }
 
 .modal__background {
@@ -1467,6 +1432,11 @@ a {
   padding: var(--pad1);
   cursor: pointer;
 }
+.modal__close svg,
+.delete-modal__close svg {
+  width: 12px;
+  height: 12px;
+}
 .modal__close span,
 .delete-modal__close span {
   pointer-events: none;
@@ -1531,6 +1501,11 @@ a {
   padding-right: var(--pad-2);
 }
 
+.user-icon {
+  --height: 40px;
+  --width: 40px;
+}
+
 .sidebar {
   --bottom-sidebar: auto;
   --right-sidebar: 0;
@@ -1561,6 +1536,9 @@ a {
 .sidebar.menu-is-open .menu .is-active {
   --background-color: var(--second);
 }
+.sidebar.menu-is-open .home-icon {
+  margin-top: 7px;
+}
 
 .menu {
   --display-menu: grid;
@@ -1583,6 +1561,11 @@ a {
 }
 
 @media (min-width: 900px) {
+  .user-icon {
+    --height: 60px;
+    --width: 60px;
+  }
+
   .sidebar {
     --bottom-sidebar: 0;
     --right-sidebar: auto;
@@ -1609,7 +1592,7 @@ a {
   }
   .menu__item {
     --padding: var(--pad2) 0;
-    --height: var(--pad8);
+    --height: 130px;
   }
   .menu__home {
     --display: flex;
@@ -1618,6 +1601,18 @@ a {
     --display-mobile-only: none;
   }
 }
+.home-icon {
+  padding: var(--pad1);
+}
+
+.user-icon {
+  height: var(--width);
+  width: var(--height);
+  margin: var(--pad1);
+  border-radius: 50%;
+  overflow: clip;
+}
+
 .sidebar {
   position: fixed;
   left: 0;
@@ -1636,9 +1631,6 @@ a {
   align-items: center;
   width: 100%;
 }
-.sidebar__topbar .topbar__home div {
-  padding: var(--pad1);
-}
 .sidebar__topbar .topbar__middle {
   display: flex;
   flex-direction: column;
@@ -1649,14 +1641,18 @@ a {
 }
 .sidebar__topbar .topbar__action {
   margin: var(--pad1);
+}
+.sidebar__topbar .topbar__action .close {
+  display: var(--display);
+  width: var(--pad3);
   padding: var(--pad1);
   cursor: pointer;
 }
-.sidebar__topbar .topbar__action div {
+.sidebar__topbar .topbar__action .burguer {
   display: var(--display);
-  width: var(--pad1-5);
-  height: var(--pad1-5);
-  border: 1px solid white;
+  width: 56px;
+  padding: var(--pad1);
+  cursor: pointer;
 }
 .sidebar__menu {
   display: var(--display);
@@ -1680,6 +1676,9 @@ a {
   justify-content: center;
   align-items: center;
   margin-top: auto;
+}
+.sidebar__logout .menu__item:hover {
+  background-color: var(--second);
 }
 .sidebar__logout .menu__item::before {
   content: "";
@@ -1763,22 +1762,11 @@ a {
   background-color: transparent;
 }
 .menu__icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: var(--pad1-5);
-  height: var(--pad1-5);
-  border: 1px solid white;
 }
-.menu__user {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-  border: 1px solid white;
-  border-radius: 50%;
-  overflow: clip;
+.menu__icon--out {
+  width: var(--pad1);
+  transform: rotate(90deg);
 }
 .menu__home {
   display: var(--display);
@@ -2013,6 +2001,7 @@ a {
 
 .header-topbar {
   --padding: var(--pad1);
+  --height: auto;
 }
 .header-topbar__logo {
   --display: none;
@@ -2024,6 +2013,7 @@ a {
 @media (min-width: 900px) {
   .header-topbar {
     --padding: var(--pad2) var(--pad4);
+    --height: 132px;
   }
   .header-topbar__logo {
     --display: block;
@@ -2034,6 +2024,7 @@ a {
 }
 .header-topbar {
   padding: var(--padding);
+  height: var(--height);
   background-color: var(--primary);
   color: var(--white);
   align-items: center;
@@ -2041,6 +2032,9 @@ a {
 .header-topbar__logo {
   grid-column: 1;
   display: var(--display);
+}
+.header-topbar__logo img {
+  max-height: 65px;
 }
 .header-topbar__text {
   grid-column: 2/span 4;
@@ -2090,7 +2084,7 @@ a {
   --align-self: auto;
 }
 .home .outro {
-  --padding-outro: var(--pad4) var(--pad1);
+  --padding-outro: var(--pad4) var(--pad1) var(--pad2) var(--pad1);
 }
 .home .outro__btn {
   --align-self: auto;
@@ -2272,6 +2266,7 @@ a {
   flex-direction: column;
 }
 .home .outro__text {
+  padding: 0 var(--pad3);
   color: var(--primary-dark);
 }
 .home .outro__btn {

@@ -38,7 +38,13 @@
 						<p>Confirmació d'inscripció</p>
 					</div>
 					<div class="modal__close" onclick="hideModal(event)">
-						<span>✖</span>
+						<svg
+							class="icon-pathfill-primary"
+							xmlns="http://www.w3.org/2000/svg"
+							viewbox="0 0 9.46 9.46">
+							<path
+								d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+						</svg>
 					</div>
 					<div class="modal__form form">
 						<div class="modal__intro text-md">
@@ -72,12 +78,13 @@
 							<input type="hidden" id="activity_id" name="activity_id" value="{{ activity.id }}">
 						</form>
 					</div>
-					<button form="{{ activity.id }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
-						Confirmar i anar als meus cursos
-					</button>
-					<button form="{{ activity.id }}" class="modal__submit modal__submit2 btn btn--empty btn__text" type="submit">
-						Confirmar i tornar enrere
-					</button>
+						<button 
+							form="{{ activity.id }}" 
+							class="modal__submit modal__submit1 btn btn--second btn__text" 
+							type="submit"
+							>
+							Confirmar
+						</button>
 				</div>
 			</div>
 			<div class="delete-modal is-hidden">
@@ -87,7 +94,13 @@
 						<p>Confirmació d'anul·lació</p>
 					</div>
 					<div class="modal__close" onclick="hideModal(event)">
-						<span>✖</span>
+						<svg
+							class="icon-pathfill-primary"
+							xmlns="http://www.w3.org/2000/svg"
+							viewbox="0 0 9.46 9.46">
+							<path
+								d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+						</svg>
 					</div>
 					<div class="modal__form form">
 						<div class="modal__intro text-md">
@@ -136,10 +149,22 @@
 					<p>Sessió conclosa</p>
 				</div>
 				<div class="session-card__time text-sm">
-					<span>💙</span>
-					<p>{{ activity.date_start }}</p>
-					<span>💚</span>
-					<p>{{ activity.starting_time }} - {{ activity.ending_time }}H</p>
+						<svg
+							class="icon-pathfill-lilac"
+							xmlns="http://www.w3.org/2000/svg"
+							viewbox="0 0 20.000001 20">
+							<path d="m 10.186441,12 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4,4 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z M 2.6864407,20 c -0.82,-0.02 -1.48,-0.68 -1.5,-1.5 V 3 c 0.02,-0.82 0.68,-1.48 1.5,-1.5 h 1.62 V 0 h 1.62 V 1.5 H 14.426441 V 0 h 1.62 v 1.5 h 1.62 c 0.82,0.02 1.48,0.68 1.5,1.5 v 15.5 c -0.02,0.82 -0.68,1.48 -1.5,1.5 z m 0,-1.5 H 17.686441 V 7.75 H 2.6864407 Z" />
+						</svg>
+						<p>{{ activity.date_start }}</p>
+						<svg
+							class="icon-pathfill-lilac"
+							xmlns="http://www.w3.org/2000/svg"
+							viewbox="0 0 20.24 20.24">
+							<g transform="translate(-7.38,-7.39)">
+								<path d="m 21.22,22.39 1.14,-1.14 -4.02,-4.05 v -5.09 h -1.52 v 5.7 z m -3.72,5.24 c -1.35,0 -2.68,-0.26 -3.92,-0.8 -2.43,-1.03 -4.37,-2.97 -5.4,-5.4 -0.53,-1.24 -0.8,-2.57 -0.8,-3.92 0,-1.35 0.26,-2.68 0.8,-3.92 1.03,-2.43 2.97,-4.37 5.4,-5.4 1.24,-0.53 2.57,-0.8 3.92,-0.8 1.35,0 2.68,0.26 3.92,0.8 2.43,1.03 4.37,2.97 5.4,5.4 0.53,1.24 0.8,2.57 0.8,3.92 0,1.35 -0.26,2.68 -0.8,3.92 -1.03,2.43 -2.97,4.37 -5.4,5.4 -1.24,0.53 -2.57,0.8 -3.92,0.8" />
+							</g>
+						</svg>
+						<p>{{ activity.starting_time }} - {{ activity.ending_time }} H</p>
 				</div>
 				<div class="session-card__bloc">
 					<h3 class="title text-menu">Lloc</h3>

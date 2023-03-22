@@ -1,67 +1,24 @@
-.icon-pathfill-grey {
-  fill: none;
-  
-  path {
-    fill: var(--grey-dark);
-  }
-}
 .icon-pathfill-white {
   fill: none;
-  
   path {
     fill: var(--white);
   }
 }
-.icon-pathstroke-grey {
+.icon-pathfill-second-3 {
   fill: none;
-
   path {
-    stroke: var(--grey-dark);
-    stroke-width: 3;
-    stroke-linecap: square;
-    stroke-linejoin: round;
+    fill: var(--second-3);
   }
 }
-.icon-close-grey {
+.icon-pathfill-lilac {
   fill: none;
-
   path {
-    stroke: var(--grey-dark);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  rect {
-    fill: var(--grey-dark);
+    fill: #d3bfc6;
   }
 }
-.icon-help-grey {
+.icon-pathfill-primary {
   fill: none;
-
-  & path:nth-child(1) {
-    stroke: var(--grey-dark);
-    stroke-width: 2;
+  path {
+    fill: var(--primary);
   }
-  & path:nth-child(2) {
-    stroke: var(--grey-dark);
-    stroke-width: 2;
-    stroke-linecap: round;
-  }
-}
-
-.icon-download {
-  width: 20px;
-  height: 15px;
-}
-.icon-16 {
-  width: 16px;
-  height: 16px;
-}
-.icon-24 {
-  width: 24px;
-  height: 24px;
-}
-.icon-36 {
-  width: 36px;
-  height: 36px;
 }

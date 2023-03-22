@@ -1,4 +1,8 @@
 // Dynamic variables
+.user-icon {
+  --height: 40px;
+  --width: 40px;
+}
 .sidebar {
   --bottom-sidebar: auto;
   --right-sidebar: 0;
@@ -34,6 +38,9 @@
         --background-color: var(--second);
       }
     }
+    .home-icon {
+      margin-top: 7px;
+    }
   }
 }
 .menu {
@@ -58,6 +65,10 @@
 }
 
 @media (min-width: 900px) {
+  .user-icon {
+    --height: 60px;
+    --width: 60px;
+  }
   .sidebar {
     --bottom-sidebar: 0;
     --right-sidebar: auto;
@@ -85,7 +96,7 @@
 
     &__item {
     --padding: var(--pad2) 0;
-    --height: var(--pad8);
+    --height: 130px;
     }
     &__home {
       --display: flex;
@@ -97,6 +108,16 @@
 }
 
 // Layout
+.home-icon {
+  padding: var(--pad1);
+}
+.user-icon {
+  height: var(--width);
+  width: var(--height);
+  margin: var(--pad1);
+  border-radius: 50%;
+  overflow: clip;
+}
 .sidebar {
   position: fixed;
   left: 0;
@@ -117,12 +138,7 @@
     align-items: center;
     width: 100%;
 
-    .topbar__home {
-      div {
-        padding: var(--pad1);
-      }
-
-    }
+    // .topbar__home {}
     .topbar__middle {
       display: flex;
       flex-direction: column;
@@ -135,14 +151,18 @@
     }
     .topbar__action {
       margin: var(--pad1);
-      padding: var(--pad1);
-      cursor: pointer;
       
-      div {
+      .close {
         display: var(--display);
-        width: var(--pad1-5);
-        height: var(--pad1-5);
-        border: 1px solid white;
+        width: var(--pad3);
+        padding: var(--pad1);
+        cursor: pointer;
+      }
+      .burguer {
+        display: var(--display);
+        width: 56px;
+        padding: var(--pad1);
+        cursor: pointer;
       }
     }
   }
@@ -169,6 +189,10 @@
     justify-content: center;
     align-items: center;
     margin-top: auto;
+
+    .menu__item:hover {
+      background-color: var(--second);
+    }
 
     .menu__item::before {
       content: "";
@@ -265,25 +289,15 @@
     }
   }
   &__icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: var(--pad1-5);
-    height: var(--pad1-5);
-    border: 1px solid white;
   }
-  &__user {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 60px;
-    border: 1px solid white;
-    border-radius: 50%;
-    overflow: clip;
+  &__icon--out {
+    width: var(--pad1);
+    transform: rotate(90deg);
   }
   // Icona del menu d'inici - només dektop
   &__home {
     display: var(--display);
   }
 }
+
