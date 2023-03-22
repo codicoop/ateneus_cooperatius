@@ -1,0 +1,25 @@
+.logout {
+  .intro {
+    --padding-hello-out: var(--pad1) 0 var(--pad4) 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .logout {
+    .intro {
+      --padding-hello-out: var(--pad4) 0 var(--pad6) 0;
+    }
+  }
+}
+
+.logout {
+  .intro {
+    // Element of welcome when not logged
+    &__hello-out {
+      padding: var(--padding-hello-out);
+    }
+    &__bloc {
+      padding-top: var(--pad3);
+    }
+  }
+}

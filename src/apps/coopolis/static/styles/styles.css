@@ -184,7 +184,7 @@ img {
 :root {
   --black: #000;
   --grey: #707070;
-  --grey-light: hsl(339, 19%, 79%);
+  --grey-light: #d4bfc6;
   --grey-lighter: #D3BFC640;
   --white: #fff;
   --red: #FF0000;
@@ -2515,6 +2515,22 @@ a {
   border-top: 1px solid var(--grey-light);
   color: var(--primary);
   width: 100%;
+}
+
+.logout .intro {
+  --padding-hello-out: var(--pad1) 0 var(--pad4) 0;
+}
+
+@media (min-width: 900px) {
+  .logout .intro {
+    --padding-hello-out: var(--pad4) 0 var(--pad6) 0;
+  }
+}
+.logout .intro__hello-out {
+  padding: var(--padding-hello-out);
+}
+.logout .intro__bloc {
+  padding-top: var(--pad3);
 }
 
 /*# sourceMappingURL=styles.css.map */
