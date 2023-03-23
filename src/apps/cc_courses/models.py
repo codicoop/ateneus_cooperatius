@@ -570,7 +570,7 @@ class Activity(models.Model):
         if self.resources.exists():
             absolute_url_activity = (
                 settings.ABSOLUTE_URL +
-                reverse('activity', args=[self.uuid])
+                reverse('my_activities')
             )
             absolute_url_activity = (
                 "Descàrrega del material formatiu: <a "
@@ -850,7 +850,7 @@ class ActivityEnrolled(models.Model):
         }
         absolute_url_activity = (
             settings.ABSOLUTE_URL +
-            reverse('activity',  args=[activity.uuid])
+            reverse('my_activities')
         )
         mail.body_strings = {
             'activitat_nom': activity.name,
