@@ -19,6 +19,12 @@
         line-height: 18px;
       }
     }
+    .topbar {
+      &__right {
+        --flex-direction: column;
+        --padding-right: var(--pad1);
+      }
+    }
   }
   .intro {
     --padding-intro: var(--pad1);
@@ -130,6 +136,12 @@
         --align-self: center;
       }
     }
+    .topbar {
+      &__right {
+        --flex-direction: row;
+        --padding-right: 0;
+      }
+    }
   }
 }
 
@@ -146,6 +158,9 @@
     &__topbar {
       grid-column: 1 / span 6;
       grid-row: 1;
+      .btn {
+        cursor: pointer;
+      }
     }
     &__content {
       grid-column: 1 / span 6;
@@ -197,7 +212,9 @@
     }
     &__right {
       display: flex;
-      gap: 0 var(--pad1);
+      flex-direction: var(--flex-direction);;
+      gap: var(--pad1);
+      padding-right: var(--padding-right);
     }
   }
   .intro {

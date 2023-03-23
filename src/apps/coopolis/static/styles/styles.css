@@ -346,6 +346,7 @@ body {
   flex-direction: column;
 }
 .grid-base__main {
+  height: 100vh;
   margin-top: 88px;
 }
 
@@ -853,7 +854,7 @@ a {
   font-weight: 300;
   font-size: 12px;
   line-height: 16px;
-  color: var(--primary-light);
+  color: var(--primary-dark);
   cursor: pointer;
 }
 
@@ -2063,6 +2064,10 @@ a {
   font-size: 14px;
   line-height: 18px;
 }
+.home .welcome .topbar__right {
+  --flex-direction: column;
+  --padding-right: var(--pad1);
+}
 .home .intro {
   --padding-intro: var(--pad1);
   --padding-hello-out: var(--pad1) 0 var(--pad4) 0;
@@ -2154,6 +2159,10 @@ a {
   .home .outro__btn {
     --align-self: center;
   }
+  .home .topbar__right {
+    --flex-direction: row;
+    --padding-right: 0;
+  }
 }
 .home__welcome {
   position: relative;
@@ -2165,6 +2174,9 @@ a {
 .home .welcome__topbar {
   grid-column: 1/span 6;
   grid-row: 1;
+}
+.home .welcome__topbar .btn {
+  cursor: pointer;
 }
 .home .welcome__content {
   grid-column: 1/span 6;
@@ -2213,7 +2225,9 @@ a {
 }
 .home .topbar__right {
   display: flex;
-  gap: 0 var(--pad1);
+  flex-direction: var(--flex-direction);
+  gap: var(--pad1);
+  padding-right: var(--padding-right);
 }
 .home .intro {
   color: var(--primary);
@@ -2524,6 +2538,14 @@ a {
   .logout .intro {
     --padding-hello-out: var(--pad4) 0 var(--pad6) 0;
   }
+}
+.logout {
+  height: 100%;
+}
+.logout .intro {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .logout .intro__hello-out {
   padding: var(--padding-hello-out);
