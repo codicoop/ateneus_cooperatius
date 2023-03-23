@@ -102,12 +102,12 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
         fields = (
-            'first_name', 'last_name', 'surname2', 'id_number',
-            'cannot_share_id', 'email',
+            'first_name', 'last_name', 'surname2', 'email', 'id_number',
+            'cannot_share_id',
             'phone_number', 'birthdate', 'birth_place', 'town', 'district',
             'address', 'gender', 'educational_level', 'employment_situation',
-            'discovered_us', 'project_involved', 'password1', 'password2',
-            'authorize_communications'
+            'discovered_us', 'project_involved', 'authorize_communications',
+            'password1', 'password2',
         )
 
     required_css_class = "required"

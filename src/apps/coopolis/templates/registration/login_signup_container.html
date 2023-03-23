@@ -16,7 +16,7 @@
 		<form 
 				class="form grid-item-wide"
 				method="post" 
-				action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+				action="{% url 'signup_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
 		>
 			{% csrf_token %}
 			{{ signup_form.as_ul }}
