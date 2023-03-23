@@ -45,6 +45,7 @@
 			Selecciona les sessions on vulguis participar:
 		</div>
     {% for activity in activities %}
+		<div class="activity-container">
 			<div class="modal is-hidden">
 				<div class="modal__background" onclick="hideModal(event)"></div>
 				<div class="modal__card">
@@ -223,6 +224,7 @@
 					{% endif %}
 				</div>
       </div>
+		</div>
     {% endfor %}
   </section>
 </div>
