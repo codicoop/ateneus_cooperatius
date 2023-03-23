@@ -58,6 +58,7 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
         super().__init__(*args, **kwargs)
         if 'password' in self.fields:
             self.fields.pop('password')
+        self.label_suffix = ""
 
     def clean_id_number(self):
         model = get_user_model()
