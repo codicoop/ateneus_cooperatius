@@ -346,7 +346,6 @@ body {
   flex-direction: column;
 }
 .grid-base__main {
-  height: 100vh;
   margin-top: 88px;
 }
 
@@ -2482,6 +2481,9 @@ a {
 .course .course-bloc {
   --padding-bottom: var(--pad1);
 }
+.course .course-bloc__image {
+  --width: 50%;
+}
 
 @media (min-width: 900px) {
   .course {
@@ -2498,6 +2500,9 @@ a {
   }
   .course .course-bloc {
     --padding-bottom: var(--pad4);
+  }
+  .course .course-bloc__image {
+    --width: 100%;
   }
 }
 .course {
@@ -2526,6 +2531,14 @@ a {
 .course .course-bloc__title {
   color: var(--primary);
   padding-bottom: var(--pad-2);
+}
+.course .course-bloc__image {
+  width: var(--width);
+  height: 100%;
+}
+.course .course-bloc__image img {
+  border-radius: var(--br);
+  object-fit: cover;
 }
 .course__grid {
   display: var(--display);
