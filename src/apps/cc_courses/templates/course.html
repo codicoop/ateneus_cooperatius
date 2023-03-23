@@ -25,6 +25,20 @@
 				</div>
 			</div>
 		</div>
+
+		{% if course.banner %}
+		<div class="grid-item-span-2">
+			<div class="course-bloc">
+				<div class="course-bloc__title text-menu">
+					Cartell
+				</div>
+				<div class="course-bloc__image">
+					<img src="{{ course.banner.url }}" />
+				</div>
+			</div>
+		</div>
+		{% endif %}
+
 	</section>
 	<section class="course__grid grid-content">
 		<div class="intro text-md grid-item-full">

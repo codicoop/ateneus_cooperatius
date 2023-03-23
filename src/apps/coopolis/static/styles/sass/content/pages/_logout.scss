@@ -12,8 +12,13 @@
   }
 }
 
-.logout {
+.logout { 
+    height: 100%;
+    
   .intro {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     // Element of welcome when not logged
     &__hello-out {
       padding: var(--padding-hello-out);

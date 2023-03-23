@@ -6,7 +6,7 @@
       --justify-content: flex-start;
       --align-items: center;
       --padding: var(--pad1);
-      --height: auto;
+      --height-content: auto;
 
       .welcome__logo {
         --display: none;
@@ -17,6 +17,12 @@
       .title-1 {
         font-size: 14px;
         line-height: 18px;
+      }
+    }
+    .topbar {
+      &__right {
+        --flex-direction: column;
+        --padding-right: var(--pad1);
       }
     }
   }
@@ -56,11 +62,11 @@
           --justify-content: center;
           --align-items: center;
           --padding: var(--pad2) var(--pad1);
-          --height: 450px;
+          --height-content: 450px;
           
           .welcome__logo {
             --display: block;
-            --width: var(--pad9)
+            --height: var(--pad9);
           }
         }
       }
@@ -76,11 +82,11 @@
         --justify-content: center;
         --align-items: center;
         --padding: 0;
-        --height: 100vh;
+        --height-content: 100vh;
 
         .welcome__logo {
           --display: block;
-          --width: var(--pad9);
+          --height: var(--pad4);
         }
         .welcome__btns {
           --display: flex;
@@ -88,13 +94,13 @@
 
         &.is-logged {
           --justify-content: space-between;
-          --align-items: flex-start;
+          --align-items: center;
           --padding:  var(--pad2) 0;
-          --height: var(--pad8);
+          --height-content: 132px;
   
           .welcome__logo {
             --display: block;
-            --width: var(--pad5);
+            --width: var(--pad4);
           }
           .title-1 {
             font-size: 16px;
@@ -130,6 +136,12 @@
         --align-self: center;
       }
     }
+    .topbar {
+      &__right {
+        --flex-direction: row;
+        --padding-right: 0;
+      }
+    }
   }
 }
 
@@ -146,6 +158,9 @@
     &__topbar {
       grid-column: 1 / span 6;
       grid-row: 1;
+      .btn {
+        cursor: pointer;
+      }
     }
     &__content {
       grid-column: 1 / span 6;
@@ -155,20 +170,24 @@
       flex-direction: var(--flex-direction);
       justify-content: var(--justify-content);
       align-items: var(--align-items);
-      height: var(--height);
+      height: var(--height-content);
       padding: var(--padding);
       color: var(--white);
     }
     &__logo {
       display: var(--display);
-      width: var(--width);
-      height: auto;
+      margin-right: var(--pad4);
+      img {
+        width: auto;
+        height: var(--height);
+      }
     }
     &__text {
       width: var(--pad20);
       height: auto;
     }
     &__btns {
+      align-self: flex-start;
       display: var(--display);
       margin-top: -12px;
       color: var(--second-3);
@@ -193,7 +212,9 @@
     }
     &__right {
       display: flex;
-      gap: 0 var(--pad1);
+      flex-direction: var(--flex-direction);;
+      gap: var(--pad1);
+      padding-right: var(--padding-right);
     }
   }
   .intro {
