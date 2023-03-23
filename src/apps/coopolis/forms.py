@@ -29,9 +29,9 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
         model = Project
         fields = (
             'name', 'sector', 'web', 'project_status', 'motivation', 'mail',
-            'phone', 'town', 'district', 'number_people', 'estatuts',
+            'phone', 'town', 'district', 'number_people',
             'viability', 'sostenibility', 'object_finality', 'project_origins',
-            'solves_necessities', 'social_base'
+            'solves_necessities', 'social_base', 'estatuts',
         )
         exclude = ('cif', 'registration_date', 'constitution_date',
                    'partners', )
