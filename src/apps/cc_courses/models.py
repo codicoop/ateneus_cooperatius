@@ -2,7 +2,7 @@ import uuid
 
 from constance import config
 from django.core.exceptions import NON_FIELD_ERRORS
-from django.db import models
+from django.db import models, IntegrityError
 from django.shortcuts import reverse
 from django.conf import settings
 from datetime import date, datetime, time
@@ -784,6 +784,17 @@ class ActivityEnrolled(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
+        try:
+            super(ActivityEnrolled, self).save(
+                force_insert, force_update, using, update_fields
+            )
+        except IntegrityError as e:
+            if "duplicate" in str(e):
+                raise ValidationError({
+                    NON_FIELD_ERRORS: 'Ja tens inscripció a aquesta activitat.',
+                })
+            raise e
+
         # Aquí hi feia un "if not self.id", de manera que l'actualització de
         # waiting_list només passava a les inscripcions noves, i provocava que
         # al canviar el nº d'spots, les que ja estaven en llista d'espera no
@@ -792,9 +803,6 @@ class ActivityEnrolled(models.Model):
             is_full = self.activity.remaining_spots < 1
             self.waiting_list = is_full
 
-        super(ActivityEnrolled, self).save(
-            force_insert, force_update, using, update_fields
-        )
 
     def send_confirmation_email(self):
         mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
