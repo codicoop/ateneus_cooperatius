@@ -1437,9 +1437,6 @@ a {
 .delete-modal__close svg {
   width: 12px;
   height: 12px;
-}
-.modal__close span,
-.delete-modal__close span {
   pointer-events: none;
 }
 .modal__intro,
