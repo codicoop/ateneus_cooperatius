@@ -155,7 +155,7 @@
               </div>
             {% endif %}
 
-            {% if enrollment.activity.instructions|safe or enrollment.activity.resources.all %}
+            {% if enrollment.activity.instructions or enrollment.activity.resources.all %}
             <div class="my-course-card__section section">
               <div class="section__label {% if enrollment.activity.videocall_url %} label3 {% else %} label2 {% endif %} text-sm" onclick="toggleSection(event)">
                 <p>Instruccions sobre el funcionament de la sessió</p>
@@ -169,6 +169,7 @@
                 </div>
               </div>
               <div class="section__info">
+                {% if enrollment.activity.instructions %}
                 <div class="instructions">
                   <div class="my-course-card__subtitle text-menu">
                     <p>Descripció</p>
@@ -177,6 +178,7 @@
                     <p>{{ enrollment.activity.instructions|safe }}</p>
                   </div>
                 </div>
+                {% endif %}
 
                 {% if enrollment.activity.resources.all %}
                 <div class="material">
