@@ -125,6 +125,7 @@
 			</div>
 		</div>
 	</section>
+	{% if not user.is_authenticated %}
 	<section class="home__outro outro grid-content">
 		<div class="outro__item grid-item-3-4">
 			<div class="outro__text richtext">
@@ -144,6 +145,7 @@
 		</div>
 	</section>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}

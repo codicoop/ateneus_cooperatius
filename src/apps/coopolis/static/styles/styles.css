@@ -2064,7 +2064,7 @@ a {
   font-size: 14px;
   line-height: 18px;
 }
-.home .welcome .topbar__right {
+.home .topbar__right {
   --flex-direction: column;
   --padding-right: var(--pad1);
 }
@@ -2133,6 +2133,10 @@ a {
   .home .welcome__content.is-logged .title-1 {
     font-size: 16px;
   }
+  .home .topbar__right {
+    --flex-direction: row;
+    --padding-right: 0;
+  }
   .home .intro {
     --padding-intro: var(--pad2) var(--pad4-5) 0 var(--pad4-5);
     --padding-hello-out: var(--pad4) 0 var(--pad8) 0;
@@ -2158,10 +2162,6 @@ a {
   }
   .home .outro__btn {
     --align-self: center;
-  }
-  .home .topbar__right {
-    --flex-direction: row;
-    --padding-right: 0;
   }
 }
 .home__welcome {

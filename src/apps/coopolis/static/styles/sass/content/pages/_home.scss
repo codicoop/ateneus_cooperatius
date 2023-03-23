@@ -19,11 +19,11 @@
         line-height: 18px;
       }
     }
-    .topbar {
-      &__right {
-        --flex-direction: column;
-        --padding-right: var(--pad1);
-      }
+  }
+  .topbar {
+    &__right {
+      --flex-direction: column;
+      --padding-right: var(--pad1);
     }
   }
   .intro {
@@ -91,7 +91,6 @@
         .welcome__btns {
           --display: flex;
         }
-
         &.is-logged {
           --justify-content: space-between;
           --align-items: center;
@@ -108,6 +107,13 @@
         }
       }
     }
+    .topbar {
+      &__right {
+        --flex-direction: row;
+        --padding-right: 0;
+      }
+    }
+
     .intro {
       --padding-intro: var(--pad2) var(--pad4-5) 0 var(--pad4-5);
       --padding-hello-out: var(--pad4) 0 var(--pad8) 0;
@@ -134,12 +140,6 @@
 
       &__btn {
         --align-self: center;
-      }
-    }
-    .topbar {
-      &__right {
-        --flex-direction: row;
-        --padding-right: 0;
       }
     }
   }
@@ -212,7 +212,7 @@
     }
     &__right {
       display: flex;
-      flex-direction: var(--flex-direction);;
+      flex-direction: var(--flex-direction);
       gap: var(--pad1);
       padding-right: var(--padding-right);
     }
