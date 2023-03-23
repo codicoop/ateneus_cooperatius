@@ -2312,6 +2312,19 @@ a {
   padding-bottom: var(--pad4-5);
   color: var(--primary);
 }
+.signup__form .form li:nth-child(6) {
+  grid-column: 2;
+}
+.signup__form .form li:nth-child(19) {
+  grid-column: 1;
+  grid-row: span 2;
+}
+.signup__form .form li:nth-child(20) {
+  grid-column: 2;
+}
+.signup__form .form li:nth-child(21) {
+  grid-column: 2;
+}
 
 .project__intro {
   --padding-intro: var(--pad1) 0 var(--pad8) 0;
