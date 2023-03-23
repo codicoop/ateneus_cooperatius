@@ -23,6 +23,7 @@ function closeSessionCard(event) {
 }
 
 function showModal(event) {
+  console.log(event.target)
   const card = event.target.parentElement.parentElement.parentElement
   const modal = card.querySelector(".modal")
   modal.classList.remove("is-hidden")
