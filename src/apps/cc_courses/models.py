@@ -786,7 +786,7 @@ class ActivityEnrolled(models.Model):
              update_fields=None):
         # Aquí hi feia un "if not self.id", de manera que l'actualització de
         # waiting_list només passava a les inscripcions noves, i provocava que
-        # al canviar el nº d'spots, les que ja estaven en llista d'espear no
+        # al canviar el nº d'spots, les que ja estaven en llista d'espera no
         # passessin a confirmades.
         if not self.activity.is_past_due:
             is_full = self.activity.remaining_spots < 1
