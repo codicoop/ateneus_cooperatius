@@ -23,22 +23,20 @@
   }
   &__form {
     .form {
-      // Checkbox dni
+      // Email
+      & li:nth-child(5) {
+        grid-column: 1;
+        grid-row: 3;
+      }
+      // DNI
       & li:nth-child(6) {
         grid-column: 2;
-      }
-      // Contrasenya 1
-      & li:nth-child(19) {
-        grid-column: 1;
-        grid-row: span 2;
-      }
-      // Contrasenya 2
-      & li:nth-child(20) {
-        grid-column: 2;
+        grid-row: 2;
       }
       // Acepto rebre info
-      & li:nth-child(21) {
-        grid-column: 2;
+      & li:nth-child(19) {
+        align-self: flex-end;
+        margin-top: 32px;
       }
     }
   }
