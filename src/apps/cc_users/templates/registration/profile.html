@@ -27,7 +27,7 @@
 		<div class="profile__info grid-item-wide text-md">
 			<p>{{ user.id_number }}</p>
 			<p>{{ user.email }}</p>
-			<p>{{ user.town }}</p>
+			<p>{{ user.town.name|lower|capfirst }}</p>
 		</div>
 	</section>
 	<section class="profile__form grid-content">
