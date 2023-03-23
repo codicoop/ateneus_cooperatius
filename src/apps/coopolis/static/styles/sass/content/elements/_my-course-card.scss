@@ -173,9 +173,11 @@
     }
     .open {
       display: var(--display);
+      width: 24px;
     }
     .close {
       display: var(--display);
+      width: 24px;
     }
     &__action {
       display: var(--display-action);
