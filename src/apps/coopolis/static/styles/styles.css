@@ -1378,6 +1378,8 @@ a {
   align-items: center;
 }
 .session-card__login {
+  align-self: end;
+  grid-column: 5/span 2;
   display: none;
   padding: var(--pad1);
 }
