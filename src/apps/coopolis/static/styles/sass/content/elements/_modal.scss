@@ -134,3 +134,12 @@
   }
 }
 
+// Modal delete
+.delete-modal {
+  .modal__form {
+    grid-template-columns: 1fr;
+  }
+  .modal__intro .text-sm{
+    padding-top: var(--pad-2);
+  }
+}

@@ -1527,6 +1527,13 @@ a {
   padding-right: var(--pad-2);
 }
 
+.delete-modal .modal__form {
+  grid-template-columns: 1fr;
+}
+.delete-modal .modal__intro .text-sm {
+  padding-top: var(--pad-2);
+}
+
 .user-icon {
   --height: 40px;
   --width: 40px;

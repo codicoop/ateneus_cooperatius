@@ -40,6 +40,7 @@ function onLoadFunction(){
     textareaParent.classList.add("field-textarea")
   })
 
+  // Pàgina de registre
   const registerPage = document.querySelector(".signup")
 
   if (registerPage) {
@@ -49,5 +50,22 @@ function onLoadFunction(){
   
     readAcceptedOne.classList.add("field-checkbox--long")
     readAcceptedTwo.classList.add("field-checkbox--long")
+  }
+
+  // Pàgina de projectes
+  const projectPage = document.querySelector(".project")
+
+  if (projectPage) {
+    // Mostrant districte només si Barcelona
+    const townInput = document.querySelector("#id_town")
+    const districtField = document.querySelector("#id_district").parentElement
+
+    if (townInput.value === "90") {
+      districtField.classList.remove("is-hidden")
+    } else {
+      districtField.classList.add("is-hidden")
+    }
+
+    townInput.onclick = toggleDistrict
   }
 }
