@@ -4,7 +4,7 @@
     &__content {
       --flex-direction: column;
       --justify-content: flex-start;
-      --align-items: center;
+      --align-items: flex-start;
       --padding: var(--pad1);
       --height-content: auto;
 
@@ -14,16 +14,17 @@
       .welcome__btns {
         --display: none;
       }
-      .title-1 {
-        font-size: 14px;
-        line-height: 18px;
-      }
     }
   }
   .topbar {
+    --justify-content: flex-end;
+    --padding-topbar: var(--pad2) 0 0 0;
+
     &__right {
-      --flex-direction: column;
       --padding-right: var(--pad1);
+    }
+    &__left {
+      --display: none;
     }
   }
   .intro {
@@ -101,16 +102,19 @@
             --display: block;
             --width: var(--pad4);
           }
-          .title-1 {
-            font-size: 16px;
-          }
         }
       }
     }
     .topbar {
+    --justify-content: space-between;
+    --padding-topbar: var(--pad2) 0;
+
       &__right {
         --flex-direction: row;
         --padding-right: 0;
+      }
+      &__left {
+        --display: flex;
       }
     }
 
@@ -185,6 +189,9 @@
     &__text {
       width: var(--pad20);
       height: auto;
+      .text-md {
+        color: var(--white);
+      }
     }
     &__btns {
       align-self: flex-start;
@@ -195,15 +202,15 @@
   }
   .topbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: var(--justify-content);
     align-items: flex-start;
     height: fit-content;
-    padding: var(--pad2) 0;
+    padding: var(--padding-topbar);
     color: var(--white);
     z-index: 1;
-
+    
     &__left {
-      display: flex;
+      display: var(--display);
       gap: 0 var(--pad1-5);
       
       .btn {
@@ -212,9 +219,12 @@
     }
     &__right {
       display: flex;
-      flex-direction: var(--flex-direction);
       gap: var(--pad1);
       padding-right: var(--padding-right);
+
+      p {
+        white-space: nowrap;
+      }
     }
   }
   .intro {

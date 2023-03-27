@@ -6,7 +6,13 @@
       <p>Accedeix al teu compte:</p>
     </div>
     <div class="card__close" onclick="hideLoginFloat()">
-      <span>✖</span>
+      <svg
+        class="icon-pathfill-primary"
+        xmlns="http://www.w3.org/2000/svg"
+        viewbox="0 0 9.46 9.46">
+        <path
+          d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+      </svg>
     </div>
     <div class="login__form form">
       {% if login_form.errors %}
@@ -16,7 +22,9 @@
       {% endif %}
       <form method="post" action="{% url 'login_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
         {% csrf_token %}
-        {{ login_form.as_ul }}
+        <li class="field"><label for="id_username">Correu electrònic</label> <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="254" required="" id="id_username"></li>
+        <li class="field"><label for="id_password">Contrasenya</label> <input type="password" name="password" autocomplete="current-password" required="" id="id_password"></li>
+        <li class="field-checkbox"><label for="id_remember_me">Mantenir la sessió oberta</label> <input type="checkbox" name="remember_me" id="id_remember_me"></li>
         <a href="{% url 'password_reset' %}">
           <div class="form__remember">
             Has oblidat la contrasenya?

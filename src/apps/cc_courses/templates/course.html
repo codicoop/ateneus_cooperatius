@@ -45,7 +45,7 @@
 			Selecciona les sessions on vulguis participar:
 		</div>
     {% for activity in activities %}
-		<div class="activity-container">
+		<div class="activity-container grid-item-full">
 			<div class="modal is-hidden">
 				<div class="modal__background" onclick="hideModal(event)"></div>
 				<div class="modal__card">
@@ -189,40 +189,56 @@
 					<h3 class="title text-menu">Descripció</h3>
 					<p class="text">{{ activity.objectives|safe }}</p>
 				</div>
-				<div class="session-card__btn">
-					<!-- Si l'activitat està activa -->
-					{% if activity.is_past_due is False %}
-						<!-- Si NO estàs inscrit -->
-						{% if not user in activity.enrolled.all %}
-							<!-- Si encara hi ha places -->
-							{% if activity.remaining_spots > 0 %}
-								<div 
-									class="btn btn--second btn__text"
-									onclick="showModal(event)"
-								>
-									<p>Inscriure-s'hi</p>
-								</div>
-							{% else %}
-							<!-- Si no hi ha places -->
-								<div 
-									class="btn btn--second btn__text"
-									onclick="showModal(event)"
-								>
-									<p>Entrar en llista d'espera</p>
-								</div>
+				<!-- Si estas loggejat -->
+				{% if user.is_authenticated %}
+					<div class="session-card__btn">
+						<!-- Si l'activitat està activa -->
+						{% if activity.is_past_due is False %}
+							<!-- Si NO estàs inscrit -->
+							{% if not user in activity.enrolled.all %}
+								<!-- Si encara hi ha places -->
+								{% if activity.remaining_spots > 0 %}
+									<div 
+										class="btn btn--second btn__text"
+										onclick="showModal(event)"
+									>
+										<p>Inscriure-s'hi</p>
+									</div>
+								{% else %}
+								<!-- Si no hi ha places -->
+									<div 
+										class="btn btn--second btn__text"
+										onclick="showModal(event)"
+									>
+										<p>Entrar en llista d'espera</p>
+									</div>
+								{% endif %}
+							{% endif %}
+							<!-- Si JA estàs incrit -->
+							{% if user in activity.enrolled.all %}
+							<div 
+								class="btn btn--empty btn__text"
+								onclick="showDeleteModal(event)"
+							>
+								<p>Eliminar inscripció</p>
+							</div>
 							{% endif %}
 						{% endif %}
-						<!-- Si JA estàs incrit -->
-						{% if user in activity.enrolled.all %}
-						<div 
-							class="btn btn--empty btn__text"
-							onclick="showDeleteModal(event)"
-						>
-							<p>Eliminar inscripció</p>
+					</div>
+				{% else %}
+					<!-- Si NO estas loggejat -->
+					<!-- Si l'activitat està activa -->
+					{% if activity.is_past_due is False %}
+					<div class="session-card__login">
+						<div class="text-sm">
+							<p>Has d'accedir al teu compte abans de inscriure't a cap activitat</p>
 						</div>
-						{% endif %}
+						<div class="btn btn--second btn__text" onclick="showLoginFloat(event)">
+							<p>Accedir</p>
+						</div>
+					</div>
 					{% endif %}
-				</div>
+				{% endif %}
       </div>
 		</div>
     {% endfor %}

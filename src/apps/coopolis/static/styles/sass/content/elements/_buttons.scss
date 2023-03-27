@@ -17,6 +17,7 @@
   width: var(--width);
   padding: var(--pad1) var(--pad2);
   border-radius: var(--br);
+  cursor: pointer;
 
   &.btn--second {
     background-color: var(--second);

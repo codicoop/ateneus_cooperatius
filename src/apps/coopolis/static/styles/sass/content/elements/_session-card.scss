@@ -82,8 +82,11 @@
   &.is-open {
     
     .session-card__bloc,
-    .session-card__btn {
+    .session-card__login {
       display: block;
+    }
+    .session-card__btn {
+      display: flex;
     }
     .session-card__time {
       display: grid;
@@ -203,7 +206,10 @@
     bottom: var(--bottom);
     right: var(--right);
     display: none;
+    flex-direction: column;
+    align-items: center;
     margin-top: var(--pad3);
+    max-width: 90%;
     cursor: pointer;
 
     p {
@@ -211,6 +217,10 @@
     }
     .text-md {
       cursor: auto;
+    }
+    .btn {
+      min-width: 170px;
+      width: fit-content;
     }
   }
   &__time {
@@ -228,4 +238,14 @@
       align-items: center;
     }
   }
+  &__login {
+    display: none;
+    padding: var(--pad1);
+
+    .text-sm {
+      padding: var(--pad1);
+      cursor: auto;
+    }
+  }
 }
+
