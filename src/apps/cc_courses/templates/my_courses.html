@@ -202,16 +202,6 @@
                 </div>
                 {% endif %}
 
-                {% if enrollment.activity.poll_access_allowed %}
-                <div class="poll">
-                  <a href="{% url 'activity_poll' uuid=enrollment.activity.uuid %}">
-                    <div class="btn btn--primary btn__text">
-                      <p>Anar a l'enquesta</p>
-                    </div>
-                  </a>
-                </div>
-                {% endif %}
-
               </div>
             </div>
             {% endif %}
