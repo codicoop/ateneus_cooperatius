@@ -72,3 +72,8 @@ function goToMyCourses(url) {
   console.log(url)
   window.location.replace(url)
 }
+
+function toggleSession(event) {
+  const parent = event.target.parentElement.parentElement
+  parent.classList.toggle("is-open")
+}

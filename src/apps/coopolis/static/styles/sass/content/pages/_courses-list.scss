@@ -2,14 +2,20 @@
 .courses-list {
   --padding-page: var(--pad1);
   --display: flex;
-  --padding: 0;
+
+  &__grid {
+    --padding: 0;
+  }
 }
 
 @media (min-width: 900px) {
   .courses-list {
   --padding-page: var(--pad2) 0;
   --display: grid;
-  --padding: 0 var(--pad4-5);
+
+  &__grid {
+    --padding: 0 var(--pad4-5);
+  }
   }
 }
 
@@ -30,6 +36,12 @@
     justify-content: center;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     padding: var(--padding);
+
+    & + .courses-list__grid {
+      .courses-list__subtitle {
+        padding: var(--pad2) 0 var(--pad1) 0;
+      }
+    }
   }
   &__subtitle {
     width: 100%;
