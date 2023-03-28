@@ -30,3 +30,14 @@ function toggleDistrict() {
     districtField.value = ""
   }
 }
+
+function hideMessageModal(event) {
+  if (event.target.classList.contains("modal__close")) {
+    const modal = event.target.parentElement.parentElement
+    modal.classList.add("is-hidden")
+  }
+  if (event.target.classList.contains("modal__background")) {
+    const modal = event.target.parentElement
+    modal.classList.add("is-hidden")
+  }
+}

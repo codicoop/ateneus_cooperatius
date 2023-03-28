@@ -30,16 +30,44 @@
 			>
         {% csrf_token %}
 				{{ form.as_ul }}
-				<!-- {% if form.errors %}
+				{% if messages %}
+					<div class="modal">
+						<div class="modal__background" onclick="hideMessageModal(event)"></div>
+						<div class="modal__card">
+							<div class="modal__title title-1">
+								<p>Confirmació</p>
+							</div>
+							<div class="modal__close" onclick="hideMessageModal(event)">
+								<svg
+									class="icon-pathfill-primary"
+									xmlns="http://www.w3.org/2000/svg"
+									viewbox="0 0 9.46 9.46">
+									<path
+										d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+								</svg>
+							</div>
+							<div class="modal__form">
+								{% for message in messages %}
+
+								<div class="modal__intro text-md">
+									<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
+										<p>{{ message }}</p>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+        {% endif %}
+				{% if form.errors %}
 				<div class="message-container">
-					<p class="error-message">No s'ha pogut completar el registre, si
-						us plau, revisa els errors del formulari.
+					<p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
 					</p>
 					{% for error in form.non_field_errors %}
 					<p class="error-message">{{ error }}</p>
 					{% endfor %}
 				</div>
-				{% endif %} -->
+				{% endif %}
 				<div class="form__submit">
 					<input type="submit" class="btn btn--second btn__text" value="Guardar projecte" />
 				</div>
