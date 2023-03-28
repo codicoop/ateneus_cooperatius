@@ -20,8 +20,15 @@ function onLoadFunction(){
     }
     if (el.type === "file") {
       let fileParent = el.parentElement
+      let label = el.previousElementSibling
       fileParent.classList.add("field")
       fileParent.classList.add("field-file")
+      label.classList.add("upload-icon")
+
+      if (fileParent.classList.contains("field-checkbox")) {
+        fileParent.classList.remove("field-checkbox")
+        fileParent.classList.add("full")
+      }
     }
   })
   // Afegint clases pels selects

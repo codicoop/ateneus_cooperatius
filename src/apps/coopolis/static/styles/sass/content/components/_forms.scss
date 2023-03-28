@@ -1,5 +1,7 @@
 // Dynamic variables
 .form {
+  --display: block;
+  
   &__submit {
     --margin: var(--pad2) 0;
   }
@@ -16,6 +18,21 @@
 }
 
 @media (min-width: 900px) {
+  .signup {
+    .form {
+      --display: grid;
+    }
+  }
+  .profile {
+    .form {
+      --display: flex;
+    }
+  }
+  .project {
+    .form {
+      --display: grid;
+    }
+  }
   .form {
     &__submit {
       --margin: var(--pad4) 0;
@@ -30,6 +47,10 @@
 
 // Layout
 .form {
+  display: var(--display);
+  grid-template-columns: 50% 50%;
+  gap: 0 var(--pad1);
+
   form {
     display: flex;
     flex-direction: column;
