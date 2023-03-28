@@ -3,7 +3,8 @@
   &__background {
     --top: 87px;
   }
-  &__form {
+  &__form,
+  .form {
     --display: flex;
     --padding: var(--pad2) var(--pad3) var(--pad2) var(--pad1);
   }
@@ -17,7 +18,8 @@
     &__background {
       --top: 0;
     }
-    &__form {
+    &__form,
+    .form {
       --display: grid;
       --padding: var(--pad2) var(--pad3) var(--pad2) 0;
     }
@@ -97,7 +99,8 @@
       }
     }
   }
-  &__form {
+  &__form,
+  .form {
     grid-column: 1 / span 2;
     display: var(--display);
     grid-template-columns: 1fr 1fr;
@@ -139,7 +142,7 @@
   .modal__form {
     grid-template-columns: 1fr;
   }
-  .modal__intro .text-sm{
+  .modal__intro .text-sm {
     padding-top: var(--pad-2);
   }
 }

@@ -1,6 +1,6 @@
 // Dynamic variables
 .courses-list {
-  --padding-page: var(--pad1);
+  --padding-page: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
   --display: flex;
 
   &__grid {
@@ -10,7 +10,7 @@
 
 @media (min-width: 900px) {
   .courses-list {
-  --padding-page: var(--pad2) 0;
+  --padding-page: var(--pad2) 0 var(--pad4) 0;
   --display: grid;
 
   &__grid {

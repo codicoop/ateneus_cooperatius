@@ -1023,16 +1023,25 @@ a {
   --margin-top: 0;
 }
 
-.my-course-card.past-activities.is-open .top {
+.my-course-card.past-activities.is-open .top,
+.my-course-card.waiting-activities.is-open .top {
   --padding-top: 0 var(--pad1) var(--pad1) var(--pad1);
 }
-.my-course-card.past-activities.is-open .bottom {
+.my-course-card.past-activities.is-open .bottom,
+.my-course-card.waiting-activities.is-open .bottom {
   --display-bottom: block;
 }
-.my-course-card.past-activities .top {
+.my-course-card.past-activities .top,
+.my-course-card.waiting-activities .top {
   --padding-top: 0 var(--pad1) 0 var(--pad1);
+  --display-top: flex;
 }
-.my-course-card.past-activities .bottom {
+.my-course-card.past-activities .top__btn,
+.my-course-card.waiting-activities .top__btn {
+  --margin: var(--pad3) var(--pad2) 0 var(--pad2);
+}
+.my-course-card.past-activities .bottom,
+.my-course-card.waiting-activities .bottom {
   --display-bottom: none;
 }
 
@@ -1076,16 +1085,25 @@ a {
     --margin-top: 138px;
   }
 
-  .my-course-card.past-activities.is-open .top {
+  .my-course-card.past-activities.is-open .top,
+.my-course-card.waiting-activities.is-open .top {
     --padding-top: 0 var(--pad2) var(--pad1) var(--pad2);
   }
-  .my-course-card.past-activities.is-open .bottom {
+  .my-course-card.past-activities.is-open .bottom,
+.my-course-card.waiting-activities.is-open .bottom {
     --display-bottom: grid;
   }
-  .my-course-card.past-activities .top {
+  .my-course-card.past-activities .top,
+.my-course-card.waiting-activities .top {
     --padding-top: 0 var(--pad2) 0 var(--pad2);
+    --display-top: grid;
   }
-  .my-course-card.past-activities .bottom {
+  .my-course-card.past-activities .top__btn,
+.my-course-card.waiting-activities .top__btn {
+    --margin: 0;
+  }
+  .my-course-card.past-activities .bottom,
+.my-course-card.waiting-activities .bottom {
     --display-bottom: none;
   }
 }
@@ -1300,6 +1318,51 @@ a {
   justify-self: end;
 }
 .my-course-card.past-activities .bottom .poll .btn {
+  width: fit-content;
+}
+
+.my-course-card.waiting-activities {
+  display: flex;
+  width: 100%;
+}
+.my-course-card.waiting-activities .my-course-card__pretitle {
+  font-weight: bold;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+.my-course-card.waiting-activities .my-course-card__title {
+  padding-bottom: var(--pad2);
+}
+.my-course-card.waiting-activities .my-course-card__session {
+  border-top: 2px solid var(--grey-lighter);
+  padding: var(--pad1) 0;
+}
+.my-course-card.waiting-activities .top {
+  display: var(--display-top);
+  flex-direction: column;
+  grid-template-columns: repeat(3, 1fr);
+  padding: var(--padding-top);
+}
+.my-course-card.waiting-activities .top__title {
+  grid-column: 1;
+  padding-bottom: var(--pad1);
+  font-weight: bold;
+  pointer-events: none;
+}
+.my-course-card.waiting-activities .top__date {
+  grid-column: 2;
+  display: flex;
+  gap: var(--pad-2);
+  padding-bottom: var(--pad-2);
+  color: var(--violet);
+  pointer-events: none;
+}
+.my-course-card.waiting-activities .top__btn {
+  grid-column: 3;
+  grid-row: 1/span 2;
+  justify-self: end;
+  align-self: center;
+  margin: var(--margin);
   width: fit-content;
 }
 
@@ -1535,7 +1598,8 @@ a {
 .modal__background {
   --top: 87px;
 }
-.modal__form {
+.modal__form,
+.modal .form {
   --display: flex;
   --padding: var(--pad2) var(--pad3) var(--pad2) var(--pad1);
 }
@@ -1547,7 +1611,8 @@ a {
   .modal__background {
     --top: 0;
   }
-  .modal__form {
+  .modal__form,
+.modal .form {
     --display: grid;
     --padding: var(--pad2) var(--pad3) var(--pad2) 0;
   }
@@ -1630,7 +1695,9 @@ a {
   padding-top: var(--pad-2);
 }
 .modal__form,
-.delete-modal__form {
+.modal .form,
+.delete-modal__form,
+.delete-modal .form {
   grid-column: 1/span 2;
   display: var(--display);
   grid-template-columns: 1fr 1fr;
@@ -1639,16 +1706,22 @@ a {
   background-color: hsla(208deg, 87%, 88%, 0.25);
 }
 .modal__form form,
-.delete-modal__form form {
+.modal .form form,
+.delete-modal__form form,
+.delete-modal .form form {
   justify-content: center;
 }
 .modal__form li.field,
-.delete-modal__form li.field {
+.modal .form li.field,
+.delete-modal__form li.field,
+.delete-modal .form li.field {
   height: 100%;
   padding-bottom: 0;
 }
 .modal__form textarea,
-.delete-modal__form textarea {
+.modal .form textarea,
+.delete-modal__form textarea,
+.delete-modal .form textarea {
   height: 100%;
 }
 .modal__submit,
@@ -2681,7 +2754,7 @@ a {
 }
 
 .courses-list {
-  --padding-page: var(--pad1);
+  --padding-page: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
   --display: flex;
 }
 .courses-list__grid {
@@ -2690,7 +2763,7 @@ a {
 
 @media (min-width: 900px) {
   .courses-list {
-    --padding-page: var(--pad2) 0;
+    --padding-page: var(--pad2) 0 var(--pad4) 0;
     --display: grid;
   }
   .courses-list__grid {
