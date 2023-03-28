@@ -2365,11 +2365,15 @@ a {
   --padding: var(--pad1);
   --height-content: auto;
 }
-.home .welcome__content .welcome__logo {
+.home .welcome__logo {
   --display: none;
 }
-.home .welcome__content .welcome__btns {
+.home .welcome__btns {
   --display: none;
+}
+.home .welcome__text {
+  --font-size: 20px;
+  --line-height: 24px;
 }
 .home .topbar {
   --justify-content: flex-end;
@@ -2443,6 +2447,10 @@ a {
     --display: block;
     --width: var(--pad4);
   }
+  .home .welcome__text {
+    --font-size: 28px;
+    --line-height: 32px;
+  }
   .home .topbar {
     --justify-content: space-between;
     --padding-topbar: var(--pad2) 0;
@@ -2503,6 +2511,7 @@ a {
   justify-content: var(--justify-content);
   align-items: var(--align-items);
   height: var(--height-content);
+  max-height: 700px;
   padding: var(--padding);
   color: var(--white);
 }
@@ -2511,15 +2520,15 @@ a {
   margin-right: var(--pad4);
 }
 .home .welcome__logo img {
-  width: auto;
-  height: var(--height);
+  width: var(--pad10);
+  height: auto;
 }
 .home .welcome__text {
   width: var(--pad20);
   height: auto;
-}
-.home .welcome__text .text-md {
   color: var(--white);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
 }
 .home .welcome__btns {
   align-self: flex-start;

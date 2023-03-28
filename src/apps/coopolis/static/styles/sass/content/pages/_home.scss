@@ -7,13 +7,16 @@
       --align-items: flex-start;
       --padding: var(--pad1);
       --height-content: auto;
-
-      .welcome__logo {
-        --display: none;
-      }
-      .welcome__btns {
-        --display: none;
-      }
+    }
+    &__logo {
+      --display: none;
+    }
+    &__btns {
+      --display: none;
+    }
+    &__text {
+      --font-size: 20px;
+      --line-height: 24px;
     }
   }
   .topbar {
@@ -104,6 +107,10 @@
           }
         }
       }
+      &__text {
+      --font-size: 28px;
+      --line-height: 32px;
+    }
     }
     .topbar {
     --justify-content: space-between;
@@ -175,23 +182,25 @@
       justify-content: var(--justify-content);
       align-items: var(--align-items);
       height: var(--height-content);
+      max-height: 700px;
       padding: var(--padding);
       color: var(--white);
     }
     &__logo {
       display: var(--display);
       margin-right: var(--pad4);
+      
       img {
-        width: auto;
-        height: var(--height);
+        width: var(--pad10);
+        height: auto;
       }
     }
     &__text {
       width: var(--pad20);
       height: auto;
-      .text-md {
-        color: var(--white);
-      }
+      color: var(--white);
+      font-size: var(--font-size);
+      line-height: var(--line-height);
     }
     &__btns {
       align-self: flex-start;
