@@ -1023,6 +1023,19 @@ a {
   --margin-top: 0;
 }
 
+.my-course-card.past-activities.is-open .top {
+  --padding-top: 0 var(--pad1) var(--pad1) var(--pad1);
+}
+.my-course-card.past-activities.is-open .bottom {
+  --display-bottom: block;
+}
+.my-course-card.past-activities .top {
+  --padding-top: 0 var(--pad1) 0 var(--pad1);
+}
+.my-course-card.past-activities .bottom {
+  --display-bottom: none;
+}
+
 @media (min-width: 900px) {
   .my-course-card {
     --max-width: none;
@@ -1061,6 +1074,19 @@ a {
   }
   .my-course-card .section .label3 {
     --margin-top: 138px;
+  }
+
+  .my-course-card.past-activities.is-open .top {
+    --padding-top: 0 var(--pad2) var(--pad1) var(--pad2);
+  }
+  .my-course-card.past-activities.is-open .bottom {
+    --display-bottom: grid;
+  }
+  .my-course-card.past-activities .top {
+    --padding-top: 0 var(--pad2) 0 var(--pad2);
+  }
+  .my-course-card.past-activities .bottom {
+    --display-bottom: none;
   }
 }
 .my-course-card {
@@ -1222,24 +1248,13 @@ a {
 }
 
 .my-course-card.past-activities {
+  display: flex;
   width: 100%;
 }
 .my-course-card.past-activities .my-course-card__pretitle {
   font-weight: bold;
   color: var(--primary);
   text-transform: uppercase;
-}
-.my-course-card.past-activities.is-open .bottom {
-  display: block;
-}
-.my-course-card.past-activities.is-open .top {
-  padding: 0 var(--pad1) var(--pad1) var(--pad1);
-}
-.my-course-card.past-activities.is-open .top .close {
-  display: block;
-}
-.my-course-card.past-activities.is-open .top .open {
-  display: none;
 }
 .my-course-card.past-activities .my-course-card__title {
   padding-bottom: var(--pad2);
@@ -1252,7 +1267,7 @@ a {
   display: grid;
   grid-template-columns: 1fr 50px 50px;
   gap: var(--pad1) var(--pad2);
-  padding: 0 var(--pad1) 0 var(--pad1);
+  padding: var(--padding-top);
 }
 .my-course-card.past-activities .top__title {
   font-weight: bold;
@@ -1273,12 +1288,19 @@ a {
   display: none;
 }
 .my-course-card.past-activities .bottom {
-  display: none;
+  display: var(--display-bottom);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 var(--pad3);
   padding: 0 var(--pad1);
   border-top: 2px solid var(--grey-lighter);
 }
 .my-course-card.past-activities .bottom .poll {
+  grid-column: 3;
   padding-top: var(--pad3);
+  justify-self: end;
+}
+.my-course-card.past-activities .bottom .poll .btn {
+  width: fit-content;
 }
 
 .session-card {

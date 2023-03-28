@@ -50,6 +50,22 @@
     }
   }
 }
+.my-course-card.past-activities {
+  &.is-open {
+    .top {
+      --padding-top: 0 var(--pad1) var(--pad1) var(--pad1);
+    }
+    .bottom {
+      --display-bottom: block;
+    }
+  }
+  .top {
+    --padding-top: 0 var(--pad1) 0 var(--pad1);
+  }
+  .bottom {
+    --display-bottom: none;
+  }
+}
 
 @media (min-width: 900px) {
   .my-course-card {
@@ -92,6 +108,22 @@
       .label3 {
         --margin-top: 138px;
       }
+    }
+  }
+  .my-course-card.past-activities {
+    &.is-open {
+      .top {
+        --padding-top: 0 var(--pad2) var(--pad1) var(--pad2);
+      }
+      .bottom {
+        --display-bottom: grid;
+      }
+    }
+    .top {
+      --padding-top: 0 var(--pad2) 0 var(--pad2);
+    }
+    .bottom {
+      --display-bottom: none;
     }
   }
 }
@@ -267,28 +299,13 @@
 
 // Diferències per activitats pasades
 .my-course-card.past-activities {
+  display: flex;
   width: 100%;
 
   .my-course-card__pretitle {
     font-weight: bold;
     color: var(--primary);
     text-transform: uppercase;
-  }
-
-  &.is-open {
-    .bottom {
-      display: block;
-    }
-    .top {
-      padding: 0 var(--pad1) var(--pad1) var(--pad1);
-
-      .close {
-        display: block;
-      }
-      .open {
-        display: none;
-      }
-    }
   }
   .my-course-card__title {
     padding-bottom:  var(--pad2);
@@ -301,7 +318,7 @@
     display: grid;
     grid-template-columns: 1fr 50px 50px;
     gap: var(--pad1) var(--pad2);
-    padding: 0 var(--pad1) 0 var(--pad1);
+    padding: var(--padding-top);
     
     &__title {
       font-weight: bold;
@@ -324,12 +341,20 @@
     }
   }
   .bottom {
-    display: none;
+    display: var(--display-bottom);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 var(--pad3);
     padding: 0 var(--pad1);
     border-top: 2px solid var(--grey-lighter);
 
     .poll {
+      grid-column: 3;
       padding-top: var(--pad3);
+      justify-self: end;
+
+      .btn {
+        width: fit-content;
+      }
     }
   }
 }
