@@ -55,4 +55,7 @@
   .is-hidden {
     display: none;
   }
+  .is-bright {
+    filter: brightness(100%);
+  }
 }

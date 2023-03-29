@@ -2,6 +2,7 @@
 .my-course-card {
   --max-width: 500px;
   --display-card: flex;
+  --padding-card: var(--pad1) 0;
 
   &__pretitle {
     --padding: 0 var(--pad1) var(--pad-2) var(--pad1);
@@ -18,6 +19,10 @@
     &.is-open {
       .section__info {
         --display: flex;
+        --background-color: #fdfcfc;
+      }
+      .section__label {
+        --background-color: #fdfcfc;
       }
       .open {
         --display: none;
@@ -37,10 +42,13 @@
     }
     &__info {
       --display: none;
+      --background-color: var(--white);
+      --padding-info: 0 var(--pad1) var(--pad4) var(--pad1);
     }
     &__label {
       --background-color: var(--white);
       --padding: var(--pad1-5) var(--pad1);
+      --margin-top: 0;
     }
     .label2 {
       --margin-top: 0;
@@ -63,7 +71,7 @@
   .top {
     --padding-top: 0 var(--pad1) 0 var(--pad1);
     --display-top: flex;
-
+    
     &__btn {
       --margin: var(--pad3) var(--pad2) 0 var(--pad2);
     }
@@ -77,6 +85,7 @@
   .my-course-card {
     --max-width: none;
     --display-card: grid;
+    --padding-card: var(--pad1) 0 0 0;
 
     &__pretitle {
       --padding: 0 var(--pad2) var(--pad-2) var(--pad2);
@@ -88,31 +97,37 @@
       --margin: var(--pad2) var(--pad2) var(--pad2) 0;
     }
     .section {
-    --display-section: grid;
+      --display-section: grid;
 
+      &__action {
+        --display-action: none;
+      }
+      &__info {
+        --background-color: var(--white);
+        --padding-info: 0 var(--pad1) var(--pad5) var(--pad1);
+      }
+      &__label {
+        --background-color: var(--white);
+        --padding: var(--pad1-5) var(--pad2);
+        --margin-top: -2px;
+      }
+      .label2 {
+        --margin-top: 68px;
+      }
+      .label3 {
+        --margin-top: 136px;
+      }
       &.is-open {
         .section__label {
           --background-color: #fff0f5;
         }
         .section__info {
           --display: grid;
+          --background-color: #fdfcfc;
         }
         .section__info--centered {
           --display: flex;
         }
-      }
-      &__action {
-        --display-action: none;
-      }
-      &__label {
-        --background-color: var(--white);
-        --padding: var(--pad1-5) var(--pad2);
-      }
-      .label2 {
-        --margin-top: 70px;
-      }
-      .label3 {
-        --margin-top: 138px;
       }
     }
   }
@@ -147,9 +162,11 @@
   flex-direction: column;
   grid-template-columns: repeat(3, 1fr);
   max-width: var(--max-width);
-  padding: var(--pad1) 0;
+  width: 100%;
+  padding: var(--padding-card);
   background-color: var(--white);
   border-radius: var(--br);
+  border: 1px solid var(--grey-lighter);
   box-shadow: 3px 3px 10px #FE1A681A;
   
   &__pretitle {
@@ -180,7 +197,9 @@
       pointer-events: none;
     }
   }
-  // &__section {}
+  &__section {
+    border-top: 2px solid var(--grey-lighter);
+  }
   .section {
     grid-column: 1 / span 3;
     grid-row: 3;
@@ -197,6 +216,7 @@
       gap: 0 var(--pad8);
       height: fit-content;
       padding: var(--padding);
+      margin-top: var(--margin-top);
       background-color: var(--background-color);
       border-top: 2px solid var(--grey-lighter);
       border-bottom: 2px solid var(--grey-lighter);
@@ -237,7 +257,8 @@
       flex-direction: column;
       grid-template-columns: repeat(2, 1fr);
       gap: 0 var(--pad1);
-      padding: 0 var(--pad1) var(--pad4) var(--pad1);
+      padding: var(--padding-info);
+      background-color: var(--background-color);
 
       &.section__info--centered {
         align-items: center;
@@ -312,7 +333,6 @@
 // Diferències per activitats pasades
 .my-course-card.past-activities {
   display: flex;
-  width: 100%;
 
   .my-course-card__pretitle {
     font-weight: bold;
@@ -374,7 +394,6 @@
 // Diferències per llista d'espera
 .my-course-card.waiting-activities {
   display: flex;
-  width: 100%;
 
   .my-course-card__pretitle {
     font-weight: bold;

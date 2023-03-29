@@ -5,7 +5,8 @@
 
 .form {
   // Estils pels camps automàtics de django
-  li.field {
+  li.field,
+  .field {
     position: relative;
     list-style: none;
     padding-bottom: var(--pad-2);
