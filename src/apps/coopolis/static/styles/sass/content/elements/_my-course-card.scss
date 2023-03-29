@@ -89,6 +89,7 @@
   }
   .bottom {
     --display-bottom: none;
+    --width: stretch;
   }
 }
 
@@ -184,6 +185,7 @@
     }
     .bottom {
       --display-bottom: none;
+      --width: fit-content;
     }
   }
 }
@@ -305,6 +307,7 @@
       margin: var(--pad3) var(--pad1) 0 var(--pad1);
       padding: var(--pad1);
       max-width: 330px;
+      background-color: var(--white);
       border: 2px solid var(--grey-lighter);
       border-radius: var(--br);
       color: var(--grey);
@@ -416,7 +419,7 @@
       justify-self: end;
 
       .btn {
-        width: fit-content;
+        width: var(--width);
       }
     }
   }

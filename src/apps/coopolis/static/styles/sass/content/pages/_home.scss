@@ -40,6 +40,9 @@
     --padding-intro: var(--pad1);
     --padding-hello-out: var(--pad1) 0 var(--pad4) 0;
 
+    &__hello-out {
+      --width: auto;
+    }
     &__bloc {
       --padding-left-bloc: 0;
       --padding-bottom-bloc: var(--pad2);
@@ -55,6 +58,7 @@
     }
     &__bloc-btn {
       --align-self: auto;
+      --margin-bottom: 0;
     }
   }
   .outro {
@@ -139,11 +143,14 @@
     .intro {
       --padding-intro: var(--pad2) var(--pad4-5) 0 var(--pad4-5);
       --padding-hello-out: var(--pad4) 0 var(--pad8) 0;
-
+      
+      &__hello-out {
+        --width: 50%;
+      }
       &__bloc {
         --padding-left-bloc: var(--pad2);
-        --padding-bottom-bloc: var(--pad6);
-        --height: 80%;
+        --padding-bottom-bloc: var(--pad1);
+        --height: 93%;
         --width: 2px;
         --top: auto;
       }
@@ -155,6 +162,7 @@
       }
       &__bloc-btn {
         --align-self: center;
+        --margin-bottom: var(--pad5);
       }
     }
     .outro {
@@ -294,9 +302,11 @@
     }
     &__bloc-text {
       padding-bottom: var(--padding-bottom);
+      color: var(--primary);
     }
     &__bloc-btn {
       align-self: var(--align-self);
+      margin-bottom: var(--margin-bottom);
     }
   }
   .outro {
