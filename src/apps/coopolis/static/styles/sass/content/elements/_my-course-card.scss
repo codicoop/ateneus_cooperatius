@@ -30,6 +30,12 @@
       .close {
         --display: block;
       }
+      .label1 {
+      --border-bottom: 2px solid var(--grey-lighter);
+      }
+      .label2 {
+      --border-bottom: 2px solid var(--grey-lighter);
+      }
     }
     .open {
       --display: block;
@@ -50,8 +56,13 @@
       --padding: var(--pad1-5) var(--pad1);
       --margin-top: 0;
     }
+    .label1 {
+      --border-bottom: none;
+      --border-top: none;
+    }
     .label2 {
       --margin-top: 0;
+      --border-bottom: none;
     }
     .label3 {
       --margin-top: 0;
@@ -112,10 +123,10 @@
         --margin-top: -2px;
       }
       .label2 {
-        --margin-top: 68px;
+        --margin-top: 66px;
       }
       .label3 {
-        --margin-top: 136px;
+        --margin-top: 134px;
       }
       &.is-open {
         .section__label {
@@ -129,6 +140,28 @@
           --display: flex;
         }
       }
+    }
+    .section.is-open {
+      .label1 {
+        --border-bottom:  2px solid var(--grey-lighter);
+      }
+      .label2, .label3 {
+        --border-bottom:  2px solid var(--grey-lighter);
+        --border-top:  2px solid var(--grey-lighter);
+      }
+    }
+    .label1, .label2, .label3 {
+      --border-bottom:  2px solid var(--grey-lighter);
+      --border-top:  2px solid var(--grey-lighter);
+    }
+    .label1 {
+      --margin-top: 0;
+    }
+    .label2 {
+      --margin-top: 0;
+    }
+    .label3 {
+      --margin-top: 0;
     }
   }
   .my-course-card.past-activities,
@@ -197,15 +230,13 @@
       pointer-events: none;
     }
   }
-  &__section {
-    border-top: 2px solid var(--grey-lighter);
-  }
   .section {
     grid-column: 1 / span 3;
     grid-row: 3;
     display: var(--display-section);
     flex-direction: column;
     grid-template-columns: repeat(3, 1fr);
+    border-top: 2px solid var(--grey-lighter);
 
     &__label {
       grid-column: 1;
@@ -218,22 +249,22 @@
       padding: var(--padding);
       margin-top: var(--margin-top);
       background-color: var(--background-color);
-      border-top: 2px solid var(--grey-lighter);
-      border-bottom: 2px solid var(--grey-lighter);
       font-weight: bold;
       color: var(--primary);
       cursor: pointer;
     }
-    & + .section {
-      .section__label {
-        border-top: none;
-      }
+    .label1 {
+      border-bottom: var(--border-bottom);
+      border-top: var(--border-top);
     }
-    // .label1 {}
     .label2 {
       margin-top: var(--margin-top);
+      border-top: var(--border-top);
+      border-bottom: var(--border-bottom);
     }
     .label3 {
+      border-top: var(--border-top);
+      border-bottom: 2px solid var(--grey-lighter);
       margin-top: var(--margin-top);
     }
     .open {
