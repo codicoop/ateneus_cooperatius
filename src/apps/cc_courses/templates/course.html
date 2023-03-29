@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load thumbnail static %}
 
+{% block home_is_active %}{% endblock %}
+{% block enrollments_is_active %}is-active{% endblock %}
+{% block projects_is_active %}{% endblock %}
+
 {% block content %}
 {% include './components/header_topbar.html' %}
 <div class="course">

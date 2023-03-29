@@ -99,7 +99,7 @@
         <ul class="menu">
           <li class="menu__home">
             <a href="{% url 'home' %}">
-              <div class="menu__item is-active">
+              <div class="menu__item {% block home_is_active %}is-active{% endblock %}">
                 {% if not user.is_authenticated %}
                 <div class="home-icon">
                   <svg
@@ -138,7 +138,7 @@
           </li>
           <li>
             <a href="{% url 'courses' %}">
-              <div class="menu__item">
+              <div class="menu__item {% block enrollments_is_active %}{% endblock %}">
                 <div class="menu__icon">
                   <svg
                     class="icon-pathfill-white"
@@ -155,7 +155,7 @@
           </li>
           <li>
             <a href="{% url 'project_info' %}">
-              <div class="menu__item">
+              <div class="menu__item {% block projects_is_active %}{% endblock %}">
                 <div class="menu__icon">
                   <svg
                     class="icon-pathfill-white"
