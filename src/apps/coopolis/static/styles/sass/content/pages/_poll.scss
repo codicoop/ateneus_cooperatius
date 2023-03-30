@@ -47,6 +47,7 @@
 .poll {
   height: 100%;
   padding: var(--padding-page);
+  max-width: 2000px;
 
   .grid-content {
     padding: var(--padding);
