@@ -53,7 +53,7 @@
   --pad20: calc(var(--pad-base) * 20); // 320
 
   .is-hidden {
-    display: none;
+    display: none !important;
   }
   .is-bright {
     filter: brightness(100%);

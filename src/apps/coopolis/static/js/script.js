@@ -17,7 +17,6 @@ function hideLoginFloat() {
   const login = document.querySelector(".login")
   login.classList.add("is-hidden")
 }
-
 function toggleDistrict() {
   // Mostrant districte només si Barcelona
   const townInput = document.querySelector("#id_town")
@@ -30,7 +29,6 @@ function toggleDistrict() {
     districtField.value = ""
   }
 }
-
 function hideMessageModal(event) {
   if (event.target.classList.contains("modal__close")) {
     const modal = event.target.parentElement.parentElement

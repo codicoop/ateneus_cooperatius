@@ -49,7 +49,7 @@
   flex-direction: var(--flex-direction-footer);
   justify-content: space-between;
   align-items: var(--align-items);
-  gap: var(--pad1);
+  gap: var(--pad1) var(--pad8);
   padding: var(--padding-footer);
   margin-top: auto;
   background-color: var(--primary);
@@ -82,10 +82,12 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: var(--pad1);
+    gap: var(--pad1) var(--pad2);
     width: 100%;
   }
   &__logo {
+    width: 160px;
+    
     img {
       width: auto;
       max-height: 40px;

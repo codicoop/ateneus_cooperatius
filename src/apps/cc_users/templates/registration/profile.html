@@ -36,6 +36,12 @@
 				{% csrf_token %}
 				{{ form.as_ul }}
 			</form>
+			{% if form.errors %}
+			<div class="form__error text-sm">
+					<p>Hi ha hagut un error: {{ form.error }}</p>
+			</div>
+			{% endif %}
+
 			<div class="form__submit">
 				<button form="profile_form" type="submit" class="btn btn--second">
 					<p class="btn__text">

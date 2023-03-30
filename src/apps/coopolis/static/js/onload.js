@@ -61,18 +61,19 @@ function onLoadFunction(){
 
   // Pàgina de projectes
   const projectPage = document.querySelector(".project")
+  const profilePage = document.querySelector(".profile")
 
-  if (projectPage) {
+  if (projectPage || registerPage || profilePage) {
     // Mostrant districte només si Barcelona
     const townInput = document.querySelector("#id_town")
     const districtField = document.querySelector("#id_district").parentElement
-
+    townInput.onclick = toggleDistrict
+    
     if (townInput.value === "90") {
       districtField.classList.remove("is-hidden")
     } else {
       districtField.classList.add("is-hidden")
     }
-
-    townInput.onclick = toggleDistrict
+    
   }
 }

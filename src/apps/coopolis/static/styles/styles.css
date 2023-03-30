@@ -226,7 +226,7 @@ img {
   --pad20: calc(var(--pad-base) * 20);
 }
 :root .is-hidden {
-  display: none;
+  display: none !important;
 }
 :root .is-bright {
   filter: brightness(100%);
@@ -705,11 +705,22 @@ a {
   background-color: var(--primary);
 }
 
+.field-file {
+  --align-items: flex-start;
+}
+
+@media (min-width: 900px) {
+  .field-file {
+    --align-items: center;
+  }
+}
 .form li.field,
 .form .field {
   position: relative;
   list-style: none;
   padding-bottom: var(--pad-2);
+  display: flex;
+  flex-direction: column;
 }
 .form li.field.required label::after,
 .form .field.required label::after {
@@ -718,8 +729,10 @@ a {
 }
 .form li.field label,
 .form .field label {
+  order: 1;
   display: block;
   padding-bottom: var(--pad-2);
+  padding-top: var(--pad-3);
   font-weight: 700;
   font-size: 10px;
   line-height: 12px;
@@ -732,6 +745,7 @@ a {
 .form .field input,
 .form .field select,
 .form .field textarea {
+  order: 3;
   width: 100%;
   padding: var(--pad-2);
   background-color: var(--white);
@@ -747,6 +761,15 @@ a {
 .form .field select:-webkit-autofill,
 .form .field textarea:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+.form li.field .errorlist,
+.form .field .errorlist {
+  order: 2;
+  padding-left: var(--pad-2);
+  padding-bottom: var(--pad-3);
+  color: var(--primary);
+  font-size: 12px;
+  line-height: 16px;
 }
 .form li.field input[type=file] ~ .field-file-custom::after,
 .form .field input[type=file] ~ .field-file-custom::after {
@@ -853,10 +876,11 @@ a {
   content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 13.1 7.8400002' width='13.1' height='7.8400002'%3E%3Cpolygon points='12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 ' id='polygon2' transform='translate(-10.95,-13.58)' style='fill:%23fe8cb3' /%3E%3C/svg%3E");
   position: absolute;
   right: 14px;
-  top: 32px;
+  top: 37px;
 }
 
 .helptext {
+  order: 4;
   display: inline-block;
   padding-left: var(--pad-2);
   padding-top: var(--pad-3);
@@ -877,14 +901,14 @@ a {
   opacity: 1;
 }
 
-.field-file {
+.form li.field-file {
   position: relative;
 }
-.field-file .upload-icon::after {
+.form li.field-file .upload-icon::after {
   content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16.000002 15.99'%3E%3Cpath d='m 16.000001,14.66 c -0.02,0.730001 -0.6,1.32 -1.33,1.33 H 1.3299999 C 0.5999999,15.97 0.0099999,15.39 0,14.66 L 6e-7,8.1900007 h 1.33 L 1.3299999,14.66 14.66,14.660001 V 8.1900007 h 1.33 V 14.660001 Z M 11.89,3.8600007 l -0.96,0.96 -2.27,-2.27 V 10.330001 H 7.33 V 2.5999997 l -2.27,2.27 -0.96,-0.96 L 8.01,0 11.880001,3.8700007 Z' style='fill:%23d91d69;' /%3E%3C/svg%3E");
   position: absolute;
   right: 3px;
-  top: 23px;
+  top: 28px;
   padding: 11px;
   width: 37px;
   background-color: #fff0f5;
@@ -892,18 +916,20 @@ a {
   border-bottom-right-radius: 5px;
   pointer-events: none;
 }
-.field-file.full {
+.form li.field-file.full {
   display: grid;
-  grid-template-columns: 15px 1fr;
-  align-items: center;
+  grid-template-columns: 24px 1fr;
+  align-items: var(--align-items);
   gap: var(--pad-2);
 }
-.field-file.full label:nth-child(1) {
+.form li.field-file.full label:nth-child(1) {
   grid-column: span 2;
+  order: unset;
 }
-.field-file.full a {
-  position: relative;
+.form li.field-file.full a {
   grid-column: span 2;
+  order: unset;
+  position: relative;
   width: 100%;
   padding: 13px 13px 13px 52px;
   background-color: #efe7f2;
@@ -913,14 +939,17 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.field-file.full a::before {
+.form li.field-file.full a::before {
   content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 15.54 19.43'%3E%3Cpath d='M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z' style='fill:%23d6085b;fill-opacity:1' /%3E%3C/svg%3E");
   position: absolute;
   left: 19px;
   top: 10px;
   pointer-events: none;
 }
-.field-file.full input:nth-child(3) {
+.form li.field-file.full input:nth-child(3) {
+  order: unset;
+  grid-column: 1;
+  grid-row: 5;
   position: relative;
   width: var(--pad1);
   height: var(--pad1);
@@ -928,7 +957,7 @@ a {
   border: 2px solid var(--second-2);
   border-radius: 50px;
 }
-.field-file.full input:nth-child(3)::after {
+.form li.field-file.full input:nth-child(3)::after {
   content: "";
   display: block;
   position: absolute;
@@ -939,13 +968,16 @@ a {
   border-radius: 20px;
   background-color: var(--white);
 }
-.field-file.full input:nth-child(3):checked {
+.form li.field-file.full input:nth-child(3):checked {
   background-color: var(--second-lighter);
 }
-.field-file.full input:nth-child(3):checked::after {
+.form li.field-file.full input:nth-child(3):checked::after {
   background-color: var(--second);
 }
-.field-file.full label:nth-child(4) {
+.form li.field-file.full label:nth-child(4) {
+  order: unset;
+  grid-column: 2;
+  grid-row: 5;
   display: inline;
   padding-bottom: 0;
   padding-left: var(--pad-2);
@@ -957,7 +989,8 @@ a {
   color: var(--primary-dark);
   cursor: pointer;
 }
-.field-file.full input:nth-child(6) {
+.form li.field-file.full input:nth-child(6) {
+  order: unset;
   grid-column: span 2;
 }
 
@@ -2159,7 +2192,7 @@ a {
   flex-direction: var(--flex-direction-footer);
   justify-content: space-between;
   align-items: var(--align-items);
-  gap: var(--pad1);
+  gap: var(--pad1) var(--pad8);
   padding: var(--padding-footer);
   margin-top: auto;
   background-color: var(--primary);
@@ -2191,8 +2224,11 @@ a {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--pad1);
+  gap: var(--pad1) var(--pad2);
   width: 100%;
+}
+.footer__logo {
+  width: 160px;
 }
 .footer__logo img {
   width: auto;
@@ -2735,6 +2771,8 @@ a {
   --padding-signup: var(--pad1);
   --margin-top: 0;
   --align-self: flex-start;
+}
+.signup .form {
   --display: flex;
 }
 .signup .form li:nth-child(2) {
@@ -2815,6 +2853,8 @@ a {
     --padding-signup: var(--pad8) 0;
     --margin-top: 32px;
     --align-self: flex-end;
+  }
+  .signup .form {
     --display: grid;
   }
   .signup .form li:nth-child(2) {

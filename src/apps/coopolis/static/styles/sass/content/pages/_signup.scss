@@ -3,9 +3,10 @@
   --padding-signup: var(--pad1);
   --margin-top: 0;
   --align-self: flex-start;
-  --display: flex;
-
+  
   .form {
+    --display: flex;
+    
     & li:nth-child(2) {
       --order: 1;
     }
@@ -89,9 +90,10 @@
     --padding-signup: var(--pad8) 0;
     --margin-top: 32px;
     --align-self: flex-end;
-    --display: grid;
-
+    
     .form {
+      --display: grid;
+
       & li:nth-child(2) {
         --order: auto;  
       }

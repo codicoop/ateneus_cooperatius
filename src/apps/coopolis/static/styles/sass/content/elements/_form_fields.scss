@@ -1,6 +1,11 @@
 // Dynamic variables
-
+.field-file {
+  --align-items: flex-start;
+}
 @media (min-width: 900px) {
+  .field-file {
+    --align-items: center;
+  }
 }
 
 .form {
@@ -10,6 +15,8 @@
     position: relative;
     list-style: none;
     padding-bottom: var(--pad-2);
+    display: flex;
+    flex-direction: column;
 
     &.required {
       label::after {
@@ -18,8 +25,10 @@
       }
     }
     label {
+      order: 1;
       display: block;
       padding-bottom: var(--pad-2);
+      padding-top: var(--pad-3);
       font-weight: 700;
       font-size: 10px;
       line-height: 12px;
@@ -30,6 +39,7 @@
     input,
     select,
     textarea {
+      order: 3;
       width: 100%;
       padding: var(--pad-2);
       background-color: var(--white);
@@ -41,6 +51,15 @@
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
       }
+    }
+    // Errors
+    .errorlist {
+      order: 2;
+      padding-left: var(--pad-2);
+      padding-bottom: var(--pad-3);
+      color: var(--primary);
+      font-size: 12px;
+      line-height: 16px;
     }
 
     // Camp upload file
@@ -161,11 +180,12 @@
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 13.1 7.8400002' width='13.1' height='7.8400002'%3E%3Cpolygon points='12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 ' id='polygon2' transform='translate(-10.95,-13.58)' style='fill:%23fe8cb3' /%3E%3C/svg%3E");
     position: absolute;
     right: 14px;
-    top: 32px;
+    top: 37px;
   }
 }
 
 .helptext {
+  order: 4;
   display: inline-block;
   padding-left: var(--pad-2);
   padding-top: var(--pad-3);
@@ -189,14 +209,14 @@
   }
 }
 
-.field-file {
+.form li.field-file {
   position: relative;
 
   .upload-icon::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16.000002 15.99'%3E%3Cpath d='m 16.000001,14.66 c -0.02,0.730001 -0.6,1.32 -1.33,1.33 H 1.3299999 C 0.5999999,15.97 0.0099999,15.39 0,14.66 L 6e-7,8.1900007 h 1.33 L 1.3299999,14.66 14.66,14.660001 V 8.1900007 h 1.33 V 14.660001 Z M 11.89,3.8600007 l -0.96,0.96 -2.27,-2.27 V 10.330001 H 7.33 V 2.5999997 l -2.27,2.27 -0.96,-0.96 L 8.01,0 11.880001,3.8700007 Z' style='fill:%23d91d69;' /%3E%3C/svg%3E");
     position: absolute;
     right: 3px;
-    top: 23px;
+    top: 28px;
     padding: 11px;
     width: 37px;
     background-color: #fff0f5;
@@ -208,18 +228,20 @@
   // Input file que ja té un document
   &.full {
     display: grid;
-    grid-template-columns: 15px 1fr;
-    align-items: center;
+    grid-template-columns: 24px 1fr;
+    align-items: var(--align-items);
     gap: var(--pad-2);
 
     // Primera label
     & label:nth-child(1) {
       grid-column: span 2;
+      order: unset;
     }
     // Mostra de l'arxiu actual
     a {
-      position: relative;
       grid-column: span 2;
+      order: unset;
+      position: relative;
       width: 100%;
       padding: 13px 13px 13px 52px;
       background-color: #efe7f2;
@@ -240,6 +262,9 @@
 
     // Input del camp per netejar
     & input:nth-child(3) {
+      order: unset;
+      grid-column: 1;
+      grid-row: 5;
       position: relative;
       width: var(--pad1);
       height: var(--pad1);
@@ -260,7 +285,7 @@
       }
       &:checked {
         background-color: var(--second-lighter);
-    
+        
         &::after {
           background-color: var(--second);
         }
@@ -268,6 +293,9 @@
     }
     // Label del camp per netejar
     & label:nth-child(4) {
+      order: unset;
+      grid-column: 2;
+      grid-row: 5;
       display: inline;
       padding-bottom: 0;
       padding-left: var(--pad-2);
@@ -280,6 +308,7 @@
       cursor: pointer;
     }
     & input:nth-child(6) {
+      order: unset;
       grid-column: span 2;
     }
   }
