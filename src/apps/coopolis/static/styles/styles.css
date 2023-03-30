@@ -1881,9 +1881,6 @@ a {
   --color-border-mb: var(--second-light);
   --color-border-dk: transparent;
 }
-.menu .is-active {
-  --background-color: var(--second-med);
-}
 .menu__item {
   --padding: var(--pad4-5) 0;
   --height: auto;
@@ -1930,7 +1927,7 @@ a {
     --height: 130px;
   }
   .menu__home {
-    --display: flex;
+    --display: block;
   }
   .menu .mobile-only {
     --display-mobile-only: none;
@@ -2085,8 +2082,7 @@ a {
   background-color: var(--second-med);
 }
 .menu__item.is-active {
-  background-color: var(--background-color);
-  width: var(--pad8);
+  background-color: var(--second-med);
 }
 .menu__item.is-disabled {
   cursor: not-allowed;

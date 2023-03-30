@@ -53,9 +53,6 @@
   --color-border-mb: var(--second-light);
   --color-border-dk: transparent;
 
-  .is-active {
-    --background-color: var(--second-med);
-  }
   &__item {
     --padding: var(--pad4-5) 0;
     --height: auto;
@@ -103,7 +100,7 @@
     --height: 130px;
     }
     &__home {
-      --display: flex;
+      --display: block;
     }
     .mobile-only {
       --display-mobile-only: none;
@@ -213,7 +210,6 @@
     }
   }
 }
-
 .menu {
   position: relative;
   display: var(--display-menu);
@@ -235,7 +231,6 @@
       background-color: var(--color-border-dk);
       z-index: 1;
     }
-
     &:nth-child(3) {
       &::before {
         content: "";
@@ -277,10 +272,9 @@
     &:hover {
       background-color: var(--second-med);
     }
-
     &.is-active {
-      background-color: var(--background-color);
-      width: var(--pad8);
+      background-color: var(--second-med);
+      // width: var(--pad8);
     }
     &.is-disabled {
       cursor: not-allowed;
