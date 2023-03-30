@@ -388,6 +388,13 @@ body {
   grid-column: 5/span 2;
 }
 
+.no-footer .grid-base__main {
+  height: 100vh;
+}
+.no-footer .footer {
+  display: none;
+}
+
 @media (min-width: 900px) {
   .grid-base {
     display: grid;
@@ -2106,6 +2113,10 @@ a {
   display: var(--display);
 }
 
+.blue .sidebar__topbar {
+  border-bottom: 2px solid var(--second-light);
+}
+
 .footer {
   --flex-direction-footer: column;
   --padding-footer: var(--pad1);
@@ -3392,6 +3403,50 @@ a {
 }
 .login-page .login__error {
   color: var(--primary);
+}
+
+.project-out {
+  --padding-project: var(--pad2) var(--pad1);
+  --flex-direction: column;
+}
+.project-out .btn {
+  --width: auto;
+}
+
+@media (min-width: 900px) {
+  .project-out {
+    --padding-project: var(--pad11) 0;
+    --flex-direction: row;
+  }
+  .project-out .btn {
+    --width: 170px;
+  }
+}
+.project-out {
+  padding: var(--padding-project);
+  background-color: var(--second);
+  height: 100%;
+}
+.project-out.grid-content {
+  grid-template-rows: auto auto auto 1fr;
+}
+.project-out__title {
+  color: var(--white);
+  padding-bottom: var(--pad2);
+}
+.project-out__text {
+  color: var(--white);
+  padding-bottom: var(--pad2);
+}
+.project-out__btn {
+  display: flex;
+  flex-direction: var(--flex-direction);
+  justify-content: center;
+  gap: var(--pad1);
+  margin-top: var(--pad4);
+}
+.project-out__btn .btn {
+  width: var(--width);
 }
 
 /*# sourceMappingURL=styles.css.map */

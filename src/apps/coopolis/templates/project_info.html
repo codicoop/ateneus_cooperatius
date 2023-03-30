@@ -3,19 +3,28 @@
 {% block home_is_active %}{% endblock %}
 {% block enrollments_is_active %}{% endblock %}
 {% block projects_is_active %}is-active{% endblock %}
+{% block extra_class_body %}no-footer blue{% endblock %}
 
 {% block content %}
-<div class="breadcrumb">
-    <span><a href="{% url 'home' %}">Inici</a> > Projecte</span>
-</div>
-<div class="introduction">
+<div class="project-out grid-content">
+  <div class="project-out__title title-1 grid-item-wide">
     {{ config.CONTENT_PROJECT_INTRODUCTION|safe }}
+  </div>
+  <div class="project-out__text text-md grid-item-wide">
+    <p>Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o crea'n un amb els formularis que hi ha a continuació.</p>
+  </div>
+  <div class="project-out__btn grid-item-wide">
+    <a href="{% url 'loginsignup' %}">
+      <div class="btn btn--white btn__text">
+        <p>Registrar-se</p>
+      </div>
+    </a>
+    <a>
+      <div class="btn btn--primary btn__text" onclick="showLoginFloat()">
+        <p>Accedir</p>
+      </div>
+    </a>
+  </div>
 </div>
-<div class="page-content">
-    <div class="generic-content">
-        <h1>{{ config.CONTENT_PROJECT_TITLE }}</h1>
-        {{ config.CONTENT_PROJECT_INFO|safe }}
-    </div>
-    {% include 'registration/login_signup_form.html' %}
-</div>
+
 {% endblock %}

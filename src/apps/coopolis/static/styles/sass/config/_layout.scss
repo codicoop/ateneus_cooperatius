@@ -51,6 +51,15 @@ body {
   grid-column: 5 / span 2;
 }
 
+.no-footer {
+  .grid-base__main {
+    height: 100vh;
+  }
+  .footer {
+    display: none;
+  }
+}
+
 // Versió laptop i desktop
 @media (min-width: 900px) {
   .grid-base {

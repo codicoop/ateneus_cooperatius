@@ -313,3 +313,11 @@
   }
 }
 
+// Cas especial de quan la pantalla es tota blava
+.blue {
+  .sidebar {
+    &__topbar {
+      border-bottom: 2px solid var(--second-light);
+    }
+  }
+}

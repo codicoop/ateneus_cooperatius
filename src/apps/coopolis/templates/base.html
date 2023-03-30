@@ -29,7 +29,7 @@
     <script src="{% static 'js/onload.js' %}"></script>
   </head>
     
-  <body class="grid-base" onload="onLoadFunction()">
+  <body class="grid-base {% block extra_class_body %}{% endblock %}" onload="onLoadFunction()">
     <sidebar class="grid-base__side sidebar {% if user.is_authenticated %}is-logged{% endif %}">
       <div class="sidebar__topbar">
         <div class="topbar__home">
