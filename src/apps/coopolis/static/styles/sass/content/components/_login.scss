@@ -31,6 +31,8 @@
   
   &__card {
     z-index: 110;
+    width: 100%;
+    max-width: 400px;
     margin-top: 50px;
   }
   &__form {

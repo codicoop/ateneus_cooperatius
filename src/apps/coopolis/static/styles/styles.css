@@ -2276,6 +2276,8 @@ a {
 }
 .login__card {
   z-index: 110;
+  width: 100%;
+  max-width: 400px;
   margin-top: 50px;
 }
 .login__form form {
@@ -3356,6 +3358,40 @@ a {
 }
 .poll .field-text input[type=text]:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.login-page {
+  --margin-card: var(--pad3) var(--pad2);
+}
+
+@media (min-width: 900px) {
+  .login-page {
+    --margin-card: var(--pad3) var(--pad2);
+  }
+}
+.login-page .login__card {
+  margin: var(--margin-card);
+}
+.login-page .login__form.form li:nth-child(2) {
+  order: 1;
+}
+.login-page .login__form.form li:nth-child(3) {
+  order: 2;
+}
+.login-page .login__form.form li:nth-child(4) {
+  order: 6;
+}
+.login-page .login__form.form a:nth-child(5) {
+  order: 3;
+}
+.login-page .login__form.form input:nth-child(6) {
+  order: 5;
+}
+.login-page .login__form.form div:nth-child(8) {
+  order: 4;
+}
+.login-page .login__error {
+  color: var(--primary);
 }
 
 /*# sourceMappingURL=styles.css.map */

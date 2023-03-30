@@ -1,0 +1,47 @@
+.login-page {
+  --margin-card: var(--pad3) var(--pad2);
+}
+
+@media (min-width: 900px) {
+  .login-page {
+    --margin-card: var(--pad3) var(--pad2);
+  }
+}
+
+.login-page { 
+  .login {
+    &__card {
+      margin: var(--margin-card);
+    }
+    &__form.form {
+      // Email field
+      & li:nth-child(2) {
+        order: 1;
+      }
+      // Password field
+      & li:nth-child(3) {
+        order: 2;
+      }
+      // Sessió oberta
+      & li:nth-child(4) {
+        order: 6;
+      }
+      // Link recuperar contrasenya
+      & a:nth-child(5) {
+        order: 3;
+      }
+      // Submit btn
+      & input:nth-child(6) {
+        order: 5;
+      }
+      // Error
+      & div:nth-child(8) {
+        order: 4;
+      }
+    }
+    &__error {
+      color: var(--primary);
+    }
+  }
+
+}
