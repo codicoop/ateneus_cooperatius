@@ -24,7 +24,22 @@
 			</div>
 		</div>
 	</section>
+
+  {% if messages %}
+  <section class="courses-list__message grid-content">
+    {% for message in messages %}
+    <div class="message grid-item-full">
+      <div class=" text-md{% if message.tags %} {{ message.tags }}-message{% endif %}">
+      <p>{{ message }}</p>
+    </div>
+
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
   <section class="courses-list__grid grid-content">
+
       {% if enrolled_activities.count is 0 %}
         <div class="courses-list__subtitle text-md grid-item-full">
           <p>No tens cap inscripció confirmada.</p>

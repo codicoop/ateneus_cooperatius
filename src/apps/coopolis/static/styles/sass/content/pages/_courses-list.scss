@@ -6,16 +6,22 @@
   &__grid {
     --padding: 0;
   }
+  &__message {
+    --justify-content: center;
+  }
 }
 
 @media (min-width: 900px) {
   .courses-list {
-  --padding-page: var(--pad2) 0 var(--pad4) 0;
-  --display: grid;
+    --padding-page: var(--pad2) 0 var(--pad4) 0;
+    --display: grid;
 
-  &__grid {
-    --padding: 0 var(--pad4-5);
-  }
+    &__grid {
+      --padding: 0 var(--pad4-5);
+    }
+    &__message {
+      --justify-content: flex-start;
+    }
   }
 }
 
@@ -25,6 +31,18 @@
   padding: var(--padding-page);
   background-color: var(--second-3);
 
+  &__message {
+    display: flex;
+    justify-content: var(--justify-content);
+    padding-bottom: var(--pad2);
+
+    .message {
+      max-width: 500px;
+    }
+    .text-md {
+      color: var(--primary);
+    }
+  }
   &__submenu {
     margin-bottom: var(--pad3);
   }
