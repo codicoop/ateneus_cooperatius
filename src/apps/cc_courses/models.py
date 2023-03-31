@@ -784,6 +784,15 @@ class ActivityEnrolled(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
+
+        # Aquí hi feia un "if not self.id", de manera que l'actualització de
+        # waiting_list només passava a les inscripcions noves, i provocava que
+        # al canviar el nº d'spots, les que ja estaven en llista d'espera no
+        # passessin a confirmades.
+        if not self.activity.is_past_due:
+            is_full = self.activity.remaining_spots < 1
+            self.waiting_list = is_full
+
         try:
             super(ActivityEnrolled, self).save(
                 force_insert, force_update, using, update_fields
@@ -794,14 +803,6 @@ class ActivityEnrolled(models.Model):
                     NON_FIELD_ERRORS: 'Ja tens inscripció a aquesta activitat.',
                 })
             raise e
-
-        # Aquí hi feia un "if not self.id", de manera que l'actualització de
-        # waiting_list només passava a les inscripcions noves, i provocava que
-        # al canviar el nº d'spots, les que ja estaven en llista d'espera no
-        # passessin a confirmades.
-        if not self.activity.is_past_due:
-            is_full = self.activity.remaining_spots < 1
-            self.waiting_list = is_full
 
 
     def send_confirmation_email(self):
