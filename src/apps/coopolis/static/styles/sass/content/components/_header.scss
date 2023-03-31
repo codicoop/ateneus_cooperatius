@@ -148,7 +148,8 @@
       margin-left: var(--margin-left);
 
       // Email
-      & a:nth-child(2) {
+      & a:nth-child(2),
+      & a:nth-child(3) {
         color: var(--white);
       }
     }
