@@ -26,22 +26,41 @@
 	</section>
 
   {% if messages %}
-  <section class="courses-list__message grid-content">
-    {% for message in messages %}
-    <div class="message grid-item-full">
-      <div class=" text-md{% if message.tags %} {{ message.tags }}-message{% endif %}">
-      <p>{{ message }}</p>
+  <div class="modal">
+    <div class="modal__background" onclick="hideModal(event)"></div>
+    <div class="modal__card">
+      <div class="modal__title title-1">
+        <p>Confirmació d'enviament de l'enquesta</p>
+      </div>
+      <div class="modal__close" onclick="hideModal(event)">
+        <svg
+          class="icon-pathfill-primary"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="modal__form form">
+        <div class="modal__intro text-md">
+          {% for message in messages %}
+          <div class="text-md">
+            <p>{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
-
-    </div>
-    {% endfor %}
-  </section>
+  </div>
   {% endif %}
 
-  <section class="courses-list__grid grid-content">
+  <section class="courses-list__grid grid-content">    
+    <div class="courses-list__subtitle text-md">
+      <p>Estàs inscrit a les següents activitats:</p>
+    </div>
 
       {% if enrolled_activities.count is 0 %}
-        <div class="courses-list__subtitle text-md grid-item-full">
+        <div class="courses-list__subtitle text-sm is-bold grid-item-full">
           <p>No tens cap inscripció confirmada.</p>
         </div>
       {% else %}
