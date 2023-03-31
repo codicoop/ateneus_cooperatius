@@ -433,6 +433,7 @@ body {
   width: var(--width);
   padding: var(--pad1) var(--pad2);
   border-radius: var(--br);
+  white-space: nowrap;
   cursor: pointer;
 }
 .btn.btn--second {
