@@ -28,6 +28,13 @@
     </div>
     {% endif %}
     <div  class="header-topbar__links">
+      {% if user.is_superuser or user.is_staff %}
+      <a href="{% url 'admin:index'%}" class="text-menu">
+        <div class="btn btn--empty">
+          <p>Backoffice</p>
+        </div>
+      </a>
+      {% endif %}
       <a href="{{ config.PROJECT_WEBSITE_URL }}" class="text-menu">
         <div class="btn btn--empty">
           <p>Web</p>

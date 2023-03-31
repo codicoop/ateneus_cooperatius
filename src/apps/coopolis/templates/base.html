@@ -68,6 +68,11 @@
           <div class="text-menu">
             <p>{{ user.email }}</p>
           </div>
+          {% if user.is_superuser or user.is_staff %}
+          <a href="{% url 'admin:index'%}" class="text-menu">
+            <p>Anar al backoffice</p>
+          </a>
+          {% endif %}
           <a href="{% url 'logout' %}">
             <div class="text-menu">
               <p>Tancar sessió</p>
