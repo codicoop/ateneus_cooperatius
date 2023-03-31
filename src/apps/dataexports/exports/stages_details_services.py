@@ -751,6 +751,10 @@ class CirclesDataManager(StageDetailsDataManager):
                     ServicesChoices.PUNT_INFO.label,
                 ),
                 **self.get_data_structure_for_service(
+                    ServicesChoices.SERV_COMPLEMENTARIS.name,
+                    ServicesChoices.SERV_COMPLEMENTARIS.label,
+                ),
+                **self.get_data_structure_for_service(
                     None,
                     "Sense Servei",
                 ),
