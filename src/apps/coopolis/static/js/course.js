@@ -22,24 +22,6 @@ function closeSessionCard(event) {
   closeBtn.classList.add("is-hidden")
 }
 
-function showModal(event) {
-  console.log(event.target)
-  const card = event.target.parentElement.parentElement.parentElement
-  const modal = card.querySelector(".modal")
-  modal.classList.remove("is-hidden")
-}
-
-function hideModal(event) {
-  if (event.target.classList.contains("modal__close")) {
-    const modal = event.target.parentElement.parentElement
-    modal.classList.add("is-hidden")
-  }
-  if (event.target.classList.contains("modal__background")) {
-    const modal = event.target.parentElement
-    modal.classList.add("is-hidden")
-  }
-}
-
 function showDeleteModal(event) {
   const card = event.target.parentElement.parentElement.parentElement
   const modal = card.querySelector(".delete-modal")
