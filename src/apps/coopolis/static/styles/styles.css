@@ -2775,8 +2775,8 @@ a {
 
 .signup {
   --padding-signup: var(--pad1);
-  --margin-top: 0;
-  --align-self: flex-start;
+  --margin-top: var(--pad1);
+  --align-self: auto;
 }
 .signup .form {
   --display: flex;
@@ -2857,83 +2857,83 @@ a {
 @media (min-width: 900px) {
   .signup {
     --padding-signup: var(--pad8) 0;
-    --margin-top: 32px;
+    --margin-top: var(--pad2);
     --align-self: flex-end;
   }
   .signup .form {
     --display: grid;
   }
   .signup .form li:nth-child(2) {
-    --order: auto;
+    --order: 1;
   }
   .signup .form li:nth-child(3) {
-    --order: auto;
+    --order: 2;
   }
   .signup .form li:nth-child(4) {
-    --order: auto;
+    --order: 3;
   }
   .signup .form li:nth-child(5) {
-    --order: auto;
+    --order: 4;
   }
   .signup .form li:nth-child(6) {
-    --order: auto;
+    --order: 5;
   }
   .signup .form li:nth-child(7) {
-    --order: auto;
+    --order: 6;
   }
   .signup .form li:nth-child(8) {
-    --order: auto;
+    --order: 7;
   }
   .signup .form li:nth-child(9) {
-    --order: auto;
+    --order: 8;
   }
   .signup .form li:nth-child(10) {
-    --order: auto;
+    --order: 9;
   }
   .signup .form li:nth-child(11) {
-    --order: auto;
+    --order: 10;
   }
   .signup .form li:nth-child(12) {
-    --order: auto;
+    --order: 11;
   }
   .signup .form li:nth-child(13) {
-    --order: auto;
+    --order: 12;
   }
   .signup .form li:nth-child(14) {
-    --order: auto;
+    --order: 13;
   }
   .signup .form li:nth-child(15) {
-    --order: auto;
+    --order: 14;
   }
   .signup .form li:nth-child(16) {
-    --order: auto;
+    --order: 15;
   }
   .signup .form li:nth-child(17) {
-    --order: auto;
+    --order: 16;
   }
   .signup .form li:nth-child(18) {
-    --order: auto;
+    --order: 17;
   }
   .signup .form li:nth-child(19) {
-    --order: auto;
+    --order: 20;
   }
   .signup .form li:nth-child(20) {
-    --order: auto;
+    --order: 18;
   }
   .signup .form li:nth-child(21) {
-    --order: auto;
+    --order: 19;
   }
   .signup .form li:nth-child(22) {
-    --order: auto;
+    --order: 21;
   }
   .signup .form li:nth-child(23) {
-    --order: auto;
+    --order: 22;
   }
   .signup .form div:nth-child(24) {
-    --order: auto;
+    --order: 23;
   }
   .signup .form div:nth-child(25) {
-    --order: auto;
+    --order: 24;
   }
 }
 .signup {
@@ -3012,6 +3012,7 @@ a {
   margin-top: var(--margin-top);
 }
 .signup__form .form li:nth-child(20) {
+  grid-row: span 2;
   order: var(--order);
 }
 .signup__form .form li:nth-child(21) {

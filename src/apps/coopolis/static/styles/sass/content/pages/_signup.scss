@@ -1,8 +1,8 @@
 // Dynamic variables
 .signup {
   --padding-signup: var(--pad1);
-  --margin-top: 0;
-  --align-self: flex-start;
+  --margin-top: var(--pad1);
+  --align-self: auto;
   
   .form {
     --display: flex;
@@ -88,86 +88,86 @@
 @media (min-width: 900px) {
   .signup {
     --padding-signup: var(--pad8) 0;
-    --margin-top: 32px;
+    --margin-top: var(--pad2);
     --align-self: flex-end;
     
     .form {
       --display: grid;
 
       & li:nth-child(2) {
-        --order: auto;  
+        --order: 1;  
       }
       & li:nth-child(3) {
-        --order: auto;      
+        --order: 2;      
       }
       & li:nth-child(4) {
-        --order: auto;      
+        --order: 3;      
       }
       // Email
       & li:nth-child(5) {
-        --order: auto;      
+        --order: 4;      
       }
       & li:nth-child(6) {
-        --order: auto;      
+        --order: 5;      
       }
       & li:nth-child(7) {
-        --order: auto;      
+        --order: 6;      
       }
       & li:nth-child(8) {
-        --order: auto;      
+        --order: 7;      
       }
       // DNI
       & li:nth-child(9) {
-        --order: auto;      
+        --order: 8;      
       }
       & li:nth-child(10) {
-        --order: auto;      
+        --order: 9;      
       }
       & li:nth-child(11) {
-        --order: auto;
+        --order: 10;
       }
       & li:nth-child(12) {
-        --order: auto;
+        --order: 11;
       }
       & li:nth-child(13) {
-        --order: auto;
+        --order: 12;
       }
       & li:nth-child(14) {
-        --order: auto;
+        --order: 13;
       }
       & li:nth-child(15) {
-        --order: auto;
+        --order: 14;
       }
       & li:nth-child(16) {
-        --order: auto;
+        --order: 15;
       }
       & li:nth-child(17) {
-        --order: auto;
+        --order: 16;
       }
       & li:nth-child(18) {
-        --order: auto;
+        --order: 17;
       }
       // Acepto rebre info
       & li:nth-child(19) {
-        --order: auto;
+        --order: 20;
       }
       & li:nth-child(20) {
-        --order: auto;
+        --order: 18;
       }
       & li:nth-child(21) {
-        --order: auto;
+        --order: 19;
       }
       & li:nth-child(22) {
-        --order: auto;
+        --order: 21;
       }
       & li:nth-child(23) {
-        --order: auto;
+        --order: 22;
       }
       & div:nth-child(24) {
-        --order: auto;
+        --order: 23;
       }
       & div:nth-child(25) {
-        --order: auto;
+        --order: 24;
       }
     }
   }
@@ -254,6 +254,7 @@
         margin-top: var(--margin-top);
       }
       & li:nth-child(20) {
+        grid-row: span 2;
         order: var(--order);
       }
       & li:nth-child(21) {
