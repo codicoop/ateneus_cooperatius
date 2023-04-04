@@ -2030,10 +2030,15 @@ a {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 128px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 .sidebar__middle p {
   padding: var(--pad-2);
-  writing-mode: sideways-lr;
+  transform: rotate(-90deg);
   font-size: 12px;
   line-height: 12px;
   text-transform: uppercase;
