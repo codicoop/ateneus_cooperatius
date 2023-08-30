@@ -1,0 +1,71 @@
+// Dynamic variables
+.profile {
+  --padding-profile: var(--pad1);
+
+  &__intro {
+    --display: flex;
+    --padding-intro: var(--pad4) 0;
+    --margin-intro: 0 0 var(--pad1-5) 0;
+    --text-align: center;
+  }
+  &__title {
+    --max-width: 300px;
+    --font-size: 35px;
+    --line-height: 40px;
+  }
+}
+
+@media (min-width: 900px) {
+  .profile {
+    --padding-profile: var(--pad2) 0 var(--pad8) 0;
+
+    &__intro {
+      --display: grid;
+      --padding-intro: var(--pad4) 0 var(--pad6) 0;
+      --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
+      --text-align: left;
+    }
+    &__title {
+      --max-width: 500px;
+      --font-size: 64px;
+      --line-height: 64px;
+    }
+  }
+}
+
+// Layout
+.profile {
+    background-color: var(--second-3);
+    padding: var(--padding-profile);
+
+  &__intro {
+    display: var(--display);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--padding-intro);
+    margin: var(--margin-intro);
+    border-bottom: 2px solid var(--primary-lightest);
+    color: var(--primary);
+  }
+  &__title {
+    max-width: var(--max-width);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    text-align: var(--text-align);
+    padding-bottom: var(--pad1);
+  }
+  &__info {
+    text-align: var(--text-align);
+    color: var(--primary);
+  }
+  &__form {
+    .form {
+      flex-direction: column;
+    }
+    .form__submit {
+      align-self: center;
+      margin: var(--pad3) 0;
+    }
+  }
+}

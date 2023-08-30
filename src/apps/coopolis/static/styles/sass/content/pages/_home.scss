@@ -1,0 +1,328 @@
+// Dynamic variables
+.home {
+  .welcome {
+    &__content {
+      --flex-direction: column;
+      --justify-content: flex-start;
+      --align-items: flex-start;
+      --padding: var(--pad1);
+      --height-content: auto;
+
+      &.is-logged {
+        .welcome__logo {
+          --height: var(--pad4);
+        }
+      }
+    }
+    &__logo {
+      --display: none;
+    }
+    &__btns {
+      --display: none;
+    }
+    &__text {
+      --font-size: 20px;
+      --line-height: 24px;
+    }
+  }
+  .topbar {
+    --justify-content: flex-end;
+    --padding-topbar: var(--pad2) 0 0 0;
+
+    &__right {
+      --padding-right: var(--pad1);
+    }
+    &__left {
+      --display: none;
+    }
+  }
+  .intro {
+    --padding-intro: var(--pad1);
+    --padding-hello-out: var(--pad1) 0 var(--pad4) 0;
+
+    &__hello-out {
+      --width: auto;
+    }
+    &__bloc {
+      --padding-left-bloc: 0;
+      --padding-bottom-bloc: var(--pad2);
+      --height: 2px;
+      --width: 100%;
+      --top: 0;
+    }
+    &__bloc-title {
+      --padding-bottom: var(--pad1);
+    }
+    &__bloc-text {
+      --padding-bottom: var(--pad4);
+    }
+    &__bloc-btn {
+      --align-self: auto;
+      --margin-bottom: 0;
+    }
+  }
+  .outro {
+    --padding-outro: var(--pad4) var(--pad1) var(--pad2) var(--pad1);
+    
+    &__btn {
+      --align-self: auto;
+    }
+  }
+  // Diferències quan no estem loggejats
+  &.not-logged {
+    .home {
+      .welcome {
+        &__content {
+          --justify-content: center;
+          --align-items: center;
+          --padding: var(--pad2) var(--pad1);
+          --height-content: 450px;
+          
+          .welcome__logo {
+            --display: block;
+            --height: var(--pad9);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 900px) {
+  .home {
+    .welcome {
+      &__content {
+        --flex-direction: row;
+        --justify-content: center;
+        --align-items: center;
+        --padding: 0;
+        --height-content: 100vh;
+
+        &.is-logged {
+          .welcome__logo {
+            --height: var(--pad4);
+          }
+        }
+
+        .welcome__logo {
+          --display: block;
+          --height: var(--pad10);
+        }
+        .welcome__btns {
+          --display: flex;
+        }
+        &.is-logged {
+          --justify-content: space-between;
+          --align-items: center;
+          --padding:  var(--pad2) 0;
+          --height-content: 132px;
+  
+          .welcome__logo {
+            --display: block;
+            --width: var(--pad4);
+          }
+        }
+      }
+      &__text {
+      --font-size: 28px;
+      --line-height: 32px;
+    }
+    }
+    .topbar {
+    --justify-content: space-between;
+    --padding-topbar: var(--pad2) 0;
+
+      &__right {
+        --flex-direction: row;
+        --padding-right: 0;
+      }
+      &__left {
+        --display: flex;
+      }
+    }
+    .intro {
+      --padding-intro: var(--pad2) var(--pad4-5) 0 var(--pad4-5);
+      --padding-hello-out: var(--pad4) 0 var(--pad8) 0;
+      
+      &__hello-out {
+        --width: 50%;
+      }
+      &__bloc {
+        --padding-left-bloc: var(--pad2);
+        --padding-bottom-bloc: var(--pad1);
+        --height: 93%;
+        --width: 2px;
+        --top: auto;
+      }
+      &__bloc-title {
+        --padding-bottom: var(--pad4);
+      }
+      &__bloc-text {
+        --padding-bottom: var(--pad6);
+      }
+      &__bloc-btn {
+        --align-self: center;
+        --margin-bottom: var(--pad5);
+      }
+    }
+    .outro {
+      --padding-outro: var(--pad8) 0 var(--pad9) 0;
+
+      &__btn {
+        --align-self: center;
+      }
+    }
+  }
+}
+
+// Layout
+.home {
+  &__welcome {
+    position: relative;
+    background-color: var(--primary);
+  }
+  &__intro {
+    background-color: var(--second-3);
+  }
+  .welcome {
+    &__topbar {
+      grid-column: 1 / span 6;
+      grid-row: 1;
+      .btn {
+        cursor: pointer;
+      }
+    }
+    &__content {
+      grid-column: 1 / span 6;
+      grid-row: 1 / span 2;
+
+      display: flex;
+      flex-direction: var(--flex-direction);
+      justify-content: var(--justify-content);
+      align-items: var(--align-items);
+      height: var(--height-content);
+      max-height: 700px;
+      padding: var(--padding);
+      color: var(--white);
+    }
+    &__logo {
+      display: var(--display);
+      margin-right: var(--pad4);
+      
+      img {
+        width: auto;
+        height: var(--height);
+      }
+    }
+    &__text {
+      width: var(--pad20);
+      height: auto;
+      color: var(--white);
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+    }
+    &__btns {
+      align-self: flex-start;
+      display: var(--display);
+      margin-top: -12px;
+      color: var(--second-3);
+    }
+  }
+  .topbar {
+    display: flex;
+    justify-content: var(--justify-content);
+    align-items: flex-start;
+    height: fit-content;
+    padding: var(--padding-topbar);
+    color: var(--white);
+    z-index: 1;
+    
+    &__left {
+      display: var(--display);
+      gap: 0 var(--pad1-5);
+      
+      .btn {
+        margin-top: calc(var(--pad1) * -1);
+      }
+    }
+    &__right {
+      display: flex;
+      gap: var(--pad1);
+      padding-right: var(--padding-right);
+
+      p {
+        white-space: nowrap;
+      }
+    }
+  }
+  .intro {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-lightest);
+    padding: var(--padding-intro);
+    
+    &__title {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 2px solid var(--primary-lightest);
+    }
+    // Element of welcome when not logged
+    &__hello-out {
+      width: var(--width);
+      padding: var(--padding-hello-out);
+    }
+    // &__submenu { }
+    &__hello {
+      padding: var(--pad6);
+      text-align: center;
+    }
+    &__bloc {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-top: var(--pad1);
+      padding-bottom: var(--padding-bottom-bloc);
+
+      & + .intro__bloc {
+        padding-left: var(--padding-left-bloc);
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: var(--top);
+          height: var(--height);
+          width: var(--width);
+          background-color: var(--primary-lightest);
+        }
+      }
+    }
+    &__bloc-title {
+      padding-bottom: var(--padding-bottom);
+    }
+    &__bloc-text {
+      padding-bottom: var(--padding-bottom);
+      color: var(--primary);
+    }
+    &__bloc-btn {
+      align-self: var(--align-self);
+      margin-bottom: var(--margin-bottom);
+    }
+  }
+  .outro {
+    padding: var(--padding-outro);
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+    }
+    &__text {
+      padding: 0 var(--pad3);
+      color: var(--primary-dark);
+    }
+    &__btn {
+      align-self: var(--align-self);
+      padding-top: var(--pad4);
+    }
+  }
+}

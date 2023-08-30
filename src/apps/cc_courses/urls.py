@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CourseDetailView, EnrollActivityView, MyCoursesListView, OptoutActivityView, ActivityDetailView
+from .views import CourseDetailView, EnrollActivityView, MyCoursesListView, OptoutActivityView
 from .utils import get_courses_list_view_class
 from django.contrib.auth.decorators import login_required
 
@@ -21,10 +21,5 @@ urlpatterns = [
         'activities/<id>/activity_optout',
         OptoutActivityView.as_view(),
         name='activity_optout'
-    ),
-    path(
-        'activities/<uuid:slug>/instructions',
-        login_required(ActivityDetailView.as_view()),
-        name='activity'
     ),
 ]

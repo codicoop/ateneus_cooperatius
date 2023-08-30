@@ -1,0 +1,52 @@
+
+<div class="login is-hidden">
+  <div class="login__background" onclick="hideLoginFloat()"></div>
+  <div class="login__card card">
+    <div class="card__title text-md is-bold">
+      <p>Accedeix al teu compte:</p>
+    </div>
+    <div class="card__close" onclick="hideLoginFloat()">
+      <svg
+        class="icon-pathfill-primary"
+        xmlns="http://www.w3.org/2000/svg"
+        viewbox="0 0 9.46 9.46">
+        <path
+          d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+      </svg>
+    </div>
+    <div class="login__form form">
+      {% if login_form.errors %}
+      <div class="form__error">
+          <p>Usuari i/o contrasenya incorrectes. Si us plau torna-ho a intentar.</p>
+      </div>
+      {% endif %}
+      <form method="post" action="{% url 'login_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+        {% csrf_token %}
+        <li class="field"><label for="id_username">Correu electrònic</label> <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="254" required="" id="id_username"></li>
+        <li class="field"><label for="id_password">Contrasenya</label> <input type="password" name="password" autocomplete="current-password" required="" id="id_password"></li>
+        <li class="field-checkbox"><label for="id_remember_me">Mantenir la sessió oberta</label> <input type="checkbox" name="remember_me" id="id_remember_me"></li>
+        <a href="{% url 'password_reset' %}">
+          <div class="form__remember">
+            Has oblidat la contrasenya?
+          </div>
+        </a>
+        <input class="form__submit btn btn--second btn__text" type="submit" value="Accedir" />
+        <input type="hidden" name="next" value="{{ next }}" />
+      </form>
+    </div>
+    <div class="login__signup">
+      <div class="login__signup-text text-menu">
+        <p>Ets nou?</p>
+      </div>
+      <div class="login__signup-btn">
+        <a href="{% url 'loginsignup' %}">
+          <div class="btn btn--primary">
+            <div class="btn__text">
+              Crear un compte
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

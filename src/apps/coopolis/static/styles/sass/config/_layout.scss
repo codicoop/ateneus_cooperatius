@@ -1,0 +1,85 @@
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+}
+
+// En aquest cas en concret no es fan servir les 
+// variables custom CSS com a media queries
+// sino media queries tradicionals
+
+// Versió mòbil i tablet
+.grid-base {
+  display: flex;
+  flex-direction: column;
+
+  &__main {
+    margin-top: 88px;
+  }
+}
+// Element col·locat
+// Lone items
+.grid-item-full {
+  grid-column: 1 / -1;
+}
+.grid-item-wide {
+  grid-column: 2 / span 4;
+}
+// items que es reparteixen en 2 columnes
+.grid-item-span-3 {
+  grid-column: span 3;
+}
+.grid-item-1-3 {
+  grid-column: 1 / span 3;
+}
+.grid-item-4-6 {
+  grid-column: 4 / span 3;
+}
+
+// Items que es reparteixen en 3 columnes
+.grid-item-span-2 {
+  grid-column: span 2;
+}
+.grid-item-1-2 {
+  grid-column: 1 / span 2;
+}
+.grid-item-3-4 {
+  grid-column: 3 / span 2;
+}
+.grid-item-5-6 {
+  grid-column: 5 / span 2;
+}
+
+.no-footer {
+  .grid-base__main {
+    height: 100vh;
+  }
+  .footer {
+    display: none;
+  }
+}
+
+// Versió laptop i desktop
+@media (min-width: 900px) {
+  .grid-base {
+    display: grid;
+    grid-template-columns: var(--pad8) 1fr;
+
+    &__side {
+      grid-column: 1;
+    }
+    &__main {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      margin-top: 0;
+    }
+  }
+  .grid-content {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0 var(--pad1);
+    padding: 0 var(--pad4-5);
+  }
+}

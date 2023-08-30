@@ -1,0 +1,48 @@
+{% load static my_tag_library %}
+<!-- Duplicat a l'app coopolis i users-->
+<section class="header-topbar grid-content">
+  <div class="header-topbar__logo">
+    <img src="{% external_static "/logo.png" %}" alt="Logo de l'Ateneu Cooperatiu">
+  </div>
+  <div class="header-topbar__text">
+    <div class="text-md is-bold">
+      <p>{{ PROJECT_NAME }}</p>
+    </div>
+    <div class="text-md">
+      <p>Plataforma de gestió de projectes i inscripcions</p>
+    </div>
+  </div>
+  <div class="header-topbar__actions">
+    {% if not user.is_authenticated %}
+    <div class="header-topbar__login">
+      <a href="{% url 'loginsignup' %}">
+        <div class="btn btn--second btn__text">
+          <p>Registrar-se</p>
+        </div>
+      </a>
+      <div class="btn btn--white btn__text" onclick="showLoginFloat()">
+        <p>Accedir</p>
+      </div>
+    </div>
+    {% endif %}
+    <div  class="header-topbar__links">
+      {% if user.is_superuser or user.is_staff %}
+      <a href="{% url 'admin:index'%}" class="text-menu">
+        <div class="btn btn--empty">
+          <p>Backoffice</p>
+        </div>
+      </a>
+      {% endif %}
+      <a href="{{ config.PROJECT_WEBSITE_URL }}" class="text-menu">
+        <div class="btn btn--empty">
+          <p>Web</p>
+        </div>
+      </a>
+      <a href="{{ config.PROJECT_CONTACT_URL }}" class="text-menu">
+        <div class="btn btn--empty">
+          <p>Contacte</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

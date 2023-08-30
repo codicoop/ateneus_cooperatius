@@ -1,0 +1,127 @@
+// Dynamic variables
+.login {
+  &__background {
+    --top: 87px;
+  }
+}
+
+@media (min-width: 900px) {
+  .login {
+    &__background {
+      --top: 0;
+    }
+  }
+}
+
+// Layout
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &__background {
+    position: fixed;
+    top: var(--top);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--violet);
+    z-index: 100;
+  }
+  
+  &__card {
+    z-index: 110;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 50px;
+  }
+  &__form {
+    form {
+      display: flex;
+      flex-direction: column;
+
+      // Hidden input
+      & input:nth-child(1) {
+        order: 1;
+      }
+      // Input correu
+      & li:nth-child(2) {
+        order: 2;
+      }
+      // Input contrasenya
+      & li:nth-child(3) {
+        order: 3;
+      }
+      // Checkbox mantenir la sessió
+      & li:nth-child(4) {
+        order: 6;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: flex-end;
+        padding-top: var(--pad-2);
+        padding-bottom: var(--pad3);
+        
+        label {
+          display: inline;
+          padding-bottom: 0;
+          padding-left: var(--pad-2);
+          width: 80%;
+          font-weight: 300;
+          font-size: 12px;
+          line-height: 16px;
+          text-transform: none;
+          color: var(--primary-dark);
+          cursor: pointer;
+        }
+        input {
+          position: relative;
+          width: var(--pad1);
+          height: var(--pad1);
+          padding: 0;
+
+          &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 9px;
+            height: 9px;
+            border-radius: 20px;
+            background-color: var(--white);
+          }
+        }
+        input:checked {
+          background-color: var(--second-lighter);
+
+          &::after {
+            background-color: var(--second);
+          }
+        }
+      }
+      // Enllaç de recuperació de contrasenya
+      & a:nth-child(5) {
+        order: 4;
+
+        color: var(--second);
+        font-weight: bold;
+        padding-bottom: var(--pad1);
+      }
+      // Submit
+      & input:nth-child(6) {
+        order: 5;
+      }
+    }
+  }
+  &__signup {
+    border-top: 2px solid var(--grey-light);
+  }
+  &__signup-text {
+    padding-bottom: var(--pad1);
+    padding-top: var(--pad-3);
+    color: var(--grey-light);
+  }
+  // &__signup-btn { }
+}
+

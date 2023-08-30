@@ -1,0 +1,27 @@
+{% load static %}
+<footer class="footer">
+  <div class="footer__author">
+    <div class="footer__author-text">
+      <p>Aquesta aplicació web ha sigut dissenyada per
+        <a class="link" target="_blank" href="https://www.bildi.net/">Bildi</a>
+        i desenvolupada per
+        <a class="link" target="_blank" href="https://www.codi.coop/">Codi Cooperatiu</a>.
+      </p>
+    </div>
+    <div class="footer__author-links">
+      <a class="link" target="_blank" href="{{ config.PROJECT_LEGAL_URL }}">Avís legal</a>
+      <a class="link" target="_blank" href="{{ config.PROJECT_CONTACT_URL }}">Contacte</a>
+    </div>
+  </div>
+  <div class="footer__logo-container">
+    <div class="footer__logo is-bright">
+      <img src="{% static 'images/logo_economia_social.png' %}" />
+    </div>
+    <div class="footer__logo">
+      <img src="{% static 'images/logo_gene.png' %}" />
+    </div>
+    <div class="footer__logo">
+      <img src="{% static 'images/logo_ateneus.png' %}" />
+    </div>
+  </div>
+</footer>

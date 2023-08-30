@@ -1,0 +1,42 @@
+// Dynamic variables
+.submenu {
+  --grid-template-columns: 1fr 1fr;
+  --font-size: 14px;
+  --line-height: 16px;
+}
+
+@media (min-width: 900px) {
+  .submenu {
+    --grid-template-columns: var(--pad11) var(--pad11);
+    --font-size: 16px;
+    --line-height: 18px;
+  }
+}
+
+.submenu {
+  display: grid;
+  grid-template-columns: var(--grid-template-columns);
+  border-bottom: 1px solid var(--primary-lightest);
+  color: var(--primary-light);
+  font-weight: bold;
+  
+  .submenu__item {
+    padding-bottom: var(--pad1);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+
+    &.is-active {
+      position: relative;
+      color: var(--primary);
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary);
+      }
+    }
+  }
+}

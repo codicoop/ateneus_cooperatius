@@ -20,11 +20,3 @@ function makeModal (modalSelector) {
     divBackground.append(modal);
     modalParent.append(divBackground);
 }
-
-function showModal(modalSelector) {
-    $(modalSelector).css("display", "block");
-}
-
-function hideModal(modalSelector) {
-    $(modalSelector).css("display", "none");
-}

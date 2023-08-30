@@ -1,0 +1,100 @@
+// Dynamic variables
+.header-topbar {
+  --padding: var(--pad1);
+  --height: auto;
+
+  &.grid-content {
+    --display-header: flex;
+  }
+  
+  &__logo {
+    --display: none;
+  }
+  &__links {
+    --display: none;
+  }
+  &__login {
+    --margin: var(--pad1);
+  }
+}
+
+@media (min-width: 900px) {
+  .header-topbar {
+    --padding: var(--pad2) var(--pad4);
+    --height: 132px;
+    
+    &.grid-content {
+      --display-header: grid;
+    }
+    &__logo {
+      --display: block;
+    }
+    &__links {
+      --display: flex;
+    }
+    &__login {
+      --margin: 0;
+    }
+  }
+}
+
+// Layout
+
+.header-topbar {
+  padding: var(--padding);
+  height: var(--height);
+  background-color: var(--primary);
+  color: var(--white);
+  align-items: center;
+
+  &.grid-content {
+    display: var(--display-header);
+    grid-auto-flow: dense;
+    flex-direction: column;
+  }
+
+  &__logo {
+    grid-column: 1;
+    display: var(--display);
+    align-self: center;
+
+    img {
+      max-height: 65px;
+    }
+  }
+  &__text {
+    order: 2;
+    grid-column: 2 / span 4;
+    align-self: flex-start;
+
+    .text-md {
+      color: var(--white);
+    }
+  }
+  &__actions {
+    order: 1;
+    grid-column: 6;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+  }
+  &__links {
+    display: var(--display);
+    flex-direction: row;
+    align-self: flex-end;
+    gap: var(--pad1);
+  }
+  &__login {
+    display: flex;
+    gap: var(--pad1);
+    margin: var(--margin);
+    
+    .btn {
+      cursor: pointer;
+    }
+
+    p {
+      white-space: nowrap;
+    }
+  }
+}

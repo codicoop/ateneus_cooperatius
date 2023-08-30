@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.views import generic
 from django.shortcuts import reverse
 
@@ -17,10 +18,14 @@ class EnrollActivityView(generic.RedirectView):
                 user_comments=request.POST['user_comments'],
             )
             self.url = activity.course.absolute_url
-            enrollment.save()
-            if enrollment.waiting_list:
-                enrollment.send_waiting_list_email()
+            try:
+                enrollment.save()
+            except ValidationError:
+                self.url = reverse("my_activities")
             else:
-                enrollment.send_confirmation_email()
+                if enrollment.waiting_list:
+                    enrollment.send_waiting_list_email()
+                else:
+                    enrollment.send_confirmation_email()
 
         return super().get(request, *args, **kwargs)

@@ -1,6 +1,87 @@
-{% extends "generic.html" %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block generic %}
+{% block content %}
+{% include '../components/header_topbar.html' %}
+<div class="profile {% if not user.is_authenticated %}not-logged{% endif %}">
+	{% if messages %}
+  <div class="modal">
+    <div class="modal__background" onclick="hideModal(event)"></div>
+    <div class="modal__card">
+      <div class="modal__title title-1">
+        <p>Confirmació</p>
+      </div>
+      <div class="modal__close" onclick="hideModal(event)">
+        <svg
+          class="icon-pathfill-primary"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="modal__form form">
+        <div class="modal__intro text-md">
+          {% for message in messages %}
+          <div class="text-md">
+            <p>{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+	<section class="profile__submenu grid-content">
+		<div class="grid-item-full">
+			<div class="submenu">
+				<a href="{% url 'home' %}">
+					<div class="submenu__item">
+						<p>Tauler d'inici</p>
+					</div>
+				</a>
+				<a href="{% url 'user_profile' %}">
+					<div class="submenu__item is-active">
+						<p>Les meves dades</p>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+	<section class="profile__intro grid-content">
+		<div class="profile__title grid-item-wide">
+			<p>{{ user.first_name }} {{ user.last_name }} {{ user.surname2 }}</p>
+		</div>
+		<div class="profile__info grid-item-wide text-md">
+			<p>{{ user.id_number }}</p>
+			<p>{{ user.email }}</p>
+			<p>{{ user.town.name|lower|capfirst }}</p>
+		</div>
+	</section>
+	<section class="profile__form grid-content">
+		<div class="form grid-item-wide">
+			<form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" id="profile_form">
+				{% csrf_token %}
+				{{ form.as_ul }}
+			</form>
+			{% if form.errors %}
+			<div class="form__error text-sm">
+					<p>Hi ha hagut un error: {{ form.error }}</p>
+			</div>
+			{% endif %}
+
+			<div class="form__submit">
+				<button form="profile_form" type="submit" class="btn btn--second">
+					<p class="btn__text">
+						Guardar canvis
+					</p>
+				</button>
+			</div>
+		</div>
+	</section>
+</div>
+{% endblock %}
+
 
 <div class="generated-form">
     {% if form.errors %}
@@ -26,6 +107,4 @@
     </form>
 </div>
 
-{% include 'reusable/town_district_validation_js.html' %}
 
-{% endblock %}

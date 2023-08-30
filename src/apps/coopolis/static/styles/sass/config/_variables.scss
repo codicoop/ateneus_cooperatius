@@ -1,0 +1,61 @@
+:root {
+  // Basic Colors
+  --black: #000;
+  --grey: #707070;
+  --grey-light: #d4bfc6;
+  --grey-lighter: #D3BFC640;
+  --white: #fff;
+
+  --red: #FF0000;
+  --orange: #E99401;
+  --yellow: #F6BF00;
+  --violet: #c4b6c3;
+  --violet-dark: #a77f8d;
+  
+  // App colors
+  --primary-lightest: #FFC5D9;
+  --primary-light: #FE8CB3;
+  --primary: #D6085B;
+  --primary-med: #720027;
+  --primary-dark: #51001C;
+
+  --second-3: #EAF3FB;
+  --second-2: #C7E3FB;
+  --second-1: #A0EDF9;
+  --second-lighter: #8ECAFD;
+  --second-light: #1E96FC;
+  --second: #146CD7;
+  --second-med: #08259B;
+  --second-dark: #00132B;
+  
+  // Border radius
+  --br: 8px;
+
+  // Pads
+  --pad-base: 16px;
+
+  --pad-3: calc(var(--pad-base) / 3); // 5
+  --pad-2: calc(var(--pad-base) / 2); // 8 
+  --pad1: var(--pad-base); // 16
+  --pad1-5: calc(var(--pad-base) * 1.5); // 24
+  --pad2: calc(var(--pad-base) * 2); // 32
+  --pad3: calc(var(--pad-base) * 3); // 48
+  --pad4: calc(var(--pad-base) * 4); // 64
+  --pad4-5: calc(var(--pad-base) * 4.5); // 72
+  --pad5: calc(var(--pad-base) * 5); // 80
+  --pad6: calc(var(--pad-base) * 6); // 96
+  --pad7: calc(var(--pad-base) * 7); // 112
+  --pad8: calc(var(--pad-base) * 8); // 128
+  --pad9: calc(var(--pad-base) * 9); // 144
+  --pad10: calc(var(--pad-base) * 10); // 160
+  --pad11: calc(var(--pad-base) * 11); // 176
+  --pad12: calc(var(--pad-base) * 12); // 192
+  --pad20: calc(var(--pad-base) * 20); // 320
+
+  .is-hidden {
+    display: none !important;
+  }
+  .is-bright {
+    filter: brightness(100%);
+  }
+}
