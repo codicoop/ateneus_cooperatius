@@ -1,22 +1,40 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block loginbox %}
-{% endblock %}
+{% block home_is_active %}is-active{% endblock %}
+{% block enrollments_is_active %}{% endblock %}
+{% block projects_is_active %}{% endblock %}
 
 {% block content %}
-<div class="page-content">
-
-    {% if messages %}
-    <div class="generated-form">
-        <ul class="message-container">
-            {% for message in messages %}
-            <li
-            {% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-
-    {% include 'registration/login_signup_form.html' %}
+{% include '../components/header_topbar.html' %}
+<div 
+	class="signup {% if not user.is_authenticated %}not-logged{% endif %}"
+	
+>
+	<section class="signup__welcome grid-content">
+		<div class="title-1 grid-item-wide">
+			<p>Per a inscriure't a les activitats o sol·licitar acompanyament per al teu projecte, crea un compte amb els formularis que hi ha a continuació.</p>
+		</div>
+	</section>
+	<section class="signup__form grid-content">
+		<form 
+				class="form grid-item-wide"
+				method="post" 
+				action="{% url 'signup_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+		>
+			{% csrf_token %}
+			{{ signup_form.as_ul }}
+			<div class="form__text">
+				<p>Consulta el
+					<a href="{{ config.PROJECT_LEGAL_URL }}" target="_blank" class="is-bold">text complet</a>
+					de l'avís legal i de protecció de dades.
+				</p>
+			</div>
+			<div class="form__submit">
+				<input type="submit" class="btn btn--second btn__text" value="Crear compte" />
+			</div>
+			<input type="hidden" name="next" value="{{ next }}" />
+		</form>
+	</section>
 </div>
 {% endblock %}

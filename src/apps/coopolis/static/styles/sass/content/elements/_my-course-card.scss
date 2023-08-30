@@ -1,0 +1,473 @@
+// Dynamic variables
+.my-course-card {
+  --max-width: 500px;
+  --display-card: flex;
+  --padding-card: var(--pad1) 0;
+
+  &__pretitle {
+    --padding: 0 var(--pad1) var(--pad-2) var(--pad1);
+  }
+  &__title {
+    --padding: 0 var(--pad1) var(--pad4) var(--pad1);
+  }
+  &__btn {
+    --margin: var(--pad3) var(--pad2) var(--pad2) var(--pad2);
+  }
+  .section {
+    --display-section: flex;
+
+    &.is-open {
+      .section__info {
+        --display: flex;
+        --background-color: #fdfcfc;
+      }
+      .section__label {
+        --background-color: #fdfcfc;
+      }
+      .open {
+        --display: none;
+      }
+      .close {
+        --display: block;
+      }
+      .label1 {
+      --border-bottom: 2px solid var(--grey-lighter);
+      }
+      .label2 {
+      --border-bottom: 2px solid var(--grey-lighter);
+      }
+    }
+    .open {
+      --display: block;
+    }
+    .close {
+      --display: none;
+    }
+    &__action {
+      --display-action: block;
+    }
+    &__info {
+      --display: none;
+      --background-color: var(--white);
+      --padding-info: 0 var(--pad1) var(--pad4) var(--pad1);
+    }
+    &__label {
+      --background-color: var(--white);
+      --padding: var(--pad1-5) var(--pad1);
+      --margin-top: 0;
+    }
+    .label1 {
+      --border-bottom: none;
+      --border-top: none;
+    }
+    .label2 {
+      --margin-top: 0;
+      --border-bottom: none;
+    }
+    .label3 {
+      --margin-top: 0;
+    }
+  }
+}
+.my-course-card.past-activities,
+.my-course-card.waiting-activities {
+  &.is-open {
+    .top {
+      --padding-top: 0 var(--pad1) var(--pad1) var(--pad1);
+    }
+    .bottom {
+      --display-bottom: block;
+    }
+  }
+  .top {
+    --padding-top: 0 var(--pad1) 0 var(--pad1);
+    --display-top: flex;
+    
+    &__btn {
+      --margin: var(--pad3) var(--pad2) 0 var(--pad2);
+    }
+  }
+  .bottom {
+    --display-bottom: none;
+    --width: stretch;
+  }
+}
+
+@media (min-width: 900px) {
+  .my-course-card {
+    --max-width: none;
+    --display-card: grid;
+    --padding-card: var(--pad1) 0 0 0;
+
+    &__pretitle {
+      --padding: 0 var(--pad2) var(--pad-2) var(--pad2);
+    }
+    &__title {
+      --padding: 0 0 var(--pad2) var(--pad2);
+    }
+    &__btn {
+      --margin: var(--pad2) var(--pad2) var(--pad2) 0;
+    }
+    .section {
+      --display-section: grid;
+
+      &__action {
+        --display-action: none;
+      }
+      &__info {
+        --background-color: var(--white);
+        --padding-info: 0 var(--pad1) var(--pad5) var(--pad1);
+      }
+      &__label {
+        --background-color: var(--white);
+        --padding: var(--pad1-5) var(--pad2);
+        --margin-top: -2px;
+      }
+      .label2 {
+        --margin-top: 66px;
+      }
+      .label3 {
+        --margin-top: 134px;
+      }
+      &.is-open {
+        .section__label {
+          --background-color: #fff0f5;
+        }
+        .section__info {
+          --display: grid;
+          --background-color: #fdfcfc;
+        }
+        .section__info--centered {
+          --display: flex;
+        }
+      }
+    }
+    .section.is-open {
+      .label1 {
+        --border-bottom:  2px solid var(--grey-lighter);
+      }
+      .label2, .label3 {
+        --border-bottom:  2px solid var(--grey-lighter);
+        --border-top:  2px solid var(--grey-lighter);
+      }
+    }
+    .label1, .label2, .label3 {
+      --border-bottom:  2px solid var(--grey-lighter);
+      --border-top:  2px solid var(--grey-lighter);
+    }
+    .label1 {
+      --margin-top: 0;
+    }
+    .label2 {
+      --margin-top: 0;
+    }
+    .label3 {
+      --margin-top: 0;
+    }
+  }
+  .my-course-card.past-activities,
+  .my-course-card.waiting-activities {
+    &.is-open {
+      .top {
+        --padding-top: 0 var(--pad2) var(--pad1) var(--pad2);
+      }
+      .bottom {
+        --display-bottom: grid;
+      }
+    }
+    .top {
+      --padding-top: 0 var(--pad2) 0 var(--pad2);
+      --display-top: grid;
+      
+      &__btn {
+        --margin: 0;
+      }
+    }
+    .bottom {
+      --display-bottom: none;
+      --width: fit-content;
+    }
+  }
+}
+
+// Card estàndard
+.my-course-card {
+  position: relative;
+  display: var(--display-card);
+  flex-direction: column;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: var(--max-width);
+  width: 100%;
+  padding: var(--padding-card);
+  background-color: var(--white);
+  border-radius: var(--br);
+  border: 1px solid var(--grey-lighter);
+  box-shadow: 3px 3px 10px #FE1A681A;
+  
+  &__pretitle {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+    color: var(--primary-light);
+    padding: var(--padding);
+  }
+  &__title {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    padding: var(--padding);
+  }
+  &__bloc {
+    padding: var(--pad1);
+    border-top: 2px solid var(--grey-lighter);
+  }
+  &__subtitle {
+    color: var(--primary);
+    padding: var(--pad1) 0 var(--pad-2) 0;
+  }
+  &__btn {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    margin: var(--margin);
+    cursor: pointer;
+    p {
+      pointer-events: none;
+    }
+  }
+  .section {
+    grid-column: 1 / span 3;
+    grid-row: 3;
+    display: var(--display-section);
+    flex-direction: column;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 2px solid var(--grey-lighter);
+
+    &__label {
+      grid-column: 1;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0 var(--pad8);
+      height: fit-content;
+      padding: var(--padding);
+      margin-top: var(--margin-top);
+      background-color: var(--background-color);
+      font-weight: bold;
+      color: var(--primary);
+      cursor: pointer;
+    }
+    .label1 {
+      border-bottom: var(--border-bottom);
+      border-top: var(--border-top);
+    }
+    .label2 {
+      margin-top: var(--margin-top);
+      border-top: var(--border-top);
+      border-bottom: var(--border-bottom);
+    }
+    .label3 {
+      border-top: var(--border-top);
+      border-bottom: 2px solid var(--grey-lighter);
+      margin-top: var(--margin-top);
+    }
+    .open {
+      display: var(--display);
+      width: 24px;
+    }
+    .close {
+      display: var(--display);
+      width: 24px;
+    }
+    &__action {
+      display: var(--display-action);
+      pointer-events: none;
+    }
+    p {
+      pointer-events: none;
+    }
+    &__info {
+      grid-column: 2 / span 2;
+      display: var(--display);
+      flex-direction: column;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0 var(--pad1);
+      padding: var(--padding-info);
+      background-color: var(--background-color);
+
+      &.section__info--centered {
+        align-items: center;
+        justify-content: center;
+        gap: var(--pad2);
+      }
+      // boto enquesta
+      .poll {
+        padding: var(--pad4) var(--pad1) var(--pad2) var(--pad1);
+      }
+    }
+    &__link {
+      margin: var(--pad3) var(--pad1) 0 var(--pad1);
+      padding: var(--pad1);
+      max-width: 330px;
+      background-color: var(--white);
+      border: 2px solid var(--grey-lighter);
+      border-radius: var(--br);
+      color: var(--grey);
+    }
+    &__btn {
+      position: relative;
+      width: 100%;
+      max-width: 330px;
+      padding: 0 var(--pad1);
+      cursor: pointer;
+    }
+    .copied_alert {
+      position: absolute;
+      bottom: -24px;
+      right: var(--pad2);
+      text-align: right;
+      color: var(--primary);
+      cursor: auto;
+    }
+    &__material {
+      display: flex;
+      align-items: center;
+      gap: 0 var(--pad1);
+      margin-top: var(--pad-2);
+      padding: var(--pad1);
+      background-color: #feeef3;
+      border-radius: var(--br);
+      
+      p {
+        font-weight: bold;
+        color: var(--primary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 300px;
+      }
+    }
+    // Ordenació específica
+    .day {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .time {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .description {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+    }
+    .place {      
+      grid-column: 1;
+      grid-row: 3;
+    }
+  }
+}
+
+// Diferències per activitats pasades
+.my-course-card.past-activities {
+  display: flex;
+
+  .my-course-card__pretitle {
+    font-weight: bold;
+    color: var(--primary);
+    text-transform: uppercase;
+  }
+  .my-course-card__title {
+    padding-bottom:  var(--pad2);
+  }
+  .my-course-card__session {
+    border-top: 2px solid var(--grey-lighter);
+    padding: var(--pad1) 0;
+  }
+  .top {
+    display: grid;
+    grid-template-columns: 1fr 50px 50px;
+    gap: var(--pad1) var(--pad2);
+    padding: var(--padding-top);
+    
+    &__title {
+      font-weight: bold;
+      pointer-events: none;
+    }
+    &__date {
+      grid-column: 1;
+      display: flex;
+      gap: var(--pad-2);
+      color: var(--violet);
+      pointer-events: none;
+    }
+    &__action {
+      grid-column: 3;
+      pointer-events: none;
+
+      .close {
+        display: none;
+      }
+    }
+  }
+  .bottom {
+    display: var(--display-bottom);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 var(--pad3);
+    padding: 0 var(--pad1);
+    border-top: 2px solid var(--grey-lighter);
+
+    .poll {
+      grid-column: 3;
+      padding-top: var(--pad3);
+      justify-self: end;
+
+      .btn {
+        width: var(--width);
+      }
+    }
+  }
+}
+
+// Diferències per llista d'espera
+.my-course-card.waiting-activities {
+  display: flex;
+
+  .my-course-card__pretitle {
+    font-weight: bold;
+    color: var(--primary);
+    text-transform: uppercase;
+  }
+  .my-course-card__title {
+    padding-bottom:  var(--pad2);
+  }
+  .my-course-card__session {
+    border-top: 2px solid var(--grey-lighter);
+    padding: var(--pad1) 0;
+  }
+  .top {
+    display: var(--display-top);
+    flex-direction: column;
+    grid-template-columns: repeat(3, 1fr);
+    padding: var(--padding-top);
+    
+    &__title {
+      grid-column: 1;
+      padding-bottom: var(--pad1);
+      font-weight: bold;
+      pointer-events: none;
+    }
+    &__date {
+      grid-column: 2;
+      display: flex;
+      gap: var(--pad-2);
+      padding-bottom: var(--pad-2);
+      color: var(--violet);
+      pointer-events: none;
+    }
+    &__btn {
+      grid-column: 3;
+      grid-row: 1 / span 2;
+      justify-self: end;
+      align-self: center;
+      margin: var(--margin);
+      width: fit-content;
+    }
+  }
+}

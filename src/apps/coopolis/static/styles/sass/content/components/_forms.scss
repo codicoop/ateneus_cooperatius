@@ -1,0 +1,77 @@
+// Dynamic variables
+.form {
+  --display: block;
+  
+  &__submit {
+    --margin: var(--pad2) 0;
+  }
+}
+.signup {
+  .form__submit {
+    --margin: var(--pad4) 0;
+  }
+}
+.login {
+  .form__submit {
+    --margin: var(--pad1) 0 0 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .signup {
+    .form {
+      --display: grid;
+    }
+  }
+  .profile {
+    .form {
+      --display: flex;
+    }
+  }
+  .project {
+    .form {
+      --display: grid;
+    }
+  }
+  .form {
+    &__submit {
+      --margin: var(--pad4) 0;
+    }
+  }
+  .signup {
+    .form__submit {
+      --margin: var(--pad6) 0;
+    }
+  }
+}
+
+// Layout
+.form {
+  display: var(--display);
+  grid-template-columns: 50% 50%;
+  gap: 0 var(--pad1);
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Non-field error
+  &__error {
+    grid-column: 1 / -1;
+    padding-bottom: var(--padding-xsm);
+    padding-top: var(--padding-sm);
+    color: var(--red);
+  }
+  // The submit button of the form
+  &__text {
+    a {
+      color: var(--second);
+    }
+  }
+  // The submit button of the form
+  &__submit {
+    align-self: stretch;
+    margin: var(--margin);
+  }
+}

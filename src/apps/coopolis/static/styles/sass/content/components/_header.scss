@@ -1,0 +1,323 @@
+// Dynamic variables
+.user-icon {
+  --height: 40px;
+  --width: 40px;
+}
+.sidebar {
+  --bottom-sidebar: auto;
+  --right-sidebar: 0;
+  --flex-direction-sidebar: row;
+
+  &__topbar {
+    --display-topbar: flex;
+  }
+  .burguer {
+    --display: block;
+  }
+  .close,
+  &__menu {
+    --display: none;
+  }
+  &__middle,
+  &__logout {
+    --display: none;
+  }
+  // Canvis quan el menú és obert a versió mòvil
+  &.menu-is-open {
+    --flex-direction-sidebar: column;
+
+    .burguer {
+      --display: none;
+    }
+    .close,
+    .sidebar__menu {
+      --display: block;
+    }
+    .menu {
+      .is-active {
+        --background-color: var(--second);
+      }
+    }
+    .home-icon {
+      margin-top: 7px;
+    }
+    .topbar__middle {
+      --margin-top: 8px;
+      --margin-left: -8px;
+    }
+  }
+}
+.menu {
+  --display-menu: grid;
+  --width-menu: 100%;
+  --color-border-mb: var(--second-light);
+  --color-border-dk: transparent;
+
+  &__item {
+    --padding: var(--pad4-5) 0;
+    --height: auto;
+    }
+  &__home {
+    --display: none;
+  }
+  .mobile-only {
+    --display-mobile-only: block;
+  }
+}
+
+@media (min-width: 900px) {
+  .user-icon {
+    --height: 60px;
+    --width: 60px;
+  }
+  .sidebar {
+    --bottom-sidebar: 0;
+    --right-sidebar: auto;
+    --flex-direction-sidebar: column;
+
+    &__topbar {
+      --display-topbar: none;
+    }
+    &__menu {
+      --display: flex;
+    }
+    .burguer, .close {
+      --display: none;
+    }
+    &__middle,
+    &__logout {
+      --display: flex;
+    }
+  }
+  .menu {
+    --display-menu: flex;
+    --width-menu: var(--pad8);
+    --color-border-mb: transparent;
+    --color-border-dk: var(--second-light);
+
+    &__item {
+    --padding: var(--pad2) 0;
+    --height: 130px;
+    }
+    &__home {
+      --display: block;
+    }
+    .mobile-only {
+      --display-mobile-only: none;
+    }
+  }
+}
+
+// Layout
+.home-icon {
+  padding: var(--pad1);
+}
+.user-icon {
+  height: var(--width);
+  width: var(--height);
+  margin: var(--pad1);
+  border-radius: 50%;
+  overflow: clip;
+}
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: var(--bottom-sidebar);
+  right: var(--right-sidebar);
+
+  display: flex;
+  flex-direction: var(--flex-direction-sidebar);
+  justify-content: flex-start;
+  background-color: var(--second);
+  z-index: 200;
+  
+  // barra de versió mòvil
+  &__topbar {
+    display: var(--display-topbar);
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    // .topbar__home {}
+    .topbar__middle {
+      display: flex;
+      flex-direction: column;
+      color: var(--second-lighter);
+      margin-top: var(--margin-top);
+      margin-left: var(--margin-left);
+
+      // Email
+      & a:nth-child(2),
+      & a:nth-child(3) {
+        color: var(--white);
+      }
+    }
+    .topbar__action {
+      margin: var(--pad1);
+      
+      .close {
+        display: var(--display);
+        width: var(--pad3);
+        padding: var(--pad1);
+        cursor: pointer;
+      }
+      .burguer {
+        display: var(--display);
+        width: 56px;
+        padding: var(--pad1);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__menu {
+    display: var(--display);
+  }
+  &__middle {
+    display: var(--display);
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 128px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+    text-align: center;
+    
+    p {
+      padding: var(--pad-2);
+      transform: rotate(-90deg);
+      font-size: 12px;
+      line-height: 12px;
+      text-transform: uppercase;
+      color: var(--second-light);
+    }
+  }
+  &__logout {
+    position: relative;
+    display: var(--display);
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+
+    .menu__item:hover {
+      background-color: var(--second);
+    }
+
+    .menu__item::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      width: 75%;
+      height: 2px;
+      background-color: var(--second-light);
+      z-index: 1;
+    }
+  }
+}
+.menu {
+  position: relative;
+  display: var(--display-menu);
+  flex-direction: var(--flex-direction-sidebar);
+  grid-template-columns: 1fr 1fr;
+  width: var(--width-menu);
+
+  li {
+    position: relative;
+    border-top: 2px solid var(--color-border-mb);
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 16px;
+      width: 75%;
+      height: 2px;
+      background-color: var(--color-border-dk);
+      z-index: 1;
+    }
+    &:nth-child(3) {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 23px;
+        width: 2px;
+        height: 75%;
+        background-color: var(--color-border-mb);
+        z-index: 1;
+      }
+    }
+    &:nth-child(5) {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        width: 2px;
+        height: 75%;
+        background-color: var(--color-border-mb);
+        z-index: 1;
+      }
+    }
+  }
+  .mobile-only {
+    display: var(--display-mobile-only);
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--pad1);
+    padding: var(--padding);
+    height: var(--height);
+    background-color: var(--second);
+    color: var(--white);
+
+    &:hover {
+      background-color: var(--second-med);
+    }
+    &.is-active {
+      background-color: var(--second-med);
+      // width: var(--pad8);
+    }
+    &.is-disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      background-color: var(--grey-light);
+    }
+    // Difference in some btns
+    &.menu__item--narrow {
+      padding: var(--pad2);
+
+      &::after {
+        background-color: transparent;
+      }
+    }
+  }
+  &__icon {
+    height: 27px;
+
+    svg {
+      width: var(--pad1-5);
+    }
+  }
+  &__icon--out {
+    width: var(--pad1);
+    transform: rotate(90deg);
+  }
+  // Icona del menu d'inici - només dektop
+  &__home {
+    display: var(--display);
+  }
+}
+
+// Cas especial de quan la pantalla es tota blava
+.blue {
+  .sidebar {
+    &__topbar {
+      border-bottom: 2px solid var(--second-light);
+    }
+  }
+}

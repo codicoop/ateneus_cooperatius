@@ -1,0 +1,69 @@
+// Dynamic variables
+.courses-list {
+  --padding-page: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
+  --display: flex;
+
+  &__grid {
+    --padding: 0;
+  }
+  &__message {
+    --justify-content: center;
+  }
+}
+
+@media (min-width: 900px) {
+  .courses-list {
+    --padding-page: var(--pad2) 0 var(--pad4) 0;
+    --display: grid;
+
+    &__grid {
+      --padding: 0 var(--pad4-5);
+    }
+    &__message {
+      --justify-content: flex-start;
+    }
+  }
+}
+
+// Layout
+.courses-list {
+  height: 100%;
+  padding: var(--padding-page);
+  background-color: var(--second-3);
+
+  &__message {
+    display: flex;
+    justify-content: var(--justify-content);
+    padding-bottom: var(--pad2);
+
+    .message {
+      max-width: 500px;
+    }
+    .text-md {
+      color: var(--primary);
+    }
+  }
+  &__submenu {
+    margin-bottom: var(--pad3);
+  }
+  &__grid {
+    display: var(--display);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--pad1);
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: var(--padding);
+
+    & + .courses-list__grid {
+      .courses-list__subtitle {
+        padding: var(--pad2) 0 var(--pad1) 0;
+      }
+    }
+  }
+  &__subtitle {
+    width: 100%;
+    color: var(--primary);
+    padding: 0 0 var(--pad1) 0;
+  }
+}

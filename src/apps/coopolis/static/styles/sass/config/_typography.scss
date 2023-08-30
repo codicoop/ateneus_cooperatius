@@ -1,0 +1,93 @@
+// Dynamic variables
+body, 
+.text-sm {
+  --font-size: 12px;
+  --line-height: 16px;
+}
+.text-md {
+  --font-size: 16px;
+  --line-height: 20px;
+}
+.title-1 {
+  --font-size: 20px;
+  --line-height: 24px;
+}
+.title-2 {
+  --font-size: 35px;
+  --line-height: 40px;
+}
+
+@media (min-width: 900px) {
+  body,
+  .text-sm {
+    --font-size: 14px;
+    --line-height: 18px;
+  }
+  .text-md {
+    --font-size: 18px;
+    --line-height: 24px;
+  }
+
+  .title-1 {
+    --font-size: 28px;
+    --line-height: 32px;
+  }
+  .title-2 {
+    --font-size: 64px;
+    --line-height: 64px;
+  }
+}
+
+// Layout
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--black);
+}
+body, 
+.text-sm {
+  font-weight: 300;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  color: var(--primary-dark);
+}
+.text-md {
+  font-weight: 300;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  color: var(--primary-dark);
+}
+.text-menu {
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+.text-submenu {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 16px;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+.text-btn {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 12px;
+}
+.title-1 {
+  font-weight: 300;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+}
+.title-2 {
+  font-weight: 500;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+}
+
+.is-bold {
+  font-weight: 700;
+}
+.not-bold {
+  font-weight: 300;
+}

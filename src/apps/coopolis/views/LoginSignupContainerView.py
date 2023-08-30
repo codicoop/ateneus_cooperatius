@@ -75,7 +75,7 @@ class CoopolisSignUpView(SignUpView):
 
 
 class CoopolisLoginView(LoginView):
-    template_name = 'registration/login_signup_container.html'
+    template_name = 'registration/login.html'
     success_url = '/'
     form_class = LogInForm
 

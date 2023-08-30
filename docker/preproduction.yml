@@ -6,20 +6,20 @@ networks:
 
 services:
   # http://127.0.0.1:5012 or http://localhost:5012
-  develop_ateneus_altpirineu:
-    restart: on-failure
-    container_name: develop_ateneus_altpirineu
-    image: codicoop/ateneus:latest
-    env_file: ./settings/develop/altpirineu.env
-    # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --threads=10  --bind 0.0.0.0:8012
-    depends_on:
-      - develop_ateneus_db
-    #entrypoint: ["sh", "-c", "sleep 2073600"]
-    networks:
-      - develop_ateneus_network
-    ports:
-      - 5012:8012
+#  develop_ateneus_altpirineu:
+#    restart: on-failure
+#    container_name: develop_ateneus_altpirineu
+#    image: codicoop/ateneus:latest
+#    env_file: ./settings/develop/altpirineu.env
+#    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+#    command: gunicorn conf.wsgi:application --threads=10  --bind 0.0.0.0:8012
+#    depends_on:
+#      - develop_ateneus_db
+#    #entrypoint: ["sh", "-c", "sleep 2073600"]
+#    networks:
+#      - develop_ateneus_network
+#    ports:
+#      - 5012:8012
 
 #  # http://127.0.0.1:5006 or http://localhost:5006
 #  develop_ateneus_baixllobregat:
@@ -148,23 +148,23 @@ services:
 #      - develop_ateneus_network
 #    ports:
 #      - 5010:8010
-#
-#  # http://127.0.0.1:5005 or http://localhost:5005
-#  develop_ateneus_ponentcoopera:
-#    restart: on-failure
-#    container_name: develop_ateneus_ponentcoopera
-#    image: codicoop/ateneus:latest
-#    env_file: ./settings/develop/ponentcoopera.env
-#    # The WSGI application name is the django app name you chose when doing django-admin startproject.
-#    command: gunicorn conf.wsgi:application --threads=10  --bind 0.0.0.0:8005
-#    depends_on:
-#      - develop_ateneus_db
-#    #entrypoint: ["sh", "-c", "sleep 2073600"]
-#    networks:
-#      - develop_ateneus_network
-#    ports:
-#      - 5005:8005
-#
+
+  # http://127.0.0.1:5005 or http://localhost:5005
+  develop_ateneus_ponentcoopera:
+    restart: on-failure
+    container_name: develop_ateneus_ponentcoopera
+    image: codicoop/ateneus:latest
+    env_file: ./settings/develop/ponentcoopera.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --threads=10  --bind 0.0.0.0:8005
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5005:8005
+
 #  # http://127.0.0.1:5011 or http://localhost:5011
 #  develop_ateneus_terresebre:
 #    restart: on-failure
@@ -197,21 +197,21 @@ services:
     ports:
       - 5009:8009
 
-#  # http://127.0.0.1:5006 or http://localhost:5006
-#  develop_ateneus_vallesoccidental:
-#    restart: on-failure
-#    container_name: develop_ateneus_vallesoccidental
-#    image: codicoop/ateneus:latest
-#    env_file: ./settings/develop/vallesoccidental.env
-#    # The WSGI application name is the django app name you chose when doing django-admin startproject.
-#    command: gunicorn conf.wsgi:application --threads=10  --bind 0.0.0.0:8006
-#    depends_on:
-#      - develop_ateneus_db
-#    #entrypoint: ["sh", "-c", "sleep 2073600"]
-#    networks:
-#      - develop_ateneus_network
-#    ports:
-#      - 5006:8006
+  # http://127.0.0.1:5006 or http://localhost:5006
+  develop_ateneus_vallesoccidental:
+    restart: on-failure
+    container_name: develop_ateneus_vallesoccidental
+    image: codicoop/ateneus:latest
+    env_file: ./settings/develop/vallesoccidental.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --threads=10  --bind 0.0.0.0:8006
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5006:8006
 
   # http://localhost:8080/
 #  develop_ateneus_adminer:
@@ -234,15 +234,15 @@ services:
     networks:
       - develop_ateneus_network
 
-  develop_ateneus_celery_altpirineu:
-    image: codicoop/ateneus:latest
-    command: "celery -A apps.celery worker -B --loglevel=INFO"
-    container_name: develop_ateneus_celery_altpirineu
-    env_file: ./settings/develop/altpirineu.env
-    depends_on:
-      - develop_ateneus_redis
-    networks:
-      - develop_ateneus_network
+#  develop_ateneus_celery_altpirineu:
+#    image: codicoop/ateneus:latest
+#    command: "celery -A apps.celery worker -B --loglevel=INFO"
+#    container_name: develop_ateneus_celery_altpirineu
+#    env_file: ./settings/develop/altpirineu.env
+#    depends_on:
+#      - develop_ateneus_redis
+#    networks:
+#      - develop_ateneus_network
 
 #  develop_ateneus_celery_baixllobregat:
 #    image: codicoop/ateneus:latest
@@ -294,15 +294,15 @@ services:
 #    networks:
 #      - develop_ateneus_network
 
-  develop_ateneus_celery_coopolis:
-    image: codicoop/ateneus:latest
-    command: "celery -A apps.celery worker -B --loglevel=INFO"
-    container_name: develop_ateneus_celery_coopolis
-    env_file: ./settings/develop/coopolis.env
-    depends_on:
-      - develop_ateneus_redis
-    networks:
-      - develop_ateneus_network
+#  develop_ateneus_celery_coopolis:
+#    image: codicoop/ateneus:latest
+#    command: "celery -A apps.celery worker -B --loglevel=INFO"
+#    container_name: develop_ateneus_celery_coopolis
+#    env_file: ./settings/develop/coopolis.env
+#    depends_on:
+#      - develop_ateneus_redis
+#    networks:
+#      - develop_ateneus_network
 
 #  develop_ateneus_celery_coopsetania:
 #    image: codicoop/ateneus:latest
@@ -364,8 +364,8 @@ services:
 #    networks:
 #      - develop_ateneus_network
 
-  develop_ateneus_redis:
-    container_name: develop_ateneus_redis
-    image: redis
-    networks:
-      - develop_ateneus_network
+#  develop_ateneus_redis:
+#    container_name: develop_ateneus_redis
+#    image: redis
+#    networks:
+#      - develop_ateneus_network

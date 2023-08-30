@@ -1,0 +1,25 @@
+// Estils per enllaços
+.richtext {
+  a {
+    font-weight: bold;
+    color: var(--brown);
+  }
+  b {
+    font-weight: bold;
+  }
+  i {
+    font-style: italic;
+  }
+  ul {
+    padding: var(--pad-2) var(--pad2);
+    list-style: disc;
+  }
+  ol {
+    padding: var(--pad-2) var(--pad2);
+    list-style: decimal;
+  }
+  p + p {
+    margin-top: var(--pad-2);
+  }
+}
+

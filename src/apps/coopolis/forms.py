@@ -29,9 +29,9 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
         model = Project
         fields = (
             'name', 'sector', 'web', 'project_status', 'motivation', 'mail',
-            'phone', 'town', 'district', 'number_people', 'estatuts',
+            'phone', 'town', 'district', 'number_people',
             'viability', 'sostenibility', 'object_finality', 'project_origins',
-            'solves_necessities', 'social_base'
+            'solves_necessities', 'social_base', 'estatuts',
         )
         exclude = ('cif', 'registration_date', 'constitution_date',
                    'partners', )
@@ -102,12 +102,12 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
         fields = (
-            'first_name', 'last_name', 'surname2', 'id_number',
-            'cannot_share_id', 'email',
+            'first_name', 'last_name', 'surname2', 'email', 'id_number',
+            'cannot_share_id',
             'phone_number', 'birthdate', 'birth_place', 'town', 'district',
             'address', 'gender', 'educational_level', 'employment_situation',
-            'discovered_us', 'project_involved', 'password1', 'password2',
-            'authorize_communications'
+            'discovered_us', 'project_involved', 'authorize_communications',
+            'password1', 'password2',
         )
 
     required_css_class = "required"
@@ -135,6 +135,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         if "accept_conditions2" in self.fields:
             self.fields['accept_conditions2'].help_text = mark_safe(
                 config.CONTENT_SIGNUP_LEGAL2)
+        self.label_suffix = ""
 
     def clean(self):
         super().clean()

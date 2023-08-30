@@ -1,0 +1,46 @@
+// Dynamic variables
+.course-card {
+  &__title {
+    --padding-bottom: var(--pad2);
+  }
+  &__btn {
+    --margin: var(--pad2) var(--pad1) var(--pad1) var(--pad1);
+  }
+}
+
+@media (min-width: 900px) {
+  .course-card {
+    &__title {
+      --padding-bottom: var(--pad7);
+    }
+    &__btn {
+      --margin: auto 0 0 0;
+    }
+  }
+}
+
+.course-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  padding: var(--pad1);
+  background-color: var(--white);
+  border-radius: var(--br);
+  box-shadow: 3px 3px 10px #FE1A681A;
+  
+  &__title {
+    padding-bottom: var(--padding-bottom);
+  }
+  &__bloc {
+    padding: var(--pad1) 0;
+    border-top: 1px solid #d3bfc6;
+  }
+  &__subtitle {
+    color: var(--primary);
+    padding-bottom: var(--pad-2);
+  }
+  &__btn {
+    margin: var(--margin);
+  }
+}

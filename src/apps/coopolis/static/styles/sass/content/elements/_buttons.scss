@@ -1,0 +1,57 @@
+// Dynamic variables
+.btn {
+  --width: 100%;
+}
+
+@media (min-width: 900px) {
+  .btn {
+    --width: auto;
+  }
+}
+
+// Layout
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--width);
+  padding: var(--pad1) var(--pad2);
+  border-radius: var(--br);
+  white-space: nowrap;
+  cursor: pointer;
+
+  &.btn--second {
+    background-color: var(--second);
+    color: var(--white);
+  }
+  &.btn--white {
+    background-color: var(--white);
+    color: var(--second);
+  }
+  &.btn--primary {
+    background-color: var(--primary);
+    color: var(--white);
+  }
+  &.btn--primary2 {
+    background-color: #feeef3;
+    color: var(--primary);
+  }
+  &.btn--empty {
+    background-color: transparent;
+  }
+  &__text {
+    font-size: 12px;
+    line-height: 12px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+}
+
+// Exemple de botó que és un enllaç
+// <a href="{% url 'loginsignup' %}">
+//    <div class="btn btn--second">
+//       <div class="btn__text">
+//           Registrar-se
+//        </div>
+//    </div>
+// </a>

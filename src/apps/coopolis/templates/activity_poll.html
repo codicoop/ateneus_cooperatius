@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load thumbnail static %}
+
+{% block home_is_active %}{% endblock %}
+{% block enrollments_is_active %}is-active{% endblock %}
+{% block projects_is_active %}{% endblock %}
 
 {% block head %}
 {% load static %}
@@ -7,62 +12,77 @@
 {% endblock %}
 
 {% block content %}
+{% include './components/header_topbar.html' %}
+<div class="poll">
+	<section class="poll__intro grid-content">
+		<div class="poll__back grid-item-full">
+			<a href="{% url 'courses' %}">
+				<div class="text-menu">
+					Anar a tota l'oferta formativa
+				</div>
+			</a>
+		</div>
+		<div class="poll__title title-2 grid-item-full">
+			<h1>{{ activity.name }}</h1>
+		</div>
+	</section>
+  <section class="poll__form">
+  <form method="post">
+    {% csrf_token %}
 
-<div class="breadcrumb">
-  <span><a href="{% url 'home' %}">Inici</a> > <a href="{% url 'my_activities' %}">Els meus cursos</a> > {{ activity.name }}</span>
-</div>
-<div class="page-content">
-
-  <h1>{{ activity }}</h1>
-
-  <h2>Enquesta anònima de valoració</h2>
-
-  {% if already_answered %}
-  <em>Ja has omplert anteriorment l'enquesta de valoració anònima per aquesta activitat. Moltes gràcies!</em>
-  {% else %}
-  <form method="post">{% csrf_token %}
-    <div class="poll">
-
-      {% for fieldset in fieldsets %}
-      <div class="poll__fieldset">
+    {% for fieldset in fieldsets %}
+    <div class="poll__fieldset grid-content">
+      <div class="grid-item-1-3 poll__fieldset-title text-menu">
         <h3>{{ fieldset.0 }}</h3>
-        {% for field in fieldset.1.fields %}
-        <div class="poll__item{% if field.type == 'text' %} poll__item--text{% endif %}">
-          {% if field.type == 'stars' %}
-          <div>{{ field.obj.label }}</div>
-          <fieldset class="rating">
-            <input type="radio" id="id_{{ field.name }}_3" name="{{ field.name }}" value="4"/>
-            <label class="full" for="id_{{ field.name }}_3" title="(4) Molt bé"></label>
-            <input type="radio" id="id_{{ field.name }}_2" name="{{ field.name }}" value="3"/>
-            <label class="full" for="id_{{ field.name }}_2" title="(3) Bé"></label>
-            <input type="radio" id="id_{{ field.name }}_1" name="{{ field.name }}" value="2"/>
-            <label class="full" for="id_{{ field.name }}_1" title="(2) Malament"></label>
-            <input type="radio" id="id_{{ field.name }}_0" name="{{ field.name }}" value="1"/>
-            <label class="full" for="id_{{ field.name }}_0" title="(1) Molt malament"></label>
-          </fieldset>
-          {% elif field.type == 'yesno' %}
-          <label for="id_{{ field.name }}">{{ field.obj.label }}</label>
-          <select name="{{ field.name }}" id="id_{{ field.name }}">
-            <option value="unknown" selected="">ns / nc</option>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-          </select>
-          {% elif field.type == 'text' %}
-          <label for="id_{{ field.name }}">{{ field.obj.label }}</label>
-          <input type="text" name="{{ field.name }}" id="id_{{ field.name }}">
-          {% endif %}
-
-        </div>
-        {% endfor %}
       </div>
+
+      {% for field in fieldset.1.fields %}
+      {% if field.type == 'stars' %}
+      <div class="poll__field grid-item-4-6 {% if field.type == 'text' %} field {% endif %}">
+        <div class="poll__field-label text-md">
+          {{ field.obj.label }}
+        </div>
+        <fieldset class="rating">
+          <input type="radio" id="id_{{ field.name }}_3" name="{{ field.name }}" value="4"/>
+          <label class="full" for="id_{{ field.name }}_3" title="(4) Molt bé"></label>
+          <input type="radio" id="id_{{ field.name }}_2" name="{{ field.name }}" value="3"/>
+          <label class="full" for="id_{{ field.name }}_2" title="(3) Bé"></label>
+          <input type="radio" id="id_{{ field.name }}_1" name="{{ field.name }}" value="2"/>
+          <label class="full" for="id_{{ field.name }}_1" title="(2) Malament"></label>
+          <input type="radio" id="id_{{ field.name }}_0" name="{{ field.name }}" value="1"/>
+          <label class="full" for="id_{{ field.name }}_0" title="(1) Molt malament"></label>
+        </fieldset>
+      </div>
+      {% elif field.type == 'yesno' %}
+      <div class="poll__field grid-item-4-6 field field-select">
+        <label class="poll__field-label text-md" for="id_{{ field.name }}">
+          {{ field.obj.label }}
+        </label>
+        <select name="{{ field.name }}" id="id_{{ field.name }}">
+          <option value="unknown" selected="">ns / nc</option>
+          <option value="true">Sí</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+      {% elif field.type == 'text' %}
+      <div class="poll__field grid-item-4-6 field-text">
+        <label class="poll__field-label text-md" for="id_{{ field.name }}">
+        {{ field.obj.label }}
+        </label>
+        <input type="text" name="{{ field.name }}" id="id_{{ field.name }}">
+      </div>
+      {% endif %}
       {% endfor %}
 
-      <div class="poll__send">
-        <input type="submit" value="Enviar">
-      </div>
     </div>
+    {% endfor %}
 
+    <div class="form__submit">
+      <button type="submit" class="btn btn--second btn__text">Enviar</button>
+    </div>
   </form>
-  {% endif %}
+
+  </section>
 </div>
+
 {% endblock %}

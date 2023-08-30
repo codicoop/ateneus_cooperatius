@@ -1,94 +1,439 @@
 {% extends "base.html" %}
+{% load thumbnail static %}
 
-{% block head %}
-{% load static %}
-<script src="{% static 'js/modal.js' %}"></script>
-{% endblock %}
+{% block home_is_active %}{% endblock %}
+{% block enrollments_is_active %}is-active{% endblock %}
+{% block projects_is_active %}{% endblock %}
 
 {% block content %}
-
-<div class="page-content">
-
+{% include './components/header_topbar.html' %}
+<div class="courses-list">
+  <section class="courses-list__submenu grid-content">
+		<div class="grid-item-full">
+			<div class="submenu">
+				<a href="{% url 'courses' %}">
+					<div class="submenu__item">
+						<p>Oferta formativa</p>
+					</div>
+				</a>
+				<a href="{% url 'my_activities' %}">
+					<div class="submenu__item is-active">
+						<p>Els meus cursos</p>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
 
   {% if messages %}
-  <div class="generated-form">
-    <ul class="message-container">
-      {% for message in messages %}
-      <li
-      {% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
+  <div class="modal">
+    <div class="modal__background" onclick="hideModal(event)"></div>
+    <div class="modal__card">
+      <div class="modal__title title-1">
+        <p>Confirmació d'enviament de l'enquesta</p>
+      </div>
+      <div class="modal__close" onclick="hideModal(event)">
+        <svg
+          class="icon-pathfill-primary"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="modal__form form">
+        <div class="modal__intro text-md">
+          {% for message in messages %}
+          <div class="text-md">
+            <p>{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
   {% endif %}
 
+  <section class="courses-list__grid grid-content">    
+    <div class="courses-list__subtitle text-md">
+      <p>Estàs inscrit a les següents activitats:</p>
+    </div>
 
-  {% if enrolled_activities.count is 0 %}
-  <h1>No tens cap inscripció confirmada.</h1>
-  <p>Aquí podràs veure i gestionar les activitats a les que t'hagis inscrit. Per veure quins cursos i activitats hi
-    ha programades, accedeix al <a href="{% url 'courses' %}">llistat de cursos</a>. </p>
-  {% else %}
-  <h1>Estàs inscrit/a a les següents activitats:</h1><br/>
-  <div class="courses-container">
-    {% with optout_button=True %}
-    {% for enrollment in enrolled_activities %}
-    {% include "reusable/my_courses_activity.html" %}
-    {% endfor %}
-    {% endwith %}
-  </div>
-  {% endif %}
+      {% if enrolled_activities.count is 0 %}
+        <div class="courses-list__subtitle text-sm is-bold grid-item-full">
+          <p>No tens cap inscripció confirmada.</p>
+        </div>
+      {% else %}
+
+        {% for enrollment in enrolled_activities %}
+          <div class="delete-modal is-hidden">
+            <div class="modal__background" onclick="hideModal(event)"></div>
+            <div class="modal__card">
+              <div class="modal__title title-1">
+                <p>Confirmació d'anul·lació</p>
+              </div>
+              <div class="modal__close" onclick="hideModal(event)">
+                <svg
+                  class="icon-pathfill-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewbox="0 0 9.46 9.46">
+                  <path
+                    d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+                </svg>
+              </div>
+              <div class="modal__form form">
+                <div class="modal__intro text-md">
+                  <div class="text-md">
+                    <p>{{ activity.name }}</p>
+                  </div>
+                  <div class="text-sm">
+                    <p>Segur que vols continuar? </br> (si t'ho repenses, i queden places, podràs tornar-t'hi a inscriure) </p>
+                  </div>
+                </div>
+                <form 
+                  method="post" 
+                  action="{% url 'activity_optout' id=enrollment.activity.id %}" 
+                  id="delete_{{ enrollment.activity.id }}"
+                >
+                  {% csrf_token %}
+                  <input type="hidden" id="enrollment_activity_id" name="enrollment_activity_id" value="{{ enrollment.activity.id }}">
+                </form>
+              </div>
+              <button form="delete_{{ enrollment.activity.id }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
+                Anul·lar l'inscripció
+              </button>
+            </div>
+          </div>
+          <div class="my-course-card grid-item-full">
+            <div class="my-course-card__pretitle text-sm">
+              <h2>{{ enrollment.activity.course }}</h2>
+            </div>
+            <div class="my-course-card__title text-md">
+              <h2>{{ enrollment.activity.name }}</h2>
+            </div>
+            <div class="my-course-card__section section section1 is-open">
+              <div class="section__label label1 text-sm" onclick="toggleSection(event)">
+                <p>Informació de la sessió</p>
+                <div class="section__action">
+                  <div class="open">
+                    <img src="{% static 'images/icons/mes-bold.svg' %}" alt="">
+                  </div>
+                  <div class="close">
+                    <img src="{% static 'images/icons/menys-bold.svg' %}" alt="">
+                  </div>
+                </div>
+              </div>
+              <div class="section__info">
+                <div class="day">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Dia</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.date_start }}</p>
+                  </div>
+                </div>
+                <div class="time">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Hora</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.starting_time }} - {{ enrollment.activity.ending_time }} H</p>
+                  </div>
+                </div>
+                <div class="description">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Descripció</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.objectives|safe }}</p>
+                  </div>
+                </div>
+                {% if enrollment.activity.place %}
+                <div class="place">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Lloc</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.place }}</p>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+
+            {% if enrollment.activity.videocall_url %}
+              <div class="my-course-card__section section section2">
+                <div class="section__label label2 text-sm" onclick="toggleSection(event)">
+                  <p>Enllaç de la videotrucada</p>
+                  <div class="section__action">
+                    <div class="open">
+                      <img src="{% static 'images/icons/mes-bold.svg' %}" alt="">
+                    </div>
+                    <div class="close">
+                      <img src="{% static 'images/icons/menys-bold.svg' %}" alt="">
+                    </div>
+                  </div>
+                </div>
+                <div class="section__info section__info--centered">
+                  <a href="{{ enrollment.activity.videocall_url }}" target="_blank">
+                    <div class="section__link">
+                      {{ enrollment.activity.videocall_url }}
+                    </div>
+                  </a>
+                  <div class="section__btn">
+                    <div class="btn btn--primary2 btn__text"
+                      onclick="javascript:copyVideocallUrl('{{ enrollment.activity.videocall_url }}');"
+                    >
+                      <p>Copiar l'enllaç
+                      </p>
+                    </div>
+                    <div class="copied_alert text-sm is-hidden">Enllaç copiat</div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if enrollment.activity.instructions or enrollment.activity.resources.all %}
+            <div class="my-course-card__section section">
+              <div class="section__label {% if enrollment.activity.videocall_url %} label3 {% else %} label2 {% endif %} text-sm" onclick="toggleSection(event)">
+                <p>Instruccions sobre el funcionament de la sessió</p>
+                <div class="section__action">
+                  <div class="open">
+                    <img src="{% static 'images/icons/mes-bold.svg' %}" alt="">
+                  </div>
+                  <div class="close">
+                    <img src="{% static 'images/icons/menys-bold.svg' %}" alt="">
+                  </div>
+                </div>
+              </div>
+              <div class="section__info">
+                {% if enrollment.activity.instructions %}
+                <div class="instructions">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Descripció</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.instructions|safe }}</p>
+                  </div>
+                </div>
+                {% endif %}
+
+                {% if enrollment.activity.resources.all %}
+                <div class="material">
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Material formatiu</p>
+                  </div>
+                  {% for resource in enrollment.activity.resources.all %}
+                    <a href="{{ resource.image.url }}" target="_blank">
+                      <div class="section__material text-sm">
+                        <svg
+                          class="icon-pathfill-primary"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewbox="0 0 15.54 19.43"
+                          width="16">
+                          <path d="M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z" />
+                        </svg>
+                        <p>{{ resource.name }}</p>
+                      </div>
+                    </a>
+                  {% endfor %}
+                </div>
+                {% endif %}
+
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="my-course-card__btn">
+              <div 
+                class="btn btn--second btn__text"
+                onclick="showDeleteModal(event)"
+              >
+                <p>Eliminar inscripció</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+      {% endif %}
+  </section>
 
   {% if waiting_list_activities %}
-  <h1>Ets en llista d'espera per les següents activitats:</h1><br/>
-  <div class="courses-container">
-    {% with optout_button=True button_text_waiting_list=True %}
+  <section class="courses-list__grid grid-content">
+    <div class="courses-list__subtitle text-md">
+      <p>Ets en llista d'espera per les següents activitats:</p>
+    </div>
     {% for enrollment in waiting_list_activities %}
-    {% include "reusable/my_courses_activity.html" %}
+    <div class="delete-modal is-hidden">
+      <div class="modal__background" onclick="hideModal(event)"></div>
+      <div class="modal__card">
+        <div class="modal__title title-1">
+          <p>Confirmació d'anul·lació</p>
+        </div>
+        <div class="modal__close" onclick="hideModal(event)">
+          <svg
+            class="icon-pathfill-primary"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="modal__form form">
+          <div class="modal__intro text-md">
+            <div class="text-md">
+              <p>{{ activity.name }}</p>
+            </div>
+            <div class="text-sm">
+              <p>Segur que vols continuar? </br> (si t'ho repenses, i queden places, podràs tornar-t'hi a inscriure) </p>
+            </div>
+          </div>
+          <form 
+            method="post" 
+            action="{% url 'activity_optout' id=enrollment.activity.id %}" 
+            id="delete_{{ enrollment.activity.id }}"
+          >
+            {% csrf_token %}
+            <input type="hidden" id="enrollment_activity_id" name="enrollment_activity_id" value="{{ enrollment.activity.id }}">
+          </form>
+        </div>
+        <button form="delete_{{ enrollment.activity.id }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
+          Anul·lar l'inscripció
+        </button>
+      </div>
+    </div>
+    <div class="my-course-card grid-item-full waiting-activities">
+      <div class="my-course-card__pretitle text-sm">
+        <h2>Formació</h2>
+      </div>
+      <div class="my-course-card__title text-md">
+        <h2>{{ enrollment.activity.course }}</h2>
+      </div>
+      <div class="my-course-card__session">
+        <div class="top">
+          <div class="top__title text-sm">
+            <h2>{{ enrollment.activity.name }}</h2>
+          </div>
+          <div class="top__date text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20.000001 20" width="15" height="15">
+              <path d="m 10.186441,12 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4,4 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z M 2.6864407,20 c -0.82,-0.02 -1.48,-0.68 -1.5,-1.5 V 3 c 0.02,-0.82 0.68,-1.48 1.5,-1.5 h 1.62 V 0 h 1.62 V 1.5 H 14.426441 V 0 h 1.62 v 1.5 h 1.62 c 0.82,0.02 1.48,0.68 1.5,1.5 v 15.5 c -0.02,0.82 -0.68,1.48 -1.5,1.5 z m 0,-1.5 H 17.686441 V 7.75 H 2.6864407 Z" inkscape:connector-curvature="0" style="fill:#d3bfc6;fill-opacity:1" />
+            </svg>
+            <p>{{ enrollment.activity.date_start }}</p>
+          </div>
+          <div class="top__date text-sm">
+            <svg class="icon-pathfill-lilac" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20.24 20.24" width="15" height="15">
+              <g transform="translate(-7.38,-7.39)">
+                <path d="m 21.22,22.39 1.14,-1.14 -4.02,-4.05 v -5.09 h -1.52 v 5.7 z m -3.72,5.24 c -1.35,0 -2.68,-0.26 -3.92,-0.8 -2.43,-1.03 -4.37,-2.97 -5.4,-5.4 -0.53,-1.24 -0.8,-2.57 -0.8,-3.92 0,-1.35 0.26,-2.68 0.8,-3.92 1.03,-2.43 2.97,-4.37 5.4,-5.4 1.24,-0.53 2.57,-0.8 3.92,-0.8 1.35,0 2.68,0.26 3.92,0.8 2.43,1.03 4.37,2.97 5.4,5.4 0.53,1.24 0.8,2.57 0.8,3.92 0,1.35 -0.26,2.68 -0.8,3.92 -1.03,2.43 -2.97,4.37 -5.4,5.4 -1.24,0.53 -2.57,0.8 -3.92,0.8" />
+              </g>
+            </svg>
+            <p>{{ enrollment.activity.date_start }}</p>
+          </div>
+          <div class="top__btn">
+            <div 
+            class="btn btn--second btn__text"
+            onclick="showDeleteModal(event)"
+            >
+              <p>Sortir de la llista d'espera</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
     {% endfor %}
-    {% endwith %}
-  </div>
+  </section>
   {% endif %}
 
   {% if past_enrolled_activities.count %}
-  <h1>Activitats a les que has assistit anteriorment:</h1><br/>
-  <div class="courses-container">
+  <section class="courses-list__grid grid-content">
+    <div class="courses-list__subtitle text-md">
+      <p>Activitats a les que has assistit anteriorment:</p>
+    </div>
+
     {% for enrollment in past_enrolled_activities %}
-    {% include "reusable/my_courses_activity.html" %}
-    {% endfor %}
-  </div>
-  {% endif %}
-</div>
-
-<div id="modal-confirm" class="modal">
-  <span class="modal-close" onclick="javascript:hideModal('#modal-confirm');">&times;</span>
-  <div class="modal-container">
-    <div class="modal-title">
-      Confirmació
-    </div>
-    <div class="modal-content">
-      Ets a punt d'eliminar la inscripció a l'activitat:
-      <p><strong id="modal-title-text"></strong></p>
-      <br>
-      Segur que vols continuar? (si t'ho repenses, i queden places, podràs tornar-t'hi a inscriure)
-    </div>
-    <div class="modal-buttons">
-      <a id="button3" href="#" class="enroll-button">
-        <div>
-          Anul·lar la inscripció
+    <div class="my-course-card grid-item-full past-activities">
+      <div class="my-course-card__pretitle text-sm">
+        <h2>Formació</h2>
+      </div>
+      <div class="my-course-card__title text-md">
+        <h2>{{ enrollment.activity.course }}</h2>
+      </div>
+      <div class="my-course-card__session">
+        <div class="top" onclick="toggleSession(event)">
+          <div class="top__title text-sm">
+            <h2>{{ enrollment.activity.name }}</h2>
+          </div>
+          <div class="top__date text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20.000001 20" width="15" height="15">
+              <path d="m 10.186441,12 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4,4 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z M 2.6864407,20 c -0.82,-0.02 -1.48,-0.68 -1.5,-1.5 V 3 c 0.02,-0.82 0.68,-1.48 1.5,-1.5 h 1.62 V 0 h 1.62 V 1.5 H 14.426441 V 0 h 1.62 v 1.5 h 1.62 c 0.82,0.02 1.48,0.68 1.5,1.5 v 15.5 c -0.02,0.82 -0.68,1.48 -1.5,1.5 z m 0,-1.5 H 17.686441 V 7.75 H 2.6864407 Z" inkscape:connector-curvature="0" style="fill:#d3bfc6;fill-opacity:1" />
+            </svg>
+            <p>{{ enrollment.activity.date_start }}</p>
+          </div>
+          <div class="top__action">
+            <div class="open">
+              <img src="{% static 'images/icons/mes-bold.svg' %}" alt="">
+            </div>
+            <div class="close">
+              <img src="{% static 'images/icons/menys-bold.svg' %}" alt="">
+            </div>
+          </div>
         </div>
-      </a>
+        <div class="bottom">
+          <div class="bottom__bloc">
+            <div class="my-course-card__subtitle text-menu">
+              <p>Descripció</p>
+            </div>
+            <div class="my-course-card__text richtext">
+              <p>{{ enrollment.activity.objectives|safe }}</p>
+            </div>
+          </div>
+
+          {% if enrollment.activity.resources.count %}
+          <div class="bottom__bloc">
+            <div class="my-course-card__subtitle text-menu">
+              <p>Material formatiu</p>
+            </div>
+
+            {% for resource in enrollment.activity.resources.all %}
+              <a href="{{ resource.image.url }}" target="_blank">
+                <div class="section__material text-sm">
+                  <svg
+                    class="icon-pathfill-primary"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewbox="0 0 15.54 19.43"
+                    width="16">
+                    <path d="M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z" />
+                  </svg>
+                  <p>{{ resource.name }}</p>
+                </div>
+              </a>
+            {% endfor %}
+
+          </div>
+          {% endif %}
+
+          {% if enrollment.activity.poll_access_allowed %}
+          <div class="bottom__bloc poll">
+            <a href="{% url 'activity_poll' uuid=enrollment.activity.uuid %}">
+              <div class="btn btn--primary btn__text">
+                <p>Anar a l'enquesta</p>
+              </div>
+            </a>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+
     </div>
-  </div>
+    {% endfor %}
+
+  </section>
+  {% endif %}
+
 </div>
-<script>
-    $( document ).ready(function() {
-        makeModal('#modal-confirm');
-    });
+{% endblock %}
 
-    function onOptoutButtonClick (activityName, activityUrl) {
-        $('#modal-title-text').text(activityName);
-        $("#button3").attr("href", activityUrl);
-        showModal('#modal-confirm');
-    }
-
-</script>
+{% block extra_js %}
+	<script src="{% static 'js/course.js' %}"></script>
 {% endblock %}

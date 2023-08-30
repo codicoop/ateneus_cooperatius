@@ -1,0 +1,46 @@
+.project-out {
+  --padding-project: var(--pad2) var(--pad1);
+  --flex-direction: column;
+  .btn {
+    --width: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .project-out {
+    --padding-project: var(--pad11) 0;
+    --flex-direction: row;
+    .btn {
+      --width: 170px;
+    }
+  }
+}
+
+.project-out { 
+  padding: var(--padding-project);
+  background-color: var(--second);
+  height: 100%;
+  &.grid-content {
+    grid-template-rows: auto auto auto 1fr;
+  }
+
+  &__title {
+    color: var(--white);
+    padding-bottom: var(--pad2);
+  }
+  &__text {
+    color: var(--white);
+    padding-bottom: var(--pad2);
+  }
+  &__btn {
+    display: flex;
+    flex-direction: var(--flex-direction);
+    justify-content: center;
+    gap: var(--pad1);
+    margin-top: var(--pad4);
+
+    .btn {
+      width: var(--width);
+    }
+  }
+}

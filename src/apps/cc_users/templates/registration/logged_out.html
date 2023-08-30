@@ -1,9 +1,28 @@
-{% extends "generic.html" %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block loginbox %}
-{% endblock %}
-
-{% block generic %}
-  <h1>Sessió tancada!</h1>
-  <p><a href="{% url 'loginsignup'%}">Clica aquí per tornar a iniciar la sessió</a>, o torna a la <a href="{% url 'home' %}">portada</a>.</p>
+{% block content %}
+<div class="home logout">
+	<section class="home__intro intro grid-content">
+		<div class="intro__title grid-item-full">
+			<div class="intro__hello-out title-1">
+				<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de {{ PROJECT_NAME }}!</p>
+			</div>
+		</div>
+		<div class="intro__bloc grid-item-1-3">
+			<div class="intro__bloc-title title-1">
+				<p>Sessió tancada!</p>
+			</div>
+        <div class="intro__bloc-text text-sm richtext">
+          <p>
+            Fes click 
+            <a href="/" >
+              <b>aquí</b>
+            </a>
+            per tornar a la portada
+          </p>
+        </div>
+		</div>
+	</section>
+</div>
 {% endblock %}
