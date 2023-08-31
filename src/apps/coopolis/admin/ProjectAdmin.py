@@ -634,3 +634,6 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             return obj.project_stage.get_circle_display()
         return None
     stage_circle_field.short_description = 'Cercle'
+
+    def has_add_permission(self, request):
+        return False
