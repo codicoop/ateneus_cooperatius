@@ -38,7 +38,7 @@
 			</div>
 			<div class="welcome__text">
 				<div class="is-bold">
-					<p>{{ PROJECT_NAME }}</p>
+					<p>{{ config.PROJECT_NAME }}</p>
 				</div>
 				<div>
 					<p>Plataforma de gestió de projectes i inscripcions</p>
@@ -71,7 +71,7 @@
 		<div class="intro__title grid-item-full">
 			{% if not user.is_authenticated %}
 			<div class="intro__hello-out title-1">
-				<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de {{ PROJECT_NAME }}!</p>
+				<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de {{ config.PROJECT_NAME }}!</p>
 			</div>
 			{% else %}
 			<div class="intro__submenu submenu">
@@ -114,7 +114,7 @@
 				<p>Projectes</p>
 			</div>
 			<div class="intro__bloc-text text-md">
-				Des de {{ PROJECT_NAME }} acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a cooperatives.
+				Des de {{ config.PROJECT_NAME }} acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a cooperatives.
 			</div>
 			<div class="intro__bloc-btn">
 				<a href="{% url 'project_info' %}">
