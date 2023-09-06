@@ -7,6 +7,11 @@ from apps.coopolis.choices import CirclesChoices
 
 
 def migrate_organizer_to_circle(apps, schema_editor):
+    # Disabled for safety. For instance, we're not using anymore the
+    # settings.PROJECT_NAME var, so it would not work anyway, and once this
+    # migration was done, it's not needed anymore, specially not in new
+    # deployments.
+    return
     """
     This migration comes out of the necessity for normnalizing the information
     in:

@@ -108,7 +108,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, '../apps')))
 
 # Local strings
-PROJECT_NAME = env.str("PROJECT_NAME", "")
 ADMIN_HEADER = env.str("ADMIN_HEADER", "")
 GRAPPELLI_ADMIN_TITLE = env.str("GRAPPELLI_ADMIN_TITLE", "")
 CIRCLE_NAMES = [
@@ -181,7 +180,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'apps.coopolis.context_processors.settings_values',
+                # 'apps.coopolis.context_processors.settings_values',
             ],
         },
     },
