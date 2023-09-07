@@ -273,114 +273,6 @@ CONSTANCE_CONFIG = {
         "cofinançament del Ministeri d’Ocupació i Seguretat Social, i "
         "l’Ajuntament de Barcelona.",
         'Casella per acceptar #2.'),
-    # E-mails
-    'EMAIL_NEW_PROJECT': (
-        "Nova sol·licitud d'acompanyament<br />"                          
-        "<br />"
-        "Nom del projecte: {} <br />"
-        "Telèfon de contacte: {} <br />"
-        "Correu electrònic de contacte del projecte: {} <br />"
-        "Correu electrònic de l'usuari que l'ha creat: {} <br />",
-        "Cos del correu que s'envia quan algú sol·licita un acompanyament."),
-    'EMAIL_NEW_PROJECT_SUBJECT': (
-        "Nova sol·licitud d'acompanyament: {}",
-        "Assumpte del correu que s'envia quan algú sol·licita un "
-        "acompanyament."),
-    'EMAIL_ENROLLMENT_CONFIRMATION': (
-        "Inscripció a l'activitat: {} <br />"
-        "<br />Dades de l'activitat:<br />"
-        "Data: {}<br />"
-        "Horari: de {} a {}<br />"
-        "Lloc: {}<br />"
-        "<br />"
-        "Les places son limitades. Si finalment no pots assistir-hi, si us "
-        "plau anul·la la teva inscripció. Per fer-ho, pots gestionar les "
-        "teves inscripcions accedint al back-office de Coòpolis amb el teu "
-        "correu i contrasenya <a href=\"{}\">aquí</a> "
-        "o bé contactar-nos al correu electrònic {}, o trucar-nos al {}.",
-        "Cos del correu que s'envia quan algú s'inscriu a una activitat"),
-    'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT': (
-        "Confirmació d'inscripció a l'activitat: {}",
-        "Assumpte del correu que s'envia quan algú s'inscriu a una activitat"),
-    'EMAIL_ENROLLMENT_WAITING_LIST': (
-        "Inscripció en llista d'espera.",
-        "Cos del correu que s'envia quan algú s'inscriu a una activitat i "
-        "entra en llista d'espera."),
-    'EMAIL_ENROLLMENT_WAITING_LIST_SUBJECT': (
-        "Ets en llista d'espera per l'activitat: {}",
-        "Assumpte del correu que s'envia quan algú s'inscriu a una activitat "
-        "i entra en llista d'espera."),
-    'EMAIL_ENROLLMENT_REMINDER': (
-        "",
-        "Cos del correu de recordatori que s'envia a tothom que s'ha inscrit"
-        "a una activitat mitjançant el botó per enviar el recordatori a "
-        "tothom."),
-    'EMAIL_ENROLLMENT_REMINDER_SUBJECT': (
-        "Recordatori d'inscripció a l'activitat: {}",
-        "Assumpte del correu de recordatori que s'envia a tothom que s'ha "
-        "inscrita una activitat mitjançant el botó per enviar el recordatori "
-        "a tothom."),
-    'EMAIL_SIGNUP_WELCOME_SUBJECT': (
-        "Nou compte creat a Coòpolis",
-        "Assumpte del missatge de benvinguda que s'envia al crear un compte "
-        "nou."),
-    'EMAIL_SIGNUP_WELCOME': (
-        "Benvingut/da a Coòpolis!<br />"
-        "<br />"
-        "<em>Estàs rebent aquest correu perquè s'ha completat un registre a la"
-        " plataforma serveis.bcn.coop.<br />"
-        "Si aquest registre no l'has fet tu o cap altra persona amb qui "
-        "comparteixis aquest compte, ignora aquest"
-        "correu o avisa'ns per tal que l'eliminem de la base de dades."
-        "</em><br />"
-        "<br />"
-        "Amb el teu compte pots:<br />"
-        "- Inscriure't a les sessions formatives, que trobaràs "
-        "<a href=\"https://serveis.bcn.coop/program/\">aquí</a>.<br />"
-        "- Si esteu iniciant o teniu en marxa un projecte cooperatiu, podeu "
-        "<a href=\"https://serveis.bcn.coop/project/new/\">sol·licitar un "
-        "acompanyament</a>.<br />"
-        "- Consultar o editar les dades del teu perfil i recuperar la "
-        "contrassenya. Més informació a "
-        "<a href=\"https://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
-        "<br />"
-        "L'equip de Coòpolis.<br />"
-        "<a href=\"https://bcn.coop\">bcn.coop</a>",
-        "Missatge de benvinguda que s'envia quan algú crea un compte."),
-    'EMAIL_ADDED_TO_PROJECT_SUBJECT': (
-        "Has estat afegit com a participant del projecte {}",
-        "Assumpte del missatge de notificació d'haver estat afegit a un "
-        "projecte."),
-    'EMAIL_ADDED_TO_PROJECT': (
-        "Has estat afegit com a participant al projecte acompanyat per "
-        "Coòpolis:<br />"
-        "{}<br />"
-        "<br />"
-        "Per veure i modificar la fitxa del vostre projecte, accedeix a "
-        "<a href=\"https://serveis.bcn.coop/project/info/\">l'apartat "
-        "Projectes</a> de la plataforma de Coòpolis amb el"
-        "teu e-mail i contrasenya.<br />"
-        "Si necessites la contrasenya, trobaràs l'opció per fer-ho a "
-        "<a href=\"https://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
-        "<br />"
-        "L'equip de Coòpolis.<br />"
-        "<a href=\"https://bcn.coop\">bcn.coop</a>",
-        "Missatge de notificació d'haver estat afegit a un projecte."),
-    'MAIL_PASSWORD_RESET_SUBJECT': (
-        "Reinici de contrasenya a serveis.bcn.coop",
-        "Mail enviat quan es reinicia la contrassenya: assumpte."),
-    'MAIL_PASSWORD_RESET': (
-        "Has rebut aquest correu perquè hi ha hagut una sol·licitud de reinici"
-        " de contrasenya del teu compte a serveis.bcn.coop.<br /><br />Si has "
-        "fet tu la sol·licitud, si us plau obre el següent enllaç i escull una"
-        " contrasenya nova: (password_reset_url)<br />Si no has fet tu la "
-        "sol·licitud, senzillament ignora aquest correu.<br /><br />El teu "
-        "nom d'usuari, en cas que l'hagis oblidat: (username)<br /><br />"
-        "Gràcies per fer servir la nostra plataforma,<br />L'equip de "
-        "Coòpolis",
-        "Mail enviat quan es reinicia la contrassenya: cos. Ha d'incloure en "
-        "algun lloc (username) i (password_reset_url) per poder mostrar el "
-        "link i el nom d'usuari."),
     # Configuration
     'EMAIL_FROM_ENROLLMENTS': (
         'formacio@bcn.coop',
@@ -450,17 +342,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
         'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
         'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS',
         'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'
-    ),
-    'Correus': (
-        'EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT',
-        'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
-        'EMAIL_ENROLLMENT_CONFIRMATION',
-        'EMAIL_ENROLLMENT_WAITING_LIST_SUBJECT',
-        'EMAIL_ENROLLMENT_WAITING_LIST', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT',
-        'EMAIL_ENROLLMENT_REMINDER', 'EMAIL_SIGNUP_WELCOME_SUBJECT',
-        'EMAIL_SIGNUP_WELCOME', 'EMAIL_ADDED_TO_PROJECT_SUBJECT',
-        'EMAIL_ADDED_TO_PROJECT', 'MAIL_PASSWORD_RESET_SUBJECT',
-        'MAIL_PASSWORD_RESET'
     ),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
     "Llistat d'assistència": ('ATTENDEE_LIST_FOOTER_IMG',),
