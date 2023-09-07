@@ -12,7 +12,7 @@ from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from apps.coopolis.forms import (
     ProjectFormAdmin,
-    EmploymentInsertionInlineFormSet,
+    EmploymentInsertionInlineFormSet, EmploymentInsertionAdminForm,
 )
 from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
 from apps.dataexports.models import SubsidyPeriod
@@ -531,6 +531,7 @@ class DerivationAdmin(admin.ModelAdmin):
 
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
+    form = EmploymentInsertionAdminForm
     list_display = ('insertion_date', 'project', 'user', 'contract_type',
                     'subsidy_period', 'circle', )
     list_filter = (

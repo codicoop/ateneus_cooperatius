@@ -109,6 +109,27 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
         raise ValidationError(mark_safe(msg))
 
 
+class EmploymentInsertionAdminForm(models.ModelForm):
+    class Meta:
+        model = EmploymentInsertion
+        fields = (
+            "project",
+            "user",
+            "subsidy_period",
+            "insertion_date",
+            "end_date",
+            "contract_type",
+            "circle",
+        )
+
+    def clean(self):
+        super().clean()
+        EmploymentInsertion.validate_extended_fields(
+            self.cleaned_data.get("user"),
+            self.cleaned_data.get("project"),
+        )
+        return self.cleaned_data
+
 class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
