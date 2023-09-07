@@ -43,6 +43,16 @@ class ProjectFormAdmin(ProjectForm):
         # Un-excluding the fields that we were hiding for the front-end.
         exclude = None
 
+    def clean(self):
+        super().clean()
+        if EmploymentInsertion.objects.filter(
+                project=self.instance.id,
+        ).count():
+            msg = ("Aquest projecte està vinculat a insercions laborals, "
+                   "per aquest motiu, aquest camp és obligatori.")
+            if not self.cleaned_data.get("cif"):
+                self.add_error("cif", msg)
+        return self.cleaned_data
 
 class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
     def clean(self):
