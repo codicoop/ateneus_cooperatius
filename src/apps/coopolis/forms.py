@@ -15,7 +15,8 @@ from django.utils.safestring import mark_safe
 from constance import config
 from django.conf import settings
 
-from apps.coopolis.models import Project, User, ActivityPoll
+from apps.coopolis.models import Project, User, ActivityPoll, \
+    EmploymentInsertion
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.mixins import FormDistrictValidationMixin
 from apps.facilities_reservations.models import Reservation, \
@@ -223,6 +224,22 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
                    "participació davant dels organismes públics que financen "
                    "aquestes activitats.")
             self.add_error('id_number', msg)
+
+        if EmploymentInsertion.objects.filter(
+                user=self.instance.id,
+        ).count():
+            msg = ("Aquesta persona està vinculada a una inserció laboral, "
+                   "per aquest motiu, aquest camp és obligatori.")
+            if not self.cleaned_data.get("last_name"):
+                self.add_error("last_name", msg)
+            if not self.cleaned_data.get("gender"):
+                self.add_error("gender", msg)
+            if not self.cleaned_data.get("birthdate"):
+                self.add_error("birthdate", msg)
+            if not self.cleaned_data.get("birth_place"):
+                self.add_error("birth_place", msg)
+            if not self.cleaned_data.get("town"):
+                self.add_error("town", msg)
         return self.cleaned_data
 
 
