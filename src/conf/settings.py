@@ -258,72 +258,6 @@ CONSTANCE_CONFIG = {
     'ENABLE_STAGE_SUBTYPES': (
         False, "Mostrar el camp \"Subtipus\" a les justificacions "
                "d'acompanyament.", bool),
-    # Courses
-    'CONTENT_COURSES_INTRODUCTION': (
-        "Des de Coòpolis disposem d’una oferta regular de formació en economia"
-        " social i cooperativisme per a tots els públics, tant per a aquelles "
-        "persones que tenen ganes d’apropar-se a l’economia social i "
-        "solidària, com per a aquelles persones o col·lectius que estan "
-        "pensant en constituir el seu propi projecte econòmic. A més de les "
-        "activitats a l’espai Coòpolis de Can Batlló, també oferim formacions"
-        " descentralitzades en altres espais comunitaris i seus de l’economia "
-        "social i solidària barcelonina.",
-        "Formació: text d'introducció a la franja blava"),
-    # Project
-    'CONTENT_PROJECT_INTRODUCTION': (
-        "<p>Des de Coòpolis acompanyem projectes en la seva posada en marxa i "
-        "constitució com a cooperatives, en aquells aspectes centrals per a la"
-        " seva activitat i facilitem eines i recursos per a la seva "
-        "consolidació i creixement. També dissenyem itineraris per a la "
-        "transformació d’associacions i altres formes d’empreses a "
-        "cooperatives.</p>",
-        "Apartat Projecte: text d'introducció a la franja blava."),
-    'CONTENT_PROJECT_TITLE': (
-        "Assessorament de projectes",
-        "Apartat Projecte: text d'encapçalament"),
-    'CONTENT_PROJECT_INFO': (
-        "<p>Per sol·licitar acompanyament per al teu projecte, accedeix amb "
-        "el teu compte o crea'n un amb els formularis que hi ha a "
-        "continuació.</p>",
-        "Aartat Projecte: Text que es mostra a l'apartat si hi accedeix sense "
-        "haver fet login"),
-    'CONTENT_PROJECT_NEW': (
-        "<p>Omple el següent formulari per sol·licitar un acompanyament.</p>",
-        "Apartat Projecte: Text que es mostra al formulari per sol·licitar "
-        "un acompanyament"),
-    # Home
-    'CONTENT_HOME_COURSES_TITLE': (
-        "Formació i activitats",
-        "Portada, títol del bloc que informa sobre la formació."),
-    'CONTENT_HOME_COURSES_TEXT': (
-        "Disposem d’una oferta regular de formació en economia solidària i "
-        "cooperativisme per a tots els públics, tant per a aquelles persones "
-        "que tenen ganes d’apropar-se a l’ESS per primera vegada, els "
-        "col·lectius que estan engegant un projecte, i cooperatives que volen "
-        "consolidar la seva activitat incorporant nous coneixements "
-        "especialitzats.",
-        "Portada, títol del bloc que informa sobre la formació."),
-    'CONTENT_HOME_INTRODUCTION': (
-        "<p><strong>Benvingudes a la web de gestió d’inscripcions i "
-        "acompanyaments de Coòpolis!</strong></p><p>Cal que us doneu d’alta "
-        "amb les vostres dades personals, i podreu realitzar les inscripcions "
-        "de les formacions, i sol·licitar assessorament per a la creació de "
-        "projectes cooperatius.</p><p><em>(*Si teniu dificultats, podeu "
-        "escriure un correu a <a href=\"mailto:inscripcions@bcn.coop\">"
-        "inscripcions@bcn.coop</a> o trucar a Coòpolis)</em></p>",
-        "Text d'introducció de la home."),
-    "CONTENT_HOME_PROJECTS_TITLE": (
-        "Acompanyament de projectes",
-        "Portada: títol del bloc que informa sobre l'acompanyament de "
-        "projectes."),
-    "CONTENT_HOME_PROJECTS_TEXT": (
-        "Des de Coòpolis acompanyem projectes en la seva posada en marxa i "
-        "constitució com a cooperatives, en aquells aspectes centrals per a la"
-        " seva activitat i facilitem eines i recursos per a la seva "
-        "consolidació i creixement. També dissenyem itineraris per a la "
-        "transformació d’associacions i altres formes d’empreses a "
-        "cooperatives.",
-        "Portada: bloc que informa sobre l'acompanyament de projectes."),
     # Sign up
     'CONTENT_SIGNUP_LEGAL1': (
         "La participació en les activitats de Coòpolis, Ateneu Cooperatiu de "
@@ -528,16 +462,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
         'EMAIL_ADDED_TO_PROJECT', 'MAIL_PASSWORD_RESET_SUBJECT',
         'MAIL_PASSWORD_RESET'
     ),
-    "Apartat Portada": (
-        'CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT',
-        'CONTENT_HOME_PROJECTS_TITLE', "CONTENT_HOME_PROJECTS_TEXT",
-        'CONTENT_HOME_INTRODUCTION'
-    ),
-    'Apartat Projectes': (
-        'CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE',
-        'CONTENT_PROJECT_INFO', 'CONTENT_PROJECT_NEW'
-    ),
-    "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
     "Llistat d'assistència": ('ATTENDEE_LIST_FOOTER_IMG',),
 }
