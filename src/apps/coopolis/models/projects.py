@@ -658,7 +658,7 @@ class EmploymentInsertion(models.Model):
         return f"{self.user.full_name}: {self.get_contract_type_display()}"
 
     @classmethod
-    def validate_extended_fields(cls, user_obj, project_obj):
+    def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
         user_obj_errors = {
             "surname": "- Cognom.<br />",
             "gender": "- Gènere. <br/>",
@@ -689,10 +689,12 @@ class EmploymentInsertion(models.Model):
         if user_errors:
             msg += f"De la {url}:<br /> {''.join(user_errors)}<br />"
         if cif_error:
-            project_url = reverse(
-                'admin:coopolis_project_change',
-                kwargs={'object_id': project_obj.id}
-            )
-            url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
+            url = "fitxa del Projecte (en aquest mateix formulari, més amunt)"
+            if link_to_project:
+                project_url = reverse(
+                    'admin:coopolis_project_change',
+                    kwargs={'object_id': project_obj.id}
+                )
+                url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
             msg += f"De la {url}:<br>{cif_error}"
         raise ValidationError(mark_safe(msg))
