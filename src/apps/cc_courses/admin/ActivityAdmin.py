@@ -11,7 +11,7 @@ from constance import config
 from datetime import datetime
 import modelclone
 
-from apps.coopolis.choices import ActivityFileType
+from apps.coopolis.choices import ActivityFileType, ServicesChoices
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
 from apps.cc_courses.models import (
     Activity,
@@ -166,6 +166,26 @@ class ActivityFileInlineAdmin(admin.TabularInline):
     extra = 0
 
 
+class SubserviceFilter(admin.SimpleListFilter):
+    title = 'Sub-servei'
+    parameter_name = 'sub_service'
+
+    def lookups(self, request, model_admin):
+        sub_services = [(None, "-")]
+        if "service__exact" in request.GET:
+            service_id = int(request.GET.get("service__exact"))
+            service = ServicesChoices(service_id)
+            sub_services = [
+                (sub_service.value, sub_service.label)
+                for sub_service in service.get_sub_services()
+            ]
+        return sub_services
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(sub_service=self.value())
+
+
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -184,9 +204,10 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
         FilterBySubsidyPeriod, FilterByJustificationFiles,
-        "service", ("place__town", admin.RelatedOnlyFieldListFilter),
-        'course', 'date_start', 'room', 'circle', 'entity', 'place',
-        'for_minors', 'cofunded',
+        "service", SubserviceFilter,
+        ("place__town", admin.RelatedOnlyFieldListFilter),
+        'course', 'date_start', 'room', 'circle', 'entity',
+        'place', 'for_minors', 'cofunded',
         ("responsible", admin.RelatedOnlyFieldListFilter),
     )
     fieldsets = [
