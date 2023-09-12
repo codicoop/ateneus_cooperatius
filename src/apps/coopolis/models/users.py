@@ -21,7 +21,7 @@ class User(BaseUser):
         "e-mail inventat", default=False,
         help_text="Marca aquesta casella si el correu és inventat, i "
                   "desmarca-la si mai el canvieu pel correu real. Ens ajudarà "
-                  "a mantenir la base de dadesneta."
+                  "a mantenir la base de dades neta."
     )
     username = models.CharField(unique=False, null=True, max_length=150,
                                 verbose_name="nom d'usuari/a")
