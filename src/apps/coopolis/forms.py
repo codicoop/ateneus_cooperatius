@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
     UserCreationForm, ReadOnlyPasswordHashField
 )
 from django.core.exceptions import ValidationError
+from django.db.models import BLANK_CHOICE_DASH
 from django.forms import models
 from django.urls import reverse
 from django.utils.timezone import make_aware
@@ -128,6 +129,15 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         label="He llegit i accepto", required=True)
     authorize_communications = forms.BooleanField(
         label="Accepto rebre informació sobre els serveis", required=False)
+    birth_place = forms.ChoiceField(
+        label="Lloc de naixement",
+        choices=[
+            BLANK_CHOICE_DASH[0],
+            ("CATALUNYA", "Catalunya"),
+            ("ESPANYA", "Espanya"),
+            ("OTHER", "Altre")
+        ]
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
