@@ -1235,19 +1235,19 @@ files = [
 
 [[package]]
 name = "pydyf"
-version = "0.2.0"
+version = "0.7.0"
 description = "A low-level PDF generator."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pydyf-0.2.0-py3-none-any.whl", hash = "sha256:f0468bc644d3a5b0a7072d0d92bd5c024cf4beede0df56100d9919a59f15e1f0"},
-    {file = "pydyf-0.2.0.tar.gz", hash = "sha256:06ebc18b4de29fc1450ae49dd142ecd26bd7ba09d0b1919e365fbc3d8af8a622"},
+    {file = "pydyf-0.7.0-py3-none-any.whl", hash = "sha256:23a753daa75adba387606c54eab4d5c9bca83f076be697e59f719d238753fb05"},
+    {file = "pydyf-0.7.0.tar.gz", hash = "sha256:a5a88cb06e5beb64a1ef2147ee879b0e5139f5fdb827fda2fcf14a018c7b11e6"},
 ]
 
 [package.extras]
 doc = ["sphinx", "sphinx_rtd_theme"]
-test = ["coverage[toml]", "pillow", "pytest", "pytest-cov", "pytest-flake8", "pytest-isort", "pytest-xdist"]
+test = ["flake8", "isort", "pillow", "pytest"]
 
 [[package]]
 name = "pyphen"
@@ -1630,14 +1630,14 @@ files = [
 
 [[package]]
 name = "weasyprint"
-version = "55.0"
+version = "59.0"
 description = "The Awesome Document Factory"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "weasyprint-55.0-py3-none-any.whl", hash = "sha256:6a5008b3e1152498f206b2d0791b3e161f507607e31ca42b307cb31b49795462"},
-    {file = "weasyprint-55.0.tar.gz", hash = "sha256:ea5d5f2f159262e38b6e85939d8510e9735a47751a9647c9eaa93c22ced86230"},
+    {file = "weasyprint-59.0-py3-none-any.whl", hash = "sha256:a308d67c5e99f536b15527baaad4e91be0cf307317e0f66e8d934a0bc99bfb38"},
+    {file = "weasyprint-59.0.tar.gz", hash = "sha256:223a76636b3744eaa4ab8a2885f50cf46cf8ebb1acb99b5276d02feccf507492"},
 ]
 
 [package.dependencies]
@@ -1645,14 +1645,14 @@ cffi = ">=0.6"
 cssselect2 = ">=0.1"
 fonttools = {version = ">=4.0.0", extras = ["woff"]}
 html5lib = ">=1.1"
-Pillow = ">=4.0.0"
-pydyf = ">=0.0.3"
+Pillow = ">=9.1.0"
+pydyf = ">=0.6.0"
 Pyphen = ">=0.9.1"
 tinycss2 = ">=1.0.0"
 
 [package.extras]
 doc = ["sphinx", "sphinx_rtd_theme"]
-test = ["coverage[toml]", "pytest", "pytest-cov", "pytest-flake8", "pytest-isort"]
+test = ["flake8", "isort", "pytest"]
 
 [[package]]
 name = "webencodings"
@@ -1745,4 +1745,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.12"
-content-hash = "899edf09d9c3bf1537b5c7e6418464a2c2b15c09c895e6361c51cd0666eb23af"
+content-hash = "bba3b2d6784b8d36c2b078d05f58557aa6c61cc5c081562114aa14c8fbe026f9"
