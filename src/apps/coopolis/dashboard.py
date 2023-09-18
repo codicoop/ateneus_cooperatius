@@ -7,14 +7,10 @@ To activate your index dashboard add the following to your settings.py::
 """
 
 from grappelli.dashboard import modules, Dashboard
-from django.conf import settings
 from django.urls import reverse
-from constance import config
 
 
 class MyDashboard(Dashboard):
-    title = "Back-office de "+settings.PROJECT_NAME  # Aquest títol no l'està mostrant enlloc.
-
     def __init__(self, **kwargs):
         Dashboard.__init__(self, **kwargs)
 
@@ -114,7 +110,7 @@ class MyDashboard(Dashboard):
             )
 
         self.children.append(modules.Group(
-            title=settings.PROJECT_NAME,
+            title="Backoffice",
             column=1,
             collapsible=True,
             children=group_children

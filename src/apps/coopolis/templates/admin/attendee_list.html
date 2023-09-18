@@ -48,6 +48,10 @@ td {
     width: 30%;
 }
 
+.qr {
+  width: 100px;
+}
+
 @page {
     margin: 30px 20px 180px 20px;
     size: A4 portrait;
@@ -69,20 +73,34 @@ td {
   <table cellspacing="0" cellpadding="0">
     <tbody>
       <tr>
-        <td style="width: 23%;" class="table-header-caption">EXPEDIENT</td>
+        <td style="width: 30%;" class="table-header-caption">EXPEDIENT</td>
         <td>{{ activity.subsidy_period.number|default_if_none:"" }}</td>
-        <td style="width: 21%;" class="table-header-caption">ATENEU/CERCLE</td>
-        <td class="table-header-content">{{ activity.get_circle_display }}</td>
+        <td style="width: 105px" class="table-header-caption">ENQUESTA</td>
       </tr>
       <tr>
-        <td class="table-header-caption">ENTITAT</td><td>{{ activity.entity|default_if_none:"" }}</td>
-        <td class="table-header-caption">DATA</td><td>{{ activity.date_start }}</td>
+        <td class="table-header-caption">ENTITAT</td>
+        <td>{{ activity.entity|default_if_none:"" }}</td>
+        <td rowspan="3" class="table-header-caption"><img src="{{ qr_poll }}" class="qr"></td>
       </tr>
       <tr>
-        <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td colspan="3">{{ activity }}</td>
+        <td class="table-header-caption">ATENEU/CERCLE</td>
+        <td>{{ activity.get_circle_display }}</td>
+      </tr>
+      <tr>
+        <td class="table-header-caption">DATA</td>
+        <td>{{ activity.date_start }}</td>
+      </tr>
+      <tr>
+        <td class="table-header-caption">NOM DE L'ACTIVITAT</td>
+        <td colspan="2">{{ activity }}</td>
+      </tr>
+      <tr>
+        <td class="table-header-caption">ENQUESTA</td>
+        <td colspan="2"><a href="{{ poll_url }}" target="_blank">{{ poll_url }}</a></td>
       </tr>
     </tbody>
   </table>
+
   <div style="height: 500px; margin-top: 50px;">
   <table class="llista" cellspacing="0" cellpadding="0">
     <thead>

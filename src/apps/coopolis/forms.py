@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
     UserCreationForm, ReadOnlyPasswordHashField
 )
 from django.core.exceptions import ValidationError
+from django.db.models import BLANK_CHOICE_DASH
 from django.forms import models
 from django.urls import reverse
 from django.utils.timezone import make_aware
@@ -15,7 +16,8 @@ from django.utils.safestring import mark_safe
 from constance import config
 from django.conf import settings
 
-from apps.coopolis.models import Project, User, ActivityPoll
+from apps.coopolis.models import Project, User, ActivityPoll, \
+    EmploymentInsertion
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.mixins import FormDistrictValidationMixin
 from apps.facilities_reservations.models import Reservation, \
@@ -42,6 +44,16 @@ class ProjectFormAdmin(ProjectForm):
         # Un-excluding the fields that we were hiding for the front-end.
         exclude = None
 
+    def clean(self):
+        super().clean()
+        if EmploymentInsertion.objects.filter(
+                project=self.instance.id,
+        ).count():
+            msg = ("Aquest projecte està vinculat a insercions laborals, "
+                   "per aquest motiu, aquest camp és obligatori.")
+            if not self.cleaned_data.get("cif"):
+                self.add_error("cif", msg)
+        return self.cleaned_data
 
 class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
     def clean(self):
@@ -62,41 +74,33 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
             # for rows in which the user has been modified (or make the
             # user row read only when editing).
             # New (unsaved yet) ones will have data['id'] == None
-            self.validate_extended_fields(data['user'], data['project'])
+            EmploymentInsertion.validate_extended_fields(
+                data['user'],
+                data['project'],
+                False,
+            )
 
-    def validate_extended_fields(self, user_obj, project_obj):
-        user_obj_errors = {
-            "surname": "- Cognom.<br />",
-            "gender": "- Gènere. <br/>",
-            "birthdate": "- Data de naixement.<br />",
-            "birth_place": "- Lloc de naixement.<br />",
-            "town": "- Municipi.<br />",
-        }
-        user_errors = [value for key, value in user_obj_errors.items() if
-                       not getattr(user_obj, key)]
 
-        cif_error = None
-        if not project_obj.cif:
-            cif_error = ("- NIF (el trobaràs més amunt en aquest mateix "
-                         "formulari).<br>")
-
-        if not user_errors and not cif_error:
-            return True
-        url = reverse(
-            'admin:coopolis_user_change',
-            kwargs={'object_id': user_obj.id}
+class EmploymentInsertionAdminForm(models.ModelForm):
+    class Meta:
+        model = EmploymentInsertion
+        fields = (
+            "project",
+            "user",
+            "subsidy_period",
+            "insertion_date",
+            "end_date",
+            "contract_type",
+            "circle",
         )
-        url = f'<a href="{url}" target="_blank">Fitxa de la Persona</a>'
-        msg = (f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
-               f"Projecte i de les Persones que normalment son opcionals, "
-               f"però que per poder justificar les insercions laborals "
-               f"son obligatoris.<br>")
-        if user_errors:
-            msg += f"De la {url}:<br /> {''.join(user_errors)}<br />"
-        if cif_error:
-            msg += f"De la fitxa del Projecte:<br>{cif_error}"
-        raise ValidationError(mark_safe(msg))
 
+    def clean(self):
+        super().clean()
+        EmploymentInsertion.validate_extended_fields(
+            self.cleaned_data.get("user"),
+            self.cleaned_data.get("project"),
+        )
+        return self.cleaned_data
 
 class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
@@ -125,6 +129,15 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         label="He llegit i accepto", required=True)
     authorize_communications = forms.BooleanField(
         label="Accepto rebre informació sobre els serveis", required=False)
+    birth_place = forms.ChoiceField(
+        label="Lloc de naixement",
+        choices=[
+            BLANK_CHOICE_DASH[0],
+            ("CATALUNYA", "Catalunya"),
+            ("ESPANYA", "Espanya"),
+            ("OTHER", "Altre")
+        ]
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -223,6 +236,22 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
                    "participació davant dels organismes públics que financen "
                    "aquestes activitats.")
             self.add_error('id_number', msg)
+
+        if EmploymentInsertion.objects.filter(
+                user=self.instance.id,
+        ).count():
+            msg = ("Aquesta persona està vinculada a una inserció laboral, "
+                   "per aquest motiu, aquest camp és obligatori.")
+            if not self.cleaned_data.get("last_name"):
+                self.add_error("last_name", msg)
+            if not self.cleaned_data.get("gender"):
+                self.add_error("gender", msg)
+            if not self.cleaned_data.get("birthdate"):
+                self.add_error("birthdate", msg)
+            if not self.cleaned_data.get("birth_place"):
+                self.add_error("birth_place", msg)
+            if not self.cleaned_data.get("town"):
+                self.add_error("town", msg)
         return self.cleaned_data
 
 
