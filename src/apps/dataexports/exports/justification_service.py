@@ -861,7 +861,7 @@ class ExportJustificationService:
                 insertion.user.first_name,  # Persona
                 id_number,
                 insertion_date,  # Data d'alta SS
-                '',  # Data baixa SS
+                insertion.end_date or "",  # Data baixa SS
                 contract_type,  # Tipus de contracte
                 gender,
                 birthdate,

@@ -4,7 +4,8 @@ from constance import config
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Q
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
@@ -624,7 +625,7 @@ class EmploymentInsertion(models.Model):
         ordering = ["-insertion_date"]
 
     project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
+        Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
         related_name="employment_insertions")
     user = models.ForeignKey(
         User, verbose_name="persona", blank=True, null=True,
@@ -655,3 +656,45 @@ class EmploymentInsertion(models.Model):
 
     def __str__(self):
         return f"{self.user.full_name}: {self.get_contract_type_display()}"
+
+    @classmethod
+    def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
+        user_obj_errors = {
+            "surname": "- Cognom.<br />",
+            "gender": "- Gènere. <br/>",
+            "birthdate": "- Data de naixement.<br />",
+            "birth_place": "- Lloc de naixement.<br />",
+            "town": "- Municipi.<br />",
+        }
+        user_errors = [value for key, value in user_obj_errors.items() if
+                       not getattr(user_obj, key)]
+        if not isinstance(user_obj, User) or not isinstance(project_obj, Project):
+            return True
+
+        cif_error = None
+        if not project_obj.cif:
+            cif_error = "- NIF.<br>"
+
+        if not user_errors and not cif_error:
+            return True
+        user_url = reverse(
+            'admin:coopolis_user_change',
+            kwargs={'object_id': user_obj.id}
+        )
+        url = f'<a href="{user_url}" target="_blank">Fitxa de la Persona</a>'
+        msg = (f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
+               f"Projecte i de les Persones que normalment son opcionals, "
+               f"però que per poder justificar les insercions laborals "
+               f"son obligatoris.<br>")
+        if user_errors:
+            msg += f"De la {url}:<br /> {''.join(user_errors)}<br />"
+        if cif_error:
+            url = "fitxa del Projecte (en aquest mateix formulari, més amunt)"
+            if link_to_project:
+                project_url = reverse(
+                    'admin:coopolis_project_change',
+                    kwargs={'object_id': project_obj.id}
+                )
+                url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
+            msg += f"De la {url}:<br>{cif_error}"
+        raise ValidationError(mark_safe(msg))

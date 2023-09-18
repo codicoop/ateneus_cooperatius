@@ -1,3 +1,8 @@
+import base64
+from io import BytesIO
+
+import qrcode
+from django.conf import settings
 from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.utils import formats
@@ -10,8 +15,10 @@ from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 from datetime import datetime
 import modelclone
+import weasyprint
+import django.template.loader as loader
 
-from apps.coopolis.choices import ActivityFileType
+from apps.coopolis.choices import ActivityFileType, ServicesChoices
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
 from apps.cc_courses.models import (
     Activity,
@@ -166,6 +173,26 @@ class ActivityFileInlineAdmin(admin.TabularInline):
     extra = 0
 
 
+class SubserviceFilter(admin.SimpleListFilter):
+    title = 'Sub-servei'
+    parameter_name = 'sub_service'
+
+    def lookups(self, request, model_admin):
+        sub_services = [(None, "-")]
+        if "service__exact" in request.GET:
+            service_id = int(request.GET.get("service__exact"))
+            service = ServicesChoices(service_id)
+            sub_services = [
+                (sub_service.value, sub_service.label)
+                for sub_service in service.get_sub_services()
+            ]
+        return sub_services
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(sub_service=self.value())
+
+
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -184,9 +211,10 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
         FilterBySubsidyPeriod, FilterByJustificationFiles,
-        "service", ("place__town", admin.RelatedOnlyFieldListFilter),
-        'course', 'date_start', 'room', 'circle', 'entity', 'place',
-        'for_minors', 'cofunded',
+        "service", SubserviceFilter,
+        ("place__town", admin.RelatedOnlyFieldListFilter),
+        'course', 'date_start', 'room', 'circle', 'entity',
+        'place', 'for_minors', 'cofunded',
         ("responsible", admin.RelatedOnlyFieldListFilter),
     )
     fieldsets = [
@@ -271,7 +299,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         urls = super().get_urls()
         custom_urls = [
             path(
-                r'<_id>/attendee-list/',
+                r'<uuid>/attendee-list/',
                 self.admin_site.admin_view(self.attendee_list),
                 name='attendee-list',
             ),
@@ -317,7 +345,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     def attendee_list_field(self, obj):
         if obj.id is None:
             return '-'
-        url = reverse_lazy('admin:attendee-list', kwargs={'_id': obj.id})
+        url = reverse_lazy('admin:attendee-list', kwargs={'uuid': obj.uuid})
         return format_html(
             f'<a href="{url}" target="_new">Llista d\'assistencia</a>')
 
@@ -325,21 +353,33 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     attendee_list_field.short_description = 'Exportar'
 
     @staticmethod
-    def attendee_list(request, _id):
-        import weasyprint
-        import django.template.loader as loader
+    def attendee_list(request, uuid):
         temp = loader.get_template('admin/attendee_list.html')
+        absolute_url_poll = (
+            settings.ABSOLUTE_URL +
+            reverse(
+                'activity_poll', kwargs={'uuid': uuid}
+            )
+        )
+        buffered = BytesIO()
+        qr_poll = qrcode.make(absolute_url_poll)
+        qr_poll.save(buffered, format="JPEG")
+        qr_poll_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        qr_poll_uri = f"data:image/png;base64,{qr_poll_base64}"
+
         content = temp.render(
             {
-                'assistants': Activity.objects.get(pk=_id).enrolled.filter(
+                "assistants": Activity.objects.get(uuid=uuid).enrolled.filter(
                     enrollments__waiting_list=False),
-                'activity': Activity.objects.get(pk=_id),
-                'footer_image': config.ATTENDEE_LIST_FOOTER_IMG,
+                "activity": Activity.objects.get(uuid=uuid),
+                "footer_image": config.ATTENDEE_LIST_FOOTER_IMG,
+                "qr_poll": qr_poll_uri,
+                "poll_url": absolute_url_poll,
             }
         )
 
         pdf = weasyprint.HTML(
-            string=content.encode('utf-8'),
+            string=content.encode("utf-8"),
             base_url=request.build_absolute_uri()
         )
 

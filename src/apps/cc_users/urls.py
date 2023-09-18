@@ -21,7 +21,6 @@ urlpatterns = [
         PasswordChangeDoneView.as_view(),
         name='password_change_done')
     ,
-    path('users/signup', views.SignUpView.as_view(), name='signup'),
     path(
         'users/profile/',
         login_required(views.MyAccountView.as_view()),

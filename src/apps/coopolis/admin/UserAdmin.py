@@ -186,27 +186,81 @@ class UserAdmin(admin.ModelAdmin):
     def get_csv(users_queryset, writer):
         writer.writerow(
             [
-                'Email Address',
-                'First Name',
-                'Last Name',
-                'City',
-                'Address',
-                'Authorize Newsletter',
+                "Email",
+                "Nom",
+                "Cognom",
+                "Segon cognom",
+                "Població",
+                "Adreça",
+                "Autoritza rebre informació",
+                "ID Persona",
+                "DNI/NIE/Passaport",
+                "Telèfon",
+                "Data de naixement",
+                "Lloc de naixement",
+                "Gènere",
+                "Nivell d'estudis",
+                "Situació laboral",
+                "Com ens has conegut",
+                "Participa a un projecte cooperatiu/ESS?",
+                "Projecte: ID",
+                "Projecte: Nom",
+                "Projecte: Sector",
+                "Projecte: Web",
+                "Projecte: Estat",
+                "Projecte: Petició inicial",
+                "Projecte: Correu electrònic",
+                "Projecte: Telèfon",
+                "Projecte: Població",
+                "Projecte: num. persones",
+                "Projecte: Objecte i finalitat",
+                "Projecte: Orígens",
+                "Projecte: Necessitats que resol",
+                "Projecte: Base social",
             ]
         )
         for user in users_queryset:
             if user.fake_email is True:
                 continue
-            writer.writerow(
-                [
-                    user.email,
-                    user.first_name,
-                    user.surname,
-                    user.town if user.town else '',
-                    user.address if user.address else '',
-                    'yes' if user.authorize_communications else 'no'
+            user_info = [
+                user.email,
+                user.first_name,
+                user.surname or "",
+                user.surname2 or "",
+                user.town or "",
+                user.address or "",
+                'yes' if user.authorize_communications else 'no',
+                user.id,
+                user.id_number or "",
+                user.phone_number or "",
+                str(user.birthdate),
+                user.get_birth_place_display(),
+                user.get_gender_display(),
+                user.get_educational_level_display(),
+                user.get_employment_situation_display(),
+                user.get_discovered_us_display(),
+                user.project_involved or "",
+            ]
+            project_info = []
+            if user.project:
+                project_info = [
+                    user.project.id,
+                    user.project.name,
+                    user.project.get_sector_display(),
+                    user.project.web,
+                    user.project.get_project_status_display(),
+                    user.project.get_motivation_display(),
+                    user.project.mail,
+                    user.project.phone,
+                    user.project.town or "",
+                    user.project.number_people,
+                    user.project.object_finality or "",
+                    user.project.project_origins or "",
+                    user.project.solves_necessities or "",
+                    user.project.social_base or "",
                 ]
-            )
+            writer.writerow(user_info + project_info)
+
 
     def save_model(self, request, obj, form, change):
         # Override this to set the password to the value in the field if it's
