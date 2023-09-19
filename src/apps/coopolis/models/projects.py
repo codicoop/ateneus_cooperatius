@@ -738,3 +738,30 @@ class CreatedEntity(models.Model):
     class Meta:
         verbose_name = "Entitat creada"
         verbose_name_plural = "Entitats creades"
+
+    @classmethod
+    def validate_extended_fields(cls, project_obj):
+        if not isinstance(project_obj, Project):
+            return True
+        project_obj_errors = {
+            "cif": "- NIF.<br />",
+            "constitution_date": "- Data de constitució. <br/>",
+        }
+        project_errors = [
+            value for key, value in project_obj_errors.items()
+            if not getattr(project_obj, key)
+        ]
+
+        if not project_errors:
+            return True
+        project_url = reverse(
+            'admin:coopolis_project_change',
+            kwargs={'object_id': project_obj.id}
+        )
+        url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
+        msg = (f"No s'ha pogut desar l'entitat creada. Hi ha camps del "
+               f"Projecte que normalment son opcionals, "
+               f"però que per poder justificar les entitats creades "
+               f"son obligatoris.<br>")
+        msg += f"De la {url}:<br /> {''.join(project_errors)}<br />"
+        raise ValidationError(mark_safe(msg))

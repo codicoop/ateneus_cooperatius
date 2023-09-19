@@ -13,6 +13,7 @@ from apps.coopolis.models import User, Project, ProjectStage, EmploymentInsertio
 from apps.coopolis.forms import (
     ProjectFormAdmin,
     EmploymentInsertionInlineFormSet, EmploymentInsertionAdminForm,
+    EntityCreatedAdminForm,
 )
 from apps.coopolis.models.projects import (
     ProjectStageSession,
@@ -646,4 +647,4 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
 
 @admin.register(CreatedEntity)
 class CreatedEntityAdmin(admin.ModelAdmin):
-    pass
+    form = EntityCreatedAdminForm
