@@ -14,7 +14,11 @@ from apps.coopolis.forms import (
     ProjectFormAdmin,
     EmploymentInsertionInlineFormSet, EmploymentInsertionAdminForm,
 )
-from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
+from apps.coopolis.models.projects import (
+    ProjectStageSession,
+    ProjectFile,
+    CreatedEntity,
+)
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -638,3 +642,8 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(CreatedEntity)
+class CreatedEntityAdmin(admin.ModelAdmin):
+    pass

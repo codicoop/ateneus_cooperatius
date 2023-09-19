@@ -698,3 +698,43 @@ class EmploymentInsertion(models.Model):
                 url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
             msg += f"De la {url}:<br>{cif_error}"
         raise ValidationError(mark_safe(msg))
+
+
+class CreatedEntity(models.Model):
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="created_entities",
+    )
+    service = models.SmallIntegerField(
+        "Servei",
+        choices=ServicesChoices.choices,
+        null=True,
+    )
+    sub_service = models.SmallIntegerField(
+        "Sub-servei",
+        choices=SubServicesChoices.choices,
+        null=True,
+    )
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod,
+        verbose_name="convocatòria de la constitució",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    circle = models.SmallIntegerField(
+        "Ateneu / Cercle",
+        choices=CirclesChoices.choices_named(),
+        null=True,
+    )
+    entity = models.ForeignKey(
+        Entity,
+        verbose_name="Entitat",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    class Meta:
+        verbose_name = "Entitat creada"
+        verbose_name_plural = "Entitats creades"

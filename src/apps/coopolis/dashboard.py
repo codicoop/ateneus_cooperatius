@@ -64,6 +64,7 @@ class MyDashboard(Dashboard):
                     'apps.coopolis.models.projects.ProjectStage',
                     'apps.coopolis.models.projects.EmploymentInsertion',
                     'apps.coopolis.models.projects.ProjectStageSession',
+                    'apps.coopolis.models.projects.CreatedEntity',
                 ),
             ),
             modules.ModelList(
