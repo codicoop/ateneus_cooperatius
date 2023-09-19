@@ -648,6 +648,14 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
 @admin.register(CreatedEntity)
 class CreatedEntityAdmin(admin.ModelAdmin):
     form = EntityCreatedAdminForm
+    list_display = (
+        "project",
+        "service",
+        "sub_service",
+        "subsidy_period",
+        "circle",
+        "entity",
+    )
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js',)
