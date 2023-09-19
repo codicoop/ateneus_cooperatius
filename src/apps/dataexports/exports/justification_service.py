@@ -3,6 +3,7 @@ from django.db.models import Q
 from apps.coopolis.choices import CirclesChoices, SubServicesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
+from apps.coopolis.models.projects import CreatedEntity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
@@ -388,62 +389,52 @@ class ExportJustificationService:
         mateix filtre per saber quins tenen
         actuació creada, i deduïr per l'ordre quina ID li toca.
         """
-        obj = Project.objects.filter(
+        obj = CreatedEntity.objects.filter(
             subsidy_period=self.export_manager.subsidy_period,
-            cif__isnull=False,
-            constitution_date__isnull=False,
         )
         self.number_of_founded_projects = len(obj)
-        for project in obj:
-            service = ("", True)
-            sub_service = ("", True)
-            circle = ("", True)
-            date = ("", True)
-            partners_involved = ""
-            cofunded = ""
-            cofunded_aacc = ""
-            circle_name = ""
-            stages = ProjectStage.objects.filter(
-                project=project,
-                subsidy_period=self.export_manager.subsidy_period
-            ).order_by("-date_start")[:1]
-            if stages:
-                stage = stages.all()[0]
-                if stage.service:
-                    service = stage.get_service_display()
-                if stage.sub_service:
-                    sub_service = stage.get_sub_service_display()
-                if stage.circle is not None:
-                    circle = CirclesChoices(stage.circle).label
-                date = stage.date_start
-                partners_involved = stage.partners_involved_in_sessions.count()
-                cofunded = str(stage.cofunded)
-                cofunded_aacc = "Sí" if stage.cofunded_ateneu else "No"
-                circle_name = stage.get_circle_display()
+        for created_entity in obj:
+            service = (
+                created_entity.get_service_display()
+                if created_entity.service else ("", True)
+            )
+            sub_service = (
+                created_entity.get_sub_service_display()
+                if created_entity.sub_service else ("", True)
+            )
+            circle = (
+                CirclesChoices(created_entity.circle).label
+                if created_entity.circle else ("", True)
+            )
+            entity = (
+                str(created_entity.entity)
+                if created_entity.entity else ("", True)
+            )
 
             self.export_manager.row_number += 1
-            town = ("", True)
-            if project.town:
-                town = str(project.town)
+            town = (
+                str(created_entity.project.town)
+                if created_entity.project.town else ("", True)
+            )
 
             row = [
-                service,
-                sub_service,
-                project.name,
-                date,
-                "",
-                "",  # Entitat
-                circle,
-                town,
-                partners_involved,
-                "No",
-                "",
-                # En blanc pq cada stage session pot contenir una entitat
+                service,  # Servei
+                sub_service,  # Sub servei
+                created_entity.project.name,  # Nom de l'actuació
+                created_entity.project.constitution_date,  # Data inici
+                "",  # Període
+                entity,  # Entitat que realitza
+                circle,  # Cercle / ateneu
+                town,  # Municipi
+                ("", True),  # Nº participants
+                "No",  # Material difusió
+                "",  # Doc. acreditatiu
+                "",  # Incidències
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
-                cofunded,  # Cofinançat
-                cofunded_aacc,  # Cofinançat amb AACC
-                circle_name,
+                "",  # Cofinançat
+                "",  # Cofinançat amb AACC
+                created_entity.get_circle_display(),  # [Ateneu / cercle]
             ]
             self.export_manager.fill_row_data(row)
 
