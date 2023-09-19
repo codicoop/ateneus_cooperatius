@@ -656,6 +656,11 @@ class CreatedEntityAdmin(admin.ModelAdmin):
         "circle",
         "entity",
     )
+    list_filter = (
+        "subsidy_period",
+        "circle",
+        "entity",
+    )
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js',)
