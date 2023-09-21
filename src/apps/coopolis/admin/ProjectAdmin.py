@@ -397,7 +397,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         ("Dades internes gestionades per l'ateneu", {
             'fields': ['partners', 'partners_participants',
                        'registration_date', 'cif',
-                       'constitution_date', 'subsidy_period', 'derivation',
+                       'constitution_date', 'derivation',
                        'derivation_date', 'description',
                        'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update', 'tags']

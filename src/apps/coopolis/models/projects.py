@@ -101,15 +101,11 @@ class Project(models.Model):
     constitution_date = models.DateField("data de constitució", blank=True,
                                          null=True)
     subsidy_period = models.ForeignKey(
-        SubsidyPeriod, verbose_name="convocatòria de la constitució",
+        SubsidyPeriod, verbose_name="(OBSOLLET) Convocatòria de la constitució",
         null=True, blank=True, on_delete=models.SET_NULL,
-        help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una "
-                  "convocatòria posterior a l'ultima "
-                  "intervenció de l'ateneu, podeu indicar-ho aquí, per tal "
-                  "que aparegui com a Entitat Creada a l'informe de Projectes "
-                  "Constituïts i a l'excel de justificació. Només es consideren"
-                  " entitats creades les que tenen el NIF i la data de "
-                  "constitució introduïdes."
+        help_text="Anteriorment es feia servir aquest camp per saber quins "
+                  "projectes incloure a la justificació com a Constituïts. Ara "
+                  "això es fa des de l'apartat Entitats Creades."
     )
     estatuts = models.FileField("estatuts", blank=True, null=True,
                                 storage=PrivateMediaStorage(), max_length=250)
