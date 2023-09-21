@@ -102,6 +102,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         )
         return self.cleaned_data
 
+
 class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
@@ -117,9 +118,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=True)
-    email = forms.EmailField(
-        label="Correu electrònic", max_length=254,
-        help_text='Requerit, ha de ser una adreça vàlida.')
+    email = forms.EmailField(label="Correu electrònic", max_length=254)
     birthdate = forms.DateField(
         label="Data de naixement", required=True,
         widget=XDSoftDatePickerInput())
