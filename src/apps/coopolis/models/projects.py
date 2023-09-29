@@ -595,13 +595,6 @@ class ProjectsFollowUpService(Project):
         ordering = ['follow_up_situation', 'follow_up_situation_update']
 
 
-class ProjectsConstitutedService(Project):
-    class Meta:
-        proxy = True
-        verbose_name_plural = "Projectes constituïts"
-        verbose_name = "Projecte constituït"
-
-
 class EmploymentInsertion(models.Model):
     class Meta:
         verbose_name = "inserció laboral"
@@ -752,3 +745,10 @@ class CreatedEntity(models.Model):
                f"son obligatoris.<br>")
         msg += f"De la {url}:<br /> {''.join(project_errors)}<br />"
         raise ValidationError(mark_safe(msg))
+
+
+class ProjectsConstitutedService(CreatedEntity):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Projectes constituïts"
+        verbose_name = "Projecte constituït"
