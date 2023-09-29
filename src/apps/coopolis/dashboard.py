@@ -75,7 +75,6 @@ class MyDashboard(Dashboard):
                     'apps.coopolis.models.projects.ProjectsFollowUpService',
                     'apps.coopolis.models.projects.ProjectsConstitutedService',
                     'apps.coopolis.models.projects.ProjectsFollowUp',
-                    'apps.coopolis.models.projects.ProjectsConstituted',
                 ),
             ),
             reservations_module_app,

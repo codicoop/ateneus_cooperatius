@@ -9,7 +9,7 @@ from .ProjectAdmin import (
     ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin,
     StageSubtypeAdmin, ProjectFile, ProjectFileAdmin,
 )
-from .ProjectsFollowUpAdmin import ProjectsConstitutedAdmin
+from .ProjectsFollowUpAdmin import ProjectsConstitutedServiceAdmin
 from .UserAdmin import UserAdmin
 from .ActivityPollAdmin import ActivityPollAdmin
 
