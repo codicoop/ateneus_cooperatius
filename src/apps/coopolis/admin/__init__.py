@@ -9,6 +9,8 @@ from .ProjectAdmin import (
     ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin,
     StageSubtypeAdmin, ProjectFile, ProjectFileAdmin,
 )
+# We're not registering it here, but needed the import so grappelli's
+# dashboard can work.
 from .ProjectsFollowUpAdmin import ProjectsConstitutedServiceAdmin
 from .UserAdmin import UserAdmin
 from .ActivityPollAdmin import ActivityPollAdmin
