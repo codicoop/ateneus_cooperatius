@@ -101,7 +101,7 @@ class Project(models.Model):
     constitution_date = models.DateField("data de constitució", blank=True,
                                          null=True)
     subsidy_period = models.ForeignKey(
-        SubsidyPeriod, verbose_name="(OBSOLLET) Convocatòria de la constitució",
+        SubsidyPeriod, verbose_name="(OBSOLET) Convocatòria de la constitució",
         null=True, blank=True, on_delete=models.SET_NULL,
         help_text="Anteriorment es feia servir aquest camp per saber quins "
                   "projectes incloure a la justificació com a Constituïts. Ara "
