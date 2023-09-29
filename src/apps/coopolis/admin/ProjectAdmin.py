@@ -661,6 +661,10 @@ class CreatedEntityAdmin(admin.ModelAdmin):
         "circle",
         "entity",
     )
+    raw_id_fields = ("project",)
+    autocomplete_lookup_fields = {
+        'fk': ["project", ],
+    }
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js',)
