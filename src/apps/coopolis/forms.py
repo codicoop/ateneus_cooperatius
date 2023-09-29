@@ -8,9 +8,9 @@ from django.contrib.auth.forms import (
 from django.core.exceptions import ValidationError
 from django.db.models import BLANK_CHOICE_DASH
 from django.forms import models
-from django.urls import reverse
 from django.utils.timezone import make_aware
 
+from apps.coopolis.models.projects import CreatedEntity
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
@@ -53,7 +53,17 @@ class ProjectFormAdmin(ProjectForm):
                    "per aquest motiu, aquest camp és obligatori.")
             if not self.cleaned_data.get("cif"):
                 self.add_error("cif", msg)
+        if CreatedEntity.objects.filter(
+                project=self.instance.id,
+        ).count():
+            msg = ("Aquest projecte està vinculat a una creació d'entitat, "
+                   "per aquest motiu, aquest camp és obligatori.")
+            if not self.cleaned_data.get("cif"):
+                self.add_error("cif", msg)
+            if not self.cleaned_data.get("constitution_date"):
+                self.add_error("constitution_date", msg)
         return self.cleaned_data
+
 
 class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
     def clean(self):
@@ -525,3 +535,23 @@ class ActivityPollForm(forms.ModelForm):
             }),
         ]
         return fieldsets
+
+
+class EntityCreatedAdminForm(models.ModelForm):
+    class Meta:
+        model = CreatedEntity
+        fields = (
+            "project",
+            "service",
+            "sub_service",
+            "subsidy_period",
+            "circle",
+            "entity",
+        )
+
+    def clean(self):
+        super().clean()
+        CreatedEntity.validate_extended_fields(
+            self.cleaned_data.get("project"),
+        )
+        return self.cleaned_data

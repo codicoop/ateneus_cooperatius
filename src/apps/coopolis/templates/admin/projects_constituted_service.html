@@ -131,15 +131,15 @@
       <tbody>
         {% for row in rows %}
         <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
-          <td><a href="{% url 'admin:coopolis_project_change' row.id %}">{{ row.name }}</a></td>
-          <td>{{ row.services_list|default_if_none:"" }} </td>
-          <td>{{ row.constitution_date }}</td>
-          <td>{{ row.cif|default_if_none:"" }}</td>
-          <td>{{ row.get_sector_display }}</td>
+          <td><a href="{% url 'admin:coopolis_project_change' row.id %}">{{ row.project.name }}</a></td>
+          <td>{{ row.project.services_list|default_if_none:"" }} </td>
+          <td>{{ row.project.constitution_date }}</td>
+          <td>{{ row.project.cif|default_if_none:"" }}</td>
+          <td>{{ row.project.get_sector_display }}</td>
           <td>{{ row.members_h }} / {{ row.members_d }} / {{ row.members_a }}</td>
-          <td>{{ row.mail }}</td>
-          <td>{{ row.phone }}</td>
-          <td>{{ row.full_town_district|default_if_none:"" }}</td>
+          <td>{{ row.project.mail }}</td>
+          <td>{{ row.project.phone }}</td>
+          <td>{{ row.project.full_town_district|default_if_none:"" }}</td>
         </tr>
         {% endfor %}
         <tr class="grp-row totals">

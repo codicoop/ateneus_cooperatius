@@ -64,6 +64,7 @@ class MyDashboard(Dashboard):
                     'apps.coopolis.models.projects.ProjectStage',
                     'apps.coopolis.models.projects.EmploymentInsertion',
                     'apps.coopolis.models.projects.ProjectStageSession',
+                    'apps.coopolis.models.projects.CreatedEntity',
                 ),
             ),
             modules.ModelList(
@@ -74,7 +75,6 @@ class MyDashboard(Dashboard):
                     'apps.coopolis.models.projects.ProjectsFollowUpService',
                     'apps.coopolis.models.projects.ProjectsConstitutedService',
                     'apps.coopolis.models.projects.ProjectsFollowUp',
-                    'apps.coopolis.models.projects.ProjectsConstituted',
                 ),
             ),
             reservations_module_app,

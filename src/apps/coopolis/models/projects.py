@@ -101,15 +101,11 @@ class Project(models.Model):
     constitution_date = models.DateField("data de constitució", blank=True,
                                          null=True)
     subsidy_period = models.ForeignKey(
-        SubsidyPeriod, verbose_name="convocatòria de la constitució",
+        SubsidyPeriod, verbose_name="(OBSOLET) Convocatòria de la constitució",
         null=True, blank=True, on_delete=models.SET_NULL,
-        help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una "
-                  "convocatòria posterior a l'ultima "
-                  "intervenció de l'ateneu, podeu indicar-ho aquí, per tal "
-                  "que aparegui com a Entitat Creada a l'informe de Projectes "
-                  "Constituïts i a l'excel de justificació. Només es consideren"
-                  " entitats creades les que tenen el NIF i la data de "
-                  "constitució introduïdes."
+        help_text="Anteriorment es feia servir aquest camp per saber quins "
+                  "projectes incloure a la justificació com a Constituïts. Ara "
+                  "això es fa des de l'apartat Entitats Creades."
     )
     estatuts = models.FileField("estatuts", blank=True, null=True,
                                 storage=PrivateMediaStorage(), max_length=250)
@@ -599,25 +595,6 @@ class ProjectsFollowUpService(Project):
         ordering = ['follow_up_situation', 'follow_up_situation_update']
 
 
-class ProjectsConstituted(Project):
-    """
-    Deprecated: from Nov 2021 this is kept to let them access older reports,
-    but when they don't need them anymore this and the corresponding admin view
-    and template can be deleted.
-    """
-    class Meta:
-        proxy = True
-        verbose_name_plural = "(obsolet) Projectes constituïts per eix"
-        verbose_name = "(obsolet) Projecte constituït per eix"
-
-
-class ProjectsConstitutedService(Project):
-    class Meta:
-        proxy = True
-        verbose_name_plural = "Projectes constituïts"
-        verbose_name = "Projecte constituït"
-
-
 class EmploymentInsertion(models.Model):
     class Meta:
         verbose_name = "inserció laboral"
@@ -698,3 +675,80 @@ class EmploymentInsertion(models.Model):
                 url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
             msg += f"De la {url}:<br>{cif_error}"
         raise ValidationError(mark_safe(msg))
+
+
+class CreatedEntity(models.Model):
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="created_entities",
+    )
+    service = models.SmallIntegerField(
+        "Servei",
+        choices=ServicesChoices.choices,
+        null=True,
+    )
+    sub_service = models.SmallIntegerField(
+        "Sub-servei",
+        choices=SubServicesChoices.choices,
+        null=True,
+    )
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod,
+        verbose_name="convocatòria de la constitució",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    circle = models.SmallIntegerField(
+        "Ateneu / Cercle",
+        choices=CirclesChoices.choices_named(),
+        null=True,
+    )
+    entity = models.ForeignKey(
+        Entity,
+        verbose_name="Entitat",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    class Meta:
+        verbose_name = "Entitat creada"
+        verbose_name_plural = "Entitats creades"
+
+    def __str__(self):
+        return f"Entitat creada: {self.project.name}"
+
+    @classmethod
+    def validate_extended_fields(cls, project_obj):
+        if not isinstance(project_obj, Project):
+            return True
+        project_obj_errors = {
+            "cif": "- NIF.<br />",
+            "constitution_date": "- Data de constitució. <br/>",
+        }
+        project_errors = [
+            value for key, value in project_obj_errors.items()
+            if not getattr(project_obj, key)
+        ]
+
+        if not project_errors:
+            return True
+        project_url = reverse(
+            'admin:coopolis_project_change',
+            kwargs={'object_id': project_obj.id}
+        )
+        url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
+        msg = (f"No s'ha pogut desar l'entitat creada. Hi ha camps del "
+               f"Projecte que normalment son opcionals, "
+               f"però que per poder justificar les entitats creades "
+               f"son obligatoris.<br>")
+        msg += f"De la {url}:<br /> {''.join(project_errors)}<br />"
+        raise ValidationError(mark_safe(msg))
+
+
+class ProjectsConstitutedService(CreatedEntity):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Projectes constituïts"
+        verbose_name = "Projecte constituït"

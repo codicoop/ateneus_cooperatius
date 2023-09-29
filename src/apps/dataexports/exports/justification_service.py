@@ -3,6 +3,7 @@ from django.db.models import Q
 from apps.coopolis.choices import CirclesChoices, SubServicesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
+from apps.coopolis.models.projects import CreatedEntity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
@@ -39,6 +40,7 @@ class ExportJustificationService:
             12: 'consolidacio',  # Consolidació
         }
         self.stages_obj = None
+        self.created_entities = self.get_created_entities()
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
@@ -369,81 +371,49 @@ class ExportJustificationService:
             self.export_manager.fill_row_data(row)
 
     def actuacions_rows_founded_projects(self):
-        """
-        Tots els projectes vinculats a la convocatòria seleccionada apareixeran
-        a la pestanya d'EntitatsCreades.
-        No obstant només aquells que tinguin una actuació vinculada 
-        durant el període de la convocatòria han de
-        d'aparèixer a la pestanya d'Actuacions.
-
-        Els que tenen això vol dir que hi ha hagut un acompanyament 
-        del projecte dins de la convocatòria.
-        Poden haver-hi hagut varis acompanyaments, per tant, hem 
-        de d'obtenir l'acompanyament més recent.
-
-        Si tot això existeix mostrem les dades del més recent,
-         sinó, ignorem el projecte.
-
-        Després a la pestanya d'EntitatsCreades hem de fer el 
-        mateix filtre per saber quins tenen
-        actuació creada, i deduïr per l'ordre quina ID li toca.
-        """
-        obj = Project.objects.filter(
-            subsidy_period=self.export_manager.subsidy_period,
-            cif__isnull=False,
-            constitution_date__isnull=False,
-        )
-        self.number_of_founded_projects = len(obj)
-        for project in obj:
-            service = ("", True)
-            sub_service = ("", True)
-            circle = ("", True)
-            date = ("", True)
-            partners_involved = ""
-            cofunded = ""
-            cofunded_aacc = ""
-            circle_name = ""
-            stages = ProjectStage.objects.filter(
-                project=project,
-                subsidy_period=self.export_manager.subsidy_period
-            ).order_by("-date_start")[:1]
-            if stages:
-                stage = stages.all()[0]
-                if stage.service:
-                    service = stage.get_service_display()
-                if stage.sub_service:
-                    sub_service = stage.get_sub_service_display()
-                if stage.circle is not None:
-                    circle = CirclesChoices(stage.circle).label
-                date = stage.date_start
-                partners_involved = stage.partners_involved_in_sessions.count()
-                cofunded = str(stage.cofunded)
-                cofunded_aacc = "Sí" if stage.cofunded_ateneu else "No"
-                circle_name = stage.get_circle_display()
+        self.number_of_founded_projects = len(self.created_entities)
+        for created_entity in self.created_entities:
+            service = (
+                created_entity.get_service_display()
+                if created_entity.service else ("", True)
+            )
+            sub_service = (
+                created_entity.get_sub_service_display()
+                if created_entity.sub_service else ("", True)
+            )
+            circle = (
+                CirclesChoices(created_entity.circle).label
+                if created_entity.circle else ("", True)
+            )
+            entity = (
+                str(created_entity.entity)
+                if created_entity.entity else ("", True)
+            )
 
             self.export_manager.row_number += 1
-            town = ("", True)
-            if project.town:
-                town = str(project.town)
+            town = (
+                str(created_entity.project.town)
+                if created_entity.project.town else ("", True)
+            )
 
             row = [
-                service,
-                sub_service,
-                project.name,
-                date,
-                "",
-                "",  # Entitat
-                circle,
-                town,
-                partners_involved,
-                "No",
-                "",
-                # En blanc pq cada stage session pot contenir una entitat
+                service,  # Servei
+                sub_service,  # Sub servei
+                created_entity.project.name,  # Nom de l'actuació
+                created_entity.project.constitution_date,  # Data inici
+                "",  # Període
+                entity,  # Entitat que realitza
+                circle,  # Cercle / ateneu
+                town,  # Municipi
+                ("", True),  # Nº participants
+                "No",  # Material difusió
+                "",  # Doc. acreditatiu
+                "",  # Incidències
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
-                cofunded,  # Cofinançat
-                cofunded_aacc,  # Cofinançat amb AACC
-                circle_name,
+                "",  # Cofinançat
+                "",  # Cofinançat amb AACC
+                created_entity.get_circle_display(),  # [Ateneu / cercle]
             ]
             self.export_manager.fill_row_data(row)
 
@@ -537,61 +507,38 @@ class ExportJustificationService:
     def founded_projects_rows(self):
         # The Ids start at 1, so later we add 1 to this number to have the 
         # right ID.
-        founded_projects_reference_number = \
-            self.number_of_stages \
-            + self.number_of_activities \
+        founded_projects_reference_number = (
+            self.number_of_stages
+            + self.number_of_activities
             + self.number_of_nouniversitaris
-        obj = Project.objects.filter(
-            subsidy_period=self.export_manager.subsidy_period,
-            cif__isnull=False,
-            constitution_date__isnull=False,
         )
-        for project in obj:
-            # Repeating the same filter than in Actuacions to determine if we 
-            # have an Actuació or not
-            reference_number = ""
-            name = ""
-            stages = ProjectStage.objects.filter(
-                project=project,
-                subsidy_period=self.export_manager.subsidy_period
-            ).order_by("-date_start")[:1]
-            circle = ("", True)
-            if stages.count() > 0:
-                stage = stages.all()[0]
-                founded_projects_reference_number += 1
-                reference_number = self.get_formatted_reference(
-                    founded_projects_reference_number,
-                    stage.sub_service,
-                    stage.entities_str,
-                    stage.circle,
-                )
-                name = project.name
-                if stage.circle:
-                    circle = CirclesChoices(stage.circle).label
-
+        for created_entity in self.created_entities:
+            founded_projects_reference_number += 1
+            circle = (
+                CirclesChoices(created_entity.circle).label
+                if created_entity.circle else ("", True)
+            )
+            contact_details = (
+                created_entity.project.partners.all()[0].full_name
+                if created_entity.project.partners.all() else ("", True)
+            )
             self.export_manager.row_number += 1
-            if project.cif is None:
-                self.export_manager.error_message.add(
-                    "<p><strong>Error: falta NIF</strong>. L'entitat '{}' "
-                    "apareix com a EntitatCreada"
-                    " perquè té una Data de constitució dins de "
-                    "la convocatòria, però si no té NIF, "
-                    "no pot ser inclosa a l'excel.</p>".format(project.name))
-                project.cif = ""
             row = [
-                reference_number,
-                # Referència. En aquest full no cal que tinguin relació amb Actuacions.
-                name,
-                # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
-                project.name,
-                project.cif or ("", True),
-                project.partners.all()[
-                    0].full_name if project.partners.all() else ("", True),
-                project.mail or ("", True),
-                project.phone or ("", True),
+                self.get_formatted_reference(
+                    founded_projects_reference_number,
+                    created_entity.sub_service,
+                    created_entity.entity,
+                    created_entity.circle,
+                ),  # Referència
+                "",  # Nom actuació
+                created_entity.project.name,  # Nom del projecte
+                created_entity.project.cif or ("", True),  # NIF del projecte
+                contact_details,  # Nom i cognoms persona de contacte
+                created_entity.project.mail or ("", True),  # Correu electrònic
+                created_entity.project.phone or ("", True),  # Telèfon
                 "Sí",  # Economia solidària
                 circle,  # Ateneu / Cercle
-                project.stages_list
+                created_entity.project.stages_list,  # Acompanyaments
             ]
             self.export_manager.fill_row_data(row)
 
@@ -927,3 +874,7 @@ class ExportJustificationService:
             f"{ref_num} - {sub_service} {subsidy_period} {entity} - {circle}"
         )
 
+    def get_created_entities(self):
+        return CreatedEntity.objects.filter(
+            subsidy_period=self.export_manager.subsidy_period,
+        )

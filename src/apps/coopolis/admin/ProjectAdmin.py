@@ -13,8 +13,13 @@ from apps.coopolis.models import User, Project, ProjectStage, EmploymentInsertio
 from apps.coopolis.forms import (
     ProjectFormAdmin,
     EmploymentInsertionInlineFormSet, EmploymentInsertionAdminForm,
+    EntityCreatedAdminForm,
 )
-from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
+from apps.coopolis.models.projects import (
+    ProjectStageSession,
+    ProjectFile,
+    CreatedEntity,
+)
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -392,7 +397,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         ("Dades internes gestionades per l'ateneu", {
             'fields': ['partners', 'partners_participants',
                        'registration_date', 'cif',
-                       'constitution_date', 'subsidy_period', 'derivation',
+                       'constitution_date', 'derivation',
                        'derivation_date', 'description',
                        'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update', 'tags']
@@ -638,3 +643,31 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(CreatedEntity)
+class CreatedEntityAdmin(admin.ModelAdmin):
+    form = EntityCreatedAdminForm
+    list_display = (
+        "project",
+        "service",
+        "sub_service",
+        "subsidy_period",
+        "circle",
+        "entity",
+    )
+    list_filter = (
+        "subsidy_period",
+        "circle",
+        "entity",
+    )
+    raw_id_fields = ("project",)
+    autocomplete_lookup_fields = {
+        'fk': ["project", ],
+    }
+
+    class Media:
+        js = ('js/grappellihacks.js', 'js/chained_dropdown.js',)
+        css = {
+            'all': ('styles/grappellihacks.css',)
+        }
