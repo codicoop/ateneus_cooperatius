@@ -489,7 +489,7 @@ class ProjectsConstitutedServiceAdmin(admin.ModelAdmin):
     change_list_template = 'admin/projects_constituted_service.html'
     list_filter = ("subsidy_period", )
     show_full_result_count = False
-    list_display = ('name', )
+    list_display = ("project", )
     list_per_page = 99999
 
     def changelist_view(self, request, extra_context=None):
