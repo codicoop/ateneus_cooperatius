@@ -219,7 +219,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     )
     fieldsets = [
         (None, {
-            'fields': ['course', 'name', 'objectives', 'place', 'room',
+            'fields': ['course', 'name', 'objectives', 'teacher', 'place', 'room',
                        'date_start',
                        'date_end', 'starting_time', 'ending_time',
                        'confirmed', 'equipments',
