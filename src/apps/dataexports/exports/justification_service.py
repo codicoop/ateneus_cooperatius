@@ -165,7 +165,7 @@ class ExportJustificationService:
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
                 )
             )
-        )
+        ).exclude(stage_sessions__isnull=True)
 
     def actuacions_rows_stages(self):
         """
