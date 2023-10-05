@@ -19,7 +19,20 @@ class Town(models.Model):
         verbose_name_plural = "poblacions"
         ordering = ["name", ]
 
+    county = models.ForeignKey(
+        County,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        default=None,
+    )
     name = models.CharField("nom", max_length=250)
+    name_for_justification = models.CharField(
+        "nom",
+        max_length=250,
+        default="",
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
