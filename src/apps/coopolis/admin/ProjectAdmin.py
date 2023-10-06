@@ -267,6 +267,7 @@ class ProjectStagesInline(admin.StackedInline):
                 'project',
                 'stage_type',
                 'subsidy_period',
+                'exclude_from_justification',
                 'service',
                 'sub_service',
                 'circle',
