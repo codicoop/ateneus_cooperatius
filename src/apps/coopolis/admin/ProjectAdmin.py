@@ -124,8 +124,8 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         (None, {
             'fields': [
                 'field_project_id', 'project', 'stage_type',
-                'subsidy_period', 'service', 'sub_service',
-                'circle', 'stage_responsible',
+                'subsidy_period', 'exclude_from_justification', 'service',
+                'sub_service', 'circle', 'stage_responsible',
                 'scanned_certificate',
                 'hours_sum', 'date_start',
                 "earliest_session_field",
