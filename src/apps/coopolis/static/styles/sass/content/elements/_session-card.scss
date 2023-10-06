@@ -150,6 +150,10 @@
       font-weight: 400;
     }
   }
+  // Si hi ha més d'un title-text dins de un bloc
+  .text + .title {
+    margin-top: var(--pad2);
+  }
   &__title {
     grid-column: 1 / span 4;
     padding: var(--padding);

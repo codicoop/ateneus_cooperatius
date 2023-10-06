@@ -158,6 +158,16 @@
                   </div>
                 </div>
                 {% endif %}
+                {% if enrollment.activity.teacher %}
+                <div>
+                  <div class="my-course-card__subtitle text-menu">
+                    <p>Formadora</p>
+                  </div>
+                  <div class="my-course-card__text richtext">
+                    <p>{{ enrollment.activity.teacher }}</p>
+                  </div>
+                </div>
+                {% endif %}
               </div>
             </div>
 
@@ -386,6 +396,14 @@
             <div class="my-course-card__text richtext">
               <p>{{ enrollment.activity.objectives|safe }}</p>
             </div>
+            {% if enrollment.activity.teacher %}
+            <div class="my-course-card__subtitle text-menu">
+              <p>Formadora</p>
+            </div>
+            <div class="my-course-card__text richtext">
+              <p>{{ enrollment.activity.teacher }}</p>
+            </div>
+            {% endif %}
           </div>
 
           {% if enrollment.activity.resources.count %}

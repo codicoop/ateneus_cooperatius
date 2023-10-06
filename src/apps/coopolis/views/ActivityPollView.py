@@ -45,7 +45,9 @@ class ActivityPollView(CreateView):
     def get_context_data(self, **kwargs):
         ctx = super(ActivityPollView, self).get_context_data(**kwargs)
         ctx['activity'] = self.activity_obj
-        ctx['fieldsets'] = ctx['form'].get_grouped_fields()
+        ctx['fieldsets'] = ctx['form'].get_grouped_fields(
+            self.activity_obj.teacher,
+        )
         # Amb getattr(object, attribute_name) hauria de poder accedir als form.field_name)  #noqa
 
         return ctx

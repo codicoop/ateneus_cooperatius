@@ -395,7 +395,9 @@ class ActivityPollForm(forms.ModelForm):
                 choices=TRUE_FALSE_CHOICES)
         }
 
-    def get_grouped_fields(self):
+    def get_grouped_fields(self, teacher=""):
+        if teacher:
+            teacher = f" ({teacher})"
         fieldsets = [
             ("Organització", {
                 'fields': [
@@ -460,7 +462,7 @@ class ActivityPollForm(forms.ModelForm):
                     },
                 ]
             }),
-            ("Valoració de la persona formadora", {
+            (f"Valoració de la persona formadora{teacher}", {
                 'fields': [
                     {
                         'name': 'teacher_has_knowledge',
