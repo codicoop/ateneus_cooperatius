@@ -368,6 +368,10 @@ class ProjectStage(models.Model):
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
+    exclude_from_justification = models.BooleanField(
+        "No incloure a l'excel de justificació",
+        default=False,
+    )
     date_start = models.DateField(
         "data creació acompanyament", null=False, blank=False,
         auto_now_add=True
