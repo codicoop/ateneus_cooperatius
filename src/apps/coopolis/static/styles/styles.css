@@ -1616,6 +1616,9 @@ a {
   color: var(--second);
   font-weight: 400;
 }
+.session-card .text + .title {
+  margin-top: var(--pad2);
+}
 .session-card__title {
   grid-column: 1/span 4;
   padding: var(--padding);

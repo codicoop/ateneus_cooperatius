@@ -410,6 +410,12 @@ class Activity(models.Model):
         verbose_name="equipaments",
         blank=True,
     )
+    teacher = models.CharField(
+        "A càrrec de",
+        max_length=50,
+        default="",
+        blank=True,
+    )
 
     objects = models.Manager()
     published = Published()
