@@ -160,6 +160,8 @@ class ExportJustificationService:
         return ProjectStage.objects.order_by('date_start').filter(
             Q(
                 subsidy_period=self.export_manager.subsidy_period
+            ) & Q(
+                exclude_from_justification=False
             ) & (
                 Q(cofunded__isnull=True) | (
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
