@@ -123,7 +123,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'project', 'stage_type',
+                'field_project_id', 'project', 'stage_type',
                 'subsidy_period', 'service', 'sub_service',
                 'circle', 'stage_responsible',
                 'scanned_certificate',
@@ -148,6 +148,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     ]
     inlines = (ProjectStageSessionsInline, )
     readonly_fields = (
+        'field_project_id',
         'hours_sum',
         'date_start',
         "earliest_session_field",
@@ -245,6 +246,12 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         if not request.user.is_superuser:
             return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
         return super().get_readonly_fields(request, obj)
+
+    @admin.display(
+        description="ID del projecte"
+    )
+    def field_project_id(self, obj):
+        return str(obj.project.id)
 
 
 class ProjectStagesInline(admin.StackedInline):
