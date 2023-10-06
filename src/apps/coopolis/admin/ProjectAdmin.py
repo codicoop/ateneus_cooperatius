@@ -388,9 +388,9 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                    FilterByFounded, 'tags', )
     fieldsets = (
         ("Dades que s'omplen des de la web", {
-            'fields': ['name', 'sector', 'web', 'project_status', 'motivation',
-                       'mail', 'phone', 'town', 'district', 'number_people',
-                       'estatuts', 'viability', 'sostenibility',
+            'fields': ['id', 'name', 'sector', 'web', 'project_status',
+                       'motivation', 'mail', 'phone', 'town', 'district',
+                       'number_people', 'estatuts', 'viability', 'sostenibility',
                        'object_finality', 'project_origins',
                        'solves_necessities', 'social_base']
         }),
