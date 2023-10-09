@@ -1,11 +1,50 @@
 // Dynamic variables
 .card {
+    --space-between-cards: var(--pad-2);
+  }
+  
+  @media (min-width: 900px) {
+    .card {
+      --space-between-cards: var(--pad1);
+  }
+}
+.supercard {
+  --template-columns: 33px 1fr 100px;
 
+  &__logo {
+    --grid-row: 1 / span 2;
+    --width: var(--pad2);
+    --height: var(--pad2);
+  }
+  &__title {
+    --align-self: start;
+  }
+  &__edit {
+    --grid-column: 2;
+    --align-self: start;
+    --justify-self: start;
+  }
 }
 
 @media (min-width: 900px) {
   .card {
+  }
+  .supercard {
+    --template-columns: 50px 1fr 100px;
 
+    &__logo {
+      --grid-row: 1;
+      --width: var(--pad3);
+      --height: var(--pad3);
+    }
+    &__title {
+      --align-self: center;
+    }
+    &__edit {
+      --grid-column: 3;
+      --align-self: center;
+      --justify-self: end;
+    }
   }
 }
 
@@ -58,14 +97,14 @@
     }
   }
   & + .card {
-    margin-top: var(--pad1);
+    margin-top: var(--space-between-cards);
   }
 }
 
 .supercard {
   display: grid;
-  grid-template-columns: 50px 1fr 100px;
-  gap: var(--pad1);
+  grid-template-columns: var(--template-columns);
+  gap: 0 var(--pad1);
   align-content: center;
   height: fit-content;
   padding: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
@@ -74,20 +113,24 @@
 
   .card {
     grid-column: 1 / span 3;
+    margin-top: var(--pad1);
   }
   &__logo {
-    width: var(--pad3);
-    height: var(--pad3);
+    grid-row: var(--grid-row);
+    width: var(--width);
+    height: var(--height);
     background-color: var(--primary);
     border-radius: 50%;
     overflow: clip;
   }
   &__title {
-    align-self: center;
+    grid-column: 2;
+    align-self: var(--align-self);
   }
   &__edit {
-    align-self: center;
-    justify-self: end;
+    grid-column: var(--grid-column);
+    align-self: var(--align-self);
+    justify-self: var(--justify-self);
     color: var(--second);
   }
 }

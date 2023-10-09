@@ -665,6 +665,50 @@ a {
   cursor: pointer;
 }
 
+.card {
+  --space-between-cards: var(--pad-2);
+}
+
+@media (min-width: 900px) {
+  .card {
+    --space-between-cards: var(--pad1);
+  }
+}
+.supercard {
+  --template-columns: 33px 1fr 100px;
+}
+.supercard__logo {
+  --grid-row: 1 / span 2;
+  --width: var(--pad2);
+  --height: var(--pad2);
+}
+.supercard__title {
+  --align-self: start;
+}
+.supercard__edit {
+  --grid-column: 2;
+  --align-self: start;
+  --justify-self: start;
+}
+
+@media (min-width: 900px) {
+  .supercard {
+    --template-columns: 50px 1fr 100px;
+  }
+  .supercard__logo {
+    --grid-row: 1;
+    --width: var(--pad3);
+    --height: var(--pad3);
+  }
+  .supercard__title {
+    --align-self: center;
+  }
+  .supercard__edit {
+    --grid-column: 3;
+    --align-self: center;
+    --justify-self: end;
+  }
+}
 .card a {
   position: relative;
   display: grid;
@@ -711,13 +755,13 @@ a {
   height: 16px;
 }
 .card + .card {
-  margin-top: var(--pad1);
+  margin-top: var(--space-between-cards);
 }
 
 .supercard {
   display: grid;
-  grid-template-columns: 50px 1fr 100px;
-  gap: var(--pad1);
+  grid-template-columns: var(--template-columns);
+  gap: 0 var(--pad1);
   align-content: center;
   height: fit-content;
   padding: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
@@ -726,20 +770,24 @@ a {
 }
 .supercard .card {
   grid-column: 1/span 3;
+  margin-top: var(--pad1);
 }
 .supercard__logo {
-  width: var(--pad3);
-  height: var(--pad3);
+  grid-row: var(--grid-row);
+  width: var(--width);
+  height: var(--height);
   background-color: var(--primary);
   border-radius: 50%;
   overflow: clip;
 }
 .supercard__title {
-  align-self: center;
+  grid-column: 2;
+  align-self: var(--align-self);
 }
 .supercard__edit {
-  align-self: center;
-  justify-self: end;
+  grid-column: var(--grid-column);
+  align-self: var(--align-self);
+  justify-self: var(--justify-self);
   color: var(--second);
 }
 
@@ -2608,6 +2656,7 @@ a {
   --width: auto;
 }
 .home .intro__bloc {
+  --grid-template-rows: 80px 1fr 150px;
   --padding-left-bloc: 0;
   --padding-bottom-bloc: var(--pad2);
   --height: 2px;
@@ -2692,6 +2741,7 @@ a {
     --width: 50%;
   }
   .home .intro__bloc {
+    --grid-template-rows: 150px 1fr 1fr;
     --padding-left-bloc: var(--pad2);
     --padding-bottom-bloc: var(--pad1);
     --height: 93%;
@@ -2807,7 +2857,7 @@ a {
 .home .intro__bloc {
   position: relative;
   display: grid;
-  grid-template-rows: 150px 1fr 1fr;
+  grid-template-rows: var(--grid-template-rows);
   gap: var(--pad3) 0;
   padding: var(--pad1) var(--pad1) var(--padding-bottom-bloc) 0;
 }
