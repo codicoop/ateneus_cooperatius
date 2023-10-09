@@ -397,7 +397,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = (
         ("Dades que s'omplen des de la web", {
             'fields': ['id', 'name', 'sector', 'web', 'project_status',
-                       'motivation', 'mail', 'phone', 'town', 'district',
+                       'motivation', 'mail', 'phone', 'town', 'field_county',
+                       'district',
                        'number_people', 'estatuts', 'viability', 'sostenibility',
                        'object_finality', 'project_origins',
                        'solves_necessities', 'social_base']
@@ -416,7 +417,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     )
     readonly_fields = (
         'id', 'follow_up_situation_update', 'partners_activities',
-        'partners_participants',
+        'partners_participants', 'field_county',
     )
     actions = ["export_as_csv"]
     change_actions = ('print', )
@@ -523,6 +524,13 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             return len(obj.employment_insertions.all())
         return 0
     _insertions_count.short_description = "Insercions"
+
+    @admin.display(
+        description="Comarca",
+    )
+    def field_county(self, obj):
+        if hasattr(obj, "town"):
+            return obj.town.county
 
 
 class DerivationAdmin(admin.ModelAdmin):
