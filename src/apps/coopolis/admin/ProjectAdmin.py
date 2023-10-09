@@ -385,7 +385,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = (
         'id', 'name', 'mail', 'phone', 'registration_date',
         'constitution_date', 'stages_field', 'last_stage_responsible',
-        '_insertions_count'
+        '_insertions_count', 'field_county',
     )
     search_fields = (
         'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
@@ -527,9 +527,10 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     @admin.display(
         description="Comarca",
+        ordering="town__county",
     )
     def field_county(self, obj):
-        if hasattr(obj, "town"):
+        if hasattr(obj, "town") and obj.town:
             return obj.town.county
 
 
