@@ -12,7 +12,7 @@ from openpyxl.utils import get_column_letter
 from .ProjectAdmin import FilterByFounded
 from apps.dataexports.models import SubsidyPeriod
 from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp, \
-    ProjectsFollowUpService, ProjectsConstituted, ProjectsConstitutedService
+    ProjectsFollowUpService, ProjectsConstitutedService
 from ..mixins import FilterByCurrentSubsidyPeriodMixin
 from ..models import User
 
@@ -475,28 +475,8 @@ class FollowUpSpreadsheet:
             self.fill_row_data(row)
 
 
-class ConstitutionDateFilter(admin.SimpleListFilter):
-    title = "Amb data de constitució dins la convocatòria…"
-
-    parameter_name = 'constitution_subsidy'
-
-    def lookups(self, request, model_admin):
-        qs = SubsidyPeriod.objects.all()
-        qs.order_by('name')
-        return list(qs.values_list('id', 'name'))
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if value:
-            period = SubsidyPeriod.objects.get(id=value)
-            return queryset.filter(constitution_date__range=(
-                period.date_start, period.date_end)
-            )
-        return queryset
-
-
-@admin.register(ProjectsConstituted)
-class ProjectsConstitutedAdmin(admin.ModelAdmin):
+@admin.register(ProjectsConstitutedService)
+class ProjectsConstitutedServiceAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
     """
@@ -506,10 +486,10 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
             'all': ('styles/grappellihacks.css',)
         }
 
-    change_list_template = 'admin/projects_constituted.html'
-    list_filter = (ConstitutionDateFilter, )
+    change_list_template = 'admin/projects_constituted_service.html'
+    list_filter = ("subsidy_period", )
     show_full_result_count = False
-    list_display = ('name', )
+    list_display = ("project", )
     list_per_page = 99999
 
     def changelist_view(self, request, extra_context=None):
@@ -525,29 +505,25 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
 
         query = {
             'members_h': Count(
-                'stages__involved_partners',
-                filter=Q(stages__involved_partners__gender='MALE'),
+                'project__stages__involved_partners',
+                filter=Q(project__stages__involved_partners__gender='MALE'),
                 distinct=True
             ),
             'members_d': Count(
-                'stages__involved_partners',
-                filter=Q(stages__involved_partners__gender='FEMALE'),
+                'project__stages__involved_partners',
+                filter=Q(project__stages__involved_partners__gender='FEMALE'),
                 distinct=True
             ),
             'members_a': Count(
-                'stages__involved_partners',
-                filter=~Q(stages__involved_partners__gender='FEMALE')
-                       & ~Q(stages__involved_partners__gender='MALE'),
+                'project__stages__involved_partners',
+                filter=~Q(project__stages__involved_partners__gender='FEMALE')
+                       & ~Q(project__stages__involved_partners__gender='MALE'),
                 distinct=True
             ),
         }
 
         # Annotate adds columns to each row with the sum or calculations of the row:
-        response.context_data['rows'] = list(
-            qs.filter(
-                cif__isnull=False, constitution_date__isnull=False
-            ).annotate(**query)
-        )
+        response.context_data['rows'] = list(qs.annotate(**query))
 
         # Normally it should be easier to call aggregate to have the totals,
         # but given how complex is it to combine
@@ -575,8 +551,3 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
-
-
-@admin.register(ProjectsConstitutedService)
-class ProjectsConstitutedServiceAdmin(ProjectsConstitutedAdmin):
-    change_list_template = 'admin/projects_constituted_service.html'

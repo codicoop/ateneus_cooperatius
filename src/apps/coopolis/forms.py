@@ -8,9 +8,9 @@ from django.contrib.auth.forms import (
 from django.core.exceptions import ValidationError
 from django.db.models import BLANK_CHOICE_DASH
 from django.forms import models
-from django.urls import reverse
 from django.utils.timezone import make_aware
 
+from apps.coopolis.models.projects import CreatedEntity
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
@@ -53,7 +53,17 @@ class ProjectFormAdmin(ProjectForm):
                    "per aquest motiu, aquest camp és obligatori.")
             if not self.cleaned_data.get("cif"):
                 self.add_error("cif", msg)
+        if CreatedEntity.objects.filter(
+                project=self.instance.id,
+        ).count():
+            msg = ("Aquest projecte està vinculat a una creació d'entitat, "
+                   "per aquest motiu, aquest camp és obligatori.")
+            if not self.cleaned_data.get("cif"):
+                self.add_error("cif", msg)
+            if not self.cleaned_data.get("constitution_date"):
+                self.add_error("constitution_date", msg)
         return self.cleaned_data
+
 
 class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
     def clean(self):
@@ -102,6 +112,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         )
         return self.cleaned_data
 
+
 class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
@@ -117,9 +128,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=True)
-    email = forms.EmailField(
-        label="Correu electrònic", max_length=254,
-        help_text='Requerit, ha de ser una adreça vàlida.')
+    email = forms.EmailField(label="Correu electrònic", max_length=254)
     birthdate = forms.DateField(
         label="Data de naixement", required=True,
         widget=XDSoftDatePickerInput())
@@ -386,7 +395,9 @@ class ActivityPollForm(forms.ModelForm):
                 choices=TRUE_FALSE_CHOICES)
         }
 
-    def get_grouped_fields(self):
+    def get_grouped_fields(self, teacher=""):
+        if teacher:
+            teacher = f" ({teacher})"
         fieldsets = [
             ("Organització", {
                 'fields': [
@@ -451,7 +462,7 @@ class ActivityPollForm(forms.ModelForm):
                     },
                 ]
             }),
-            ("Valoració de la persona formadora", {
+            (f"Valoració de la persona formadora{teacher}", {
                 'fields': [
                     {
                         'name': 'teacher_has_knowledge',
@@ -526,3 +537,23 @@ class ActivityPollForm(forms.ModelForm):
             }),
         ]
         return fieldsets
+
+
+class EntityCreatedAdminForm(models.ModelForm):
+    class Meta:
+        model = CreatedEntity
+        fields = (
+            "project",
+            "service",
+            "sub_service",
+            "subsidy_period",
+            "circle",
+            "entity",
+        )
+
+    def clean(self):
+        super().clean()
+        CreatedEntity.validate_extended_fields(
+            self.cleaned_data.get("project"),
+        )
+        return self.cleaned_data
