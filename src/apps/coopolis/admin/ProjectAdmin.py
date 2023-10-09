@@ -110,6 +110,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         'stage_responsible_field_ellipsis',
         'service', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field', 'justification_documents_total',
+        'field_county',
     )
     list_filter = (
         FilterBySubsidyPeriod,
@@ -252,6 +253,14 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     )
     def field_project_id(self, obj):
         return str(obj.project.id)
+
+    @admin.display(
+        description="Comarca",
+        ordering="project__town__county",
+    )
+    def field_county(self, obj):
+        if hasattr(obj.project, "town") and obj.project.town:
+            return obj.project.town.county
 
 
 class ProjectStagesInline(admin.StackedInline):
