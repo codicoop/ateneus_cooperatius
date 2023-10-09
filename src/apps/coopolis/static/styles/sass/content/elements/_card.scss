@@ -10,27 +10,84 @@
 }
 
 .card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--white);
-  border-radius: var(--br);
-  padding: var(--pad2);
-  box-shadow: 3px 3px 10px #FE1A681A;
-}
-.card__title {
-  padding-bottom: var(--pad4);
-}
-.card__close {
-  position: absolute;
-  top: var(--pad1);
-  right: var(--pad1);
-  padding: var(--pad1);
-  cursor: pointer;
+  a {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    padding: var(--pad2);
+    background-color: var(--white);
+    border-radius: var(--br);
+    box-shadow: 3px 3px 10px #FE1A681A;
+  }
+  &__title {
+    grid-column: 1;
+  }
+  &__pretitle {
+    grid-column: 1;
+    padding-bottom: var(--pad-2);
+  }
+  &__arrow {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    justify-self: end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+    background-color: var(--primary-lightest);
+    border-radius: 50%;
 
-  svg {
-    pointer-events: none;
-    width: 16px;
-    height: 16px;
+    svg {
+      width: 32px;
+      height: auto;
+    }
+    &__close {
+      position: absolute;
+      top: var(--pad1);
+      right: var(--pad1);
+      padding: var(--pad1);
+      cursor: pointer;
+    
+      svg {
+        pointer-events: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  & + .card {
+    margin-top: var(--pad1);
+  }
+}
+
+.supercard {
+  display: grid;
+  grid-template-columns: 50px 1fr 100px;
+  gap: var(--pad1);
+  align-content: center;
+  height: fit-content;
+  padding: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
+  border-radius: var(--br);
+  background-color: var(--primary-lightest);
+
+  .card {
+    grid-column: 1 / span 3;
+  }
+  &__logo {
+    width: var(--pad3);
+    height: var(--pad3);
+    background-color: var(--primary);
+    border-radius: 50%;
+    overflow: clip;
+  }
+  &__title {
+    align-self: center;
+  }
+  &__edit {
+    align-self: center;
+    justify-self: end;
+    color: var(--second);
   }
 }

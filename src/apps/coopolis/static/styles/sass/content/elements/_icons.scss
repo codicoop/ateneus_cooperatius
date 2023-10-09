@@ -4,6 +4,12 @@
     fill: var(--white);
   }
 }
+.icon-pathfill-second {
+  fill: none;
+  path {
+    fill: var(--second);
+  }
+}
 .icon-pathfill-second-3 {
   fill: none;
   path {

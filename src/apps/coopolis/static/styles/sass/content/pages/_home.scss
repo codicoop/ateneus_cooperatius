@@ -21,8 +21,8 @@
       --display: none;
     }
     &__text {
-      --font-size: 20px;
-      --line-height: 24px;
+      --font-size: 14px;
+      --line-height: 16px;
     }
   }
   .topbar {
@@ -50,7 +50,7 @@
       --width: 100%;
       --top: 0;
     }
-    &__bloc-title {
+    &__bloc-subtitle {
       --padding-bottom: var(--pad1);
     }
     &__bloc-text {
@@ -124,8 +124,8 @@
         }
       }
       &__text {
-      --font-size: 28px;
-      --line-height: 32px;
+      --font-size: 16px;
+      --line-height: 20px;
     }
     }
     .topbar {
@@ -154,7 +154,7 @@
         --width: 2px;
         --top: auto;
       }
-      &__bloc-title {
+      &__bloc-subtitle {
         --padding-bottom: var(--pad4);
       }
       &__bloc-text {
@@ -215,7 +215,7 @@
       }
     }
     &__text {
-      width: var(--pad20);
+      align-self: start;
       height: auto;
       color: var(--white);
       font-size: var(--font-size);
@@ -275,13 +275,13 @@
       padding: var(--pad6);
       text-align: center;
     }
+    // Info underneaath
     &__bloc {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding-top: var(--pad1);
-      padding-bottom: var(--padding-bottom-bloc);
+      display: grid;
+      grid-template-rows: 150px 1fr 1fr;
+      gap: var(--pad3) 0;
+      padding: var(--pad1) var(--pad1) var(--padding-bottom-bloc) 0;
 
       & + .intro__bloc {
         padding-left: var(--padding-left-bloc);
@@ -297,8 +297,17 @@
         }
       }
     }
-    &__bloc-title {
+    // Cas sense inscripcions
+    .intro__bloc--empty {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    &__bloc-subtitle {
       padding-bottom: var(--padding-bottom);
+    }
+    &__bloc-title {
+      max-width: 80%;
     }
     &__bloc-text {
       padding-bottom: var(--padding-bottom);
@@ -306,7 +315,26 @@
     }
     &__bloc-btn {
       align-self: var(--align-self);
+      justify-self: center;
       margin-bottom: var(--margin-bottom);
+      margin-top: var(--pad3);
+    }
+    &__bloc-link {
+      p {
+        display: inline;
+      color: var(--second);
+      margin-top: var(--pad1);
+      
+    }
+    svg {
+      position: relative;
+      top: 10px;
+      display: inline;
+      height: 32px;
+      width: auto;
+      }
+    }
+    &__bloc-supercard {
     }
   }
   .outro {
