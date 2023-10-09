@@ -131,6 +131,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                 'hours_sum', 'date_start',
                 "earliest_session_field",
                 "justification_documents_total",
+                "field_county",
             ]
         }),
         ('Opcions de cofinançament', {
@@ -154,6 +155,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         'date_start',
         "earliest_session_field",
         "justification_documents_total",
+        "field_county",
     )
     subsidy_period_filter_param = "subsidy_period"
 
