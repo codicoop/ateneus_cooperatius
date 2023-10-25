@@ -1,0 +1,70 @@
+// Dynamic variables
+.view-selector {
+  &__title {
+  }
+  &__btns {
+  }
+  &__btn {
+  }
+}
+
+@media (min-width: 900px) {
+  .view-selector {
+    &__title {
+    }
+    &__btns {
+    }
+    &__btn {
+    }
+  }
+}
+
+.view-selector {
+  padding-bottom: var(--pad-2);
+  
+  &__title {
+    padding-bottom: var(--pad-2);
+    color: var(--primary-light);
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  &__btns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    border-radius: var(--br);
+    overflow: clip;
+  }
+  .selector-btn {
+    display: flex;
+    gap: var(--pad1);
+    padding: var(--pad1);
+    background-color: var(--primary-lightest);
+    color: var(--primary);
+    font-weight: bold;
+
+    p {
+      text-transform: uppercase;
+    }
+    svg {
+      height: var(--pad1);
+      width: var(--pad1);
+      fill: none;
+
+      path {
+        fill: var(--primary);
+      }
+    }
+  }
+  .selector-btn--active {
+    background-color: var(--primary);
+    color: var(--white);
+
+    svg {
+      path {
+        fill: var(--white);
+      }
+    }
+  }
+}
+

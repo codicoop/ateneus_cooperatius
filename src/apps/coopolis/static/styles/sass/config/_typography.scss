@@ -1,4 +1,8 @@
 // Dynamic variables
+.text-xxsm {
+  --font-size: 8px;
+  --line-height: 12px;
+}
 .text-xsm {
   --font-size: 10px;
   --line-height: 14px;
@@ -22,6 +26,10 @@ body,
 }
 
 @media (min-width: 900px) {
+  .text-xxsm {
+    --font-size: 10px;
+    --line-height: 12px;
+  }
   .text-xsm {
     --font-size: 12px;
     --line-height: 16px;
@@ -50,6 +58,16 @@ body,
 body {
   font-family: 'Inter', sans-serif;
   color: var(--black);
+}
+.text-xxsm {
+  font-weight: bold;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+}
+.text-xsm {
+  font-weight: 300;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
 }
 .text-sm {
   font-weight: 300;

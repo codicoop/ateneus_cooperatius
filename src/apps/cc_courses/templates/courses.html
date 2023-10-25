@@ -8,7 +8,7 @@
 {% block content %}
 {% include './components/header_topbar.html' %}
 <div class="courses-list">
-    <section class="courses-list__submenu grid-content">
+  <section class="courses-list__submenu grid-content">
 		<div class="grid-item-full">
 			<div class="submenu">
 				<a href="{% url 'courses' %}">
@@ -24,6 +24,47 @@
 			</div>
 		</div>
 	</section>
+  <section class="courses-list__view view-selector">
+    <div class="view-selector__title text-xxsm">
+      <p>Vista</p>
+    </div>
+    <div class="view-selector__btns">
+      <div class="selector-btn selector-btn--active">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 16 16">
+        <path d="m 10.008475,16.008475 v -6 h 6 v 6 z m -10.00000041,0 v -6 H 6.0084746 v 6 z M 10.008475,6.0084746 V 0.00847459 h 6 V 6.0084746 Z m -10.00000041,0 V 0.00847459 H 6.0084746 V 6.0084746 Z" />
+      </svg>
+        <p>Galeria</p>
+      </div>
+      <div class="selector-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 20.000001 20">
+          <path d="m 10.186441,12 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4,4 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z M 2.6864407,20 c -0.82,-0.02 -1.48,-0.68 -1.5,-1.5 V 3 c 0.02,-0.82 0.68,-1.48 1.5,-1.5 h 1.62 V 0 h 1.62 V 1.5 H 14.426441 V 0 h 1.62 v 1.5 h 1.62 c 0.82,0.02 1.48,0.68 1.5,1.5 v 15.5 c -0.02,0.82 -0.68,1.48 -1.5,1.5 z m 0,-1.5 H 17.686441 V 7.75 H 2.6864407 Z" />
+        </svg>
+        <p>Sessions</p>
+      </div>
+    </div>
+  </section>
+  <section class="courses-list__filter filter">
+    <div class="filter__title text-xxsm">
+      <p>Ordenar per</p>
+    </div>
+    <form class="form" method="post">
+      {% csrf_token %}
+      <div class="filter__field field field-select field--primary text-xsm">
+        <select name="{{ field.sort_by }}" id="id_{{ field.sort_by }}">
+          <option value="start_date" selected="">Data inici</option>
+          <option value="sector">Sector</option>
+          <option value="whatever">Whatever</option>
+        </select>
+      </div>
+      <div class="form__submit">
+        <button type="submit" class="btn btn--primary btn__text">Filtrar</button>
+      </div>
+    </form>
+  </section>
   <section class="courses-list__grid">
     {% for course in future_courses %}
       <div class="course-card">

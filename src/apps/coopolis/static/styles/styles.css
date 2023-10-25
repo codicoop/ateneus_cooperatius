@@ -193,6 +193,7 @@ img {
   --violet: #c4b6c3;
   --violet-dark: #a77f8d;
   --primary-lightest: hsla(339, 100%, 89%, 0.35);
+  --primary-lighter: #FFC5D9;
   --primary-light: #FE8CB3;
   --primary: #D6085B;
   --primary-med: #720027;
@@ -232,6 +233,11 @@ img {
   filter: brightness(100%);
 }
 
+.text-xxsm {
+  --font-size: 8px;
+  --line-height: 12px;
+}
+
 .text-xsm {
   --font-size: 10px;
   --line-height: 14px;
@@ -259,6 +265,11 @@ body,
 }
 
 @media (min-width: 900px) {
+  .text-xxsm {
+    --font-size: 10px;
+    --line-height: 12px;
+  }
+
   .text-xsm {
     --font-size: 12px;
     --line-height: 16px;
@@ -288,6 +299,18 @@ body,
 body {
   font-family: "Inter", sans-serif;
   color: var(--black);
+}
+
+.text-xxsm {
+  font-weight: bold;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+}
+
+.text-xsm {
+  font-weight: 300;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
 }
 
 .text-sm {
@@ -860,6 +883,14 @@ a {
   line-height: 12px;
   text-transform: uppercase;
   color: var(--primary);
+}
+.form li.field.field--primary input,
+.form li.field.field--primary select,
+.form li.field.field--primary textarea,
+.form .field.field--primary input,
+.form .field.field--primary select,
+.form .field.field--primary textarea {
+  border: 3px solid var(--primary-lighter);
 }
 .form li.field input,
 .form li.field select,
@@ -1988,6 +2019,63 @@ a {
 }
 .delete-modal .modal__intro .text-sm {
   padding-top: var(--pad-2);
+}
+
+.view-selector {
+  padding-bottom: var(--pad-2);
+}
+.view-selector__title {
+  padding-bottom: var(--pad-2);
+  color: var(--primary-light);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.view-selector__btns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  border-radius: var(--br);
+  overflow: clip;
+}
+.view-selector .selector-btn {
+  display: flex;
+  gap: var(--pad1);
+  padding: var(--pad1);
+  background-color: var(--primary-lightest);
+  color: var(--primary);
+  font-weight: bold;
+}
+.view-selector .selector-btn p {
+  text-transform: uppercase;
+}
+.view-selector .selector-btn svg {
+  height: var(--pad1);
+  width: var(--pad1);
+  fill: none;
+}
+.view-selector .selector-btn svg path {
+  fill: var(--primary);
+}
+.view-selector .selector-btn--active {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.view-selector .selector-btn--active svg path {
+  fill: var(--white);
+}
+
+.filter__title {
+  padding-bottom: var(--pad-2);
+  color: var(--primary-light);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.filter .field-select::after {
+  top: 13px;
+}
+.filter .form__submit {
+  margin-top: var(--pad1-5);
+  margin-bottom: var(--pad4);
 }
 
 .user-icon {
