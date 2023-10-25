@@ -3,36 +3,10 @@
 
 {% block content %}
 <div class="home {% if not user.is_authenticated %}not-logged{% endif %}">
+
+	{% if user.is_authenticated %}
 	<section class="home__welcome welcome grid-content">
-
-		{% if not user.is_authenticated %}
-		<div class="welcome__topbar topbar">
-			<div class="topbar__left">
-				<a href="{{ config.PROJECT_WEBSITE_URL }}" class="text-menu">
-					<div class="btn btn--empty">
-						<p>Web</p>
-					</div>
-				</a>
-				<a href="{{ config.PROJECT_CONTACT_URL }}" class="text-menu">
-					<div class="btn btn--empty">
-						<p>Contacte</p>
-					</div>
-				</a>
-			</div>
-			<div class="topbar__right">
-				<a href="{% url 'loginsignup' %}">
-					<div class="btn btn--second btn__text">
-						<p>Registrar-se</p>
-					</div>
-				</a>
-				<div class="btn btn--white btn__text" onclick="showLoginFloat()">
-					<p>Accedir</p>
-				</div>
-			</div>
-		</div>
-		{% endif %}
-
-		<div class="welcome__content {% if user.is_authenticated %}is-logged{% endif %}">
+		<div class="welcome__content is-logged">
 			<div class="welcome__logo">
 				<img src="{% external_static '/logo.png' %}" alt="Logo Ateneu Cooperatiu">
 			</div>
@@ -44,7 +18,6 @@
 					<p>Plataforma de gestió de projectes i inscripcions</p>
 				</div>
 			</div>
-			{% if user.is_authenticated %}
 			<div class="welcome__btns">
 				{% if user.is_superuser or user.is_staff %}
 				<a href="{% url 'admin:index'%}" class="text-menu">
@@ -64,16 +37,10 @@
 					</div>
 				</a>
 			</div>
-			{% endif %}
 		</div>
 	</section>
 	<section class="home__intro intro grid-content">
 		<div class="intro__title grid-item-full">
-			{% if not user.is_authenticated %}
-			<div class="intro__hello-out title-1">
-				<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de {{ config.PROJECT_NAME }}!</p>
-			</div>
-			{% else %}
 			<div class="intro__submenu submenu">
 				<a href="{% url 'home' %}">
 					<div class="submenu__item is-active">
@@ -90,7 +57,6 @@
 				<p>Hola</p>
 				<p>{{ user.first_name }}!</p>
 			</div>
-			{% endif %}
 		</div>
 
 		{% if enrolled_activities.count is 0 %}
@@ -124,7 +90,7 @@
 				</div>
 			</span>
 			<div class="intro__bloc-list">
-				<!-- {# {% for enrollment in enrolled_activities %} #} -->
+			<!-- {# {% for enrollment in enrolled_activities %} #} -->
 				<div class="card">
 					<a href="#0">
 						<div class="card__pretitle text-xsm">
@@ -140,6 +106,7 @@
 						</div>
 					</a>
 				</div>
+			<!-- {# {% endfor %} #} -->
 				<div class="card">
 					<a href="#0">
 						<div class="card__pretitle text-xsm">
@@ -155,7 +122,6 @@
 						</div>
 					</a>
 				</div>
-				<!-- {# {% endfor %} #} -->
 				<a class="intro__bloc-link" href="{% url 'my_activities' %}">
 					<div class="btn__text text-menu">
 						<p>Veure tots els meus cursos</p>
@@ -252,7 +218,89 @@
 		<!-- {# {% endif %} #} -->
 
 	</section>
+	{% endif %}
+
 	{% if not user.is_authenticated %}
+	<section class="home__welcome welcome grid-content">
+		<div class="welcome__topbar topbar">
+			<div class="topbar__left">
+				<a href="{{ config.PROJECT_WEBSITE_URL }}" class="text-menu">
+					<div class="btn btn--empty">
+						<p>Web</p>
+					</div>
+				</a>
+				<a href="{{ config.PROJECT_CONTACT_URL }}" class="text-menu">
+					<div class="btn btn--empty">
+						<p>Contacte</p>
+					</div>
+				</a>
+			</div>
+			<div class="topbar__right">
+				<a href="{% url 'loginsignup' %}">
+					<div class="btn btn--second btn__text">
+						<p>Registrar-se</p>
+					</div>
+				</a>
+				<div class="btn btn--white btn__text" onclick="showLoginFloat()">
+					<p>Accedir</p>
+				</div>
+			</div>
+		</div>
+		<div class="welcome__content">
+			<div class="welcome__logo">
+				<img src="{% external_static '/logo.png' %}" alt="Logo Ateneu Cooperatiu">
+			</div>
+			<div class="welcome__text title-1">
+				<div class="is-bold">
+					<p>{{ config.PROJECT_NAME }}</p>
+				</div>
+				<div>
+					<p>Plataforma de gestió de projectes i inscripcions</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="home__intro intro grid-content">
+		<div class="intro__title grid-item-full">
+			<div class="intro__hello-out title-1">
+				<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de {{ config.PROJECT_NAME }}!</p>
+			</div>
+		</div>
+		<div class="intro__bloc intro__bloc--empty grid-item-1-3">
+				<div class="intro__bloc-title text-menu">
+					<p>Inscripcions</p>
+				</div>
+				<div class="intro__bloc-text text-md">
+					<p>Disposem d’una oferta regular de formació en economia solidària i cooperativisme per a tots els públics, tant per a aquelles persones que tenen ganes d’apropar-se a l’ESS per primera vegada, els col·lectius que estan engegant un projecte, i cooperatives que volen consolidar la seva activitat incorporant nous coneixements especialitzats.</p>
+				</div>
+			<div class="intro__bloc-btn">
+				<a href="{% url 'courses' %}">
+					<div class="btn btn--primary">
+						<div class="btn__text">
+							<p>Anar a l'oferta formativa</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="intro__bloc intro__bloc grid-item-4-6">
+			<div class="intro__bloc-title text-menu">
+				<p>Projectes</p>
+			</div>
+			<div class="intro__bloc-text text-md">
+				<p>Des de {{ config.PROJECT_NAME }} acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a cooperatives.</p>
+			</div>
+			<div class="intro__bloc-btn">
+				<a href="{% url 'project_info' %}">
+					<div class="btn btn--primary">
+						<div class="btn__text">
+								<p>Sol·licitar acompanyament</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
 	<section class="home__outro outro grid-content">
 		<div class="outro__item grid-item-3-4">
 			<div class="outro__text richtext">
@@ -269,7 +317,7 @@
 				<a href="{% url 'loginsignup' %}">
 					<div class="btn btn--second">
 						<div class="btn__text">
-							Registrar-se
+							<p>Registrar-se</p>
 						</div>
 					</div>
 				</a>

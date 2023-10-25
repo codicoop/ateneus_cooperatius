@@ -11,18 +11,15 @@
       &.is-logged {
         .welcome__logo {
           --height: var(--pad4);
+          --display: none;
         }
       }
     }
     &__logo {
-      --display: none;
+      --height: var(--pad7);
     }
     &__btns {
       --display: none;
-    }
-    &__text {
-      --font-size: 14px;
-      --line-height: 16px;
     }
   }
   .topbar {
@@ -69,23 +66,10 @@
       --align-self: auto;
     }
   }
-  // Diferències quan no estem loggejats
-  &.not-logged {
-    .home {
-      .welcome {
-        &__content {
-          --justify-content: center;
-          --align-items: center;
-          --padding: var(--pad2) var(--pad1);
-          --height-content: 450px;
-          
-          .welcome__logo {
-            --display: block;
-            --height: var(--pad9);
-          }
-        }
-      }
-    }
+}
+.home.not-logged {
+  .welcome__text {
+    --position: absolute;
   }
 }
 
@@ -102,11 +86,11 @@
         &.is-logged {
           .welcome__logo {
             --height: var(--pad4);
+            --display: block;
           }
         }
 
         .welcome__logo {
-          --display: block;
           --height: var(--pad10);
         }
         .welcome__btns {
@@ -124,10 +108,6 @@
           }
         }
       }
-      &__text {
-      --font-size: 16px;
-      --line-height: 20px;
-    }
     }
     .topbar {
     --justify-content: space-between;
@@ -160,11 +140,11 @@
         --padding-bottom: var(--pad4);
       }
       &__bloc-text {
-        --padding-bottom: var(--pad6);
+        --padding-bottom: var(--pad3);
       }
       &__bloc-btn {
         --align-self: center;
-        --margin-bottom: var(--pad5);
+        --margin-bottom: var(--pad6);
       }
     }
     .outro {
@@ -173,6 +153,11 @@
       &__btn {
         --align-self: center;
       }
+    }
+  }
+  .home.not-logged {
+    .welcome__text {
+      --position: relative;
     }
   }
 }
@@ -206,9 +191,15 @@
       max-height: 700px;
       padding: var(--padding);
       color: var(--white);
+
+    // Cas excepcional del logo
+      &.is-logged {
+        .welcome__logo {
+          display: var(--display);
+        }
+      }
     }
     &__logo {
-      display: var(--display);
       margin-right: var(--pad4);
       
       img {
@@ -220,8 +211,6 @@
       align-self: start;
       height: auto;
       color: var(--white);
-      font-size: var(--font-size);
-      line-height: var(--line-height);
     }
     &__btns {
       align-self: flex-start;
@@ -319,7 +308,6 @@
       align-self: var(--align-self);
       justify-self: center;
       margin-bottom: var(--margin-bottom);
-      margin-top: var(--pad3);
     }
     &__bloc-link {
       p {
@@ -356,3 +344,35 @@
     }
   }
 }
+
+// Diferències quan no estem loggejats
+.home.not-logged {
+  .welcome {
+    &__content {
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      padding: var(--pad2) var(--pad1);
+      height: 100vh;
+      
+      &__logo {
+        height: var(--pad9);
+      }
+    }
+    &__text {
+      position: var(--position);
+      bottom: var(--pad2);
+      left: var(--pad1);
+      align-self: center;
+      max-width: 320px;
+    }
+  }
+  .intro {
+    // Info underneaath
+    &__bloc {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+

@@ -2627,16 +2627,13 @@ a {
 }
 .home .welcome__content.is-logged .welcome__logo {
   --height: var(--pad4);
+  --display: none;
 }
 .home .welcome__logo {
-  --display: none;
+  --height: var(--pad7);
 }
 .home .welcome__btns {
   --display: none;
-}
-.home .welcome__text {
-  --font-size: 14px;
-  --line-height: 16px;
 }
 .home .topbar {
   --justify-content: flex-end;
@@ -2679,15 +2676,9 @@ a {
 .home .outro__btn {
   --align-self: auto;
 }
-.home.not-logged .home .welcome__content {
-  --justify-content: center;
-  --align-items: center;
-  --padding: var(--pad2) var(--pad1);
-  --height-content: 450px;
-}
-.home.not-logged .home .welcome__content .welcome__logo {
-  --display: block;
-  --height: var(--pad9);
+
+.home.not-logged .welcome__text {
+  --position: absolute;
 }
 
 @media (min-width: 900px) {
@@ -2700,9 +2691,9 @@ a {
   }
   .home .welcome__content.is-logged .welcome__logo {
     --height: var(--pad4);
+    --display: block;
   }
   .home .welcome__content .welcome__logo {
-    --display: block;
     --height: var(--pad10);
   }
   .home .welcome__content .welcome__btns {
@@ -2717,10 +2708,6 @@ a {
   .home .welcome__content.is-logged .welcome__logo {
     --display: block;
     --width: var(--pad4);
-  }
-  .home .welcome__text {
-    --font-size: 16px;
-    --line-height: 20px;
   }
   .home .topbar {
     --justify-content: space-between;
@@ -2752,17 +2739,21 @@ a {
     --padding-bottom: var(--pad4);
   }
   .home .intro__bloc-text {
-    --padding-bottom: var(--pad6);
+    --padding-bottom: var(--pad3);
   }
   .home .intro__bloc-btn {
     --align-self: center;
-    --margin-bottom: var(--pad5);
+    --margin-bottom: var(--pad6);
   }
   .home .outro {
     --padding-outro: var(--pad8) 0 var(--pad9) 0;
   }
   .home .outro__btn {
     --align-self: center;
+  }
+
+  .home.not-logged .welcome__text {
+    --position: relative;
   }
 }
 .home__welcome {
@@ -2791,8 +2782,10 @@ a {
   padding: var(--padding);
   color: var(--white);
 }
-.home .welcome__logo {
+.home .welcome__content.is-logged .welcome__logo {
   display: var(--display);
+}
+.home .welcome__logo {
   margin-right: var(--pad4);
 }
 .home .welcome__logo img {
@@ -2803,8 +2796,6 @@ a {
   align-self: start;
   height: auto;
   color: var(--white);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
 }
 .home .welcome__btns {
   align-self: flex-start;
@@ -2892,7 +2883,6 @@ a {
   align-self: var(--align-self);
   justify-self: center;
   margin-bottom: var(--margin-bottom);
-  margin-top: var(--pad3);
 }
 .home .intro__bloc-link p {
   display: inline;
@@ -2920,6 +2910,28 @@ a {
 .home .outro__btn {
   align-self: var(--align-self);
   padding-top: var(--pad4);
+}
+
+.home.not-logged .welcome__content {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  padding: var(--pad2) var(--pad1);
+  height: 100vh;
+}
+.home.not-logged .welcome__content__logo {
+  height: var(--pad9);
+}
+.home.not-logged .welcome__text {
+  position: var(--position);
+  bottom: var(--pad2);
+  left: var(--pad1);
+  align-self: center;
+  max-width: 320px;
+}
+.home.not-logged .intro__bloc {
+  display: flex;
+  flex-direction: column;
 }
 
 .signup {
