@@ -1,12 +1,6 @@
 // Dynamic variables
 .card {
-    --space-between-cards: var(--pad-2);
-  }
-  
-  @media (min-width: 900px) {
-    .card {
-      --space-between-cards: var(--pad1);
-  }
+  --space-between-cards: var(--pad-2);
 }
 .supercard {
   --template-columns: 33px 1fr 100px;
@@ -28,6 +22,7 @@
 
 @media (min-width: 900px) {
   .card {
+    --space-between-cards: var(--pad1);
   }
   .supercard {
     --template-columns: 50px 1fr 100px;
@@ -49,17 +44,15 @@
 }
 
 .card {
-  a {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 50px;
-    padding: var(--pad2);
-    background-color: var(--white);
-    border-radius: var(--br);
-    box-shadow: 3px 3px 10px #FE1A681A;
-  }
+  position: relative;
+  background-color: var(--white);
+  padding: var(--pad2);
+  border-radius: var(--br);
+  box-shadow: 3px 3px 10px #FE1A681A;
+
   &__title {
     grid-column: 1;
+    padding-bottom: var(--pad3);
   }
   &__pretitle {
     grid-column: 1;
@@ -82,18 +75,18 @@
       width: 32px;
       height: auto;
     }
-    &__close {
-      position: absolute;
-      top: var(--pad1);
-      right: var(--pad1);
-      padding: var(--pad1);
-      cursor: pointer;
-    
-      svg {
-        pointer-events: none;
-        width: 16px;
-        height: 16px;
-      }
+  }
+  &__close {
+    position: absolute;
+    top: var(--pad1);
+    right: var(--pad1);
+    padding: var(--pad1);
+    cursor: pointer;
+  
+    svg {
+      pointer-events: none;
+      width: 16px;
+      height: 16px;
     }
   }
   & + .card {

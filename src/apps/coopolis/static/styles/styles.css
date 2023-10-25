@@ -669,11 +669,6 @@ a {
   --space-between-cards: var(--pad-2);
 }
 
-@media (min-width: 900px) {
-  .card {
-    --space-between-cards: var(--pad1);
-  }
-}
 .supercard {
   --template-columns: 33px 1fr 100px;
 }
@@ -692,6 +687,10 @@ a {
 }
 
 @media (min-width: 900px) {
+  .card {
+    --space-between-cards: var(--pad1);
+  }
+
   .supercard {
     --template-columns: 50px 1fr 100px;
   }
@@ -709,17 +708,16 @@ a {
     --justify-self: end;
   }
 }
-.card a {
+.card {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 50px;
-  padding: var(--pad2);
   background-color: var(--white);
+  padding: var(--pad2);
   border-radius: var(--br);
   box-shadow: 3px 3px 10px rgba(254, 26, 104, 0.1019607843);
 }
 .card__title {
   grid-column: 1;
+  padding-bottom: var(--pad3);
 }
 .card__pretitle {
   grid-column: 1;
@@ -742,14 +740,14 @@ a {
   width: 32px;
   height: auto;
 }
-.card__arrow__close {
+.card__close {
   position: absolute;
   top: var(--pad1);
   right: var(--pad1);
   padding: var(--pad1);
   cursor: pointer;
 }
-.card__arrow__close svg {
+.card__close svg {
   pointer-events: none;
   width: 16px;
   height: 16px;
@@ -2452,7 +2450,7 @@ a {
 .login__card {
   z-index: 110;
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   margin-top: 50px;
 }
 .login__form form {
