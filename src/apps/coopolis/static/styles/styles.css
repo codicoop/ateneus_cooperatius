@@ -679,6 +679,11 @@ body {
   fill: var(--primary);
 }
 
+.icon-7 {
+  height: 7px;
+  width: 7px;
+}
+
 .link {
   font-weight: 700;
   cursor: pointer;
@@ -2108,6 +2113,14 @@ a {
   margin-top: var(--pad1-5);
   margin-bottom: var(--pad4);
 }
+.filter__tags.tags {
+  width: 100%;
+  padding: var(--pad2) 0;
+  border-top: 1px solid var(--primary-lighter);
+}
+.filter__tags.tags svg {
+  cursor: pointer;
+}
 
 .tags {
   display: flex;
@@ -2116,6 +2129,9 @@ a {
   padding-bottom: var(--pad1);
 }
 .tags .tag {
+  display: flex;
+  gap: var(--pad-2);
+  align-items: center;
   padding: 4px 8px;
   border: 1px solid var(--violet-dark);
   border-radius: 50px;
@@ -3514,22 +3530,26 @@ a {
 }
 .courses-list__filter {
   grid-row: 1;
-  grid-column: 1/span 3;
+  grid-column: 1/span 4;
+}
+.courses-list__filter .filter__title {
+  grid-row: 1;
+  grid-column: 3;
 }
 .courses-list__filter .form {
   display: var(--display);
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 .courses-list__filter .filter__field {
-  grid-row: 1;
-  grid-column: 1/span 2;
+  grid-row: 2;
+  grid-column: 3/span 2;
 }
 .courses-list__filter .filter__field select {
   height: 50px;
 }
 .courses-list__filter .form__submit {
-  grid-row: 1;
-  grid-column: 3;
+  grid-row: 2;
+  grid-column: 1;
   margin-top: var(--margin-top);
 }
 .courses-list__filter .form__submit button {

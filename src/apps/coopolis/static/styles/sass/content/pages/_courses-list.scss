@@ -87,24 +87,29 @@
   }
   &__filter {
     grid-row: 1;
-    grid-column: 1 / span 3;
+    grid-column: 1 / span 4;
+
+    .filter__title {
+      grid-row: 1;
+      grid-column: 3;
+    }
 
     .form {
       display: var(--display);
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 
     .filter__field {
-      grid-row: 1;
-      grid-column: 1 / span 2;
+      grid-row: 2;
+      grid-column: 3 / span 2;
 
       select {
         height: 50px;
       }
     }
     .form__submit {
-      grid-row: 1;
-      grid-column: 3;
+      grid-row: 2;
+      grid-column: 1;
       margin-top: var(--margin-top);
       
       button {

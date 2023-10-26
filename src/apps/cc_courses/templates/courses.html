@@ -49,10 +49,10 @@
       </div>
     </section>
     <section class="courses-list__filter filter">
-      <div class="filter__title text-xxsm">
-        <p>Ordenar per</p>
-      </div>
       <form class="form" method="post">
+        <div class="filter__title text-xxsm">
+          <p>Ordenar per</p>
+        </div>
         {% csrf_token %}
         <div class="filter__field field field-select field--primary text-xsm">
           <select name="{{ field.sort_by }}" id="id_{{ field.sort_by }}">
@@ -65,6 +65,94 @@
           <button type="submit" class="btn btn--primary btn__text">Filtrar</button>
         </div>
       </form>
+    </section>
+    <!-- Nou: Aquest div apareix si hi ha filtres seleccionats -->
+    <!-- Cada tag ha de tenir el color del seu cercle -->
+    <section class="filter__tags tags grid-item-full">
+      <div class="tag text-xsm">
+        <p>Presencial</p>
+        <svg
+          class="tag__close icon-pathfill-primary icon-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46"
+          width="9.46"
+          height="9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="tag text-xsm">
+        <p>Tag una mica llarga</p>
+        <svg
+          class="tag__close icon-pathfill-primary icon-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46"
+          width="9.46"
+          height="9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="tag text-xsm">
+        <p>Presencial</p>
+        <svg
+          class="tag__close icon-pathfill-primary icon-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46"
+          width="9.46"
+          height="9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="tag text-xsm">
+        <p>Tag una mica llarga</p>
+        <svg
+          class="tag__close icon-pathfill-primary icon-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46"
+          width="9.46"
+          height="9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="tag text-xsm">
+        <p>Presencial</p>
+        <svg
+          class="tag__close icon-pathfill-primary icon-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46"
+          width="9.46"
+          height="9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="tag text-xsm">
+        <p>Tag una mica llarga</p>
+        <svg
+          class="tag__close icon-pathfill-primary icon-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46"
+          width="9.46"
+          height="9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
+      <div class="tag text-xsm">
+        <p>Presencial</p>
+        <svg
+          class="tag__close icon-pathfill-primary icon-7"
+          xmlns="http://www.w3.org/2000/svg"
+          viewbox="0 0 9.46 9.46"
+          width="9.46"
+          height="9.46">
+          <path
+            d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+        </svg>
+      </div>
     </section>
   </div>
   <section class="courses-list__grid">
