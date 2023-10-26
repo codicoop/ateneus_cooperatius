@@ -28,13 +28,34 @@
   background-color: var(--white);
   border-radius: var(--br);
   box-shadow: 3px 3px 10px #FE1A681A;
+  // Exception
+  .richtext p + p {
+    margin-top: 0;
+  }
   
+  &__pretitle {
+    padding-bottom: var(--pad2);
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--yellow);
+  }
   &__title {
     padding-bottom: var(--padding-bottom);
   }
   &__bloc {
     padding: var(--pad1) 0;
     border-top: 1px solid #d3bfc6;
+
+    &.grid-bloc {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      gap: var(--pad1);
+
+      .course-card__subtitle {
+        grid-column: 1 / span 2;
+        padding-bottom: var(--pad1);
+      }
+    }
   }
   &__subtitle {
     color: var(--primary);
@@ -42,5 +63,24 @@
   }
   &__btn {
     margin: var(--margin);
+  }
+}
+
+.subbloc {
+  
+  &__title {
+    font-weight: bold;
+    color: var(--primary);
+    text-transform: uppercase;
+  }
+  // &__subtitle {}
+  &__text {
+    p {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      color: var(--violet-dark);
+      white-space: nowrap;
+      max-width: 10vw;
+    }
   }
 }
