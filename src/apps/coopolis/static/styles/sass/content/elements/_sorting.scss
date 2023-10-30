@@ -1,0 +1,41 @@
+// Dynamic variables
+// .sorting {
+//   &__title {
+//   }
+//   &__btns {
+//   }
+//   &__btn {
+//   }
+// }
+
+// @media (min-width: 900px) {
+//   .sorting {
+//     &__title {
+//     }
+//     &__btns {
+//     }
+//     &__btn {
+//     }
+//   }
+// }
+
+.sorting {
+  &__title {
+    padding-bottom: var(--pad-2);
+    color: var(--primary-light);
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .field-select::after {
+    top: 19px;
+  }
+  &__tags.tags {
+    padding: var(--pad2) 0;
+    border-top: 1px solid var(--primary-lighter);
+
+    svg {
+      cursor: pointer;
+    }
+  }
+}
+

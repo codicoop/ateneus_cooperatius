@@ -1,40 +1,26 @@
 // Dynamic variables
 .filter {
-  &__title {
-  }
-  &__btns {
-  }
   &__btn {
   }
 }
 
 @media (min-width: 900px) {
   .filter {
-    &__title {
-    }
-    &__btns {
-    }
     &__btn {
     }
   }
 }
 
 .filter {
-  &__title {
-    padding-bottom: var(--pad-2);
-    color: var(--primary-light);
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-  .field-select::after {
-    top: 19px;
-  }
-  .form__submit {
+  &__btn {
+    grid-column: 1;
     margin-top: var(--pad1-5);
     margin-bottom: var(--pad4);
+    p {
+      pointer-events: none;
+    }
   }
   &__tags.tags {
-    width: 100%;
     padding: var(--pad2) 0;
     border-top: 1px solid var(--primary-lighter);
 

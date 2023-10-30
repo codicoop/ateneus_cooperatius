@@ -944,23 +944,19 @@ a {
   opacity: 0.25;
 }
 
-.field-checkbox {
+.field-checkbox label {
   display: flex;
   flex-direction: row-reverse;
-  align-items: flex-start;
+  gap: var(--pad1);
+  align-items: center;
   justify-content: flex-end;
   padding-bottom: var(--pad1);
-}
-.field-checkbox label {
-  display: inline;
-  padding-bottom: 0;
   padding-left: var(--pad-2);
-  width: 80%;
   font-weight: 500;
   font-size: 12px;
   line-height: 16px;
   text-transform: none;
-  color: var(--primary-dark);
+  color: var(--violet-dark);
   cursor: pointer;
 }
 .field-checkbox input {
@@ -968,22 +964,19 @@ a {
   width: var(--pad1);
   height: var(--pad1);
   padding: 0;
-  border: 2px solid var(--second-2);
-  border-radius: 50px;
+  border: 3px solid var(--second-lighter);
+  border-radius: 6px;
 }
 .field-checkbox input::after {
   content: "";
   display: block;
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 9px;
-  height: 9px;
-  border-radius: 20px;
+  top: 1px;
+  left: 1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
   background-color: var(--white);
-}
-.field-checkbox input:checked {
-  background-color: var(--second-lighter);
 }
 .field-checkbox input:checked::after {
   background-color: var(--second);
@@ -2072,6 +2065,7 @@ a {
   width: 100%;
   border-radius: var(--br);
   overflow: clip;
+  cursor: pointer;
 }
 .view-selector .selector-btn {
   display: flex;
@@ -2100,21 +2094,15 @@ a {
   fill: var(--white);
 }
 
-.filter__title {
-  padding-bottom: var(--pad-2);
-  color: var(--primary-light);
-  text-transform: uppercase;
-  font-weight: bold;
-}
-.filter .field-select::after {
-  top: 19px;
-}
-.filter .form__submit {
+.filter__btn {
+  grid-column: 1;
   margin-top: var(--pad1-5);
   margin-bottom: var(--pad4);
 }
+.filter__btn p {
+  pointer-events: none;
+}
 .filter__tags.tags {
-  width: 100%;
   padding: var(--pad2) 0;
   border-top: 1px solid var(--primary-lighter);
 }
@@ -2138,6 +2126,23 @@ a {
   text-transform: uppercase;
   color: var(--violet-dark);
   white-space: nowrap;
+}
+
+.sorting__title {
+  padding-bottom: var(--pad-2);
+  color: var(--primary-light);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.sorting .field-select::after {
+  top: 19px;
+}
+.sorting__tags.tags {
+  padding: var(--pad2) 0;
+  border-top: 1px solid var(--primary-lighter);
+}
+.sorting__tags.tags svg {
+  cursor: pointer;
 }
 
 .user-icon {
@@ -2764,6 +2769,116 @@ a {
 }
 .header-topbar__login p {
   white-space: nowrap;
+}
+
+.overlay__card {
+  --min-height: none;
+}
+.overlay__submit {
+  --margin-top: var(--pad4);
+}
+
+@media (min-width: 900px) {
+  .overlay__card {
+    --min-height: 500px;
+  }
+  .overlay__submit {
+    --margin-top: auto;
+  }
+}
+.overlay__background {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--violet);
+  opacity: 0.75;
+  z-index: 1000;
+}
+.overlay__card form {
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: var(--min-height);
+  width: 329px;
+  padding: var(--pad2) var(--pad1);
+  background-color: var(--white);
+  z-index: 1010;
+  overflow: clip;
+}
+.overlay__close {
+  position: fixed;
+  top: var(--pad2);
+  right: var(--pad1);
+  background-color: var(--primary-lightest);
+  border-radius: 50%;
+  height: 34px;
+  width: 34px;
+}
+.overlay__close svg {
+  pointer-events: none;
+  height: 34px;
+  width: 34px;
+}
+.overlay__close svg polygon {
+  fill: var(--primary);
+}
+.overlay__title {
+  font-weight: bold;
+  color: var(--primary);
+  padding-bottom: var(--pad2);
+}
+.overlay__option.is-open .overlay__option-arrow {
+  transform: rotate(180deg);
+  transition: transform 0.5s ease-out;
+}
+.overlay__option-topbar {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--pad1);
+  padding-bottom: 6px;
+}
+.overlay__option-topbar p, .overlay__option-topbar .overlay__option-arrow {
+  pointer-events: none;
+}
+.overlay__option-list {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--pad2);
+  max-height: 270px;
+  overflow-y: scroll;
+}
+.overlay__option-dates {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--pad1);
+  padding-top: var(--pad1);
+}
+.overlay__option-dates p {
+  text-transform: uppercase;
+  color: var(--violet-dark);
+}
+.overlay__option-dates input {
+  margin-top: var(--pad1);
+}
+.overlay__clean {
+  padding-top: var(--pad1);
+  color: var(--second);
+  text-transform: uppercase;
+}
+.overlay__submit {
+  margin-top: var(--margin-top);
+}
+
+.separator {
+  display: inline-block;
+  height: 1px;
+  width: 115%;
+  margin-left: -20px;
+  background-color: var(--violet);
 }
 
 .home .welcome__content {
@@ -3459,7 +3574,7 @@ a {
   --padding-top: 0;
   --gap: var(--pad1);
 }
-.courses-list__filter .form {
+.courses-list__sorting .form {
   --display: block;
 }
 .courses-list__message {
@@ -3477,7 +3592,7 @@ a {
     --border: 1px solid var(--primary-lighter);
     --gap: var(--pad4) var(--pad1);
   }
-  .courses-list__filter .form {
+  .courses-list__sorting .form {
     --display: grid;
     --margin-top: 0;
   }
@@ -3528,31 +3643,31 @@ a {
   grid-column: 5/span 2;
   grid-row: 1;
 }
-.courses-list__filter {
+.courses-list__sorting {
   grid-row: 1;
   grid-column: 1/span 4;
 }
-.courses-list__filter .filter__title {
+.courses-list__sorting .sorting__title {
   grid-row: 1;
   grid-column: 3;
 }
-.courses-list__filter .form {
+.courses-list__sorting .form {
   display: var(--display);
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-.courses-list__filter .filter__field {
+.courses-list__sorting .sorting__field {
   grid-row: 2;
   grid-column: 3/span 2;
 }
-.courses-list__filter .filter__field select {
+.courses-list__sorting .sorting__field select {
   height: 50px;
 }
-.courses-list__filter .form__submit {
+.courses-list__sorting .form__submit {
   grid-row: 2;
   grid-column: 1;
   margin-top: var(--margin-top);
 }
-.courses-list__filter .form__submit button {
+.courses-list__sorting .form__submit button {
   height: 50px;
 }
 
