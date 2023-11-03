@@ -172,7 +172,7 @@ class ActivityFileInlineAdmin(admin.TabularInline):
     model = ActivityFile
     extra = 0
 
-
+# 
 class SubserviceFilter(admin.SimpleListFilter):
     title = 'Sub-servei'
     parameter_name = 'sub_service'
