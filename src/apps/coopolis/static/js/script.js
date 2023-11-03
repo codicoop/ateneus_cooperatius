@@ -60,18 +60,17 @@ function showFilters(event) {
   overlay.classList.remove("is-hidden")
 }
 function hideFilters(event) {
-  console.log(event.target)
   if (event.target.classList.contains("overlay__close")) {
-    const overlay = event.target.parentElement.parentElement
+    const overlay = event.target.parentElement.parentElement.parentElement
     overlay.classList.add("is-hidden")
   }
   if (event.target.classList.contains("overlay__background")) {
+    console.log(event.target)
     const overlay = event.target.parentElement
     overlay.classList.add("is-hidden")
   }
 }
 function toggleFilterOption(event) {
-  console.log(event.target);
   const parent = event.target.parentElement
   const overlay = parent.querySelector(".overlay__option-list")
   const separator = parent.querySelector(".list-separator")
@@ -80,7 +79,6 @@ function toggleFilterOption(event) {
   parent.classList.toggle("is-open")
 }
 function toggleFilterDates(event) {
-  console.log(event.target);
   const parent = event.target.parentElement
   const overlay = parent.querySelector(".overlay__option-dates")
   const separator = parent.querySelector(".list-separator")

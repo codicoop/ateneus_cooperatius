@@ -11,7 +11,7 @@
 @media (min-width: 900px) {
   .overlay {
     &__card {
-      --min-height: 500px;
+      --min-height: 808px;
     }
     &__submit {
       --margin-top: auto;
@@ -115,6 +115,9 @@
   }
   &__submit {
     margin-top: var(--margin-top);
+    .btn {
+      width: 100%;
+    }
   }
 }
 

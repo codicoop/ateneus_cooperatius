@@ -71,7 +71,8 @@
       <p>Filtrar</p>
     </div>
     <div class="filter__overlay overlay is-hidden">
-      <div class="overlay__background"></div>
+      <div class="overlay__background"
+        onclick="hideFilters(event)"></div>
       <div class="overlay__card">
         <form class="form" action="">
           {% csrf_token %}

@@ -117,4 +117,11 @@
       }
     }
   }
+  &__filter {
+    grid-column: 1 / span 6;
+  }
+  .filter__btn {
+    grid-column: 1;
+    grid-row: 1;
+  }
 }
