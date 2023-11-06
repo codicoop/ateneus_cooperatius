@@ -20,6 +20,7 @@ from apps.coopolis.models.projects import (
     ProjectFile,
     CreatedEntity,
 )
+from apps.facilities_reservations.filters import SubserviceFilter
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -114,7 +115,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     )
     list_filter = (
         FilterBySubsidyPeriod,
-        'service',
+        'service', SubserviceFilter,
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type', 'axis',
         'circle', 'project__sector'
