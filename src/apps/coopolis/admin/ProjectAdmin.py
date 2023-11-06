@@ -22,6 +22,7 @@ from apps.coopolis.models.projects import (
 )
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
+from apps.coopolis.filters import SubserviceFilter
 
 
 class FilterByFounded(admin.SimpleListFilter):
@@ -114,7 +115,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     )
     list_filter = (
         FilterBySubsidyPeriod,
-        'service',
+        'service', SubserviceFilter,
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type', 'axis',
         'circle', 'project__sector'
@@ -561,7 +562,7 @@ class DerivationAdmin(admin.ModelAdmin):
             return True
         return False
 
-
+# Ejemplo
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     form = EmploymentInsertionAdminForm
