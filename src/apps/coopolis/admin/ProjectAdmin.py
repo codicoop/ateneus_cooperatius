@@ -20,9 +20,9 @@ from apps.coopolis.models.projects import (
     ProjectFile,
     CreatedEntity,
 )
-from apps.facilities_reservations.filters import SubserviceFilter
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
+from apps.coopolis.filters import SubserviceFilter
 
 
 class FilterByFounded(admin.SimpleListFilter):
@@ -562,7 +562,7 @@ class DerivationAdmin(admin.ModelAdmin):
             return True
         return False
 
-
+# Ejemplo
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     form = EmploymentInsertionAdminForm

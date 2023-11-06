@@ -32,7 +32,7 @@ from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation, \
     ReservationEquipment
-from apps.facilities_reservations.filters import SubserviceFilter
+from apps.coopolis.filters import SubserviceFilter
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
     """
