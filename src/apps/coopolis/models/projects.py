@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
 
-from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
+from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine, Activity
 from apps.coopolis.choices import ServicesChoices, CirclesChoices, \
     SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -18,6 +18,7 @@ from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
+
 
 
 class Derivation(models.Model):
@@ -607,11 +608,13 @@ class EmploymentInsertion(models.Model):
 
     project = models.ForeignKey(
         Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
-        related_name="employment_insertions")
-    # Activity
-    """activity = models.ForeignKey(
-        Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
-        related_name="employment_insertions") """
+        related_name="employment_insertions", blank=True, null=True)
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        verbose_name="sessió",
+        blank=True, null=True
+    )
     user = models.ForeignKey(
         User, verbose_name="persona", blank=True, null=True,
         on_delete=models.PROTECT)
