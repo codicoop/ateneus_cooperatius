@@ -566,7 +566,7 @@ class DerivationAdmin(admin.ModelAdmin):
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     form = EmploymentInsertionAdminForm
-    list_display = ('insertion_date', 'project', 'user', 'contract_type',
+    list_display = ('insertion_date', 'project', 'activity', 'user', 'contract_type',
                     'subsidy_period', 'circle', )
     list_filter = (
         'subsidy_period', 'contract_type', 'circle', 'insertion_date',
