@@ -111,6 +111,10 @@ class EmploymentInsertionAdminForm(models.ModelForm):
             self.cleaned_data.get("user"),
             self.cleaned_data.get("project"),
         )
+        EmploymentInsertion.validate_activity_project(
+            self.cleaned_data.get("activity"),
+            self.cleaned_data.get("project"),
+        )
         return self.cleaned_data
 
 
