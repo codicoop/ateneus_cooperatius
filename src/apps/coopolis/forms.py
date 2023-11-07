@@ -96,6 +96,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         model = EmploymentInsertion
         fields = (
             "project",
+            "activity",
             "user",
             "subsidy_period",
             "insertion_date",
