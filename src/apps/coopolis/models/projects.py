@@ -643,8 +643,8 @@ class EmploymentInsertion(models.Model):
 
     @classmethod
     def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
-        if not user_obj:
-            raise ValidationError("Añadir persona")
+        """ if not user_obj:
+            raise ValidationError("Añadir persona") """
         user_obj_errors = {
             "surname": "- Cognom.<br />",
             "gender": "- Gènere. <br/>",

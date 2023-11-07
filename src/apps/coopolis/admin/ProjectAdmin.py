@@ -562,7 +562,6 @@ class DerivationAdmin(admin.ModelAdmin):
             return True
         return False
 
-# Ejemplo
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     form = EmploymentInsertionAdminForm
@@ -571,10 +570,10 @@ class EmploymentInsertionAdmin(admin.ModelAdmin):
     list_filter = (
         'subsidy_period', 'contract_type', 'circle', 'insertion_date',
     )
-    search_fields = ('project__name__unaccent', 'user__first_name__unaccent', )
-    raw_id_fields = ('user', 'project',)
+    search_fields = ('project__name__unaccent', 'user__first_name__unaccent',)
+    raw_id_fields = ('user', 'project')
     autocomplete_lookup_fields = {
-        'fk': ['user', 'project', ],
+        'fk': ['user', 'project'],
     }
 
 
