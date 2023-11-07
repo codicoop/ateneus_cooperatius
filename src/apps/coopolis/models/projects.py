@@ -643,8 +643,9 @@ class EmploymentInsertion(models.Model):
 
     @classmethod
     def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
-        """ if not user_obj:
-            raise ValidationError("Añadir persona") """
+        if not user_obj:
+            raise ValidationError({ "user": ValidationError("Aquest camp és obligatori.") })
+
         user_obj_errors = {
             "surname": "- Cognom.<br />",
             "gender": "- Gènere. <br/>",
@@ -687,8 +688,21 @@ class EmploymentInsertion(models.Model):
 
     @classmethod
     def validate_activity_project(cls, activity_obj, project_obj):
-        if (not activity_obj and not project_obj) or (activity_obj and project_obj):
-            raise ValidationError("Solo un dels camps es obligatori.")
+        errors = {}
+        if not activity_obj and not project_obj:
+            msg = "Un d'aquests camps és obligatori"
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })
+        
+        if activity_obj and project_obj:
+            msg = "Només es pot triar un d'aquests camps"
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })
+        raise ValidationError(errors)
 
 class CreatedEntity(models.Model):
     project = models.ForeignKey(
