@@ -204,3 +204,4 @@ a hub.docker.com per comprovar que s'ha generat sense errors.
 ## Testejar la imatge de producció en local o a develop
 Assumint que tens l'última versió a dockerhub, fes:
 `docker-compose -f compose-develop-hub.yml up`
+
