@@ -122,7 +122,7 @@ class ExportJustificationService:
             )
             town = ("", True)
             if item.place is not None and item.place.town:
-                town = str(item.place.town)
+                town = item.place.town.name_for_justification
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
@@ -292,7 +292,7 @@ class ExportJustificationService:
                 )
                 town = ("", True)
                 if item.project.town:
-                    town = str(item.project.town)
+                    town = item.project.town.name_for_justification
                 circle = (
                      CirclesChoices(item.circle).label
                      if item.circle is not None
@@ -338,7 +338,7 @@ class ExportJustificationService:
             )
             town = ("", True)
             if item.place and item.place.town:
-                town = str(item.place.town)
+                town = item.place.town.name_for_justification
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
@@ -394,7 +394,7 @@ class ExportJustificationService:
 
             self.export_manager.row_number += 1
             town = (
-                str(created_entity.project.town)
+                created_entity.project.town.name_for_justification
                 if created_entity.project.town else ("", True)
             )
 
@@ -454,7 +454,7 @@ class ExportJustificationService:
                 hours = group['total_hours']
                 town = ("", True)
                 if item.project.town:
-                    town = str(item.project.town)
+                    town = item.project.town.name_for_justification
                 crea_consolida = self.export_manager.get_correlation(
                     "stage_type",
                     item.stage_type,
@@ -586,7 +586,7 @@ class ExportJustificationService:
                         )
                     town = ("", True)
                     if participant.town:
-                        town = participant.town.name
+                        town = participant.town.name_for_justification
 
                     row = [
                         self.get_formatted_reference(
@@ -631,7 +631,7 @@ class ExportJustificationService:
                         'gender', participant.gender)
                 town = ("", True)
                 if participant.town:
-                    town = participant.town.name
+                    town = participant.town.name_for_justification
 
                 row = [
                     self.get_formatted_reference(
@@ -745,7 +745,7 @@ class ExportJustificationService:
                 birthdate = ('', True)
             town = ('', True)
             if insertion.user.town:
-                town = str(insertion.user.town)
+                town = insertion.user.town.name_for_justification
             cif = insertion.project.cif
             if not cif:
                 cif = ('', True)
