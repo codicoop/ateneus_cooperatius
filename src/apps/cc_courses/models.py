@@ -514,7 +514,7 @@ class Activity(models.Model):
                 self.minors_school_name or
                 self.minors_teacher
         ):
-            if not self.for_minors: #TODO ejemplo de diccionario/error
+            if not self.for_minors:
                 errors.update(
                     {
                         "for_minors": ValidationError(

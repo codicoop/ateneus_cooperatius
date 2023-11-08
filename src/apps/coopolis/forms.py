@@ -105,16 +105,29 @@ class EmploymentInsertionAdminForm(models.ModelForm):
             "circle",
         )
 
-    def clean(self):
+    def clean(self):       
         super().clean()
-        EmploymentInsertion.validate_activity_project(
-            self.cleaned_data.get("activity"),
-            self.cleaned_data.get("project"),
-        )
-        EmploymentInsertion.validate_extended_fields(
-            self.cleaned_data.get("user"),
-            self.cleaned_data.get("project"),
-        )
+        errors = {}
+
+        try:
+            EmploymentInsertion.validate_activity_project(
+                self.cleaned_data.get("activity"),
+                self.cleaned_data.get("project"),
+            )
+        except ValidationError as e:
+            errors.update(e.message_dict)
+
+        try:
+            EmploymentInsertion.validate_extended_fields(
+                self.cleaned_data.get("user"),
+                self.cleaned_data.get("project"),
+            )
+        except ValidationError as e:
+            errors.update(e.message_dict)
+
+        if errors:
+            raise ValidationError(errors)
+
         return self.cleaned_data
 
 
