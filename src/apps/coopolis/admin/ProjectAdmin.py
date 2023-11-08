@@ -571,9 +571,9 @@ class EmploymentInsertionAdmin(admin.ModelAdmin):
         'subsidy_period', 'contract_type', 'circle', 'insertion_date',
     )
     search_fields = ('project__name__unaccent', 'user__first_name__unaccent',)
-    raw_id_fields = ('user', 'project')
+    raw_id_fields = ('user', 'project', 'activity')
     autocomplete_lookup_fields = {
-        'fk': ['user', 'project'],
+        'fk': ['user', 'project', 'activity'],
     }
 
 
