@@ -11,6 +11,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
+
 from apps.coopolis.choices import ServicesChoices, CirclesChoices, \
     SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -18,6 +19,7 @@ from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
+
 
 
 class Derivation(models.Model):
@@ -607,11 +609,8 @@ class EmploymentInsertion(models.Model):
 
     project = models.ForeignKey(
         Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
-        related_name="employment_insertions")
-    # Activity
-    """activity = models.ForeignKey(
-        Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
-        related_name="employment_insertions") """
+        related_name="employment_insertions", blank=True, null=True)
+    activity = models.ForeignKey("cc_courses.Activity", verbose_name="sessió", on_delete=models.PROTECT, blank=True, null=True)
     user = models.ForeignKey(
         User, verbose_name="persona", blank=True, null=True,
         on_delete=models.PROTECT)
@@ -644,6 +643,9 @@ class EmploymentInsertion(models.Model):
 
     @classmethod
     def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
+        if not isinstance(user_obj, User):
+            raise ValidationError({ "user": ValidationError("Aquest camp és obligatori.") })   
+
         user_obj_errors = {
             "surname": "- Cognom.<br />",
             "gender": "- Gènere. <br/>",
@@ -684,6 +686,22 @@ class EmploymentInsertion(models.Model):
             msg += f"De la {url}:<br>{cif_error}"
         raise ValidationError(mark_safe(msg))
 
+    @classmethod
+    def validate_activity_project(cls, activity_obj, project_obj):
+        errors = {}
+        msg = ''
+        if not activity_obj and not project_obj:
+            msg = "Un dels camps 'Projecte acompanyat' o 'Sessió' és obligatori."
+            
+        if activity_obj and project_obj:
+            msg = "Només es pot triar un camp entre 'Projecte acompanyat' o 'Sessió'."
+        
+        errors.update({
+            "project": ValidationError(msg), 
+            "activity": ValidationError(msg)
+        })
+
+        raise ValidationError(errors)
 
 class CreatedEntity(models.Model):
     project = models.ForeignKey(

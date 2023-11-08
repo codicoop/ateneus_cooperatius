@@ -96,6 +96,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         model = EmploymentInsertion
         fields = (
             "project",
+            "activity",
             "user",
             "subsidy_period",
             "insertion_date",
@@ -110,6 +111,11 @@ class EmploymentInsertionAdminForm(models.ModelForm):
             self.cleaned_data.get("user"),
             self.cleaned_data.get("project"),
         )
+        EmploymentInsertion.validate_activity_project(
+            self.cleaned_data.get("activity"),
+            self.cleaned_data.get("project"),
+        )
+        
         return self.cleaned_data
 
 

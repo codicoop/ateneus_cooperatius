@@ -651,6 +651,10 @@ class Activity(models.Model):
             kwargs={'object_id': self.id},
         )
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains',)
+
 
 class ActivityResourceFile(models.Model):
     class Meta:
