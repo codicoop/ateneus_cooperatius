@@ -107,21 +107,15 @@ class EmploymentInsertionAdminForm(models.ModelForm):
 
     def clean(self):
         super().clean()
-        errors = {} 
-
-        errors.update(EmploymentInsertion.validate_activity_project(
+        EmploymentInsertion.validate_extended_fields(
+                    self.cleaned_data.get("user"),
+                    self.cleaned_data.get("project"),
+        )
+        EmploymentInsertion.validate_activity_project(
             self.cleaned_data.get("activity"),
             self.cleaned_data.get("project"),
-        ))
-    
-        errors.update(EmploymentInsertion.validate_extended_fields(
-            self.cleaned_data.get("user"),
-            self.cleaned_data.get("project"),
-        ))
-
-        if errors:
-            raise ValidationError(errors)
-
+        )
+        
         return self.cleaned_data
 
 
