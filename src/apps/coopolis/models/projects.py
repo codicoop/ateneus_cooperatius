@@ -692,14 +692,14 @@ class EmploymentInsertion(models.Model):
         errors = {}
         
         if not activity_obj and not project_obj:
-            msg = "Un d'aquests camps és obligatori"
+            msg = "Un dels camps 'Projecte acompanyat' o 'Sessió' és obligatori"
             errors.update({
                 "project": ValidationError(msg), 
                 "activity": ValidationError(msg)
             })
         
         if activity_obj and project_obj:
-            msg = "Només es pot triar un d'aquests camps"
+            msg = "Només es pot triar un camp entre 'Projecte acompanyat' o 'Sessió'"
             errors.update({
                 "project": ValidationError(msg), 
                 "activity": ValidationError(msg)
