@@ -643,9 +643,9 @@ class EmploymentInsertion(models.Model):
 
     @classmethod
     def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
-        print('user_obj' + str(isinstance(user_obj, User)))
         if not isinstance(user_obj, User):
-            raise ValidationError({ "user": ValidationError("Aquest camp és obligatori.") })
+            errors = { "user": ValidationError("Aquest camp és obligatori.") }
+            return errors
 
         user_obj_errors = {
             "surname": "- Cognom.<br />",
@@ -690,18 +690,22 @@ class EmploymentInsertion(models.Model):
     @classmethod
     def validate_activity_project(cls, activity_obj, project_obj):
         errors = {}
-        msg = ''
+        
         if not activity_obj and not project_obj:
             msg = "Un d'aquests camps és obligatori"
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })
         
         if activity_obj and project_obj:
             msg = "Només es pot triar un d'aquests camps"
-        
-        errors.update({
-            "project": ValidationError(msg), 
-            "activity": ValidationError(msg)
-        })
-        raise ValidationError(errors)
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })
+
+        return errors
 
 class CreatedEntity(models.Model):
     project = models.ForeignKey(
