@@ -527,7 +527,7 @@ class Activity(models.Model):
                 )
 
         if self.axis:
-            subaxis_options = get_szubaxis_for_axis(str(self.axis))
+            subaxis_options = get_subaxis_for_axis(str(self.axis))
             if self.subaxis not in subaxis_options:
                 errors.update(
                     {

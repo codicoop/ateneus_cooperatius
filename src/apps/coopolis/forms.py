@@ -105,7 +105,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
             "circle",
         )
 
-    def clean(self):       
+    def clean(self):
         super().clean()
         errors = {} 
 
