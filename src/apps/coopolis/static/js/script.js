@@ -86,3 +86,23 @@ function toggleFilterDates(event) {
   separator.classList.toggle("is-hidden")
   parent.classList.toggle("is-open")
 }
+function showCalendarView() {
+  let calendar = document.querySelector(".courses-list__calendar")
+  let list = document.querySelector(".courses-list__grid")
+  let calendarBtn = document.querySelector(".calendar-view-btn")
+  let listBtn = document.querySelector(".list-view-btn")
+  calendar.classList.remove("is-hidden")
+  list.classList.add("is-hidden")
+  calendarBtn.classList.add("is-active")
+  listBtn.classList.remove("is-active")
+}
+function showListView() {
+  let calendar = document.querySelector(".courses-list__calendar")
+  let list = document.querySelector(".courses-list__grid")
+  let calendarBtn = document.querySelector(".calendar-view-btn")
+  let listBtn = document.querySelector(".list-view-btn")
+  calendar.classList.add("is-hidden")
+  list.classList.remove("is-hidden")
+  calendarBtn.classList.remove("is-active")
+  listBtn.classList.add("is-active")
+}

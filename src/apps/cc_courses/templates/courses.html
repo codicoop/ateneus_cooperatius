@@ -5,6 +5,16 @@
 {% block enrollments_is_active %}is-active{% endblock %}
 {% block projects_is_active %}{% endblock %}
 
+{% block extra_head %}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.css" rel="stylesheet" />
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/locales/ca.js"></script>
+<script src="{% static 'js/fullcalendar.js' %}"></script>
+
+{% endblock %}
+
 {% block content %}
 {% include './components/header_topbar.html' %}
 <div class="courses-list">
@@ -30,15 +40,19 @@
         <p>Vista</p>
       </div>
       <div class="view-selector__btns">
-        <div class="selector-btn selector-btn--active">
+        <div class="selector-btn calendar-view-btn is-active"
+          onclick="showCalendarView()"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 16 16">
-          <path d="m 10.008475,16.008475 v -6 h 6 v 6 z m -10.00000041,0 v -6 H 6.0084746 v 6 z M 10.008475,6.0084746 V 0.00847459 h 6 V 6.0084746 Z m -10.00000041,0 V 0.00847459 H 6.0084746 V 6.0084746 Z" />
-        </svg>
+            <path d="m 10.008475,16.008475 v -6 h 6 v 6 z m -10.00000041,0 v -6 H 6.0084746 v 6 z M 10.008475,6.0084746 V 0.00847459 h 6 V 6.0084746 Z m -10.00000041,0 V 0.00847459 H 6.0084746 V 6.0084746 Z" />
+          </svg>
           <p>Galeria</p>
         </div>
-        <div class="selector-btn">
+        <div class="selector-btn list-view-btn"
+          onclick="showListView()"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 20.000001 20">
@@ -289,8 +303,10 @@
       </div>
     </section>
   </div>
-
-  <section class="courses-list__grid">
+  <section class="courses-list__calendar">
+    <div id="calendar" class="my-calendar"></div>
+  </section>
+  <section class="courses-list__grid is-hidden">
     {% for course in future_courses %}
       <div class="course-card">
         <!-- Nou: sector o cercle, potser? -->

@@ -1,0 +1,29 @@
+// Dynamic variables
+.calendar-event {
+}
+
+@media (min-width: 900px) {
+  .calendar-event {
+  }
+}
+
+// Layout
+.calendar-event {
+  border: none;
+
+  .fc-event-title-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .fc-event-title {
+    order: 2;
+    height: 100%;
+    text-overflow: ellipsis;
+  }
+  .calendar-event__top {
+    order: 1;
+    font-weight: bold;
+    margin-bottom: var(--pad-2);
+  }
+}
+

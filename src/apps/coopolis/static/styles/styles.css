@@ -2075,6 +2075,13 @@ a {
   color: var(--primary);
   font-weight: bold;
 }
+.view-selector .selector-btn.is-active {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.view-selector .selector-btn.is-active svg path {
+  fill: var(--white);
+}
 .view-selector .selector-btn p {
   text-transform: uppercase;
 }
@@ -2085,13 +2092,6 @@ a {
 }
 .view-selector .selector-btn svg path {
   fill: var(--primary);
-}
-.view-selector .selector-btn--active {
-  background-color: var(--primary);
-  color: var(--white);
-}
-.view-selector .selector-btn--active svg path {
-  fill: var(--white);
 }
 
 .filter__btn {
@@ -2142,6 +2142,24 @@ a {
 }
 .sorting__tags.tags svg {
   cursor: pointer;
+}
+
+.calendar-event {
+  border: none;
+}
+.calendar-event .fc-event-title-container {
+  display: flex;
+  flex-direction: column;
+}
+.calendar-event .fc-event-title {
+  order: 2;
+  height: 100%;
+  text-overflow: ellipsis;
+}
+.calendar-event .calendar-event__top {
+  order: 1;
+  font-weight: bold;
+  margin-bottom: var(--pad-2);
 }
 
 .user-icon {
@@ -2881,6 +2899,43 @@ a {
   width: 115%;
   margin-left: -20px;
   background-color: var(--violet);
+}
+
+.my-calendar.fc {
+  border: none;
+}
+.my-calendar.fc.fc-theme-standard td {
+  padding-bottom: var(--pad1);
+  border: none;
+  border-top: 1px solid var(--primary-lighter);
+}
+.my-calendar.fc .fc-daygrid-day-top {
+  color: var(--primary-light);
+  font-weight: bold;
+}
+.my-calendar.fc .fc-event-time {
+  display: none;
+}
+.my-calendar.fc .fc-event {
+  position: relative;
+  height: 90px;
+  padding: var(--pad-3);
+  margin-top: var(--pad-3);
+  background-color: var(--white);
+}
+.my-calendar.fc .fc-event .fc-event-tite {
+  text-overflow: ellipsis;
+}
+.my-calendar.fc .fc-event-main,
+.my-calendar.fc .fc-event-main-frame {
+  height: 100%;
+}
+.my-calendar.fc .fc-event-title-container {
+  font-family: "Inter", sans-serif;
+  color: var(--primary-dark);
+  font-size: 12px;
+  line-height: 14px;
+  text-overflow: ellipsis;
 }
 
 .home .welcome__content {

@@ -44,6 +44,16 @@
     color: var(--primary);
     font-weight: bold;
 
+    &.is-active {
+      background-color: var(--primary);
+      color: var(--white);
+  
+      svg {
+        path {
+          fill: var(--white);
+        }
+      }
+    }
     p {
       text-transform: uppercase;
     }
@@ -55,16 +65,7 @@
       path {
         fill: var(--primary);
       }
-    }
-  }
-  .selector-btn--active {
-    background-color: var(--primary);
-    color: var(--white);
-
-    svg {
-      path {
-        fill: var(--white);
-      }
+      
     }
   }
 }
