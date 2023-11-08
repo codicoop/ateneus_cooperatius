@@ -697,11 +697,6 @@ class EmploymentInsertion(models.Model):
             msg = "Només es pot triar un camp entre 'Projecte acompanyat' o 'Sessió'."
         
         errors.update({
-                "project": ValidationError(msg), 
-                "activity": ValidationError(msg)
-            })
-
-        errors.update({
             "project": ValidationError(msg), 
             "activity": ValidationError(msg)
         })
