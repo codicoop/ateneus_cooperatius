@@ -33,6 +33,10 @@
     max-width: 400px;
     margin: var(--margin-card);
   }
-  // &__form {}
+  &__form {
+    .form__submit {
+      margin-bottom: 0;
+    }
+  }
 }
 
