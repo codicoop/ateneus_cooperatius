@@ -1,0 +1,42 @@
+.modal-page {
+  --margin-card: var(--pad3) var(--pad2);
+  --top: 91px;
+  --left: 0;
+}
+
+@media (min-width: 900px) {
+  .modal-page {
+    --margin-card: var(--pad3) var(--pad2);
+    --top: 0;
+    --left: 128px;
+  }
+}
+
+.modal-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &__background {
+    position: fixed;
+    top: var(--top);
+    bottom: 0;
+    left: var(--left);
+    right: 0;
+    background-color: var(--violet);
+    z-index: 100;
+  }
+  
+  &__card {
+    z-index: 110;
+    width: 100%;
+    max-width: 400px;
+    margin: var(--margin-card);
+  }
+  &__form {
+    .form__submit {
+      margin-bottom: 0;
+    }
+  }
+}
+
