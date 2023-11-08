@@ -689,19 +689,20 @@ class EmploymentInsertion(models.Model):
     @classmethod
     def validate_activity_project(cls, activity_obj, project_obj):
         errors = {}
-        msg = ''
         if not activity_obj and not project_obj:
             msg = "Un dels camps 'Projecte acompanyat' o 'Sessió' és obligatori."
-            
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })      
         if activity_obj and project_obj:
             msg = "Només es pot triar un camp entre 'Projecte acompanyat' o 'Sessió'."
-        
-        errors.update({
-            "project": ValidationError(msg), 
-            "activity": ValidationError(msg)
-        })
-
-        raise ValidationError(errors)
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })
+        if errors: 
+            raise ValidationError(errors)
 
 class CreatedEntity(models.Model):
     project = models.ForeignKey(
