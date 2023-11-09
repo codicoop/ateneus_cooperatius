@@ -153,3 +153,27 @@ class User(BaseUser):
 
     def __str__(self):
         return self.get_full_name()
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        type = ''
+
+        if self.id_number_type == 'DNI':
+            # Validació DNI
+            type = 'DNI'
+        elif self.id_number_type == 'NIE':
+            # Validació NIE
+            type = 'NIE'
+        elif self.id_number_type == 'PASSPORT':
+            # Validació Passaport
+            type = 'passaport'
+        elif self.id_number_type == 'NO_DNI':
+            # Disabled id_number camp
+            pass
+        
+        if type:
+            errors.update({
+                "id_number": f"Format del {type} incorrecte."
+            })
+            raise Validation(errors)
