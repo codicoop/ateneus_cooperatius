@@ -33,8 +33,7 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = (
-            'first_name', 'last_name', 'surname2', 'email', 'id_number',
-            'cannot_share_id',
+            'first_name', 'last_name', 'surname2', 'email', 'id_number_type', 'id_number',
             'phone_number', 'birthdate', 'birth_place', 'town', 'district',
             'address', 'gender', 'educational_level', 'employment_situation',
             'discovered_us', 'project_involved', 'authorize_communications',
