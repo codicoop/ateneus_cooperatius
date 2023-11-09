@@ -110,6 +110,8 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         EmploymentInsertion.validate_extended_fields(
             self.cleaned_data.get("user"),
             self.cleaned_data.get("project"),
+            self.cleaned_data.get("activity"),
+            self.cleaned_data.get("subsidy_period"),
         )
         EmploymentInsertion.validate_activity_project(
             self.cleaned_data.get("activity"),
