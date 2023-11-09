@@ -89,8 +89,8 @@ class UserAdmin(admin.ModelAdmin):
         'is_staff', 'fake_email', 'authorize_communications', 'tags',
     )
     fields = (
-        'id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number',
-        'cannot_share_id', 'email', 'fake_email', 'birthdate', 'birth_place',
+        'id', 'first_name', 'last_name', 'surname2', 'gender', 
+        'email', 'fake_email', 'id_number_type','id_number','birthdate', 'birth_place',
         'town', 'district', 'address', 'phone_number', 'educational_level',
         'employment_situation', 'discovered_us', 'project_involved',
         'cooperativism_knowledge', 'authorize_communications', 'project',
