@@ -1,9 +1,17 @@
 // Dynamic variables
 .my-calendar {
+  .fc-toolbar-title {
+    --font-size: 20px;
+    --line-height: 24px;
+  }
 }
 
 @media (min-width: 900px) {
   .my-calendar {
+    .fc-toolbar-title {
+      --font-size: 28px;
+      --line-height: 30px;
+    }
   }
 }
 
@@ -11,6 +19,26 @@
 .my-calendar.fc {
   border: none;
 
+  // Les fletxes per canviar el mes
+  .fc-button {
+    height: 31px;
+    width: 31px;
+    padding: 0;
+    background-color: var(--primary-lightest);
+    border-radius: 50px;
+    border: none;
+
+    .fc-icon {
+      color: var(--primary);
+      font-size: 25px;
+    }
+  }
+  // El títol del calendari
+  .fc-toolbar-title {
+    color: var(--primary);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+  }
   // La cel·la del dia
   &.fc-theme-standard td {
     padding-bottom: var(--pad1);
