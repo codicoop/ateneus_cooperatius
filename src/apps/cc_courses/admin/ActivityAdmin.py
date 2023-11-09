@@ -32,7 +32,7 @@ from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation, \
     ReservationEquipment
-
+from apps.coopolis.filters import SubserviceFilter
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
     """
@@ -173,26 +173,6 @@ class ActivityFileInlineAdmin(admin.TabularInline):
     extra = 0
 
 
-class SubserviceFilter(admin.SimpleListFilter):
-    title = 'Sub-servei'
-    parameter_name = 'sub_service'
-
-    def lookups(self, request, model_admin):
-        sub_services = [(None, "-")]
-        if "service__exact" in request.GET:
-            service_id = int(request.GET.get("service__exact"))
-            service = ServicesChoices(service_id)
-            sub_services = [
-                (sub_service.value, sub_service.label)
-                for sub_service in service.get_sub_services()
-            ]
-        return sub_services
-
-    def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(sub_service=self.value())
-
-
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -203,12 +183,14 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     form = ActivityForm
     list_display = (
         'date_start', 'spots', 'remaining_spots', 'name', 'service',
-        'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
+        'attendee_filter_field', 'attendee_list_field', 'send_reminder_field',
+        'teacher',
+    )
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
         'activity_poll_field', 'organizer_reminded', )
     summernote_fields = ('objectives', 'instructions',)
-    search_fields = ('date_start', 'name', 'objectives',)
+    search_fields = ('date_start', 'name', 'objectives', 'teacher', )
     list_filter = (
         FilterBySubsidyPeriod, FilterByJustificationFiles,
         "service", SubserviceFilter,
@@ -219,7 +201,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     )
     fieldsets = [
         (None, {
-            'fields': ['course', 'name', 'objectives', 'place', 'room',
+            'fields': ['course', 'name', 'objectives', 'teacher', 'place', 'room',
                        'date_start',
                        'date_end', 'starting_time', 'ending_time',
                        'confirmed', 'equipments',

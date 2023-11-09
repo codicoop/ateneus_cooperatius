@@ -11,6 +11,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
+
 from apps.coopolis.choices import ServicesChoices, CirclesChoices, \
     SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -18,6 +19,7 @@ from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
+
 
 
 class Derivation(models.Model):
@@ -101,15 +103,11 @@ class Project(models.Model):
     constitution_date = models.DateField("data de constitució", blank=True,
                                          null=True)
     subsidy_period = models.ForeignKey(
-        SubsidyPeriod, verbose_name="convocatòria de la constitució",
+        SubsidyPeriod, verbose_name="(OBSOLET) Convocatòria de la constitució",
         null=True, blank=True, on_delete=models.SET_NULL,
-        help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una "
-                  "convocatòria posterior a l'ultima "
-                  "intervenció de l'ateneu, podeu indicar-ho aquí, per tal "
-                  "que aparegui com a Entitat Creada a l'informe de Projectes "
-                  "Constituïts i a l'excel de justificació. Només es consideren"
-                  " entitats creades les que tenen el NIF i la data de "
-                  "constitució introduïdes."
+        help_text="Anteriorment es feia servir aquest camp per saber quins "
+                  "projectes incloure a la justificació com a Constituïts. Ara "
+                  "això es fa des de l'apartat Entitats Creades."
     )
     estatuts = models.FileField("estatuts", blank=True, null=True,
                                 storage=PrivateMediaStorage(), max_length=250)
@@ -372,6 +370,10 @@ class ProjectStage(models.Model):
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
+    exclude_from_justification = models.BooleanField(
+        "No incloure a l'excel de justificació",
+        default=False,
+    )
     date_start = models.DateField(
         "data creació acompanyament", null=False, blank=False,
         auto_now_add=True
@@ -599,25 +601,6 @@ class ProjectsFollowUpService(Project):
         ordering = ['follow_up_situation', 'follow_up_situation_update']
 
 
-class ProjectsConstituted(Project):
-    """
-    Deprecated: from Nov 2021 this is kept to let them access older reports,
-    but when they don't need them anymore this and the corresponding admin view
-    and template can be deleted.
-    """
-    class Meta:
-        proxy = True
-        verbose_name_plural = "(obsolet) Projectes constituïts per eix"
-        verbose_name = "(obsolet) Projecte constituït per eix"
-
-
-class ProjectsConstitutedService(Project):
-    class Meta:
-        proxy = True
-        verbose_name_plural = "Projectes constituïts"
-        verbose_name = "Projecte constituït"
-
-
 class EmploymentInsertion(models.Model):
     class Meta:
         verbose_name = "inserció laboral"
@@ -626,7 +609,15 @@ class EmploymentInsertion(models.Model):
 
     project = models.ForeignKey(
         Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
-        related_name="employment_insertions")
+        related_name="employment_insertions", blank=True, null=True)
+    activity = models.ForeignKey(
+        "cc_courses.Activity",
+        verbose_name="sessió",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        related_name="employment_insertions",
+    )
     user = models.ForeignKey(
         User, verbose_name="persona", blank=True, null=True,
         on_delete=models.PROTECT)
@@ -658,37 +649,73 @@ class EmploymentInsertion(models.Model):
         return f"{self.user.full_name}: {self.get_contract_type_display()}"
 
     @classmethod
-    def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
-        user_obj_errors = {
-            "surname": "- Cognom.<br />",
-            "gender": "- Gènere. <br/>",
-            "birthdate": "- Data de naixement.<br />",
-            "birth_place": "- Lloc de naixement.<br />",
-            "town": "- Municipi.<br />",
-        }
-        user_errors = [value for key, value in user_obj_errors.items() if
-                       not getattr(user_obj, key)]
-        if not isinstance(user_obj, User) or not isinstance(project_obj, Project):
-            return True
+    def validate_extended_fields(
+            cls,
+            user_obj,
+            project_obj,
+            activity_obj,
+            subsidy_period,
+            link_to_project=True):
+        if not isinstance(user_obj, User):
+            raise ValidationError(
+                {"user": ValidationError("Aquest camp és obligatori.")}
+            )
 
-        cif_error = None
-        if not project_obj.cif:
-            cif_error = "- NIF.<br>"
-
-        if not user_errors and not cif_error:
-            return True
-        user_url = reverse(
-            'admin:coopolis_user_change',
-            kwargs={'object_id': user_obj.id}
+        user_errors = cls.get_user_field_errors(user_obj)
+        cif_error = cls.get_project_cif_field_errors(
+            project_obj,
+            link_to_project,
         )
-        url = f'<a href="{user_url}" target="_blank">Fitxa de la Persona</a>'
-        msg = (f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
-               f"Projecte i de les Persones que normalment son opcionals, "
-               f"però que per poder justificar les insercions laborals "
-               f"son obligatoris.<br>")
+        activity_subsidy_period_error = cls.get_activity_field_errors(
+            activity_obj, subsidy_period,
+        )
+
+        errors = {}
         if user_errors:
-            msg += f"De la {url}:<br /> {''.join(user_errors)}<br />"
+            errors.update({"user": ValidationError(user_errors)})
         if cif_error:
+            errors.update({"project": ValidationError(cif_error)})
+        if activity_subsidy_period_error:
+            errors.update(
+                {"activity": ValidationError(activity_subsidy_period_error)},
+            )
+
+        if errors:
+            raise ValidationError(errors)
+
+    @staticmethod
+    def get_user_field_errors(user_obj):
+        user_errors = []
+        msg = ""
+        if isinstance(user_obj, User):
+            user_obj_errors = {
+                "surname": "- Cognom.<br />",
+                "gender": "- Gènere. <br/>",
+                "birthdate": "- Data de naixement.<br />",
+                "birth_place": "- Lloc de naixement.<br />",
+                "town": "- Municipi.<br />",
+            }
+            user_errors = [value for key, value in user_obj_errors.items() if
+                           not getattr(user_obj, key)]
+        if user_errors:
+            user_url = reverse(
+                'admin:coopolis_user_change',
+                kwargs={'object_id': user_obj.id}
+            )
+            url = f'<a href="{user_url}" target="_blank">Fitxa de la Persona</a>'
+            msg += (
+                f"No s'ha pogut desar la inserció laboral. Hi ha camps de "
+                f"la fitxa de la persona que normalment son opcionals, "
+                f"però que per poder justificar les insercions laborals "
+                f"son obligatoris.<br>"
+                f"De la {url}:<br /> {''.join(user_errors)}<br />"
+            )
+        return mark_safe(msg)
+
+    @staticmethod
+    def get_project_cif_field_errors(project_obj, link_to_project):
+        msg = ""
+        if isinstance(project_obj, Project) and not project_obj.cif:
             url = "fitxa del Projecte (en aquest mateix formulari, més amunt)"
             if link_to_project:
                 project_url = reverse(
@@ -696,5 +723,118 @@ class EmploymentInsertion(models.Model):
                     kwargs={'object_id': project_obj.id}
                 )
                 url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
-            msg += f"De la {url}:<br>{cif_error}"
+            msg += (
+                f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
+                f"Projecte que normalment son opcionals, "
+                f"però que per poder justificar les insercions laborals "
+                f"son obligatoris.<br>"
+                f"De la {url}:<br>"
+                f"- NIF.<br>"
+            )
+        return mark_safe(msg)
+
+    @staticmethod
+    def get_activity_field_errors(activity_obj, subsidy_period):
+        msg = ""
+        if activity_obj and activity_obj.subsidy_period != subsidy_period:
+            msg = (
+                "L'activitat seleccionada no és vàlida perquè té una "
+                "convocatòria diferent que la indicada en aquesta inserció "
+                "laboral."
+            )
+        return mark_safe(msg)
+
+    @staticmethod
+    def validate_activity_project(activity_obj, project_obj):
+        errors = {}
+        if not activity_obj and not project_obj:
+            msg = "Un dels camps 'Projecte acompanyat' o 'Sessió' és obligatori."
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })      
+        if activity_obj and project_obj:
+            msg = "Només es pot triar un camp entre 'Projecte acompanyat' o 'Sessió'."
+            errors.update({
+                "project": ValidationError(msg), 
+                "activity": ValidationError(msg)
+            })
+        if errors: 
+            raise ValidationError(errors)
+
+
+class CreatedEntity(models.Model):
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="created_entities",
+    )
+    service = models.SmallIntegerField(
+        "Servei",
+        choices=ServicesChoices.choices,
+        null=True,
+    )
+    sub_service = models.SmallIntegerField(
+        "Sub-servei",
+        choices=SubServicesChoices.choices,
+        null=True,
+    )
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod,
+        verbose_name="convocatòria de la constitució",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    circle = models.SmallIntegerField(
+        "Ateneu / Cercle",
+        choices=CirclesChoices.choices_named(),
+        null=True,
+    )
+    entity = models.ForeignKey(
+        Entity,
+        verbose_name="Entitat",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    class Meta:
+        verbose_name = "Entitat creada"
+        verbose_name_plural = "Entitats creades"
+
+    def __str__(self):
+        return f"Entitat creada: {self.project.name}"
+
+    @classmethod
+    def validate_extended_fields(cls, project_obj):
+        if not isinstance(project_obj, Project):
+            return True
+        project_obj_errors = {
+            "cif": "- NIF.<br />",
+            "constitution_date": "- Data de constitució. <br/>",
+        }
+        project_errors = [
+            value for key, value in project_obj_errors.items()
+            if not getattr(project_obj, key)
+        ]
+
+        if not project_errors:
+            return True
+        project_url = reverse(
+            'admin:coopolis_project_change',
+            kwargs={'object_id': project_obj.id}
+        )
+        url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
+        msg = (f"No s'ha pogut desar l'entitat creada. Hi ha camps del "
+               f"Projecte que normalment son opcionals, "
+               f"però que per poder justificar les entitats creades "
+               f"son obligatoris.<br>")
+        msg += f"De la {url}:<br /> {''.join(project_errors)}<br />"
         raise ValidationError(mark_safe(msg))
+
+
+class ProjectsConstitutedService(CreatedEntity):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Projectes constituïts"
+        verbose_name = "Projecte constituït"
