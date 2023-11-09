@@ -2817,6 +2817,7 @@ a {
   grid-column: 1;
   grid-row: 4;
   width: 30%;
+  z-index: 1;
 }
 .signup__form .form li:nth-child(7) label {
   display: none;
