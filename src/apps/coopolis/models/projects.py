@@ -610,7 +610,14 @@ class EmploymentInsertion(models.Model):
     project = models.ForeignKey(
         Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
         related_name="employment_insertions", blank=True, null=True)
-    activity = models.ForeignKey("cc_courses.Activity", verbose_name="sessió", on_delete=models.PROTECT, blank=True, null=True)
+    activity = models.ForeignKey(
+        "cc_courses.Activity",
+        verbose_name="sessió",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        related_name="employment_insertions",
+    )
     user = models.ForeignKey(
         User, verbose_name="persona", blank=True, null=True,
         on_delete=models.PROTECT)

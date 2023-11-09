@@ -555,6 +555,17 @@ class Activity(models.Model):
                     }
                 )
 
+        # Prevents changing the date in a way that will change the subsidy
+        # period in case there's an EmploymentInsertion linked to this Activity.
+        if self.employment_insertions.exclude(
+                subsidy_period=self.subsidy_period,
+        ).count():
+            msg = ("Aquesta sessió està vinculada a una inserció laboral de la "
+                   f"convocatòria {self.subsidy_period}, per aquest motiu no "
+                   "es pot indicar una data que caigui fora d'aquesta "
+                   "convocatòria.")
+            errors.update({"date_start": ValidationError(msg)})
+
         if errors:
             raise ValidationError(errors)
 
