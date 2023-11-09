@@ -27,6 +27,13 @@ class User(BaseUser):
                                 verbose_name="nom d'usuari/a")
     surname2 = models.CharField("segon cognom", max_length=50, blank=True,
                                 null=True)
+    DOCUMENT_TYPE_CHOICES = (
+        ('DNI', 'DNI'),
+        ('NIE', 'NIE'),
+        ('PASSPORT', 'Passaport'),
+        ('NO_DNI', 'No puc donar el DNI')
+    )
+    id_number_type = models.CharField("tipus de document", blank=True, null=True, choices=DOCUMENT_TYPE_CHOICES, max_length=10)
     id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11)
     cannot_share_id = models.BooleanField(
         "Si degut a la teva situació legal et suposa un inconvenient"
