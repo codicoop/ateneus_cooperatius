@@ -8,6 +8,10 @@ from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportJustificationService:
+    # This value is specified whenever we call get_formatted_reference. This
+    # property here is only a fallback, used when it's not passed to
+    # get_formatted_reference. In future refactors can be deleted and make the
+    # parameter in get_formatted_reference required.
     subsidy_period_str = "2021-22"
 
     def __init__(self, export_obj):
@@ -40,6 +44,7 @@ class ExportJustificationService:
             12: 'consolidacio',  # Consolidació
         }
         self.stages_obj = None
+        self.sessions_obj = None
         self.created_entities = self.get_created_entities()
 
     def get_sessions_obj(self, for_minors=False):
@@ -105,9 +110,9 @@ class ExportJustificationService:
         # Total Stages: self.export_manager.row_number-Total Activities-1
 
     def actuacions_rows_activities(self):
-        obj = self.get_sessions_obj()
-        self.number_of_activities = len(obj)
-        for item in obj:
+        self.sessions_obj = self.get_sessions_obj()
+        self.number_of_activities = len(self.sessions_obj)
+        for item in self.sessions_obj:
             self.export_manager.row_number += 1
 
             service = (
@@ -746,10 +751,6 @@ class ExportJustificationService:
             town = ('', True)
             if insertion.user.town:
                 town = insertion.user.town.name_for_justification
-            cif = insertion.project.cif
-            if not cif:
-                cif = ('', True)
-
             if insertion.user.gender is None:
                 gender = ""
             else:
@@ -760,43 +761,18 @@ class ExportJustificationService:
                  if insertion.circle is not None
                  else ""
             )
+            cif = ('', True)
+            name = ('', True)
             reference = ("", True)
-            project = self.stages_obj.get(insertion.project.id)
-            """
-            Project en principì ha de contenir almenys un element que serà un
-            diccionari amb les dades de l'acompanyament.
-            En pot contenir diversos, i en volem agafar un d'ells, el que sigui,
-            així que iterem el diccionari 1 vegada per obtenir el primer.
-            
-            Això és un exemple del que pot contenir, tenint en compte que 
-            no podem saber segur el nom de la clau del o dels diccionaris.
-            'consolidacio': {
-                'obj': '<ProjectStage: La Providència SCCL: 04 Consolidació - acompanyament>',
-                'total_hours': 36,
-                'participants': [
-                    '<User: Teresa Trilla Ferré>',
-                    '<User: Marc Trilla Güell>',
-                    '<User: Gerard Nogués Balsells>',
-                    '<User: tais bastida aubareda>'
-                ],
-                'row_number': 126},
-            'nova_creacio': {
-                'obj': '<ProjectStage: La Providència SCCL: 02 Nova creació - constitució>',
-                'total_hours': 7,
-                'participants': [
-                    '<User: Marc Trilla Güell>',
-                    '<User: Esther Perello Piulats>'
-                ],
-                'row_number': 127
-            }
-            """
-            if project:
-                stage = next(iter(project.values()))
-                reference = self.get_formatted_reference(
-                    stage["row_number"],
-                    stage["obj"].sub_service,
-                    stage["obj"].entities_str,
-                    stage["obj"].circle,
+            if insertion.project:
+                if insertion.project.cif:
+                    cif = insertion.project.cif
+                name = insertion.project.name
+                project = self.stages_obj.get(insertion.project.id)
+                reference = self.get_formatted_reference_for_project(project)
+            if insertion.activity:
+                reference = self.get_formatted_reference_for_activity(
+                    insertion.activity,
                 )
 
             row = [
@@ -812,11 +788,72 @@ class ExportJustificationService:
                 birthdate,
                 town,
                 cif,
-                insertion.project.name,  # Projecte
+                name,  # Projecte
                 circle,  # Cercle / Ateneu
                 str(insertion.subsidy_period),  # Convocatòria
             ]
             self.export_manager.fill_row_data(row)
+
+    def get_formatted_reference_for_activity(self, activity):
+        activity_row_number = 0
+        for loaded_activity in self.sessions_obj:
+            activity_row_number += 1
+            if loaded_activity.id == activity.id:
+                print("trobada")
+                break
+            # Using 0 as a flag for "did not match any activity"
+            activity_row_number = 0
+
+        if not activity_row_number or not activity.entity:
+            return "", True
+
+        reference = self.get_formatted_reference(
+            activity_row_number,
+            activity.sub_service,
+            str(activity.entity),
+            activity.circle,
+        )
+        return reference
+
+    def get_formatted_reference_for_project(self, project):
+        reference = ("", True)
+        """
+        Project en principì ha de contenir almenys un element que serà un
+        diccionari amb les dades de l'acompanyament.
+        En pot contenir diversos, i en volem agafar un d'ells, el que sigui,
+        així que iterem el diccionari 1 vegada per obtenir el primer.
+
+        Això és un exemple del que pot contenir, tenint en compte que 
+        no podem saber segur el nom de la clau del o dels diccionaris.
+        'consolidacio': {
+            'obj': '<ProjectStage: La Providència SCCL: 04 Consolidació - acompanyament>',
+            'total_hours': 36,
+            'participants': [
+                '<User: Teresa Trilla Ferré>',
+                '<User: Marc Trilla Güell>',
+                '<User: Gerard Nogués Balsells>',
+                '<User: tais bastida aubareda>'
+            ],
+            'row_number': 126},
+        'nova_creacio': {
+            'obj': '<ProjectStage: La Providència SCCL: 02 Nova creació - constitució>',
+            'total_hours': 7,
+            'participants': [
+                '<User: Marc Trilla Güell>',
+                '<User: Esther Perello Piulats>'
+            ],
+            'row_number': 127
+        }
+        """
+        if project:
+            stage = next(iter(project.values()))
+            reference = self.get_formatted_reference(
+                stage["row_number"],
+                stage["obj"].sub_service,
+                stage["obj"].entities_str,
+                stage["obj"].circle,
+            )
+        return reference
 
     def export_all_projects(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet("PROJECTES")
