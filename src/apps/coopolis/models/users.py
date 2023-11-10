@@ -5,6 +5,7 @@ from django.db import models
 from apps.cc_users.managers import CCUserManager
 from apps.cc_users.models import BaseUser
 from .general import Town
+from django.core.validators import ValidationError
 
 
 class User(BaseUser):
@@ -171,9 +172,8 @@ class User(BaseUser):
         elif self.id_number_type == 'NO_DNI':
             # Disabled id_number camp
             pass
-        
         if type:
             errors.update({
-                "id_number": f"Format del {type} incorrecte."
+                "id_number_type": ValidationError(f"Format del {type} incorrecte.")
             })
-            raise Validation(errors)
+            raise ValidationError(errors)
