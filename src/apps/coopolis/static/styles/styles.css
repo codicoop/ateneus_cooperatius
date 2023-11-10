@@ -1921,7 +1921,7 @@ a {
 }
 .modal,
 .delete-modal {
-  position: fixed;
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
@@ -1940,6 +1940,7 @@ a {
   left: 0;
   right: 0;
   background-color: var(--violet);
+  opacity: 0.8;
 }
 .modal__card,
 .delete-modal__card {
@@ -2041,6 +2042,11 @@ a {
 .delete-modal__submit2::before {
   content: "<--";
   padding-right: var(--pad-2);
+}
+.modal .course-card,
+.delete-modal .course-card {
+  margin-top: 250px;
+  z-index: 110;
 }
 
 .delete-modal .modal__form {
