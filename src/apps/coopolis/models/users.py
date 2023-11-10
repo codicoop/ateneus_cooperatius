@@ -6,7 +6,7 @@ from apps.cc_users.managers import CCUserManager
 from apps.cc_users.models import BaseUser
 from .general import Town
 from django.core.validators import ValidationError
-
+from localflavor.es.forms import ESIdentityCardNumberField
 
 class User(BaseUser):
     class Meta:
@@ -159,17 +159,25 @@ class User(BaseUser):
         super().clean()
         errors = {}
         id_number_type = self.id_number_type
+        id_number = self.id_number
 
-        if not id_number_type:
+        if not id_number_type:    
             errors.update({
                 "id_number_type": ValidationError("Has de triar un tipus de document.")
             })
         elif id_number_type != 'NO_DNI':
             if id_number_type == 'PASSPORT':
-                id_number_type = 'passaport'  
-            errors.update({
-                "id_number_type": ValidationError(f"Format del {id_number_type} incorrecte.")
-            })
+                # Validació passaport
+                errors.update({
+                    "id_number_type": ValidationError("Si us plau, introduïu un passaport vàlid.")
+                })
+            else: 
+                try: 
+                    ESIdentityCardNumberField().clean(id_number)
+                except: 
+                    errors.update({
+                        "id_number_type": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
+                    })
 
         if errors:
             raise ValidationError(errors)
