@@ -158,22 +158,18 @@ class User(BaseUser):
     def clean(self):
         super().clean()
         errors = {}
-        type = ''
+        id_number_type = self.id_number_type
 
-        if self.id_number_type == 'DNI':
-            # Validació DNI
-            type = 'DNI'
-        elif self.id_number_type == 'NIE':
-            # Validació NIE
-            type = 'NIE'
-        elif self.id_number_type == 'PASSPORT':
-            # Validació Passaport
-            type = 'passaport'
-        elif self.id_number_type == 'NO_DNI':
-            # Disabled id_number camp
-            pass
-        if type:
+        if not id_number_type:
             errors.update({
-                "id_number_type": ValidationError(f"Format del {type} incorrecte.")
+                "id_number_type": ValidationError("Has de triar un tipus de document.")
             })
+        elif id_number_type != 'NO_DNI':
+            if id_number_type == 'PASSPORT':
+                id_number_type = 'passaport'  
+            errors.update({
+                "id_number_type": ValidationError(f"Format del {id_number_type} incorrecte.")
+            })
+
+        if errors:
             raise ValidationError(errors)
