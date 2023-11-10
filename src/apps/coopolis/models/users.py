@@ -1,3 +1,4 @@
+import re
 from tagulous.models import TagField
 from django.conf import settings
 from django.db import models
@@ -161,22 +162,24 @@ class User(BaseUser):
         id_number_type = self.id_number_type
         id_number = self.id_number
 
-        if not id_number_type:    
+        if not id_number_type and id_number:    
             errors.update({
                 "id_number_type": ValidationError("Has de triar un tipus de document.")
             })
         elif id_number_type != 'NO_DNI':
             if id_number_type == 'PASSPORT':
                 # Validació passaport
-                errors.update({
-                    "id_number_type": ValidationError("Si us plau, introduïu un passaport vàlid.")
-                })
+                passport_regex = r'^[^A-Z0-9<]*$' 
+                if re.match(passport_regex, id_number):
+                    errors.update({
+                        "id_number": ValidationError("Si us plau, introduïu un passaport vàlid.")
+                    })
             else: 
                 try: 
                     ESIdentityCardNumberField().clean(id_number)
                 except: 
                     errors.update({
-                        "id_number_type": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
+                        "id_number": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
                     })
 
         if errors:
