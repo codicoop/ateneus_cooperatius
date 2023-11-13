@@ -87,6 +87,8 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
             EmploymentInsertion.validate_extended_fields(
                 data['user'],
                 data['project'],
+                None, 
+                data.get('subsidy_period'),
                 False,
             )
 
