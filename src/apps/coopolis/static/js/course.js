@@ -23,6 +23,7 @@ function closeSessionCard(event) {
 }
 
 function showDeleteModal(event) {
+  window.scrollTo(0,0)
   const card = event.target.parentElement.parentElement.parentElement
   const modal = card.querySelector(".delete-modal")
   modal.classList.remove("is-hidden")

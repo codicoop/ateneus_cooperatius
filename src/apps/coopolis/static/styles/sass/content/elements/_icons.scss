@@ -30,9 +30,14 @@
 }
 .icon-pathfill-primary-light {
   fill: none;
+  
   path {
     fill: var(--primary-light);
   }
+}
+.icon-fill-primary-light {
+  fill: var(--primary-light);
+  fill-opacity: 1;
 }
 
 .icon-7 {

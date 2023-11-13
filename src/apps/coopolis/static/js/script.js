@@ -11,7 +11,7 @@ function closeMenu() {
 function showLoginFloat() {
   const login = document.querySelector(".login")
   login.classList.remove("is-hidden")
-  window.scrollTo(top)
+  window.scrollTo(0,0)
 }
 function hideLoginFloat() {
   const login = document.querySelector(".login")
