@@ -36,7 +36,9 @@ class User(BaseUser):
         ('NO_DNI', 'No puc donar el DNI')
     )
     id_number_type = models.CharField("tipus de document", blank=True, null=True, choices=DOCUMENT_TYPE_CHOICES, max_length=10)
-    id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11)
+    id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11, 
+        help_text="Si degut a la teva situació legal et suposa un inconvenient"
+        " indicar el DNI, deixa'l en blanc.") #TODO: Validar texto.
     cannot_share_id = models.BooleanField(
         "Si degut a la teva situació legal et suposa un inconvenient"
         " indicar el DNI, deixa'l en blanc i marca aquesta casella",
