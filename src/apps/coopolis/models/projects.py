@@ -670,15 +670,13 @@ class EmploymentInsertion(models.Model):
             activity_obj, subsidy_period,
         )
 
-        errors = {}
+        errors = []
         if user_errors:
-            errors.update({"user": ValidationError(user_errors)})
+            errors.append(ValidationError(user_errors))
         if cif_error:
-            errors.update({"project": ValidationError(cif_error)})
+            errors.append(ValidationError(cif_error))
         if activity_subsidy_period_error:
-            errors.update(
-                {"activity": ValidationError(activity_subsidy_period_error)},
-            )
+            errors.append(ValidationError(activity_subsidy_period_error))
 
         if errors:
             raise ValidationError(errors)
