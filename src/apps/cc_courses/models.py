@@ -479,6 +479,8 @@ class Activity(models.Model):
 
     @property
     def subsidy_period(self):
+        if not self.date_start:
+            return None
         model = apps.get_model('dataexports', 'SubsidyPeriod')
         # Using date start as the reference one, if an activity last for more
         # than 1 day it should not matter here.
