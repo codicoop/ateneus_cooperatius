@@ -358,6 +358,7 @@ class EmploymentInsertionInline(admin.TabularInline):
 
     model = EmploymentInsertion
     formset = EmploymentInsertionInlineFormSet
+    fields = ('user', 'subsidy_period', 'insertion_date', 'end_date', 'contract_type', 'circle')
     extra = 0
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {
