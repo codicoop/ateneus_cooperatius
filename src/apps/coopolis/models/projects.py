@@ -744,20 +744,14 @@ class EmploymentInsertion(models.Model):
 
     @staticmethod
     def validate_activity_project(activity_obj, project_obj):
-        errors = {}
+        errors = []
         if not activity_obj and not project_obj:
             msg = "Un dels camps 'Projecte acompanyat' o 'Sessió' és obligatori."
-            errors.update({
-                "project": ValidationError(msg), 
-                "activity": ValidationError(msg)
-            })      
+            errors.append(ValidationError(msg))
         if activity_obj and project_obj:
             msg = "Només es pot triar un camp entre 'Projecte acompanyat' o 'Sessió'."
-            errors.update({
-                "project": ValidationError(msg), 
-                "activity": ValidationError(msg)
-            })
-        if errors: 
+            errors.append(ValidationError(msg))
+        if errors:
             raise ValidationError(errors)
 
 
