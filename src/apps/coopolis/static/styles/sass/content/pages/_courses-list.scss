@@ -125,3 +125,13 @@
     grid-row: 1;
   }
 }
+
+// Diferències per llistat my courses
+.my-courses-list.courses-list  {
+  .courses-list__grid {
+    border-top: none;
+  }
+  .courses-list__subtitle {
+    grid-column: 1 / span 2;
+  }
+}

@@ -28,8 +28,18 @@
     fill: var(--primary);
   }
 }
+.icon-pathfill-primary-light {
+  fill: none;
+  path {
+    fill: var(--primary-light);
+  }
+}
 
 .icon-7 {
-  height: 7px;
   width: 7px;
+  height: auto;
+}
+.icon-16 {
+  width: 16px;
+  height: auto;
 }

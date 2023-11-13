@@ -48,6 +48,7 @@ function toggleSection(event) {
     el.classList.remove("is-open")
   });
   thisSection.classList.add("is-open")
+  window.scrollTo(0,200)
 }
 
 function goToMyCourses(url) {
@@ -56,6 +57,6 @@ function goToMyCourses(url) {
 }
 
 function toggleSession(event) {
-  const parent = event.target.parentElement.parentElement
+  const parent = event.target.parentElement
   parent.classList.toggle("is-open")
 }
