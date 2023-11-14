@@ -73,13 +73,14 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
     def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
-        typr = self.cleaned_data.get("id_number_type")
+        type = self.cleaned_data.get("id_number_type")
         if value and (
             model.objects
             .filter(id_number__iexact=value)
             .exclude(id=self.request.user.id)
             .exists()
         ):
+            if type == 'PASSPORT': type = 'passaport'
             raise ValidationError(f"El {type} ja existeix.")
         return value
 

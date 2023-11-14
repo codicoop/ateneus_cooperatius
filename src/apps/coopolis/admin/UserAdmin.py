@@ -103,6 +103,7 @@ class UserAdmin(admin.ModelAdmin):
     actions = ['copy_emails', 'to_csv', ]
     inlines = (ActivityEnrolledInline, )
 
+    # No funciona
     def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
@@ -113,6 +114,7 @@ class UserAdmin(admin.ModelAdmin):
             .exclude(id=self.request.user.id)
             .exists()
         ) and type != 'NO_DNI':
+            if type == 'PASSPORT': type = 'passaport'
             raise ValidationError(f"El {type} ja existeix.")
         return value
 

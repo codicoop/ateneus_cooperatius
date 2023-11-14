@@ -164,7 +164,7 @@ class User(BaseUser):
         id_number_type = self.id_number_type
         id_number = self.id_number
 
-        if not id_number_type and id_number:    
+        if not id_number_type:    
             errors.update({
                 "id_number_type": ValidationError("Has de triar un tipus de document.")
             })
@@ -172,9 +172,9 @@ class User(BaseUser):
             if id_number_type == 'PASSPORT':
                 # Validació passaport
                 passport_regex = r'^[^A-Z0-9<]*$' 
-                if re.match(passport_regex, id_number):
+                if not id_number or re.match(passport_regex, id_number):
                     errors.update({
-                        "id_number_type": ValidationError("Si us plau, introduïu un passaport vàlid1")
+                        "id_number": ValidationError("Si us plau, introduïu un passaport vàlid1")
                     })
                 else: 
                     passport_regex_patterns = [
@@ -240,21 +240,19 @@ class User(BaseUser):
                         r'^[TAMD]\d{8}$',  # SOUTH AFRICA (ZA)
                     ]
                     for pattern in passport_regex_patterns:
-                        print(pattern)
                         if re.match(pattern, id_number):
-
                             errors = {}
                             break
                         else: 
                             errors.update({
-                                "id_number_type": ValidationError("Si us plau, introduïu un passaport vàlid3.")
+                                "id_number": ValidationError("Si us plau, introduïu un passaport vàlid3.")
                             })
             else: 
                 try: 
                     ESIdentityCardNumberField().clean(id_number)
                 except: 
                     errors.update({
-                        "id_number_type": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
+                        "id_number": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid0.")
                     })
         if errors:
             raise ValidationError(errors)
