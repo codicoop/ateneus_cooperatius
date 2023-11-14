@@ -2,6 +2,7 @@ import re
 from tagulous.models import TagField
 from django.conf import settings
 from django.db import models
+from django.contrib.auth import get_user_model
 
 from apps.cc_users.managers import CCUserManager
 from apps.cc_users.models import BaseUser
@@ -254,5 +255,20 @@ class User(BaseUser):
                     errors.update({
                         "id_number": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
                     })
+        if not errors:
+            model = get_user_model()
+
+            if id_number and (
+                model.objects
+                .filter(id_number__iexact=id_number)
+                #.exclude(id=self.request.user.id)
+                .exists()
+            ):
+                if id_number_type == 'PASSPORT': id_number_type = 'passaport'
+                errors.update({
+                    "id_number_type": ValidationError(f"El {id_number_type} ja existeix.")
+                })
+            
+        print(errors)       
         if errors:
             raise ValidationError(errors)

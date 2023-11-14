@@ -8,8 +8,6 @@ from django.conf import settings
 from constance import config
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 
 from apps.coopolis.forms import MySignUpAdminForm
 from apps.cc_courses.models import ActivityEnrolled
@@ -102,21 +100,6 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'last_login', 'date_joined', 'project', )
     actions = ['copy_emails', 'to_csv', ]
     inlines = (ActivityEnrolledInline, )
-
-    # No funciona
-    def clean_id_number(self):
-        model = get_user_model()
-        value = self.cleaned_data.get("id_number")
-        type = self.cleaned_data.get("id_number_type")
-        if value and (
-            model.objects
-            .filter(id_number__iexact=value)
-            .exclude(id=self.request.user.id)
-            .exists()
-        ) and type != 'NO_DNI':
-            if type == 'PASSPORT': type = 'passaport'
-            raise ValidationError(f"El {type} ja existeix.")
-        return value
 
     def project(self, obj):
         if obj.project:

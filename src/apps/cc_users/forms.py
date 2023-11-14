@@ -70,7 +70,7 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             self.add_error('id_number', msg)
         return self.cleaned_data """
 
-    def clean_id_number(self):
+    """ def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
         type = self.cleaned_data.get("id_number_type")
@@ -82,7 +82,7 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
         ):
             if type == 'PASSPORT': type = 'passaport'
             raise ValidationError(f"El {type} ja existeix.")
-        return value
+        return value """
 
 
 class PasswordResetForm(BasePasswordResetForm):

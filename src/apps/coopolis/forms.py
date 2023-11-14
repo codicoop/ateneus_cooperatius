@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm, ReadOnlyPasswordHashField
 )
@@ -176,14 +175,14 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             self.add_error('id_number', msg)
         return self.cleaned_data"""
  
-    def clean_id_number(self):
+    """ def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
         type = self.cleaned_data.get("id_number_type")
         if value and model.objects.filter(id_number__iexact=value).exists() and type != 'NO_DNI':
             if type == 'PASSPORT': type = 'passaport'
             raise ValidationError(f"El {type} ja existeix.")
-        return value
+        return value """
 
 
 class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
