@@ -174,7 +174,7 @@ class User(BaseUser):
                 passport_regex = r'^[^A-Z0-9<]*$' 
                 if not id_number or re.match(passport_regex, id_number):
                     errors.update({
-                        "id_number": ValidationError("Si us plau, introduïu un passaport vàlid1")
+                        "id_number": ValidationError("Si us plau, introduïu un passaport vàlid")
                     })
                 else: 
                     passport_regex_patterns = [
@@ -245,14 +245,14 @@ class User(BaseUser):
                             break
                         else: 
                             errors.update({
-                                "id_number": ValidationError("Si us plau, introduïu un passaport vàlid3.")
+                                "id_number": ValidationError("Si us plau, introduïu un passaport vàlid.")
                             })
             else: 
                 try: 
                     ESIdentityCardNumberField().clean(id_number)
                 except: 
                     errors.update({
-                        "id_number": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid0.")
+                        "id_number": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
                     })
         if errors:
             raise ValidationError(errors)
