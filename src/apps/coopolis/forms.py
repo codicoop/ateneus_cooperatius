@@ -225,14 +225,6 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
 
     def clean(self):
         super().clean()
-        """cannot_share_id = self.cleaned_data.get('cannot_share_id')
-        id_number = self.cleaned_data.get('id_number')
-        if not id_number and not cannot_share_id:
-            msg = ("Necessitem el DNI, NIF o passaport per justificar la "
-                   "participació davant dels organismes públics que financen "
-                   "aquestes activitats.")
-            self.add_error('id_number', msg)"""
-
         if EmploymentInsertion.objects.filter(
                 user=self.instance.id,
         ).count():
