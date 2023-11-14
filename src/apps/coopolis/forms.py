@@ -164,26 +164,6 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                 config.CONTENT_SIGNUP_LEGAL2)
         self.label_suffix = ""
 
-    """def clean(self):
-        super().clean()
-        cannot_share_id = self.cleaned_data.get('cannot_share_id')
-        id_number = self.cleaned_data.get('id_number')
-        if not id_number and not cannot_share_id:
-            msg = ("Necessitem el DNI, NIF o passaport per justificar la "
-                   "participació davant dels organismes públics que financen "
-                   "aquestes activitats.")
-            self.add_error('id_number', msg)
-        return self.cleaned_data"""
- 
-    """ def clean_id_number(self):
-        model = get_user_model()
-        value = self.cleaned_data.get("id_number")
-        type = self.cleaned_data.get("id_number_type")
-        if value and model.objects.filter(id_number__iexact=value).exists() and type != 'NO_DNI':
-            if type == 'PASSPORT': type = 'passaport'
-            raise ValidationError(f"El {type} ja existeix.")
-        return value """
-
 
 class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     """A form for updating users. Includes all the fields on

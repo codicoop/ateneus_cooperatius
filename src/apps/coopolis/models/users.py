@@ -257,18 +257,15 @@ class User(BaseUser):
                     })
         if not errors:
             model = get_user_model()
-
             if id_number and (
                 model.objects
                 .filter(id_number__iexact=id_number)
-                #.exclude(id=self.request.user.id)
+                .exclude(id=self.id)
                 .exists()
             ):
                 if id_number_type == 'PASSPORT': id_number_type = 'passaport'
                 errors.update({
                     "id_number_type": ValidationError(f"El {id_number_type} ja existeix.")
-                })
-            
-        print(errors)       
+                })     
         if errors:
             raise ValidationError(errors)
