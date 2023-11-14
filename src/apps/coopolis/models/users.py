@@ -172,7 +172,6 @@ class User(BaseUser):
             if id_number_type == 'PASSPORT':
                 # Validació passaport
                 passport_regex = r'^[^A-Z0-9<]*$' 
-                #passport_regex = re.compile(r'^[^\W_]*$')
                 if re.match(passport_regex, id_number):
                     errors.update({
                         "id_number_type": ValidationError("Si us plau, introduïu un passaport vàlid1")
@@ -243,7 +242,7 @@ class User(BaseUser):
                     for pattern in passport_regex_patterns:
                         print(pattern)
                         if re.match(pattern, id_number):
-                            print("pattern")
+
                             errors = {}
                             break
                         else: 
@@ -257,6 +256,5 @@ class User(BaseUser):
                     errors.update({
                         "id_number_type": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
                     })
-
         if errors:
             raise ValidationError(errors)

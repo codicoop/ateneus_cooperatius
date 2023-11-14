@@ -180,7 +180,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
         type = self.cleaned_data.get("id_number_type")
-        if value and model.objects.filter(id_number__iexact=value).exists():
+        if value and model.objects.filter(id_number__iexact=value).exists() and type != 'NO_DNI':
             raise ValidationError(f"El {type} ja existeix.")
         return value
 

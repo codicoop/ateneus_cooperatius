@@ -106,13 +106,13 @@ class UserAdmin(admin.ModelAdmin):
     def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
-        typr = self.cleaned_data.get("id_number_type")
+        type = self.cleaned_data.get("id_number_type")
         if value and (
             model.objects
             .filter(id_number__iexact=value)
             .exclude(id=self.request.user.id)
             .exists()
-        ):
+        ) and type != 'NO_DNI':
             raise ValidationError(f"El {type} ja existeix.")
         return value
 
