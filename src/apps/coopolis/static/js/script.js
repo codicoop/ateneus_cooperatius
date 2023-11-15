@@ -106,3 +106,8 @@ function showListView() {
   calendarBtn.classList.remove("is-active")
   listBtn.classList.add("is-active")
 }
+// Perfil - input imatge
+function clickFileInput() {
+  let input = document.getElementById("profile_image")
+  input.click()
+}

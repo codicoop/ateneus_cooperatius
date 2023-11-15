@@ -92,7 +92,11 @@
   }
 }
 
-.field-checkbox {
+.form li.field-checkbox {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+
   label {
     display: flex;
     flex-direction: row-reverse;
@@ -105,16 +109,17 @@
     font-size: 12px;
     line-height: 16px;
     text-transform: none;
-    color: var(--violet-dark);
+    color: var(--primary-med);
     cursor: pointer;
   }
   input {
     position: relative;
-    width: var(--pad1);
-    height: var(--pad1);
+    width: 15px;
+    height: 16px;
     padding: 0;
-    border: 3px solid var(--second-lighter);
-    border-radius: 6px;
+    margin: 6px 0 0 0;
+    border: 2px solid var(--second-2);
+    border-radius: 3px;
 
     &::after {
       content: "";
@@ -122,9 +127,9 @@
       position: absolute;
       top: 1px;
       left: 1px;
-      width: 8px;
-      height: 8px;
-      border-radius: 3px;
+      width: 9px;
+      height: 10px;
+      border-radius: 2px;
       background-color: var(--white);
     }
   }
@@ -318,6 +323,35 @@
   }
 }
 
-.field-date {
-  
+.form li.field-radio {
+  display: grid;
+  grid-template-columns: 27% 27% 27%;
+
+  label {
+    grid-row: 1;
+    grid-column: 1 / span 3;
+  }
+  span {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--pad-3);
+
+    input {
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      margin: 0;
+      border: 2px solid var(--second-2);
+      border-radius: 50px;
+    }
+    label {
+      color: var(--primary-dark);
+      font-size: 14px;
+      line-height: 24px;
+      font-weight: normal;
+      text-transform: none;
+    }
+  }
 }

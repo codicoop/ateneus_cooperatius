@@ -4,7 +4,7 @@
 
   &__intro {
     --display: flex;
-    --padding-intro: var(--pad4) 0;
+    --padding-intro: var(--pad4) 0 0 0;
     --margin-intro: 0 0 var(--pad1-5) 0;
     --text-align: center;
   }
@@ -12,6 +12,27 @@
     --max-width: 300px;
     --font-size: 35px;
     --line-height: 40px;
+    --padding-bottom: var(--pad1);
+  }
+  &__info {
+    --padding-bottom: var(--pad4);
+  }
+  &__image {
+    --height: var(--pad4);
+    --width: var(--pad4);
+    // "Canvia la imatge" per desktop
+    .profile__image-link {
+      --display: none;
+    }
+  }
+  &__links {
+    // "Canvia la imatge" per mobile
+    .profile__image-link {
+      --display: block;
+    }
+    .profile__link {
+      --padding: var(--pad2);
+    }
   }
 }
 
@@ -29,6 +50,28 @@
       --max-width: 500px;
       --font-size: 64px;
       --line-height: 64px;
+      --padding-bottom: var(--pad2);
+    }
+    &__info {
+      --padding-bottom: 0;
+    }
+    &__image {
+      --height: var(--pad8);
+      --width: var(--pad8);
+
+      // "Canvia la imatge" per desktop
+      .profile__image-link {
+        --display: block;
+      }
+    }
+    &__links {
+      // "Canvia la imatge" per mobile
+      .profile__image-link {
+        --display: none;
+      }
+      .profile__link {
+        --padding: var(--pad2) var(--pad2) var(--pad2) 0;
+      }
     }
   }
 }
@@ -48,16 +91,68 @@
     border-bottom: 2px solid var(--primary-lightest);
     color: var(--primary);
   }
+  &__image {
+    grid-column: 5;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    .image {
+      height: var(--height);
+      width: var(--width);
+      margin-bottom: var(--pad1);
+      background-color: var(--grey-light);
+      border-radius: 50%;
+      overflow: clip;
+      box-shadow: 4px 6px 15px -5px var(--primary-lighter);
+    }
+    .profile__image-link {
+      display: var(--display);
+      text-transform: uppercase;
+      color: var(--second);
+    }
+    input {
+      display: none;
+    }
+  }
   &__title {
+    grid-column: 2 / span 2;
+    grid-row: 1;
     max-width: var(--max-width);
     font-size: var(--font-size);
     line-height: var(--line-height);
     text-align: var(--text-align);
-    padding-bottom: var(--pad1);
+    padding-bottom: var(--padding-bottom);
   }
   &__info {
+    grid-column: 2 / span 2;
+    grid-row: 2;
+    padding-bottom: var(--padding-bottom);
     text-align: var(--text-align);
     color: var(--primary);
+  }
+  &__links {
+    grid-column: 2;
+    grid-row: 3;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .profile__link {
+      padding: var(--padding);
+      font-weight: normal;
+      color: var(--second);
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    // "Canvia la imatge" per mobile
+    .profile__image-link {
+      display: var(--display);
+      text-transform: uppercase;
+      color: var(--second);
+    }
   }
   &__form {
     .form {

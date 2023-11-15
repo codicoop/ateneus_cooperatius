@@ -13,16 +13,18 @@ function onLoadFunction(){
       let checkboxParent = el.parentElement
       checkboxParent.classList.add("field-checkbox")
     }
+    if (el.type === "radio") {
+      let radioParent = el.parentElement
+      radioParent.classList.add("field", "field-radio")
+    }
     if (el.type === "number") {
       let numberParent = el.parentElement
-      numberParent.classList.add("field")
-      numberParent.classList.add("field-number")
+      numberParent.classList.add("field", "field-number")
     }
     if (el.type === "file") {
       let fileParent = el.parentElement
       let label = el.previousElementSibling
-      fileParent.classList.add("field")
-      fileParent.classList.add("field-file")
+      fileParent.classList.add("field","field-file")
       label.classList.add("upload-icon")
 
       if (fileParent.classList.contains("field-checkbox")) {
@@ -76,4 +78,12 @@ function onLoadFunction(){
     }
     
   }
+
+  // // Pàgina de perfil
+  // if (profilePage) {
+  //   let input1 = document.getElementById("id_educational_level").parentElement
+  //   let input2 = document.getElementById("id_employment_situation").parentElement
+  //   let input3 = document.getElementById("id_discovered_us").parentElement
+  //   let input4 = document.getElementById("id_project_involved").parentElement
+  // }
 }

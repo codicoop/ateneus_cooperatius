@@ -49,19 +49,95 @@
 		</div>
 	</section>
 	<section class="profile__intro grid-content">
-		<div class="profile__title grid-item-wide">
+    <!-- Imagino que al intentar eliminar, com a altres llocs
+      demana confirmació -->
+    <div class="delete-modal is-hidden">
+      <div class="modal__background" onclick="hideModal(event)"></div>
+      <div class="modal__card">
+        <div class="modal__title title-1">
+          <p>Confirmació d'eliminació de compte</p>
+        </div>
+        <div class="modal__close" onclick="hideModal(event)">
+          <svg
+            class="icon-pathfill-primary"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="modal__form form">
+          <div class="modal__intro text-md">
+            <div class="text-md">
+              <p></p>
+            </div>
+            <div class="text-sm">
+              <p>Segur que vols continuar? </br> El teu compte s'eliminarà i perdràs accés a l'aplicatiu, així com tota la informació del teu historial. </p>
+            </div>
+          </div>
+          <form 
+            method="post" 
+            action="" 
+            id="delete_"
+          >
+            {% csrf_token %}
+            <input type="hidden" id="" name="" value="">
+          </form>
+        </div>
+        <button form="delete_{{ d }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
+          Eliminar el compte
+        </button>
+      </div>
+    </div>
+    <div class="profile__image">
+      <div class="image">
+        <!-- Imatge del perfil -->
+      </div>
+      <input form="profile_form" type="file" name="profile_image" id="profile_image">
+      <div class="profile__image-link text-xsm" onclick="clickFileInput()">
+        <p>Canvia la imatge</p>
+      </div>
+    </div>
+		<div class="profile__title">
 			<p>{{ user.first_name }} {{ user.last_name }} {{ user.surname2 }}</p>
 		</div>
-		<div class="profile__info grid-item-wide text-md">
+		<div class="profile__info text-md">
 			<p>{{ user.id_number }}</p>
 			<p>{{ user.email }}</p>
 			<p>{{ user.town.name|lower|capfirst }}</p>
 		</div>
-	</section>
+    <div class="profile__links">
+      <div class="profile__link profile__image-link text-xsm" onclick="clickFileInput()">
+        <p>Canvia la imatge</p>
+      </div>
+      <div 
+      class="profile__link text-xsm"
+        onclick="showDeleteModal(event)"
+      >
+        <p>Eliminar compte</p>
+      </div>
+    </div>
+  </section>
 	<section class="profile__form grid-content">
 		<div class="form grid-item-wide">
-			<form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" id="profile_form">
+			<form method="post" action="" id="profile_form">
 				{% csrf_token %}
+        <!-- Exemple de radio -->
+        <li class="field field-radio">
+          <label>Gènere</label>
+          <span>
+            <input type="radio" id="gender_f" name="gender" value="FEMALE">
+            <label for="gender_f">Dona</label>
+          </span>
+          <span>
+            <input type="radio" id="gender_m" name="gender" value="MALE">
+            <label for="gender_m">Home</label>
+          </span>
+          <span>
+            <input type="radio" id="gender_o" name="gender" value="OTHER">
+            <label for="gender_o">Altre</label>
+          </span>
+        </li>
 				{{ form.as_ul }}
 			</form>
 			{% if form.errors %}
