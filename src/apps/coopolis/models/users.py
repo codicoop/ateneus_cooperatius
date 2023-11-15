@@ -260,12 +260,12 @@ class User(BaseUser):
                 "id_number": ValidationError("Aquest camp es obligatori.")
             })     
         elif id_number_type and id_number_type != DocumentTypes.NO_DNI:
-            validate_id_number = False
+            id_number_validation = False
             if id_number_type == DocumentTypes.PASSPORT:
-                validate_id_number = self.validate_passport(id_number)
+                id_number_validation = self.validate_passport(id_number)
             else: 
-                validate_id_number = self.validate_dni_nie(id_number)
-            if validate_id_number:
+                id_number_validation = self.validate_dni_nie(id_number)
+            if id_number_validation:
                 self.check_id_number_in_database(id_number)   
         
         if errors:
