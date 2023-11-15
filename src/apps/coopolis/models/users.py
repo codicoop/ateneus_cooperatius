@@ -168,8 +168,8 @@ class User(BaseUser):
                 "id_number_type": ValidationError("Has de triar un tipus de document.")
             })
         elif id_number_type != DocumentTypes.NO_DNI:
+            validate_id_number = True
             if id_number_type == DocumentTypes.PASSPORT:
-                country_match  = False
                 passport_regex_patterns = [
                     r'^[A-Z]{2}\d{7}$',  # ARMENIA (AM)
                     r'^[A-Z]{3}\d{6}$',  # ARGENTINA (AR)
@@ -240,6 +240,7 @@ class User(BaseUser):
                     errors.update({
                         "id_number": ValidationError("Si us plau, introduïu un passaport vàlid.")
                     })
+                    validate_id_number = False
             else: 
                 try: 
                     ESIdentityCardNumberField().clean(id_number)
@@ -247,18 +248,19 @@ class User(BaseUser):
                     errors.update({
                         "id_number": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
                     })
-        
-        if not errors and id_number_type != DocumentTypes.NO_DNI:
-            model = get_user_model()
-            if id_number and (
-                model.objects
-                .filter(id_number__iexact=id_number)
-                .exclude(id=self.id)
-                .exists()
-            ):
-                errors.update({
-                    "id_number_type": ValidationError(f"El {DocumentTypes[id_number_type].label} ja existeix.")
-                })     
+                    validate_id_number = False
+
+            if validate_id_number:
+                model = get_user_model()
+                if id_number and (
+                    model.objects
+                    .filter(id_number__iexact=id_number)
+                    .exclude(id=self.id)
+                    .exists()
+                ):
+                    errors.update({
+                        "id_number_type": ValidationError(f"El {DocumentTypes[id_number_type].label} ja existeix.")
+                    })     
         
         if errors:
             raise ValidationError(errors)
