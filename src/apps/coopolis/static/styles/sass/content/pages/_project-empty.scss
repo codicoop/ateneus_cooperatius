@@ -1,0 +1,65 @@
+// Dynamic variables
+.project-empty {
+  --padding: var(--pad1);
+
+  &__bloc {
+    --padding-bloc: 0;
+    --margin-bloc: 0 0 var(--pad2) 0;
+  }
+  .text-md {
+    --padding-bottom: var(--pad3);
+  }
+}
+
+@media (min-width: 900px) {
+  .project-empty {
+    --padding: var(--pad4);
+
+    &__bloc {
+      // --padding-bloc: var(--pad2) 0 var(--pad4) 0;
+      // --margin-bloc: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
+      --padding-bloc: 0;
+      --margin-bloc: 0;
+    }
+    .text-md {
+      --padding-bottom: 0;
+    }
+  }
+}
+
+// Layout
+.project-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding);
+  background-color: var(--second-3);
+
+  &__bloc {
+    padding: var(--padding-bloc);
+    margin: var(--margin-bloc);
+    
+    & + .project-empty__bloc {
+      border-top: 1px solid var(--primary-lighter);
+      padding-top: var(--pad1);
+    }
+  }
+  &__bloc2 {
+    margin-top: auto;
+  }
+  &__title {
+    color: var(--primary);
+
+    &.title-1 {
+      padding-bottom: var(--pad8);
+    }
+    &.text-md {
+      padding-bottom: var(--padding-bottom);
+    }
+  }
+  &__btn {
+    grid-column: 5 / span 2;
+    justify-self: end;
+    height: fit-content;
+  }
+}
