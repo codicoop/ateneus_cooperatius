@@ -165,7 +165,7 @@ class User(BaseUser):
             .exclude(id=self.id)
             .exists()
         ):
-            raise ValidationError({ "id_number_type": ValidationError(f"El {DocumentTypes[id_number_type].label} ja existeix.") })
+            raise ValidationError({ "id_number": ValidationError(f"El {DocumentTypes[id_number_type].label} ja existeix.") })
 
     def clean(self):
         super().clean()
@@ -177,6 +177,10 @@ class User(BaseUser):
             errors.update({
                 "id_number_type": ValidationError("Has de triar un tipus de document.")
             })
+        if not id_number:
+            errors.update({
+                "id_number": ValidationError("Aquest camp es obligatori.")
+            })     
         elif id_number_type != DocumentTypes.NO_DNI:
             validate_id_number = True
             if id_number_type == DocumentTypes.PASSPORT:
