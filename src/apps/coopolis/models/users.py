@@ -157,7 +157,7 @@ class User(BaseUser):
     def __str__(self):
         return self.get_full_name()
 
-    def check_id_number_in_database(self, id_number, id_number_type):
+    def check_id_number_in_database(self, id_number):
         model = get_user_model()
         if id_number and (
             model.objects
@@ -165,8 +165,82 @@ class User(BaseUser):
             .exclude(id=self.id)
             .exists()
         ):
-            raise ValidationError({ "id_number": ValidationError(f"El {DocumentTypes[id_number_type].label} ja existeix.") })
+            raise ValidationError({ "id_number": ValidationError("El document ja existeix.") })
 
+    def validate_passport(self, id_number):
+            passport_regex_patterns = [
+                r'^[A-Z]{2}\d{7}$',  # ARMENIA (AM)
+                r'^[A-Z]{3}\d{6}$',  # ARGENTINA (AR)
+                r'^[A-Z]\d{7}$',  # AUSTRIA (AT)
+                r'^[A-Z]\d{7}$',  # AUSTRALIA (AU)
+                r'^[A-Z]{2,3}\d{7,8}$',  # AZERBAIJAN (AZ)
+                r'^[A-Z]{2}\d{6}$',  # BELGIUM (BE)
+                r'^\d{9}$',  # BULGARIA (BG)
+                r'^[A-Z]{2}\d{6}$',  # BRAZIL (BR)
+                r'^[A-Z]{2}\d{7}$',  # BELARUS (BY)
+                r'^[A-Z]{2}\d{6}$',  # CANADA (CA)
+                r'^[A-Z]\d{7}$',  # SWITZERLAND (CH)
+                r'^G\d{8}$|^E(?![IO])[A-Z0-9]\d{7}$',  # CHINA (CN)
+                r'^[A-Z](\d{6}|\d{8})$',  # CYPRUS (CY)
+                r'^\d{8}$',  # CZECH REPUBLIC (CZ)
+                r'^[CFGHJKLMNPRTVWXYZ0-9]{9}$',  # GERMANY (DE)
+                r'^\d{9}$',  # DENMARK (DK)
+                r'^\d{9}$',  # ALGERIA (DZ)
+                r'^([A-Z]\d{7}|[A-Z]{2}\d{7})$',  # ESTONIA (EE)
+                r'^[A-Z0-9]{2}([A-Z0-9]?)\d{6}$',  # SPAIN (ES)
+                r'^[A-Z]{2}\d{7}$',  # FINLAND (FI)
+                r'^\d{2}[A-Z]{2}\d{5}$',  # FRANCE (FR)
+                r'^\d{9}$',  # UNITED KINGDOM (GB)
+                r'^[A-Z]{2}\d{7}$',  # GREECE (GR)
+                r'^\d{9}$',  # CROATIA (HR)
+                r'^[A-Z]{2}(\d{6}|\d{7})$',  # HUNGARY (HU)
+                r'^[A-Z0-9]{2}\d{7}$',  # IRELAND (IE)
+                r'^[A-Z]{1}-?\d{7}$',  # INDIA (IN)
+                r'^[A-C]\d{7}$',  # INDONESIA (ID)
+                r'^[A-Z]\d{8}$',  # IRAN (IR)
+                r'^(A)\d{7}$',  # ICELAND (IS)
+                r'^[A-Z0-9]{2}\d{7}$',  # ITALY (IT)
+                r'^[Aa]\d{7}$',  # JAMAICA (JM)
+                r'^[A-Z]{2}\d{7}$',  # JAPAN (JP)
+                r'^[MS]\d{8}$',  # SOUTH KOREA (KR)
+                r'^[a-zA-Z]\d{7}$',  # KAZAKHSTAN (KZ)
+                r'^[a-zA-Z]\d{5}$',  # LIECHTENSTEIN (LI)
+                r'^[A-Z0-9]{8}$',  # LITHUANIA (LT)
+                r'^[A-Z0-9]{8}$',  # LUXEMBURG (LU)
+                r'^[A-Z0-9]{2}\d{7}$',  # LATVIA (LV)
+                r'^[A-Z0-9]{8}$',  # LIBYA (LY)
+                r'^\d{7}$',  # MALTA (MT)
+                r'^([A-Z]{2}\d{7})|(\d{2}[A-Z]{2}\d{5})$',  # MOZAMBIQUE (MZ)
+                r'^[AHK]\d{8}$',  # MALAYSIA (MY)
+                r'^\d{10,11}$',  # MEXICO (MX)
+                r'^[A-Z]{2}[A-Z0-9]{6}\d$',  # NETHERLANDS (NL)
+                r'^([Ll]([Aa]|[Dd]|[Ff]|[Hh])|[Ee]([Aa]|[Pp])|[Nn])\d{6}$',  # NEW ZEALAND (NZ)
+                r'^([A-Z](\d{6}|\d{7}[A-Z]))|([A-Z]{2}(\d{6}|\d{7}))$',  # PHILIPPINES (PH)
+                r'^[A-Z]{2}\d{7}$',  # PAKISTAN (PK)
+                r'^[A-Z]{2}\d{7}$',  # POLAND (PL)
+                r'^[A-Z]\d{6}$',  # PORTUGAL (PT)
+                r'^\d{8,9}$',  # ROMANIA (RO)
+                r'^\d{9}$',  # RUSSIAN FEDERATION (RU)
+                r'^\d{8}$',  # SWEDEN (SE)
+                r'^(P)[A-Z]\d{7}$',  # SLOVENIA (SL)
+                r'^[0-9A-Z]\d{7}$',  # SLOVAKIA (SK)
+                r'^[A-Z]{1,2}\d{6,7}$',  # THAILAND (TH)
+                r'^[A-Z]\d{8}$',  # TURKEY (TR)
+                r'^[A-Z]{2}\d{6}$',  # UKRAINE (UA)
+                r'^\d{9}$',  # UNITED STATES (US)
+                r'^[TAMD]\d{8}$',  # SOUTH AFRICA (ZA)
+            ]
+            country_match = any(re.match(pattern, id_number) for pattern in passport_regex_patterns)
+            print('country_match')
+            print(country_match)
+            if not country_match:
+                raise ValidationError({"id_number": ValidationError("Si us plau, introduïu un document vàlid1.")})
+            else:
+                return country_match
+               
+    def validate_dni_nie():
+        pass
+        
     def clean(self):
         super().clean()
         errors = {}
@@ -181,91 +255,18 @@ class User(BaseUser):
             errors.update({
                 "id_number": ValidationError("Aquest camp es obligatori.")
             })     
-        elif id_number_type != DocumentTypes.NO_DNI:
+        elif id_number_type and id_number_type != DocumentTypes.NO_DNI:
             validate_id_number = True
             if id_number_type == DocumentTypes.PASSPORT:
-                passport_regex_patterns = [
-                    r'^[A-Z]{2}\d{7}$',  # ARMENIA (AM)
-                    r'^[A-Z]{3}\d{6}$',  # ARGENTINA (AR)
-                    r'^[A-Z]\d{7}$',  # AUSTRIA (AT)
-                    r'^[A-Z]\d{7}$',  # AUSTRALIA (AU)
-                    r'^[A-Z]{2,3}\d{7,8}$',  # AZERBAIJAN (AZ)
-                    r'^[A-Z]{2}\d{6}$',  # BELGIUM (BE)
-                    r'^\d{9}$',  # BULGARIA (BG)
-                    r'^[A-Z]{2}\d{6}$',  # BRAZIL (BR)
-                    r'^[A-Z]{2}\d{7}$',  # BELARUS (BY)
-                    r'^[A-Z]{2}\d{6}$',  # CANADA (CA)
-                    r'^[A-Z]\d{7}$',  # SWITZERLAND (CH)
-                    r'^G\d{8}$|^E(?![IO])[A-Z0-9]\d{7}$',  # CHINA (CN)
-                    r'^[A-Z](\d{6}|\d{8})$',  # CYPRUS (CY)
-                    r'^\d{8}$',  # CZECH REPUBLIC (CZ)
-                    r'^[CFGHJKLMNPRTVWXYZ0-9]{9}$',  # GERMANY (DE)
-                    r'^\d{9}$',  # DENMARK (DK)
-                    r'^\d{9}$',  # ALGERIA (DZ)
-                    r'^([A-Z]\d{7}|[A-Z]{2}\d{7})$',  # ESTONIA (EE)
-                    r'^[A-Z0-9]{2}([A-Z0-9]?)\d{6}$',  # SPAIN (ES)
-                    r'^[A-Z]{2}\d{7}$',  # FINLAND (FI)
-                    r'^\d{2}[A-Z]{2}\d{5}$',  # FRANCE (FR)
-                    r'^\d{9}$',  # UNITED KINGDOM (GB)
-                    r'^[A-Z]{2}\d{7}$',  # GREECE (GR)
-                    r'^\d{9}$',  # CROATIA (HR)
-                    r'^[A-Z]{2}(\d{6}|\d{7})$',  # HUNGARY (HU)
-                    r'^[A-Z0-9]{2}\d{7}$',  # IRELAND (IE)
-                    r'^[A-Z]{1}-?\d{7}$',  # INDIA (IN)
-                    r'^[A-C]\d{7}$',  # INDONESIA (ID)
-                    r'^[A-Z]\d{8}$',  # IRAN (IR)
-                    r'^(A)\d{7}$',  # ICELAND (IS)
-                    r'^[A-Z0-9]{2}\d{7}$',  # ITALY (IT)
-                    r'^[Aa]\d{7}$',  # JAMAICA (JM)
-                    r'^[A-Z]{2}\d{7}$',  # JAPAN (JP)
-                    r'^[MS]\d{8}$',  # SOUTH KOREA (KR)
-                    r'^[a-zA-Z]\d{7}$',  # KAZAKHSTAN (KZ)
-                    r'^[a-zA-Z]\d{5}$',  # LIECHTENSTEIN (LI)
-                    r'^[A-Z0-9]{8}$',  # LITHUANIA (LT)
-                    r'^[A-Z0-9]{8}$',  # LUXEMBURG (LU)
-                    r'^[A-Z0-9]{2}\d{7}$',  # LATVIA (LV)
-                    r'^[A-Z0-9]{8}$',  # LIBYA (LY)
-                    r'^\d{7}$',  # MALTA (MT)
-                    r'^([A-Z]{2}\d{7})|(\d{2}[A-Z]{2}\d{5})$',  # MOZAMBIQUE (MZ)
-                    r'^[AHK]\d{8}$',  # MALAYSIA (MY)
-                    r'^\d{10,11}$',  # MEXICO (MX)
-                    r'^[A-Z]{2}[A-Z0-9]{6}\d$',  # NETHERLANDS (NL)
-                    r'^([Ll]([Aa]|[Dd]|[Ff]|[Hh])|[Ee]([Aa]|[Pp])|[Nn])\d{6}$',  # NEW ZEALAND (NZ)
-                    r'^([A-Z](\d{6}|\d{7}[A-Z]))|([A-Z]{2}(\d{6}|\d{7}))$',  # PHILIPPINES (PH)
-                    r'^[A-Z]{2}\d{7}$',  # PAKISTAN (PK)
-                    r'^[A-Z]{2}\d{7}$',  # POLAND (PL)
-                    r'^[A-Z]\d{6}$',  # PORTUGAL (PT)
-                    r'^\d{8,9}$',  # ROMANIA (RO)
-                    r'^\d{9}$',  # RUSSIAN FEDERATION (RU)
-                    r'^\d{8}$',  # SWEDEN (SE)
-                    r'^(P)[A-Z]\d{7}$',  # SLOVENIA (SL)
-                    r'^[0-9A-Z]\d{7}$',  # SLOVAKIA (SK)
-                    r'^[A-Z]{1,2}\d{6,7}$',  # THAILAND (TH)
-                    r'^[A-Z]\d{8}$',  # TURKEY (TR)
-                    r'^[A-Z]{2}\d{6}$',  # UKRAINE (UA)
-                    r'^\d{9}$',  # UNITED STATES (US)
-                    r'^[TAMD]\d{8}$',  # SOUTH AFRICA (ZA)
-                ]
-                for pattern in passport_regex_patterns:
-                    if re.match(pattern, id_number):
-                        country_match = True
-                        break
-                if not country_match:
-                    errors.update({
-                        "id_number": ValidationError("Si us plau, introduïu un passaport vàlid.")
-                    })
-                    validate_id_number = False
+                validate_id_number = self.validate_passport(id_number)
             else: 
                 try: 
                     ESIdentityCardNumberField().clean(id_number)
                 except: 
-                    errors.update({
-                        "id_number": ValidationError(f"Si us plau, introduïu un {id_number_type} vàlid.")
-                    })
                     validate_id_number = False
-
+                    raise ValidationError({ "id_number": ValidationError("Si us plau, introduïu un document vàlid.") })
             if validate_id_number:
-                self.check_id_number_in_database(id_number, id_number_type)   
+                self.check_id_number_in_database(id_number)   
         
         if errors:
             raise ValidationError(errors)
