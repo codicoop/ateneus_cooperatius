@@ -234,12 +234,16 @@ class User(BaseUser):
             print('country_match')
             print(country_match)
             if not country_match:
-                raise ValidationError({"id_number": ValidationError("Si us plau, introduïu un document vàlid1.")})
+                raise ValidationError({"id_number": ValidationError("Si us plau, introduïu un document vàlid.")})
             else:
                 return country_match
                
-    def validate_dni_nie():
-        pass
+    def validate_dni_nie(self, id_number):
+        try: 
+            ESIdentityCardNumberField().clean(id_number)
+            return True
+        except: 
+            raise ValidationError({ "id_number": ValidationError("Si us plau, introduïu un document vàlid.") })
         
     def clean(self):
         super().clean()
@@ -251,20 +255,16 @@ class User(BaseUser):
             errors.update({
                 "id_number_type": ValidationError("Has de triar un tipus de document.")
             })
-        if not id_number:
+        if not id_number and id_number_type != DocumentTypes.NO_DNI:
             errors.update({
                 "id_number": ValidationError("Aquest camp es obligatori.")
             })     
         elif id_number_type and id_number_type != DocumentTypes.NO_DNI:
-            validate_id_number = True
+            validate_id_number = False
             if id_number_type == DocumentTypes.PASSPORT:
                 validate_id_number = self.validate_passport(id_number)
             else: 
-                try: 
-                    ESIdentityCardNumberField().clean(id_number)
-                except: 
-                    validate_id_number = False
-                    raise ValidationError({ "id_number": ValidationError("Si us plau, introduïu un document vàlid.") })
+                validate_id_number = self.validate_dni_nie(id_number)
             if validate_id_number:
                 self.check_id_number_in_database(id_number)   
         
