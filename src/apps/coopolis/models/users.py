@@ -157,6 +157,16 @@ class User(BaseUser):
     def __str__(self):
         return self.get_full_name()
 
+    def check_id_number_in_database(self, id_number, id_number_type):
+        model = get_user_model()
+        if id_number and (
+            model.objects
+            .filter(id_number__iexact=id_number)
+            .exclude(id=self.id)
+            .exists()
+        ):
+            raise ValidationError({ "id_number_type": ValidationError(f"El {DocumentTypes[id_number_type].label} ja existeix.") })
+
     def clean(self):
         super().clean()
         errors = {}
@@ -251,16 +261,7 @@ class User(BaseUser):
                     validate_id_number = False
 
             if validate_id_number:
-                model = get_user_model()
-                if id_number and (
-                    model.objects
-                    .filter(id_number__iexact=id_number)
-                    .exclude(id=self.id)
-                    .exists()
-                ):
-                    errors.update({
-                        "id_number_type": ValidationError(f"El {DocumentTypes[id_number_type].label} ja existeix.")
-                    })     
+                self.check_id_number_in_database(id_number, id_number_type)   
         
         if errors:
             raise ValidationError(errors)
