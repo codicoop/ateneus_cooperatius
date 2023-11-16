@@ -8,10 +8,9 @@ from apps.cc_users.managers import CCUserManager
 from apps.cc_users.models import BaseUser
 from .general import Town
 from django.core.validators import ValidationError
-from django.core.exceptions import NON_FIELD_ERRORS
 from localflavor.es.forms import ESIdentityCardNumberField
 from apps.coopolis.choices import DocumentTypes
-from apps.cc_users.constances import PASSPORT_REGEX_PATTERNS
+from apps.cc_users.constansts import PASSPORT_REGEX_PATTERNS
 
 
 class User(BaseUser):
@@ -168,7 +167,7 @@ class User(BaseUser):
         ):
             raise ValidationError({ 
                 "id_number": ValidationError("El document ja existeix.") 
-                })
+            })
 
     def _validate_passport(self, id_number):
         country_match = any(re.match(pattern, id_number) for pattern in PASSPORT_REGEX_PATTERNS)
@@ -181,10 +180,10 @@ class User(BaseUser):
         try: 
             ESIdentityCardNumberField().clean(id_number)
             return {}
-        except: 
+        except ValidationError: 
             return { 
                 "id_number": ValidationError("Si us plau, introduïu un document vàlid.") 
-                }
+            }
         
     def clean(self):
         super().clean()
