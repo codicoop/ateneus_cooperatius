@@ -218,10 +218,15 @@
         width: 30%;
         z-index: 1;
       
+        .errorlist {
+          order: 3;
+        }
         label {
+          order: 1;
           display: none;
         }
         select {
+          order: 2;
           height: 39px;
           margin-top: 25px;
         }
@@ -232,10 +237,23 @@
         grid-row: 4;
         justify-self: end;
         width: 100%;
-      
-        input {
+        
+        .errorlist {
+          order: 3;
           width: 70%;
           margin-left: 30%;
+          padding-bottom: 21px;
+        }
+        label {
+          order: 1;
+        }
+        input {
+          order: 2;
+          width: 70%;
+          margin-left: 30%;
+        }
+        .helptext {
+          order: 4;
         }
       }
       // & li:nth-child(9) {

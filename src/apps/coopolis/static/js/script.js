@@ -55,3 +55,23 @@ function hideModal(event) {
     modal.classList.add("is-hidden")
   }
 }
+
+function blockIdNumber() {
+  const idInput = document.getElementById("id_id_number")
+  const idInputType = document.getElementById("id_id_number_type")
+  const newValue = idInputType.value
+  const helptext = idInput.parentElement.querySelector(".helptext")
+
+  if (newValue === "NO_DNI") {
+    // Bloquejar el camp del número
+    idInput.value = ""
+    idInput.disabled = true
+    // Ensenyar el camp helptext
+    helptext.style.display = "block"
+  } else {
+    // Habilitar el camp del número
+    idInput.disabled = false
+    // Amagar el camp helptext
+    helptext.style.display = "none"
+  }
+}

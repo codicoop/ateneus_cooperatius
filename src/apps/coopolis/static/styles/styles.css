@@ -767,10 +767,20 @@ a {
 .form .field textarea:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
+.form li.field input:disabled,
+.form li.field select:disabled,
+.form li.field textarea:disabled,
+.form .field input:disabled,
+.form .field select:disabled,
+.form .field textarea:disabled {
+  background-color: var(--grey-light);
+  cursor: not-allowed;
+}
 .form li.field .errorlist,
 .form .field .errorlist {
   order: 2;
   padding-bottom: var(--pad-3);
+  padding-left: var(--pad-2);
   color: var(--red);
   font-size: 12px;
   line-height: 16px;
@@ -2819,10 +2829,15 @@ a {
   width: 30%;
   z-index: 1;
 }
+.signup__form .form li:nth-child(7) .errorlist {
+  order: 3;
+}
 .signup__form .form li:nth-child(7) label {
+  order: 1;
   display: none;
 }
 .signup__form .form li:nth-child(7) select {
+  order: 2;
   height: 39px;
   margin-top: 25px;
 }
@@ -2832,9 +2847,22 @@ a {
   justify-self: end;
   width: 100%;
 }
-.signup__form .form li:nth-child(8) input {
+.signup__form .form li:nth-child(8) .errorlist {
+  order: 3;
   width: 70%;
   margin-left: 30%;
+  padding-bottom: 21px;
+}
+.signup__form .form li:nth-child(8) label {
+  order: 1;
+}
+.signup__form .form li:nth-child(8) input {
+  order: 2;
+  width: 70%;
+  margin-left: 30%;
+}
+.signup__form .form li:nth-child(8) .helptext {
+  order: 4;
 }
 
 .project__intro {
