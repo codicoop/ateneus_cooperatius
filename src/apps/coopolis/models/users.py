@@ -201,9 +201,7 @@ class User(BaseUser):
             })     
         elif id_number_type and id_number_type != DocumentTypes.NO_DNI:
             if id_number_type == DocumentTypes.PASSPORT:
-                id_number_validation = errors.update(self._validate_passport(id_number))
-                print(id_number_validation)
-            
+                id_number_validation = errors.update(self._validate_passport(id_number))            
             else: 
                 id_number_validation = errors.update(self._validate_dni_nie(id_number))
             if not id_number_validation:
