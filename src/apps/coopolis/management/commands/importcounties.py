@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Not using this one because we did it in a data migration
         # self.import_counties()
-        self.check_towns()
+        self.import_counties()
 
     def import_counties(self):
         counties = json.loads(urlopen(self.counties_source).read())
