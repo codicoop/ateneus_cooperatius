@@ -127,7 +127,7 @@ class ExportJustificationService:
             )
             town = ("", True)
             if item.place is not None and item.place.town:
-                town = item.place.town.name_for_justification
+                town = self.export_manager.get_correlation("towns", item.place.town.name)
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
@@ -297,7 +297,7 @@ class ExportJustificationService:
                 )
                 town = ("", True)
                 if item.project.town:
-                    town = item.project.town.name_for_justification
+                    town = self.export_manager.get_correlation("towns", item.project.town.name)
                 circle = (
                      CirclesChoices(item.circle).label
                      if item.circle is not None
@@ -343,7 +343,7 @@ class ExportJustificationService:
             )
             town = ("", True)
             if item.place and item.place.town:
-                town = item.place.town.name_for_justification
+                town = self.export_manager.get_correlation("towns", item.place.town.name)
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
@@ -399,7 +399,7 @@ class ExportJustificationService:
 
             self.export_manager.row_number += 1
             town = (
-                created_entity.project.town.name_for_justification
+                self.export_manager.get_correlation("towns", created_entity.project.town.name)
                 if created_entity.project.town else ("", True)
             )
 
@@ -459,7 +459,7 @@ class ExportJustificationService:
                 hours = group['total_hours']
                 town = ("", True)
                 if item.project.town:
-                    town = item.project.town.name_for_justification
+                    town = self.export_manager.get_correlation("towns", item.project.town.name)
                 crea_consolida = self.export_manager.get_correlation(
                     "stage_type",
                     item.stage_type,
@@ -591,7 +591,7 @@ class ExportJustificationService:
                         )
                     town = ("", True)
                     if participant.town:
-                        town = participant.town.name_for_justification
+                        town = self.export_manager.get_correlation("towns", participant.town.name)
 
                     row = [
                         self.get_formatted_reference(
@@ -636,7 +636,7 @@ class ExportJustificationService:
                         'gender', participant.gender)
                 town = ("", True)
                 if participant.town:
-                    town = participant.town.name_for_justification
+                    town = self.export_manager.get_correlation("towns", participant.town.name)
 
                 row = [
                     self.get_formatted_reference(
@@ -750,7 +750,7 @@ class ExportJustificationService:
                 birthdate = ('', True)
             town = ('', True)
             if insertion.user.town:
-                town = insertion.user.town.name_for_justification
+                town = self.export_manager.get_correlation("towns", insertion.user.town.name)
             if insertion.user.gender is None:
                 gender = ""
             else:
