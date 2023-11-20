@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Not using this one because we did it in a data migration
         # self.import_counties()
-        self.import_towns()
+        self.check_towns()
 
     def import_counties(self):
         counties = json.loads(urlopen(self.counties_source).read())
@@ -73,3 +73,12 @@ class Command(BaseCommand):
             "Saus, Camallera i Llampaies": "SAUS,CAMALLERA I LLAMPAIES",
         }
         return equivalencies.get(name)
+
+    def check_towns(self):
+        towns = Town.objects.all()
+        path = 'apps/dataexports/fixtures/correlations_2021_2022.json'
+        with open (path, 'r') as json_file:
+            data_json = json.load(json_file)
+        for town in towns: 
+            if town.name not in data_json['towns']:
+                print(f"{town} is wrong.")
