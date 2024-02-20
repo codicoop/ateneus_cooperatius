@@ -36,7 +36,6 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
             "estatuts",
             "viability",
             "sostenibility",
-            "partners",
         )
         exclude = (
             "cif",
