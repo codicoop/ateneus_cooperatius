@@ -7,8 +7,8 @@
 
 {% block content %}
 {% include './components/header_topbar.html' %}
-<div class="project project-create">
-	<section class="project-create__submenu grid-content">
+<div class="project">
+	<section class="project__submenu grid-content">
 		<div class="grid-item-full">
 			<div class="submenu">
 				<a href="{% url 'new_project' %}">
@@ -25,13 +25,29 @@
 			</div>
 		</div>
 	</section>
-	<section class="project-create__intro grid-content">
-		<div class="grid-item-span-3 project__title title-1">
-			<p>Omple les dades del teu projecte. En qualsevol moment les podràs modificar.</p>
+	<section class="project__intro grid-content">
+		<div class="grid-item-wide project__intro-logo">
+			<div class="logo">
+				<!-- FALTA url imatge del logo -->
+				<!-- <img src="" alt="" srcset=""> -->
+			</div>
+		</div>
+		<!-- FALTA manera correcta d'accedir al nom -->
+		<div class="grid-item-wide project__intro-title title-2">
+			<p>Nom del projecte una mica SCCL</p>
+		</div>
+		<div class="grid-item-wide project__intro-btn title-2">
+			<!-- FALTA url -->
+			<a href="">
+				<div class="btn btn--second">
+					<div class="btn__text">
+						<p>Sol·licitar acompanyament</p>
+					</div>
+				</div>
+			</a>
 		</div>
 	</section>
-	<!-- FALTA comprovar els camps un cop surtin del back -->
-	<section class="project-create__form grid-content">
+	<section class="project__form grid-content">
 			<form 
 					class="form grid-item-wide"
 					method="post" 
@@ -80,10 +96,80 @@
 				</div>
 				{% endif %}
 				<div class="form__submit">
-					<input type="submit" class="btn btn--primary btn__text" value="Guardar projecte" />
+					<input type="submit" class="btn btn--primary btn__text" value="Actualitzar dades" />
 				</div>
         <input type="hidden" name="next" value="{{ next }}" />
 		</form>
+	</section>
+	<section class="project__people grid-content">
+		<div class="project__people-title is-bold">
+			<p>Integrants del projecte</p>
+		</div>
+		<!-- FOREACH participant -->
+		<div class="project__people-item">
+			<div class="image">
+				<!-- Falta imatge participant -->
+				<!-- <img src="" alt="" srcset=""> -->
+			</div>
+			<div class="text-md is-bold">
+				<!-- FALTA nom participant -->
+				<p>Andrea Simon</p>
+			</div>
+			<div class="text-md">
+				<!-- FALTA correu participant -->
+				<p>andrea@codi.coop</p>
+			</div>
+			<!-- FALTA Què passa quan s'activa? -->
+			<div class="text-btn">
+				<p>Eliminar</p>
+			</div>
+		</div>
+		<!-- END FOREACH -->
+		<div class="project__people-item">
+			<div class="image">
+				<!-- Falta imatge participant -->
+				<!-- <img src="" alt="" srcset=""> -->
+			</div>
+			<div class="text-md is-bold">
+				<!-- FALTA nom participant -->
+				<p>Andrea Simon</p>
+			</div>
+			<div class="text-md">
+				<!-- FALTA correu participant -->
+				<p>andrea@codi.coop</p>
+			</div>
+			<div class="text-btn">
+				<p>Eliminar</p>
+			</div>
+		</div>
+		<div class="project__people-item">
+			<div class="image">
+				<!-- Falta imatge participant -->
+				<!-- <img src="" alt="" srcset=""> -->
+			</div>
+			<div class="text-md is-bold">
+				<!-- FALTA nom participant -->
+				<p>Andrea Simon</p>
+			</div>
+			<div class="text-md">
+				<!-- FALTA correu participant -->
+				<p>andrea@codi.coop</p>
+			</div>
+			<div class="text-btn">
+				<p>Eliminar</p>
+			</div>
+		</div>
+		<div class="project__people-add">
+			<div class="icon">
+				<svg xmlns="http://www.w3.org/2000/svg"	viewbox="0 0 24 24"	width="24"	height="24">
+					<polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"	points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "	id="polygon2"	style="opacity:0.975;fill:#fff;fill-opacity:1" />
+				</svg>
+			</div>
+			<!-- FALTA Què passa quan s'activa? -->
+			<div class="text-btn">
+				<p>Afegir un nou integrant</p>
+			</div>
+		</div>
 	</section>
 </div>
 
