@@ -102,6 +102,7 @@ class ProjectStageAttachForm(FormDistrictValidationMixin, forms.ModelForm):
             "sostenibility",
         )
 
+
 class ProjectStageInitialPetitionForm(FormDistrictValidationMixin, forms.ModelForm):
     required_css_class = "required"
 
@@ -111,6 +112,8 @@ class ProjectStageInitialPetitionForm(FormDistrictValidationMixin, forms.ModelFo
             "project_status",
             "motivation",
         )
+
+
 class ProjectCharacteristicsForm(FormDistrictValidationMixin, forms.ModelForm):
     required_css_class = "required"
 
@@ -206,26 +209,69 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         model = User
         fields = (
             "first_name",
-            "last_name",
-            "surname2",
             "email",
-            "id_number",
-            "cannot_share_id",
+            "last_name",
             "phone_number",
+            "surname2",
             "birthdate",
+            "id_number",
             "birth_place",
+            "cannot_share_id",
             "town",
-            "district",
-            "address",
             "gender",
+            "address",
             "educational_level",
-            "employment_situation",
             "discovered_us",
+            "employment_situation",
             "project_involved",
-            "authorize_communications",
             "password1",
             "password2",
+            "authorize_communications",
         )
+
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "surname2",
+                    "email",
+                    "id_number",
+                    "cannot_share_id",
+                    "phone_number",
+                    "birthdate",
+                    "birth_place",
+                    "town",
+                    "district",
+                    "address",
+                    "gender",
+                )
+            },
+        ),
+        (
+            "Explican'ns més de tu",
+            {
+                "fields": (
+                    "educational_level",
+                    "discovered_us",
+                    "employment_situation",
+                    "project_involved",
+                )
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "password1",
+                    "password2",
+                    "authorize_communications",
+                )
+            },
+        ),
+    ]
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
