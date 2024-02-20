@@ -9,6 +9,8 @@ from django.views.generic.base import RedirectView
 from apps.cc_users.decorators import anonymous_required
 
 from .views import (
+    project_stage_characteristics_view,    
+    project_stage_initial_petition_view,
     ActivityPollView,
     CoopolisLoginView,
     CoopolisSignUpView,
@@ -19,12 +21,10 @@ from .views import (
     ProjectFormView,
     ProjectInfoView,
     get_sub_services,
+    project_stage_attatch_view,
     project_stage_data_view,
     project_stage_start_view,
     project_stage_view,
-    project_stage_attatch_view,
-    project_stage_initial_petition_view,
-    project_stage_characteristics_view
 )
 
 urlpatterns = [
@@ -75,27 +75,27 @@ urlpatterns += [
     path("project/info/", ProjectInfoView.as_view(), name="project_info"),
     path("project/stage/", project_stage_view, name="project_stage"),
     path(
-        "project/stage/start/<str:pk>",
+        "project/stage/start/<int:pk>/",
         project_stage_start_view,
         name="project_stage_start",
     ),
     path(
-        "project/stage/data/<str:pk>",
+        "project/stage/data/<int:pk>/",
         project_stage_data_view,
         name="project_stage_data",
     ),
     path(
-        "project/stage/attatch/<str:pk>",
+        "project/stage/attatch/<int:pk>/",
         project_stage_attatch_view,
         name="project_stage_attatch",
     ),
     path(
-        "project/stage/initial_petition/<str:pk>",
+        "project/stage/initial_petition/<int:pk>/",
         project_stage_initial_petition_view,
         name="project_stage_initial_petition",
     ),
     path(
-        "project/stage/characteristics/<str:pk>",
+        "project/stage/characteristics/<int:pk>/",
         project_stage_characteristics_view,
         name="project_stage_characteristics",
     ),

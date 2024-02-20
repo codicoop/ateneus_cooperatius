@@ -75,6 +75,54 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
     ]
 
 
+class ProjectStageStartForm(FormDistrictValidationMixin, forms.ModelForm):
+    required_css_class = "required"
+
+    class Meta:
+        model = Project
+        fields = (
+            "name",
+            "town",
+            "sector",
+            "district",
+            "mail",
+            "phone",
+            "object_finality",
+        )
+
+
+class ProjectStageAttachForm(FormDistrictValidationMixin, forms.ModelForm):
+    required_css_class = "required"
+
+    class Meta:
+        model = Project
+        fields = (
+            "estatuts",
+            "viability",
+            "sostenibility",
+        )
+
+class ProjectStageInitialPetitionForm(FormDistrictValidationMixin, forms.ModelForm):
+    required_css_class = "required"
+
+    class Meta:
+        model = Project
+        fields = (
+            "project_status",
+            "motivation",
+        )
+class ProjectCharacteristicsForm(FormDistrictValidationMixin, forms.ModelForm):
+    required_css_class = "required"
+
+    class Meta:
+        model = Project
+        fields = (
+            "project_origins",
+            "solves_necessities",
+            "social_base",
+        )
+
+
 class ProjectFormAdmin(ProjectForm):
     class Meta:
         # Un-excluding the fields that we were hiding for the front-end.
