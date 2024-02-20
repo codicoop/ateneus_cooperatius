@@ -25,7 +25,7 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
     class Meta:
         model = Project
         fields = (
-            # "files__image",
+            "logo",
             "name",
             "town",
             "sector",
@@ -44,38 +44,36 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
             "constitution_date",
         )
 
-    def get_grouped_fields(self):
-        fieldsets = [
-            (
-                "",
-                {
-                    "fields": (
-                        "name",
-                        "town",
-                        "sector",
-                        "district",
-                        "mail",
-                        "web",
-                        "phone",
-                    )
-                },
-            ),
-            (
-                "",
-                {
-                    "fields": (
-                        "estatus",
-                        "viability",
-                        "sostenibility",
-                    )
-                },
-            ),
-            (
-                "Integrants del proyecte",
-                {"fields": ("partners",)},
-            ),
-        ]
-        return fieldsets
+    fieldsets = [
+        (
+            None,
+            {"fields": ("logo",)},
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "town",
+                    "sector",
+                    "district",
+                    "mail",
+                    "web",
+                    "phone",
+                )
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "estatus",
+                    "viability",
+                    "sostenibility",
+                )
+            },
+        ),
+    ]
 
 
 class ProjectFormAdmin(ProjectForm):
