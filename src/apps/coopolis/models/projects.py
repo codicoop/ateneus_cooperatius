@@ -11,12 +11,10 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
 from apps.cc_courses.models import Cofunding, Entity, Organizer, StrategicLine
-from apps.coopolis.choices import (CirclesChoices, ServicesChoices,
-                                   SubServicesChoices)
+from apps.coopolis.choices import CirclesChoices, ServicesChoices, SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
-from apps.coopolis.storage_backends import (PrivateMediaStorage,
-                                            PublicMediaStorage)
+from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -40,6 +38,15 @@ class Project(models.Model):
 
     partners = models.ManyToManyField(
         "User", verbose_name="sòcies", blank=True, related_name="projects"
+    )
+    logo = models.FileField(
+        "imatge del projecte",
+        storage=PublicMediaStorage(),
+        max_length=250,
+        blank=True,
+        null=True,
+        default="",
+        help_text="Clica per carregar una imatge",
     )
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     SECTORS = (
