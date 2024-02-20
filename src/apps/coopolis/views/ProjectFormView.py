@@ -90,7 +90,6 @@ def project_stage_start_view(request, pk):
 
 def project_stage_data_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    print(project.town)
     form = ProjectStageStartForm(request.POST, instance=project)
     if request.method == "POST":
         if form.is_valid():
