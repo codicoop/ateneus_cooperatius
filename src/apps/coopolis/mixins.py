@@ -29,7 +29,6 @@ class FormDistrictValidationMixin:
         cleaned_data = super().clean()
         town = cleaned_data.get("town")
         district = cleaned_data.get("district")
-        print(str(town))
         if str(town) == "Barcelona" and district is None:
             msg = "Si la població és Barcelona, cal seleccionis un districte."
             self.add_error('district', msg)
