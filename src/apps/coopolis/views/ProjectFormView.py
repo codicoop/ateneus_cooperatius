@@ -67,13 +67,13 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 class ProjectInfoView(LoginSignupContainerView):
     template_name = "project_info.html"
 
-    def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            if self.request.user.project:
-                return HttpResponseRedirect(urls.reverse("edit_project"))
-            else:
-                return HttpResponseRedirect(urls.reverse("new_project"))
-        return super().get(self, request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     if self.request.user.is_authenticated:
+    #         if self.request.user.project:
+    #             return HttpResponseRedirect(urls.reverse("edit_project"))
+    #         else:
+    #             return HttpResponseRedirect(urls.reverse("new_project"))
+    #     return super().get(self, request, *args, **kwargs)
 
 
 def project_stage_view(request):
