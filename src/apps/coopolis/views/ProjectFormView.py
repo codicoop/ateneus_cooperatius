@@ -83,7 +83,7 @@ def project_stage_view(request):
 
 def project_stage_start_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    return render(request, "project_.html", {"project": project})
+    return render(request, "project_stage_start.html", {"project": project})
 
 
 def project_stage_data_view(request, pk):
@@ -95,7 +95,9 @@ def project_stage_data_view(request, pk):
             return redirect("project_stage_attatch", pk=pk)
     else:
         form = ProjectStageStartForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request, "project_stage_data.html", {"project": project, "form": form}
+    )
 
 
 def project_stage_attatch_view(request, pk):
@@ -107,7 +109,9 @@ def project_stage_attatch_view(request, pk):
             return redirect("project_stage_initial_petition", pk=pk)
     else:
         form = ProjectStageAttachForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request, "project_stage_attatch.html", {"project": project, "form": form}
+    )
 
 
 def project_stage_initial_petition_view(request, pk):
@@ -119,7 +123,11 @@ def project_stage_initial_petition_view(request, pk):
             return redirect("project_stage_characteristics", pk=pk)
     else:
         form = ProjectStageInitialPetitionForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request,
+        "project_stage_initial_petition.html",
+        {"project": project, "form": form},
+    )
 
 
 def project_stage_characteristics_view(request, pk):
@@ -130,7 +138,11 @@ def project_stage_characteristics_view(request, pk):
             newproject = form.save()
             newproject.notify_new_request_to_ateneu()
             newproject.notify_request_confirmation()
-            return redirect("project_empty")
+            return redirect("project_info")
     else:
         form = ProjectCharacteristicsForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request,
+        "project_stage_characteristics.html",
+        {"project": project, "form": form},
+    )
