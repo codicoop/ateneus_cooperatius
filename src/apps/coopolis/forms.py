@@ -228,6 +228,9 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             "password2",
             "authorize_communications",
         )
+        widgets = {
+            "gender": forms.RadioSelect,
+        }
 
     fieldsets = [
         (
