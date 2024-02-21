@@ -49,8 +49,6 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     def form_valid(self, form):
         newproject = form.save()
         newproject.partners.add(self.request.user)
-        newproject.notify_new_request_to_ateneu()
-        newproject.notify_request_confirmation()
 
         messages.success(
             self.request,
@@ -129,7 +127,9 @@ def project_stage_characteristics_view(request, pk):
     form = ProjectCharacteristicsForm(request.POST, instance=project)
     if request.method == "POST":
         if form.is_valid():
-            form.save()
+            newproject = form.save()
+            newproject.notify_new_request_to_ateneu()
+            newproject.notify_request_confirmation()
             return redirect("project_info")
     else:
         form = ProjectCharacteristicsForm(instance=project)
