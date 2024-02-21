@@ -65,7 +65,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 
 
 class ProjectInfoView(LoginSignupContainerView):
-    template_name = "project_info.html"
+    template_name = "project_empty.html"
 
     # def get(self, request, *args, **kwargs):
     #     if self.request.user.is_authenticated:
@@ -130,7 +130,7 @@ def project_stage_characteristics_view(request, pk):
             newproject = form.save()
             newproject.notify_new_request_to_ateneu()
             newproject.notify_request_confirmation()
-            return redirect("project_info")
+            return redirect("project_empty")
     else:
         form = ProjectCharacteristicsForm(instance=project)
     return render(request, "project_.html", {"form": form})
