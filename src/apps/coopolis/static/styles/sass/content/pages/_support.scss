@@ -1,0 +1,95 @@
+// Dynamic variables
+.support {
+  --border-top-main: 6px solid var(--second-light);
+  --padding-main: var(--pad1);
+
+  &__nav.grid-content {
+    --grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .support {
+    &__nav.grid-content {
+      --grid-template-columns: repeat(6, 1fr);
+    }
+  }
+}
+
+// Layout
+.support {
+  background-color: var(--second);
+  border-top: var(--border-top-main);
+  padding: var(--padding-main);
+  color: var(--white);
+
+  &__nav.grid-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--pad1);
+    margin-bottom: var(--pad2);
+  }
+  .support__nav a:last-child {
+    .support-nav__item {
+      &::after {
+        background-color: transparent;
+      }
+    }
+  }
+  .support-nav {
+    &__item.is-active {
+      color: var(--white);
+
+      .number {
+        background-color: var(--white);
+      }
+    }
+    &__item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--pad1);
+      height: 100%;
+      color: var(--second-light);
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 101%;
+        height: 2px;
+        left: 53px;
+        bottom: 7px;
+        background-color: var(--second-light);
+      }
+
+      .text {
+        text-align: center;
+        p {
+          max-width: 80%;
+          font-size: 10px;
+          line-height: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          overflow-wrap: anywhere;
+        }
+      } 
+      .number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--pad1);
+        height: var(--pad1);
+        background-color: var(--second-light);
+        border-radius: 50%;
+        color: var(--second);
+        font-size: 10px;
+        line-height: 10px;
+        font-weight: 700;
+      }
+    }
+  }
+  &__form {
+  }
+}
