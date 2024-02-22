@@ -49,8 +49,6 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     def form_valid(self, form):
         newproject = form.save()
         newproject.partners.add(self.request.user)
-        newproject.notify_new_request_to_ateneu()
-        newproject.notify_request_confirmation()
 
         messages.success(
             self.request,
@@ -67,15 +65,15 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 
 
 class ProjectInfoView(LoginSignupContainerView):
-    template_name = "project_info.html"
+    template_name = "project_empty.html"
 
-    def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            if self.request.user.project:
-                return HttpResponseRedirect(urls.reverse("edit_project"))
-            else:
-                return HttpResponseRedirect(urls.reverse("new_project"))
-        return super().get(self, request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     if self.request.user.is_authenticated:
+    #         if self.request.user.project:
+    #             return HttpResponseRedirect(urls.reverse("edit_project"))
+    #         else:
+    #             return HttpResponseRedirect(urls.reverse("new_project"))
+    #     return super().get(self, request, *args, **kwargs)
 
 
 def project_stage_view(request):
@@ -85,7 +83,7 @@ def project_stage_view(request):
 
 def project_stage_start_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    return render(request, "project_.html", {"project": project})
+    return render(request, "project_stage_start.html", {"project": project})
 
 
 def project_stage_data_view(request, pk):
@@ -97,7 +95,9 @@ def project_stage_data_view(request, pk):
             return redirect("project_stage_attatch", pk=pk)
     else:
         form = ProjectStageStartForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request, "project_stage_data.html", {"project": project, "form": form}
+    )
 
 
 def project_stage_attatch_view(request, pk):
@@ -109,7 +109,9 @@ def project_stage_attatch_view(request, pk):
             return redirect("project_stage_initial_petition", pk=pk)
     else:
         form = ProjectStageAttachForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request, "project_stage_attatch.html", {"project": project, "form": form}
+    )
 
 
 def project_stage_initial_petition_view(request, pk):
@@ -121,7 +123,11 @@ def project_stage_initial_petition_view(request, pk):
             return redirect("project_stage_characteristics", pk=pk)
     else:
         form = ProjectStageInitialPetitionForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request,
+        "project_stage_initial_petition.html",
+        {"project": project, "form": form},
+    )
 
 
 def project_stage_characteristics_view(request, pk):
@@ -129,8 +135,14 @@ def project_stage_characteristics_view(request, pk):
     form = ProjectCharacteristicsForm(request.POST, instance=project)
     if request.method == "POST":
         if form.is_valid():
-            form.save()
+            newproject = form.save()
+            newproject.notify_new_request_to_ateneu()
+            newproject.notify_request_confirmation()
             return redirect("project_info")
     else:
         form = ProjectCharacteristicsForm(instance=project)
-    return render(request, "project_.html", {"form": form})
+    return render(
+        request,
+        "project_stage_characteristics.html",
+        {"project": project, "form": form},
+    )

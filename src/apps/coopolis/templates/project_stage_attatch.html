@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block home_is_active %}{% endblock %}
+{% block enrollments_is_active %}{% endblock %}
+{% block projects_is_active %}is-active{% endblock %}
+
+{% block content %}
+{% include './components/header_topbar.html' %}
+<h2>{{ project.name }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p}}
+    <button type="submit">Següent</button>
+</form>
+<a href="{% url 'project_stage_data' pk=project.pk %}">Enrere</a>
+
+{% endblock %}
