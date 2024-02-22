@@ -89,12 +89,12 @@ class ProjectStageSessionsInline(admin.StackedInline):
         (
             "Informació que es mostrarà a les sòcies del projecte",
             {
-    
+                "classes": ("grp-collapse grp-closed",),
                 "fields": (
                     "objective",
                     "result",
                     ("file1", "file2", "file3"),
-                )
+                ),
             },
         ),
     ]
