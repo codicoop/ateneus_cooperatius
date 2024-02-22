@@ -3,6 +3,7 @@
   &__intro {
     --padding-intro: var(--pad1) 0 var(--pad2) 0;
     --margin-intro: var(--pad4) 0 var(--pad1-5) 0;
+    --padding-input-image: 68px 16px;
 
     &.grid-content {
       --display: flex;

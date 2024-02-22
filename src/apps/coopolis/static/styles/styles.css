@@ -187,7 +187,7 @@ img {
   --grey-light: #d4bfc6;
   --grey-lighter: #D3BFC640;
   --white: #fff;
-  --red: #FF0000;
+  --error: #FF0000;
   --orange: #E99401;
   --yellow: #F6BF00;
   --violet: #c4b6c3;
@@ -916,9 +916,11 @@ a {
   order: 2;
   padding-left: var(--pad-2);
   padding-bottom: var(--pad-3);
-  color: var(--primary);
+  color: var(--error);
   font-size: 12px;
   line-height: 16px;
+  text-align: right;
+  font-weight: bold;
 }
 .form li.field input[type=file] ~ .field-file-custom::after,
 .form .field input[type=file] ~ .field-file-custom::after {
@@ -2801,9 +2803,13 @@ a {
 }
 .form__error {
   grid-column: 1/-1;
-  padding-bottom: var(--padding-xsm);
-  padding-top: var(--padding-sm);
-  color: var(--red);
+  display: flex;
+  flex-direction: column;
+  gap: var(--pad1);
+  padding-bottom: var(--pad-2);
+  padding-top: var(--pad1);
+  color: var(--error);
+  font-weight: bold;
 }
 .form__text a {
   color: var(--second);
@@ -3763,6 +3769,7 @@ a {
 .project__intro {
   --padding-intro: var(--pad1) 0 var(--pad2) 0;
   --margin-intro: var(--pad4) 0 var(--pad1-5) 0;
+  --padding-input-image: 68px 16px;
 }
 .project__intro.grid-content {
   --display: flex;
@@ -4551,19 +4558,44 @@ a {
   height: fit-content;
 }
 
+.project-create {
+  --padding-main: var(--pad1);
+}
 .project-create__intro {
   --padding-intro: var(--pad1) 0 var(--pad8) 0;
   --margin-intro: var 0 var(--pad1-5) 0;
 }
+.project-create .form {
+  --width-input-image: 100%;
+  --height-input-image: 165px;
+  --padding-input-image: 63px 16px;
+  --margin-bottom-input-image: 0;
+}
+.project-create .form .helptext {
+  --width: 90%;
+  --height: 70%;
+}
 
 @media (min-width: 900px) {
+  .project-create {
+    --padding-main: var(--pad2) 0;
+  }
   .project-create__intro {
     --padding-intro: var(--pad2) 0 var(--pad4) 0;
-    --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
+    --margin-intro: 0 var(--pad4-5) var(--pad5) var(--pad4-5);
+  }
+  .project-create .form {
+    --width-input-image: 156px;
+    --height-input-image: 156px;
+    --margin-bottom-input-image: var(--pad3);
+  }
+  .project-create .form .helptext {
+    --width: 133px;
+    --height: 140px;
   }
 }
 .project-create {
-  padding: var(--pad1);
+  padding: var(--padding-main);
   background-color: var(--second-3);
 }
 .project-create__intro {
@@ -4572,24 +4604,43 @@ a {
   border-bottom: 2px solid var(--primary-lightest);
   color: var(--primary);
 }
-.project-create__form .form li:nth-child(14) {
-  grid-row: 8;
-  grid-column: 1;
+.project-create__form .form li:nth-child(2) {
+  position: relative;
+  grid-column: 1/span 2;
+  margin-bottom: var(--margin-bottom-input-image);
 }
-.project-create__form .form li:nth-child(15) {
-  grid-row: 8;
-  grid-column: 2;
+.project-create__form .form li:nth-child(2) .upload-icon::after {
+  content: "";
+  background-color: transparent;
 }
-.project-create__form .form li:nth-child(16) {
-  grid-row: 9;
-  grid-column: 1;
+.project-create__form .form li:nth-child(2) input {
+  width: var(--width-input-image);
+  height: var(--height-input-image);
+  padding: var(--padding-input-image);
 }
-.project-create__form .form li:nth-child(17) {
-  grid-row: 9;
-  grid-column: 2;
+.project-create__form .form li:nth-child(2) .helptext {
+  position: absolute;
+  top: 32px;
+  left: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: var(--width);
+  height: var(--height);
+  padding-top: 20px;
+  padding-left: 0;
+  background-color: var(--white);
+  color: var(--primary-light);
+  text-align: center;
+  pointer-events: none;
 }
-.project-create__form .form .form__submit {
-  grid-row: 10;
+.project-create__form .form li:nth-child(2) .helptext::before {
+  content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:cc='http://creativecommons.org/ns%23' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23' xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' id='Capa_1' data-name='Capa 1' viewBox='0 0 19.42 19.42' version='1.1' sodipodi:docname='img.svg' width='19.42' height='19.42' inkscape:version='0.92.4 (5da689c313, 2019-01-14)'%3E%3Cmetadata id='metadata8'%3E%3Crdf:RDF%3E%3Ccc:Work rdf:about=''%3E%3Cdc:format%3Eimage/svg+xml%3C/dc:format%3E%3Cdc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage' /%3E%3Cdc:title%3E%3C/dc:title%3E%3C/cc:Work%3E%3C/rdf:RDF%3E%3C/metadata%3E%3Cdefs id='defs6' /%3E%3Csodipodi:namedview pagecolor='%23ffffff' bordercolor='%23666666' borderopacity='1' objecttolerance='10' gridtolerance='10' guidetolerance='10' inkscape:pageopacity='0' inkscape:pageshadow='2' inkscape:window-width='1366' inkscape:window-height='705' id='namedview4' showgrid='false' fit-margin-top='0' fit-margin-left='0' fit-margin-right='0' fit-margin-bottom='0' inkscape:zoom='14.328571' inkscape:cx='8.8376171' inkscape:cy='13.50661' inkscape:window-x='-8' inkscape:window-y='-8' inkscape:window-maximized='1' inkscape:current-layer='Capa_1' /%3E%3Cpath id='image_FILL0_wght400_GRAD0_opsz48' data-name='image FILL0 wght400 GRAD0 opsz48' d='M 3.13,15.18 H 16.32 L 12.36,9.89 8.8,14.5 6.29,11.08 3.14,15.18 Z M 1.62,19.41 C 0.73,19.39 0.02,18.68 0,17.79 V 1.62 C 0.02,0.74 0.73,0.02 1.62,0 H 17.8 c 0.88,0.02 1.6,0.73 1.62,1.62 V 17.8 c -0.02,0.88 -0.73,1.6 -1.62,1.62 H 1.62 Z m 0,-1.62 H 17.8 V 1.62 H 1.62 v 16.18 0 z m 0,-16.18 v 0 16.19 0 -16.18 z' inkscape:connector-curvature='0' style='fill:%23fe8cb3;fill-opacity:1' /%3E%3C/svg%3E%0A");
+  position: absolute;
+  top: 40px;
+}
+.project-create__form .form__submit {
   grid-column: 1/span 2;
   justify-self: center;
 }

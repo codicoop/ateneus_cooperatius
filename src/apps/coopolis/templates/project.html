@@ -5,9 +5,10 @@
 {% block enrollments_is_active %}{% endblock %}
 {% block projects_is_active %}is-active{% endblock %}
 
+<!-- When project is new -->
 {% block content %}
 {% include './components/header_topbar.html' %}
-<div class="project">
+<div class="project project-create">
 	<section class="project__submenu grid-content">
 		<div class="grid-item-full">
 			<div class="submenu">
@@ -25,29 +26,12 @@
 			</div>
 		</div>
 	</section>
-	<section class="project__intro grid-content">
-		<div class="grid-item-wide project__intro-logo">
-			<div class="logo">
-				<!-- FALTA url imatge del logo -->
-				<!-- <img src="" alt="" srcset=""> -->
-			</div>
-		</div>
-		<!-- FALTA manera correcta d'accedir al nom -->
-		<div class="grid-item-wide project__intro-title title-2">
-			<p>Nom del projecte una mica SCCL</p>
-		</div>
-		<div class="grid-item-wide project__intro-btn title-2">
-			<!-- FALTA url -->
-			<a href="">
-				<div class="btn btn--second">
-					<div class="btn__text">
-						<p>Sol·licitar acompanyament</p>
-					</div>
-				</div>
-			</a>
+	<section class="project-create__intro grid-content">
+		<div class="grid-item-span-3 title-1">
+			<p>Omple les dades del teu projecte. En qualsevol moment les podràs modificar.</p>
 		</div>
 	</section>
-	<section class="project__form grid-content">
+	<section class="project-create__form grid-content">
 			<form 
 					class="form grid-item-wide"
 					method="post" 
@@ -87,16 +71,16 @@
 					</div>
         {% endif %}
 				{% if form.errors %}
-				<div class="message-container">
-					<p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
+				<div class="form__error">
+					<p class="form__error-item">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
 					</p>
 					{% for error in form.non_field_errors %}
-					<p class="error-message">{{ error }}</p>
+					<p class="form__error-item">{{ error }}</p>
 					{% endfor %}
 				</div>
 				{% endif %}
 				<div class="form__submit">
-					<input type="submit" class="btn btn--primary btn__text" value="Actualitzar dades" />
+					<input type="submit" class="btn btn--second btn__text" value="Guardar projecte" />
 				</div>
         <input type="hidden" name="next" value="{{ next }}" />
 		</form>

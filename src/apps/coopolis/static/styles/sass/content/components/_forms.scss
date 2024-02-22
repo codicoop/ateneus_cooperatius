@@ -59,9 +59,14 @@
   // Non-field error
   &__error {
     grid-column: 1 / -1;
-    padding-bottom: var(--padding-xsm);
-    padding-top: var(--padding-sm);
-    color: var(--red);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad1);
+    padding-bottom: var(--pad-2);
+    padding-top: var(--pad1);
+    color: var(--error);
+    font-weight: bold;
   }
   // The submit button of the form
   &__text {
