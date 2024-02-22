@@ -64,7 +64,41 @@ class ProjectStageSessionsInline(admin.StackedInline):
         "involved_partners",
         "project_partners",
         "justification_file",
+        "objective",
+        "result",
+        "file1",
+        "file2",
+        "file3",
     )
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": (
+                    "session_responsible",
+                    "date",
+                    "hours",
+                    "follow_up",
+                    "entity",
+                    "involved_partners",
+                    "project_partners",
+                    "justification_file",
+                )
+            },
+        ),
+        (
+            "Informació que es mostrarà a les sòcies del projecte",
+            {
+    
+                "fields": (
+                    "objective",
+                    "result",
+                    ("file1", "file2", "file3"),
+                )
+            },
+        ),
+    ]
+
     readonly_fields = ("project_partners",)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

@@ -653,9 +653,9 @@ class ProjectStageSession(models.Model):
     result = models.TextField("retorn", blank=True, null=True)
     file1 = models.FileField("material adjunt", blank=True, null=True,
                              storage=PublicMediaStorage(), max_length=250)
-    file2 = models.FileField("material adjunt", blank=True, null=True,
+    file2 = models.FileField("", blank=True, null=True,
                              storage=PublicMediaStorage(), max_length=250)
-    file3 = models.FileField("material adjunt", blank=True, null=True,
+    file3 = models.FileField("", blank=True, null=True,
                              storage=PublicMediaStorage(), max_length=250)
 
 
