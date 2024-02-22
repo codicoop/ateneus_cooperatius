@@ -648,6 +648,16 @@ class ProjectStageSession(models.Model):
         blank=True,
         null=True,
     )
+    # Information showed to the project partners
+    objective = models.TextField("objectiu de la sessió", blank=True, null=True)
+    result = models.TextField("retorn", blank=True, null=True)
+    file1 = models.FileField("material adjunt", blank=True, null=True,
+                             storage=PublicMediaStorage(), max_length=250)
+    file2 = models.FileField("material adjunt", blank=True, null=True,
+                             storage=PublicMediaStorage(), max_length=250)
+    file3 = models.FileField("material adjunt", blank=True, null=True,
+                             storage=PublicMediaStorage(), max_length=250)
+
 
     @property
     def project_partners(self):
