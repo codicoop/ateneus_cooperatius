@@ -1,7 +1,4 @@
-from constance import config
-from django import urls
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from apps.coopolis.forms import (
@@ -10,9 +7,7 @@ from apps.coopolis.forms import (
     ProjectStageInitialPetitionForm,
     ProjectStageStartForm,
 )
-from apps.coopolis.models import Project
-from apps.coopolis.views import LoginSignupContainerView
-from conf.custom_mail_manager import MyMailTemplate
+from apps.coopolis.models import Project, ProjectStageSession, ProjectStage
 
 
 @login_required
@@ -96,11 +91,5 @@ def project_stage_characteristics_view(request, pk):
 @login_required
 def project_stage_sessions_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-
-    return render(
-        request,
-        "project_stage_sessions.html",
-        {
-            "project": project,
-        },
-    )
+    context = {"project": project,}
+    return render(request, "project_stage_sessions.html", context)
