@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   viewBox="0 0 8 8"
-   width="8"
-   height="8"
+   viewBox="0 0 24 24"
+   width="24"
+   height="24"
    version="1.1"
    id="svg4"
    sodipodi:docname="mes-nocircle-bold.svg"
@@ -45,16 +45,16 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:zoom="25.966146"
-     inkscape:cx="4"
-     inkscape:cy="4"
+     inkscape:zoom="24.242044"
+     inkscape:cx="12.131576"
+     inkscape:cy="11.254991"
      inkscape:window-x="1358"
      inkscape:window-y="-6"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg4" />
   <polygon
-     transform="matrix(0.66666667,0,0,0.66666667,-7.6666667,-7.6666667)"
-     points="11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 16.5,11.5 16.5,16.5 "
+     transform="matrix(2,0,0,2,-23,-23)"
+     points="16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 "
      id="polygon2"
-     style="opacity:0.975;fill:#ffffff;fill-opacity:1" />
+     style="opacity:1;fill:#ffffff;fill-opacity:1" />
 </svg>

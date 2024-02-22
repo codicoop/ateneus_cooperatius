@@ -11,9 +11,19 @@
   }
   &__intro-title {
     --max-width: 70%;
+    --text-align: center;
   }
-  &__people.grid-content {
-    --grid-template-columns: 1fr 1fr;
+  &__intro-banner {
+    --margin-top: var(--pad4);
+  }
+  .logo {
+    --width: var(--pad4);
+    --height: var(--pad4);
+    --top: 20px;
+    --left: 20px;
+  }
+  &__people-grid {
+    --gap: var(--pad1);
   }
   &__people-item,
   &__people-add {
@@ -24,18 +34,29 @@
 @media (min-width: 900px) {
   .project {
     &__intro {
-      --padding-intro: var(--pad2) 0 var(--pad4) 0;
+      --padding-intro: var(--pad7) 0 var(--pad3) 0;
       --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
 
       &.grid-content {
         --display: grid;
       }
     }
+
     &__intro-title {
       --max-width: none;
+      --text-align: left;
     }
-    &__people.grid-content {
-      --grid-template-columns: repeat(6, 1fr);
+    &__intro-banner {
+      --margin-top: 0;
+    }
+    .logo {
+      --width: var(--pad7);
+      --height: var(--pad7);
+      --top: 43px;
+      --left: 43px;
+    }
+    &__people-grid {
+      --gap: var(--pad2);
     }
     &__people-item,
     &__people-add {
@@ -66,19 +87,49 @@
     grid-column: 2;
     grid-row: 1;
 
+    &:hover {
+      .logo {
+        position: relative;
+        background-color: var(--primary);
+
+        &::before {
+          content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:cc='http://creativecommons.org/ns%23' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23' xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' viewBox='0 0 24 24' width='24' height='24' version='1.1' id='svg4' sodipodi:docname='mes-nocircle-bold.svg' inkscape:version='0.92.4 (5da689c313, 2019-01-14)'%3E%3Cmetadata id='metadata10'%3E%3Crdf:RDF%3E%3Ccc:Work rdf:about=''%3E%3Cdc:format%3Eimage/svg+xml%3C/dc:format%3E%3Cdc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage' /%3E%3Cdc:title%3E%3C/dc:title%3E%3C/cc:Work%3E%3C/rdf:RDF%3E%3C/metadata%3E%3Cdefs id='defs8' /%3E%3Csodipodi:namedview pagecolor='%23ffffff' bordercolor='%23666666' borderopacity='1' objecttolerance='10' gridtolerance='10' guidetolerance='10' inkscape:pageopacity='0' inkscape:pageshadow='2' inkscape:window-width='1440' inkscape:window-height='837' id='namedview6' showgrid='false' fit-margin-top='0' fit-margin-left='0' fit-margin-right='0' fit-margin-bottom='0' inkscape:zoom='24.242044' inkscape:cx='12.131576' inkscape:cy='11.254991' inkscape:window-x='1358' inkscape:window-y='-6' inkscape:window-maximized='1' inkscape:current-layer='svg4' /%3E%3Cpolygon transform='matrix(2,0,0,2,-23,-23)' points='16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 ' id='polygon2' style='opacity:1;fill:%23ffffff;fill-opacity:1' /%3E%3C/svg%3E ");
+          position: absolute;
+          top: var(--top);
+          left: var(--left);
+        }
+        img {
+          opacity: 0;
+        }
+      }
+    }
     .logo {
-      width: var(--pad7);
-      height: var(--pad7);
+      width: var(--width);
+      height: var(--height);
       background-color: var(--white);
       border-radius: 50%;
       box-shadow: var(--shadow);
+      overflow: hidden;
     }
   }
   &__intro-title {
     grid-row: 1;
     grid-column: 3 / span 3;
-    text-align: center;
+    text-align: var(--text-align);
     max-width: var(--max-width);
+  }
+  &__intro-banner {
+    grid-column: 3 / span 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-2);
+    width: 100%;
+    max-width: 400px;
+    margin-top: var(--margin-top);
+    padding: var(--pad1);
+    background-color: var(--primary-lightest);
+    border-radius: var(--br);
+    color: var(--primary-dark);
   }
   &__intro-btn {
     grid-row: 2;
@@ -87,21 +138,8 @@
   }
   &__form {
     .form {
-      li:nth-child(14) {
-        grid-row: 8;
-        grid-column: 1;
-      }
-      li:nth-child(15) {
-        grid-row: 8;
-        grid-column: 2;
-      }
-      li:nth-child(16) {
-        grid-row: 9;
-        grid-column: 1;
-      }
-      li:nth-child(17) {
-        grid-row: 9;
-        grid-column: 2;
+      li:nth-child(2) {
+        display: none;
       }
       .form__submit {
         grid-row: 10;
@@ -115,9 +153,10 @@
     margin-bottom: var(--pad2);
     border-top: 2px solid var(--primary-lightest);
 
-    &.grid-content {
+    &-grid {
       display: grid;
-      grid-template-columns: var(--grid-template-columns);
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--gap);
     }
   }
   &__people-title {

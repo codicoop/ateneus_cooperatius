@@ -27,18 +27,18 @@
 	</section>
 	<section class="project__intro grid-content">
 		<div class="grid-item-wide project__intro-logo">
-			<div class="logo">
-				<!-- FALTA url imatge del logo -->
-				<!-- <img src="" alt="" srcset=""> -->
+			<div class="logo" onclick="clickProjectLogoInput()">
+        {% if project.logo %}
+				<img src="{{ project.logo.url }}">
+        {% endif %}
 			</div>
 		</div>
-		<!-- FALTA manera correcta d'accedir al nom -->
 		<div class="grid-item-wide project__intro-title title-2">
-			<p>Nom del projecte una mica SCCL</p>
+			<p>{{ project.name }}</p>
 		</div>
-		<div class="grid-item-wide project__intro-btn title-2">
-			<!-- FALTA url -->
-			<a href="">
+    <!-- if no acompanyament -->
+		<div class="grid-item-wide project__intro-btn title-2 is-hidden">
+      <a href="{% url 'project_stage_start' pk=project.id %}">
 				<div class="btn btn--second">
 					<div class="btn__text">
 						<p>Sol·licitar acompanyament</p>
@@ -46,6 +46,15 @@
 				</div>
 			</a>
 		</div>
+    <!-- else -->
+    <div class="grid item-wide project__intro-banner">
+      <div class="text-md is-bold">
+        <p>Acompanyament obert:</p>
+      </div>
+      <div>
+        <p>Tens una demanda d'acompanyament obert. En breus ens posarem en contacte amb tu.</p>
+      </div>
+    </div>
 	</section>
 	<section class="project__form grid-content">
 			<form 
@@ -87,11 +96,11 @@
 					</div>
         {% endif %}
 				{% if form.errors %}
-				<div class="message-container">
-					<p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
+				<div class="form__error">
+					<p class="form__error-item">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
 					</p>
 					{% for error in form.non_field_errors %}
-					<p class="error-message">{{ error }}</p>
+					<p class="form__error-item">{{ error }}</p>
 					{% endfor %}
 				</div>
 				{% endif %}
@@ -101,7 +110,7 @@
         <input type="hidden" name="next" value="{{ next }}" />
 		</form>
 	</section>
-	<section class="project__people grid-content">
+	<section class="project__people-grid">
 		<div class="project__people-title is-bold">
 			<p>Integrants del projecte</p>
 		</div>
