@@ -20,6 +20,7 @@ from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
 
+
 class Derivation(models.Model):
     class Meta:
         verbose_name = "derivació"
@@ -415,7 +416,11 @@ class ProjectStage(models.Model):
         on_delete=models.SET_NULL,
     )
     subsidy_period = models.ForeignKey(
-        SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL
+        SubsidyPeriod, verbose_name="convocatòria", null=True,
+        on_delete=models.SET_NULL)
+    exclude_from_justification = models.BooleanField(
+        "No incloure a l'excel de justificació",
+        default=False,
     )
     date_start = models.DateField(
         "data creació acompanyament", null=False, blank=False, auto_now_add=True
@@ -719,9 +724,14 @@ class EmploymentInsertion(models.Model):
         ordering = ["-insertion_date"]
 
     project = models.ForeignKey(
-        Project,
+        Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
+        related_name="employment_insertions", blank=True, null=True)
+    activity = models.ForeignKey(
+        "cc_courses.Activity",
+        verbose_name="sessió",
         on_delete=models.PROTECT,
-        verbose_name="projecte acompanyat",
+        blank=True,
+        null=True,
         related_name="employment_insertions",
     )
     user = models.ForeignKey(
@@ -753,41 +763,71 @@ class EmploymentInsertion(models.Model):
         return f"{self.user.full_name}: {self.get_contract_type_display()}"
 
     @classmethod
-    def validate_extended_fields(cls, user_obj, project_obj, link_to_project=True):
-        user_obj_errors = {
-            "surname": "- Cognom.<br />",
-            "gender": "- Gènere. <br/>",
-            "birthdate": "- Data de naixement.<br />",
-            "birth_place": "- Lloc de naixement.<br />",
-            "town": "- Municipi.<br />",
-        }
-        user_errors = [
-            value
-            for key, value in user_obj_errors.items()
-            if not getattr(user_obj, key)
-        ]
-        if not isinstance(user_obj, User) or not isinstance(project_obj, Project):
-            return True
+    def validate_extended_fields(
+            cls,
+            user_obj,
+            project_obj,
+            activity_obj,
+            subsidy_period,
+            link_to_project=True):
+        if not isinstance(user_obj, User):
+            raise ValidationError(
+                {"user": ValidationError("Aquest camp és obligatori.")}
+            )
 
-        cif_error = None
-        if not project_obj.cif:
-            cif_error = "- NIF.<br>"
+        user_errors = cls.get_user_field_errors(user_obj)
+        cif_error = cls.get_project_cif_field_errors(
+            project_obj,
+            link_to_project,
+        )
+        activity_subsidy_period_error = cls.get_activity_field_errors(
+            activity_obj, subsidy_period,
+        )
 
-        if not user_errors and not cif_error:
-            return True
-        user_url = reverse(
-            "admin:coopolis_user_change", kwargs={"object_id": user_obj.id}
-        )
-        url = f'<a href="{user_url}" target="_blank">Fitxa de la Persona</a>'
-        msg = (
-            f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
-            f"Projecte i de les Persones que normalment son opcionals, "
-            f"però que per poder justificar les insercions laborals "
-            f"son obligatoris.<br>"
-        )
+        errors = []
         if user_errors:
-            msg += f"De la {url}:<br /> {''.join(user_errors)}<br />"
+            errors.append(ValidationError(user_errors))
         if cif_error:
+            errors.append(ValidationError(cif_error))
+        if activity_subsidy_period_error:
+            errors.append(ValidationError(activity_subsidy_period_error))
+
+        if errors:
+            raise ValidationError(errors)
+
+    @staticmethod
+    def get_user_field_errors(user_obj):
+        user_errors = []
+        msg = ""
+        if isinstance(user_obj, User):
+            user_obj_errors = {
+                "surname": "- Cognom.<br />",
+                "gender": "- Gènere. <br/>",
+                "birthdate": "- Data de naixement.<br />",
+                "birth_place": "- Lloc de naixement.<br />",
+                "town": "- Municipi.<br />",
+            }
+            user_errors = [value for key, value in user_obj_errors.items() if
+                           not getattr(user_obj, key)]
+        if user_errors:
+            user_url = reverse(
+                'admin:coopolis_user_change',
+                kwargs={'object_id': user_obj.id}
+            )
+            url = f'<a href="{user_url}" target="_blank">Fitxa de la Persona</a>'
+            msg += (
+                f"No s'ha pogut desar la inserció laboral. Hi ha camps de "
+                f"la fitxa de la persona que normalment son opcionals, "
+                f"però que per poder justificar les insercions laborals "
+                f"son obligatoris.<br>"
+                f"De la {url}:<br /> {''.join(user_errors)}<br />"
+            )
+        return mark_safe(msg)
+
+    @staticmethod
+    def get_project_cif_field_errors(project_obj, link_to_project):
+        msg = ""
+        if isinstance(project_obj, Project) and not project_obj.cif:
             url = "fitxa del Projecte (en aquest mateix formulari, més amunt)"
             if link_to_project:
                 project_url = reverse(
@@ -795,8 +835,38 @@ class EmploymentInsertion(models.Model):
                     kwargs={"object_id": project_obj.id},
                 )
                 url = f'<a href="{project_url}" target="_blank">fitxa del Projecte</a>'
-            msg += f"De la {url}:<br>{cif_error}"
-        raise ValidationError(mark_safe(msg))
+            msg += (
+                f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
+                f"Projecte que normalment son opcionals, "
+                f"però que per poder justificar les insercions laborals "
+                f"son obligatoris.<br>"
+                f"De la {url}:<br>"
+                f"- NIF.<br>"
+            )
+        return mark_safe(msg)
+
+    @staticmethod
+    def get_activity_field_errors(activity_obj, subsidy_period):
+        msg = ""
+        if activity_obj and activity_obj.subsidy_period != subsidy_period:
+            msg = (
+                "L'activitat seleccionada no és vàlida perquè té una "
+                "convocatòria diferent que la indicada en aquesta inserció "
+                "laboral."
+            )
+        return mark_safe(msg)
+
+    @staticmethod
+    def validate_activity_project(activity_obj, project_obj):
+        errors = []
+        if not activity_obj and not project_obj:
+            msg = "Un dels camps 'Projecte acompanyat' o 'Sessió' és obligatori."
+            errors.append(ValidationError(msg))
+        if activity_obj and project_obj:
+            msg = "Només es pot triar un camp entre 'Projecte acompanyat' o 'Sessió'."
+            errors.append(ValidationError(msg))
+        if errors:
+            raise ValidationError(errors)
 
 
 class CreatedEntity(models.Model):

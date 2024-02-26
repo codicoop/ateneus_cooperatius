@@ -145,6 +145,7 @@ class Command(BaseCommand):
         periods = [
             SubsidyPeriod.objects.get(name="2021-2022"),
             SubsidyPeriod.objects.get(name="2022-2023"),
+            SubsidyPeriod.objects.get(name="2023-2024"),
         ]
         for period in periods:
             exports.extend(

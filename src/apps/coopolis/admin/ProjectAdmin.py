@@ -24,6 +24,7 @@ from apps.coopolis.models.projects import (
 )
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
+from apps.coopolis.filters import SubserviceFilter
 
 
 class FilterByFounded(admin.SimpleListFilter):
@@ -129,26 +130,18 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
 class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     empty_value_display = "(cap)"
     list_display = (
-        "project_field_ellipsis",
-        "date_start",
-        "stage_type",
-        "stage_responsible_field_ellipsis",
-        "service",
-        "subsidy_period",
-        "_has_certificate",
-        "_participants_count",
-        "project_field",
-        "justification_documents_total",
+        'project_field_ellipsis', 'date_start', 'stage_type',
+        'stage_responsible_field_ellipsis',
+        'service', 'subsidy_period', '_has_certificate',
+        '_participants_count', 'project_field', 'justification_documents_total',
+        'field_county',
     )
     list_filter = (
         FilterBySubsidyPeriod,
-        "service",
-        ("stage_responsible", admin.RelatedOnlyFieldListFilter),
-        "date_start",
-        "stage_type",
-        "axis",
-        "circle",
-        "project__sector",
+        'service', SubserviceFilter,
+        ('stage_responsible', admin.RelatedOnlyFieldListFilter),
+        'date_start', 'stage_type', 'axis',
+        'circle', 'project__sector'
     )
     actions = ["export_as_csv"]
     search_fields = ["project__name__unaccent"]
@@ -157,19 +150,20 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             None,
             {
                 "fields": [
-                    "project",
+                'field_project_id',     "project",
                     "stage_state",
                     "stage_type",
                     "subsidy_period",
+                    "exclude_from_justification",
                     "service",
-                    "sub_service",
-                    "circle",
+                'sub_service',     "circle",
                     "stage_responsible",
                     "scanned_certificate",
                     "hours_sum",
                     "date_start",
                     "earliest_session_field",
                     "justification_documents_total",
+                "field_county",
                 ]
             },
         ),
@@ -205,10 +199,12 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     ]
     inlines = (ProjectStageSessionsInline,)
     readonly_fields = (
+        'field_project_id',
         "hours_sum",
         "date_start",
         "earliest_session_field",
         "justification_documents_total",
+        "field_county",
     )
     subsidy_period_filter_param = "subsidy_period"
 
@@ -311,6 +307,20 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
         return super().get_readonly_fields(request, obj)
 
+    @admin.display(
+        description="ID del projecte"
+    )
+    def field_project_id(self, obj):
+        return str(obj.project.id)
+
+    @admin.display(
+        description="Comarca",
+        ordering="project__town__county",
+    )
+    def field_county(self, obj):
+        if hasattr(obj.project, "town") and obj.project.town:
+            return obj.project.town.county
+
 
 class ProjectStagesInline(admin.StackedInline):
     model = ProjectStage
@@ -320,45 +330,30 @@ class ProjectStagesInline(admin.StackedInline):
     can_delete = False
     empty_value_display = "(cap)"
     fieldsets = (
-        (
-            None,
-            {
-                "fields": [
-                    "project",
-                    "stage_type",
-                    "subsidy_period",
-                    "service",
-                    "sub_service",
-                    "circle",
-                    "stage_responsible",
-                    "scanned_certificate",
-                    "hours_sum",
-                    "date_start",
-                    "earliest_session_field",
-                    "stage_sessions_field",
-                    "justification_documents_total",
-                ]
-            },
-        ),
-        (
-            "Opcions de cofinançament",
-            {
-                "fields": (
-                    "cofunded",
-                    "cofunded_ateneu",
-                    "strategic_line",
-                ),
-            },
-        ),
-        (
-            "Camps convocatòries < 2020",
-            {
-                "fields": [
-                    "axis",
-                    "subaxis",
-                ]
-            },
-        ),
+        (None, {
+            'fields': [
+                'project',
+                'stage_type',
+                'subsidy_period',
+                'exclude_from_justification',
+                'service',
+                'sub_service',
+                'circle',
+                'stage_responsible',
+                'scanned_certificate',
+                'hours_sum',
+                'date_start',
+                "earliest_session_field",
+                "stage_sessions_field",
+                "justification_documents_total",
+            ]
+        }),
+        ('Opcions de cofinançament', {
+            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
+        }),
+        ("Camps convocatòries < 2020", {
+            'fields': ["axis", "subaxis", ]
+        }),
     )
     readonly_fields = (
         "hours_sum",
@@ -423,6 +418,7 @@ class EmploymentInsertionInline(admin.TabularInline):
 
     model = EmploymentInsertion
     formset = EmploymentInsertionInlineFormSet
+    fields = ('user', 'subsidy_period', 'insertion_date', 'end_date', 'contract_type', 'circle')
     extra = 0
     raw_id_fields = ("user",)
     autocomplete_lookup_fields = {"fk": ["user"]}
@@ -462,15 +458,9 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     form = ProjectFormAdmin
     list_display = (
-        "id",
-        "name",
-        "mail",
-        "phone",
-        "registration_date",
-        "constitution_date",
-        "stages_field",
-        "last_stage_responsible",
-        "_insertions_count",
+        'id', 'name', 'mail', 'phone', 'registration_date',
+        'constitution_date', 'stages_field', 'last_stage_responsible',
+        '_insertions_count', 'field_county',
     )
     search_fields = (
         "id",
@@ -493,64 +483,29 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         "tags",
     )
     fieldsets = (
-        (
-            "Dades que s'omplen des de la web",
-            {
-                "fields": [
-                    "name",
-                    "sector",
-                    "web",
-                    "project_status",
-                    "motivation",
-                    "mail",
-                    "phone",
-                    "town",
-                    "district",
-                    "number_people",
-                    "estatuts",
-                    "viability",
-                    "sostenibility",
-                    "object_finality",
-                    "project_origins",
-                    "solves_necessities",
-                    "social_base",
-                ]
-            },
-        ),
-        (
-            "Dades internes gestionades per l'ateneu",
-            {
-                "fields": [
-                    "partners",
-                    "partners_participants",
-                    "registration_date",
-                    "cif",
-                    "constitution_date",
-                    "derivation",
-                    "derivation_date",
-                    "description",
-                    "employment_estimation",
-                    "other",
-                    "follow_up_situation",
-                    "follow_up_situation_update",
-                    "tags",
-                ]
-            },
-        ),
-        (
-            "Activitats a les que s'han inscrit sòcies del projecte",
-            {
-                "fields": [
-                    "partners_activities",
-                ]
-            },
-        ),
+        ("Dades que s'omplen des de la web", {
+            'fields': ['id', 'name', 'sector', 'web', 'project_status',
+                       'motivation', 'mail', 'phone', 'town', 'field_county',
+                       'district',
+                       'number_people', 'estatuts', 'viability', 'sostenibility',
+                       'object_finality', 'project_origins',
+                       'solves_necessities', 'social_base']
+        }),
+        ("Dades internes gestionades per l'ateneu", {
+            'fields': ['partners', 'partners_participants',
+                       'registration_date', 'cif',
+                       'constitution_date', 'derivation',
+                       'derivation_date', 'description',
+                       'employment_estimation', 'other', 'follow_up_situation',
+                       'follow_up_situation_update', 'tags']
+        }),
+        ("Activitats a les que s'han inscrit sòcies del projecte", {
+            'fields': ['partners_activities', ]
+        })
     )
     readonly_fields = (
-        "id",
-        "follow_up_situation_update",
-        "partners_activities",
-        "partners_participants",
+        'id', 'follow_up_situation_update', 'partners_activities',
+        'partners_participants', 'field_county',
     )
     actions = ["export_as_csv"]
     change_actions = ("print",)
@@ -659,6 +614,14 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     _insertions_count.short_description = "Insercions"
 
+    @admin.display(
+        description="Comarca",
+        ordering="town__county",
+    )
+    def field_county(self, obj):
+        if hasattr(obj, "town") and obj.town:
+            return obj.town.county
+
 
 class DerivationAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
@@ -676,37 +639,21 @@ class DerivationAdmin(admin.ModelAdmin):
             return True
         return False
 
-
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     form = EmploymentInsertionAdminForm
-    list_display = (
-        "insertion_date",
-        "project",
-        "user",
-        "contract_type",
-        "subsidy_period",
-        "circle",
-    )
+    list_display = ('insertion_date', 'project', 'activity', 'user', 'contract_type',
+                    'subsidy_period', 'circle', )
     list_filter = (
         "subsidy_period",
         "contract_type",
         "circle",
         "insertion_date",
     )
-    search_fields = (
-        "project__name__unaccent",
-        "user__first_name__unaccent",
-    )
-    raw_id_fields = (
-        "user",
-        "project",
-    )
+    search_fields = ('project__name__unaccent', 'user__first_name__unaccent',)
+    raw_id_fields = ('user', 'project', 'activity')
     autocomplete_lookup_fields = {
-        "fk": [
-            "user",
-            "project",
-        ],
+        'fk': ['user', 'project', 'activity'],
     }
 
 

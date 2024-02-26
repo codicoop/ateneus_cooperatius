@@ -940,9 +940,8 @@ a {
 .form li.field .errorlist,
 .form .field .errorlist {
   order: 2;
-  padding-left: var(--pad-2);
   padding-bottom: var(--pad-3);
-  color: var(--primary);
+  color: var(--red);
   font-size: 12px;
   line-height: 16px;
 }
@@ -4460,6 +4459,43 @@ a {
   grid-column: 5/span 2;
   justify-self: end;
   height: fit-content;
+}
+
+.modal-page {
+  --margin-card: var(--pad3) var(--pad2);
+  --top: 91px;
+  --left: 0;
+}
+
+@media (min-width: 900px) {
+  .modal-page {
+    --margin-card: var(--pad3) var(--pad2);
+    --top: 0;
+    --left: 128px;
+  }
+}
+.modal-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-page__background {
+  position: fixed;
+  top: var(--top);
+  bottom: 0;
+  left: var(--left);
+  right: 0;
+  background-color: var(--violet);
+  z-index: 100;
+}
+.modal-page__card {
+  z-index: 110;
+  width: 100%;
+  max-width: 400px;
+  margin: var(--margin-card);
+}
+.modal-page__form .form__submit {
+  margin-bottom: 0;
 }
 
 /*# sourceMappingURL=styles.css.map */
