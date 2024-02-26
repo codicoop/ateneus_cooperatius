@@ -6,12 +6,24 @@
   &__nav.grid-content {
     --grid-template-columns: repeat(4, 1fr);
   }
+  &__intro {
+    --padding-top: var(--pad1);
+  }
+  &__intro-btn {
+    --margin-top: var(--pad10);
+  }
 }
 
 @media (min-width: 900px) {
   .support {
     &__nav.grid-content {
       --grid-template-columns: repeat(6, 1fr);
+    }
+    &__intro {
+      --padding-top: var(--pad2);
+    }
+    &__intro-btn {
+      --margin-top: var(--pad4);
     }
   }
 }
@@ -89,6 +101,14 @@
         font-weight: 700;
       }
     }
+  }
+  &__intro {
+    p + p {
+      padding-top: var(--padding-top);
+    }
+  }
+  &__intro-btn {
+    margin-top: var(--margin-top);
   }
   &__form {
   }

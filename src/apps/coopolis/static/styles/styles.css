@@ -192,6 +192,7 @@ img {
   --yellow: #F6BF00;
   --violet: #c4b6c3;
   --violet-dark: #a77f8d;
+  --primary-1: #F0E8F3;
   --primary-lightest: hsla(339, 100%, 89%, 0.35);
   --primary-lighter: #FFC5D9;
   --primary-light: #FE8CB3;
@@ -367,6 +368,14 @@ body,
   font-weight: 500;
   font-size: var(--font-size);
   line-height: var(--line-height);
+}
+
+.action-text {
+  font-weight: medium;
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: var(--second);
 }
 
 .is-bold {
@@ -2381,6 +2390,31 @@ a {
   margin-bottom: var(--pad-2);
 }
 
+.project-tag {
+  display: flex;
+  gap: var(--pad-2);
+  align-items: center;
+  flex-wrap: wrap;
+  width: fit-content;
+  padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad-2);
+  margin-bottom: var(--pad2);
+  background-color: var(--primary-1);
+  border-radius: 35px;
+}
+.project-tag__logo {
+  height: var(--pad1-5);
+  width: var(--pad1-5);
+  border-radius: 50%;
+  background-color: var(--white);
+  overflow: hidden;
+}
+.project-tag__title {
+  border-radius: 50px;
+  color: var(--primary);
+  white-space: nowrap;
+  font-weight: bold;
+}
+
 .user-icon {
   --height: 40px;
   --width: 40px;
@@ -3882,6 +3916,12 @@ a {
   border-radius: var(--br);
   color: var(--primary-dark);
 }
+.project__intro-banner .action-text {
+  cursor: pointer;
+}
+.project__intro-banner a {
+  margin-top: var(--pad2);
+}
 .project__intro-btn {
   grid-row: 2;
   grid-column: 3/span 3;
@@ -4687,10 +4727,22 @@ a {
 .support__nav.grid-content {
   --grid-template-columns: repeat(4, 1fr);
 }
+.support__intro {
+  --padding-top: var(--pad1);
+}
+.support__intro-btn {
+  --margin-top: var(--pad10);
+}
 
 @media (min-width: 900px) {
   .support__nav.grid-content {
     --grid-template-columns: repeat(6, 1fr);
+  }
+  .support__intro {
+    --padding-top: var(--pad2);
+  }
+  .support__intro-btn {
+    --margin-top: var(--pad4);
   }
 }
 .support {
@@ -4756,6 +4808,12 @@ a {
   font-size: 10px;
   line-height: 10px;
   font-weight: 700;
+}
+.support__intro p + p {
+  padding-top: var(--padding-top);
+}
+.support__intro-btn {
+  margin-top: var(--margin-top);
 }
 
 /*# sourceMappingURL=styles.css.map */

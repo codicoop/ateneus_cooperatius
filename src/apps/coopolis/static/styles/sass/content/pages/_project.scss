@@ -130,6 +130,13 @@
     background-color: var(--primary-lightest);
     border-radius: var(--br);
     color: var(--primary-dark);
+
+    .action-text {
+      cursor: pointer;
+    }
+    a {
+      margin-top: var(--pad2);
+    }
   }
   &__intro-btn {
     grid-row: 2;
