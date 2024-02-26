@@ -4857,14 +4857,23 @@ a {
 .support__form .form li.field label::after {
   color: var(--white);
 }
-.support__form .form .field-textarea {
-  grid-row: 1/span 3;
-  grid-column: 3;
-}
 .support__form .form__submit {
   grid-column: 1/-1;
   justify-self: center;
   margin: var(--margin);
+}
+.support__form .form .back-link {
+  grid-column: 1/-1;
+  justify-self: center;
+}
+
+.support-1 .field-textarea {
+  grid-row: 1/span 3;
+  grid-column: 3;
+}
+
+.support-3 .field {
+  grid-column: 2;
 }
 
 /*# sourceMappingURL=styles.css.map */

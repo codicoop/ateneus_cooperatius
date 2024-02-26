@@ -152,17 +152,29 @@
           color: var(--white);
         }
       }
-      // Recolocant camp textarea
-      .field-textarea {
-        grid-row: 1 / span 3;
-        grid-column: 3;
-      }
       &__submit {
         grid-column: 1 / -1;
         justify-self: center;
         margin: var(--margin);
       }
+      .back-link {
+        grid-column: 1 / -1;
+        justify-self: center;
+      }
     } 
     
+  }
+}
+.support-1 {
+  // Recolocant camp textarea
+  .field-textarea {
+    grid-row: 1 / span 3;
+    grid-column: 3;
+  }
+}
+// .support-2 {}
+.support-3 {
+  .field {
+    grid-column: 2;
   }
 }
