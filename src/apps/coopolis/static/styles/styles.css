@@ -4724,8 +4724,8 @@ a {
   --border-top-main: 6px solid var(--second-light);
   --padding-main: var(--pad1);
 }
-.support__nav.grid-content {
-  --grid-template-columns: repeat(4, 1fr);
+.support__nav {
+  --margin-nav: var(--pad2);
 }
 .support__intro {
   --padding-top: var(--pad1);
@@ -4733,10 +4733,20 @@ a {
 .support__intro-btn {
   --margin-top: var(--pad10);
 }
+.support .form {
+  --display-form: flex;
+}
+.support .form__submit {
+  --margin: var(--pad4);
+}
 
 @media (min-width: 900px) {
-  .support__nav.grid-content {
-    --grid-template-columns: repeat(6, 1fr);
+  .support {
+    --border-top-main: none;
+    --padding-main: var(--pad4) 0 0 0;
+  }
+  .support__nav {
+    --margin-nav: var(--pad4);
   }
   .support__intro {
     --padding-top: var(--pad2);
@@ -4744,21 +4754,28 @@ a {
   .support__intro-btn {
     --margin-top: var(--pad4);
   }
+  .support .form {
+    --display-form: grid;
+  }
+  .support .form__submit {
+    --margin: var(--pad7);
+  }
 }
 .support {
+  height: 100%;
+  padding: var(--padding-main);
   background-color: var(--second);
   border-top: var(--border-top-main);
-  padding: var(--padding-main);
   color: var(--white);
 }
-.support__nav.grid-content {
+.support__nav .grid-item-wide {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--pad1);
-  margin-bottom: var(--pad2);
+  margin-bottom: var(--margin-nav);
 }
-.support .support__nav a:last-child .support-nav__item::after {
-  background-color: transparent;
+.support__nav .grid-item-wide a {
+  width: 100%;
 }
 .support .support-nav__item.is-active {
   color: var(--white);
@@ -4776,17 +4793,10 @@ a {
   height: 100%;
   color: var(--second-light);
 }
-.support .support-nav__item::after {
-  content: "";
-  position: absolute;
-  width: 101%;
-  height: 2px;
-  left: 53px;
-  bottom: 7px;
-  background-color: var(--second-light);
-}
 .support .support-nav__item .text {
   text-align: center;
+  padding-left: 13%;
+  width: 100%;
 }
 .support .support-nav__item .text p {
   max-width: 80%;
@@ -4814,6 +4824,30 @@ a {
 }
 .support__intro-btn {
   margin-top: var(--margin-top);
+  justify-self: center;
+}
+.support__form {
+  padding-top: var(--pad4);
+}
+.support__form .form {
+  display: var(--display-form);
+  flex-direction: column;
+  grid-template-columns: repeat(3, 1fr);
+}
+.support__form .form li.field label {
+  color: var(--white);
+}
+.support__form .form li.field label::after {
+  color: var(--white);
+}
+.support__form .form .field-textarea {
+  grid-row: 1/span 3;
+  grid-column: 3;
+}
+.support__form .form__submit {
+  grid-column: 1/-1;
+  justify-self: center;
+  margin: var(--margin);
 }
 
 /*# sourceMappingURL=styles.css.map */
