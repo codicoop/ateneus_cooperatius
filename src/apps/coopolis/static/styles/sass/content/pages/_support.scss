@@ -16,7 +16,7 @@
     --display-form: flex;
     
     &__submit {
-      --margin: var(--pad4);
+      --margin: var(--pad4) 0 0 0;
     }
   }
 }
@@ -39,7 +39,7 @@
       --display-form: grid;
 
       &__submit {
-        --margin: var(--pad7);
+        --margin: var(--pad7) 0 0 0;
       }
     }
   }

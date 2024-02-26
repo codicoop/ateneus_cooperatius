@@ -2415,6 +2415,23 @@ a {
   font-weight: bold;
 }
 
+.back-link {
+  align-self: center;
+  position: relative;
+  margin-top: var(--pad1);
+}
+.back-link__text {
+  padding: var(--pad-2) var(--pad-2) var(--pad-2) var(--pad1-5);
+  text-transform: uppercase;
+}
+.back-link__text::before {
+  content: "←";
+  position: absolute;
+  left: 5px;
+  bottom: 10px;
+  color: var(--white);
+}
+
 .user-icon {
   --height: 40px;
   --width: 40px;
@@ -4737,7 +4754,7 @@ a {
   --display-form: flex;
 }
 .support .form__submit {
-  --margin: var(--pad4);
+  --margin: var(--pad4) 0 0 0;
 }
 
 @media (min-width: 900px) {
@@ -4758,7 +4775,7 @@ a {
     --display-form: grid;
   }
   .support .form__submit {
-    --margin: var(--pad7);
+    --margin: var(--pad7) 0 0 0;
   }
 }
 .support {
