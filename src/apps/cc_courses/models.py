@@ -131,6 +131,7 @@ class Course(models.Model):
         help_text="Indica només els horaris, sense els dies."
     )
     description = models.TextField("descripció", null=True)
+    aimed_at = models.TextField("adreçat a", null=True)
     publish = models.BooleanField("publicat")
     created = models.DateTimeField(
         "data de creació",
