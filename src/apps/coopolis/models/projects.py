@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
+from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.cc_courses.models import Cofunding, Entity, Organizer, StrategicLine
 from apps.coopolis.choices import CirclesChoices, ServicesChoices, SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -386,6 +387,14 @@ class ProjectStage(models.Model):
         verbose_name="projecte acompanyat",
         related_name="stages",
     )
+    stage_state = models.CharField(
+        "estat de l'acompanyament",
+        max_length=8,
+        choices=ProjectStageStatesChoices.choices,
+        null=True,
+        blank=True,
+        default="",
+    )
     STAGE_TYPE_OPTIONS = (
         ("11", "Creació"),
         ("12", "Consolidació"),
@@ -651,13 +660,19 @@ class ProjectStageSession(models.Model):
     # Information showed to the project partners
     objective = models.TextField("objectiu de la sessió", blank=True, null=True)
     result = models.TextField("retorn", blank=True, null=True)
-    file1 = models.FileField("material adjunt", blank=True, null=True,
-                             storage=PublicMediaStorage(), max_length=250)
-    file2 = models.FileField("", blank=True, null=True,
-                             storage=PublicMediaStorage(), max_length=250)
-    file3 = models.FileField("", blank=True, null=True,
-                             storage=PublicMediaStorage(), max_length=250)
-
+    file1 = models.FileField(
+        "material adjunt",
+        blank=True,
+        null=True,
+        storage=PublicMediaStorage(),
+        max_length=250,
+    )
+    file2 = models.FileField(
+        "", blank=True, null=True, storage=PublicMediaStorage(), max_length=250
+    )
+    file3 = models.FileField(
+        "", blank=True, null=True, storage=PublicMediaStorage(), max_length=250
+    )
 
     @property
     def project_partners(self):

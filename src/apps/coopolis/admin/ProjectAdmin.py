@@ -55,21 +55,6 @@ class ProjectStageSessionsInline(admin.StackedInline):
     autocomplete_lookup_fields = {
         "m2m": ["involved_partners"],
     }
-    fields = (
-        "session_responsible",
-        "date",
-        "hours",
-        "follow_up",
-        "entity",
-        "involved_partners",
-        "project_partners",
-        "justification_file",
-        "objective",
-        "result",
-        "file1",
-        "file2",
-        "file3",
-    )
     fieldsets = [
         (
             None,
@@ -173,6 +158,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             {
                 "fields": [
                     "project",
+                    "stage_state",
                     "stage_type",
                     "subsidy_period",
                     "service",
