@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -7,13 +8,13 @@ from apps.coopolis.forms import (
     ProjectStageInitialPetitionForm,
     ProjectStageStartForm,
 )
-from apps.coopolis.models import Project, ProjectStageSession, ProjectStage
+from apps.coopolis.models import Project, ProjectStage, ProjectStageSession
 
 
 @login_required
 def project_stage_view(request):
     projects = Project.objects.filter(partners=request.user)
-    return render(request, "project_.html", {"projects": projects})
+    return render(request, "project_empty.html", {"projects": projects})
 
 
 @login_required
@@ -72,24 +73,33 @@ def project_stage_initial_petition_view(request, pk):
 @login_required
 def project_stage_characteristics_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    form = ProjectCharacteristicsForm(request.POST, instance=project)
     if request.method == "POST":
+        form = ProjectCharacteristicsForm(request.POST, instance=project)
         if form.is_valid():
             newproject = form.save()
-            newproject.notify_new_request_to_ateneu()
-            newproject.notify_request_confirmation()
-            return redirect("project_info")
+            newproject.partners.add(request.user)
+            project.notify_new_request_to_ateneu()
+            project.notify_request_confirmation()
+            messages.success(
+                request,
+                "S'ha enviat una sol·licitud d'acompanyament del projecte. En els"
+                " propers dies et contactarà una persona de l'ateneu per concertar"
+                " una primera reunió.",
+            )
+            return redirect("project_stage_characteristics", pk=pk)
     else:
         form = ProjectCharacteristicsForm(instance=project)
     return render(
         request,
         "project_stage_characteristics.html",
-        {"project": project, "form": form},
+        { "project": project, "form": form, },
     )
 
 
 @login_required
 def project_stage_sessions_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    context = {"project": project,}
+    context = {
+        "project": project,
+    }
     return render(request, "project_stage_sessions.html", context)

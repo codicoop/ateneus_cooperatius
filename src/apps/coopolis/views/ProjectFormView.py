@@ -6,7 +6,6 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from apps.coopolis.forms import ProjectForm
-
 from apps.coopolis.models import Project
 from apps.coopolis.views import LoginSignupContainerView
 from conf.custom_mail_manager import MyMailTemplate
@@ -41,14 +40,8 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 
     def form_valid(self, form):
         newproject = form.save()
-        newproject.partners.add(self.request.user)
-
-        messages.success(
-            self.request,
-            "S'ha enviat una sol·licitud d'acompanyament del projecte. En els"
-            " propers dies et contactarà una persona de l'ateneu per concertar"
-            " una primera reunió.",
-        )
+        # newproject.partners.add(self.request.user)
+        messages.success(self.request, "Dades del projecte guardades correctament.")
         return HttpResponseRedirect(self.get_success_url())
 
     def get(self, request):
@@ -67,4 +60,3 @@ class ProjectInfoView(LoginSignupContainerView):
     #         else:
     #             return HttpResponseRedirect(urls.reverse("new_project"))
     #     return super().get(self, request, *args, **kwargs)
-
