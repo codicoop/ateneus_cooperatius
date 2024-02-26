@@ -87,6 +87,8 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
             EmploymentInsertion.validate_extended_fields(
                 data['user'],
                 data['project'],
+                None, 
+                data.get('subsidy_period'),
                 False,
             )
 
@@ -96,6 +98,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         model = EmploymentInsertion
         fields = (
             "project",
+            "activity",
             "user",
             "subsidy_period",
             "insertion_date",
@@ -109,7 +112,14 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         EmploymentInsertion.validate_extended_fields(
             self.cleaned_data.get("user"),
             self.cleaned_data.get("project"),
+            self.cleaned_data.get("activity"),
+            self.cleaned_data.get("subsidy_period"),
         )
+        EmploymentInsertion.validate_activity_project(
+            self.cleaned_data.get("activity"),
+            self.cleaned_data.get("project"),
+        )
+        
         return self.cleaned_data
 
 

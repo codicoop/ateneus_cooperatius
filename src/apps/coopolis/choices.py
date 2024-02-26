@@ -38,11 +38,11 @@ class SubServicesChoices(models.IntegerChoices):
 
     # 1. Servei de mapeig i diagnosi
     MAP_DIAGNOSI_TAULA = 101, (
-        "1 a Taula territorial per l'articulació conjunta de l'economia social "
-        "amb els diversos actors (ATENEU)"
+        "1 a  Taula territorial per l'articulació conjunta de l'economia "
+        "social amb els diversos actors (ATENEU)"
     )
     MAP_DIAGNOSI_CATALEG = 102, (
-        "1 b Elaboració d'un catàleg bones pràctiques (ATENEU I CERCLES)"
+        "1 b  Elaboració d'un catàleg bones pràctiques (ATENEU I CERCLES)."
     )
     MAP_DIAGNOSI_ORGANITZACIO = 103, (
         "1 c Organització de jornades per visibilitzar experiències, presència "
@@ -51,8 +51,8 @@ class SubServicesChoices(models.IntegerChoices):
         "(ATENEU)"
     )
     MAP_DIAGNOSI_ALTRES = 199, (
-        "1 d Altres accions dins del servei de mapeig i diagnosi (ATENEU i "
-        "CERCLES)"
+        "1 d Altres accions dins del servei de mapeig i diagnosi (ATENEU I "
+        "CERCLES)."
     )
     MAP_DIAGNOSI_ACTES = 104, (
         "1 e Identificar actes, jornades, fires, programes i publicacions que "
@@ -77,20 +77,20 @@ class SubServicesChoices(models.IntegerChoices):
         "identificació de les empreses participants (CERCLES)"
     )
     DIV_SENS_GEN_CONEIXEMENT_SESSIONS = 205, (
-        "2 e Sessions col·lectives i d'acompanyament expert individual. (CERCLES)"
+        "2 e Sessions col·lectives i d'acompanyament expert individual (CERCLES)"
     )
     DIV_SENS_GEN_CONEIXEMENT_ALTRES = 299, (
         "2 f Altres accions dins del servei de divulgació, sensibilització i "
-        "generació de coneixement (ATENEU I CERCLES)"
+        "generació de coneixement."
     )
     DIV_SENS_GEN_CONEIXEMENT_DIFUSIO = 206, (
         "2 g Difusió materials (Ateneu)"
     )
     DIV_SENS_GEN_CONEIXEMENT_ELABORACIO = 207, (
-        "2.h Elaboració material específic sobre la fórmula cooperativa (Ateneu)"
+        "2 h Elaboració material específic sobre la fórmula cooperativa (ATENEU)"
     )
     DIV_SENS_GEN_CONEIXEMENT_SENSIB = 208, (
-        "2.i Accions de sensibilització"
+        "2 i Accions de sensibilització (ATENEU I CERCLES)"
     )
 
     # 3. Servei de Formació per a la promoció, creació i consolidació de
@@ -109,7 +109,7 @@ class SubServicesChoices(models.IntegerChoices):
         "associatiu i a les empreses (ATENEU I CERCLES)"
     )
     FORM_PROM_CREA_CONS_ALTRES = 399, (
-        "3 f Altres accions dins del servei de formació (ATENEU I CERCLES)"
+        "3 f  Altres accions dins del servei de formació."
     )
     FORM_PROM_CREA_CONS_TALLERS = 306, (
         "3 g Tallers de sensibilització o dinamització adreçada a "
@@ -136,7 +136,7 @@ class SubServicesChoices(models.IntegerChoices):
         "4 e Accions de sensibilització o dinamització (CERCLES)"
     )
     ACOM_CREA_CONS_ALTRES = 499, (
-        "4 f Altres accions dins del servei d'acompanyament (ATENEU I CERCLES)"
+        "4 f Altres accions dins del servei d'acompanyament."
     )
 
     # 5. Servei de facilitació de la intercooperació, treball en xarxa i
@@ -154,13 +154,13 @@ class SubServicesChoices(models.IntegerChoices):
         "col·laborar en iniciatives conjuntes (ATENEU)"
     )
     INTERCOOP_XARXA_TERRITORI_ALTRES = 599, (
-        "5d Altres accions dins del servei d'intercooperació (ATENEU)"
+        "5 d Altres accions dins del servei de facilitació de la intercooperació."
     )
     INTERCOOP_XARXA_TERRITORI_ASS_ATENEU = 504, (
-        "5e Assemblea ateneu "
+        "5 e Assemblea ateneu "
     )
     INTERCOOP_XARXA_TERRITORI_ASS_XAC = 505, (
-        "5f Assemblea XAC"
+        "5 f Assemblea XAC"
     )
 
     # 6. Punt d'informació sobre l'ESS
