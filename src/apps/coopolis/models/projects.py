@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
-from apps.cc_courses.choices import ProjectStageStatesChoices
+from apps.cc_courses.choices import ProjectStageStatesChoices, StageTypeChoices
 from apps.cc_courses.models import Cofunding, Entity, Organizer, StrategicLine
 from apps.coopolis.choices import CirclesChoices, ServicesChoices, SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -396,16 +396,11 @@ class ProjectStage(models.Model):
         blank=True,
         default="",
     )
-    STAGE_TYPE_OPTIONS = (
-        ("11", "Creació"),
-        ("12", "Consolidació"),
-        ("9", "Incubació"),
-    )
     stage_type = models.CharField(
         "tipus d'acompanyament",
         max_length=2,
         default=DEFAULT_STAGE_TYPE,
-        choices=STAGE_TYPE_OPTIONS,
+        choices=StageTypeChoices.choices,
     )
     stage_subtype = models.ForeignKey(
         StageSubtype,
