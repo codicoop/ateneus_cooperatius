@@ -479,6 +479,8 @@ class Activity(models.Model):
 
     @property
     def subsidy_period(self):
+        if not self.date_start:
+            return None
         model = apps.get_model('dataexports', 'SubsidyPeriod')
         # Using date start as the reference one, if an activity last for more
         # than 1 day it should not matter here.
@@ -554,6 +556,17 @@ class Activity(models.Model):
                         )
                     }
                 )
+
+        # Prevents changing the date in a way that will change the subsidy
+        # period in case there's an EmploymentInsertion linked to this Activity.
+        if self.employment_insertions.exclude(
+                subsidy_period=self.subsidy_period,
+        ).count():
+            msg = ("Aquesta sessió està vinculada a una inserció laboral de la "
+                   f"convocatòria {self.subsidy_period}, per aquest motiu no "
+                   "es pot indicar una data que caigui fora d'aquesta "
+                   "convocatòria.")
+            errors.update({"date_start": ValidationError(msg)})
 
         if errors:
             raise ValidationError(errors)
@@ -650,6 +663,10 @@ class Activity(models.Model):
             "admin:cc_courses_activity_change",
             kwargs={'object_id': self.id},
         )
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains',)
 
 
 class ActivityResourceFile(models.Model):
