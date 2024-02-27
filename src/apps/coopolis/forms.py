@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from apps.cc_courses.choices import ProjectStageStatesChoices
 from constance import config
 from django import forms
 from django.conf import settings
@@ -779,3 +779,14 @@ class EntityCreatedAdminForm(models.ModelForm):
             self.cleaned_data.get("project"),
         )
         return self.cleaned_data
+
+
+class ProjectStageInlineFormSet(models.BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        total_open_stages = 0
+        for form in self.forms:
+            if form.cleaned_data['stage_state'] == ProjectStageStatesChoices.OPEN:
+                total_open_stages +=1
+        if total_open_stages > 1:
+            raise forms.ValidationError("No es pot tenir més d'un acompanyament obert.")
