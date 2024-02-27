@@ -14,7 +14,7 @@ from apps.coopolis.models import Project, ProjectStage, ProjectStageSession
 @login_required
 def project_stage_view(request):
     projects = Project.objects.filter(partners=request.user)
-    return render(request, "project_empty.html", {"projects": projects})
+    return render(request, "project_info.html", {"projects": projects})
 
 
 @login_required
@@ -92,7 +92,10 @@ def project_stage_characteristics_view(request, pk):
     return render(
         request,
         "project_stage_characteristics.html",
-        { "project": project, "form": form, },
+        {
+            "project": project,
+            "form": form,
+        },
     )
 
 
