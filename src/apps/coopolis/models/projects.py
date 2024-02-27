@@ -12,13 +12,14 @@ from django.utils.timezone import now
 
 from apps.cc_courses.choices import ProjectStageStatesChoices, StageTypeChoices
 from apps.cc_courses.models import Cofunding, Entity, Organizer, StrategicLine
-from apps.coopolis.choices import CirclesChoices, ServicesChoices, SubServicesChoices
+from apps.coopolis.choices import (CirclesChoices, ServicesChoices,
+                                   SubServicesChoices)
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
-from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
+from apps.coopolis.storage_backends import (PrivateMediaStorage,
+                                            PublicMediaStorage)
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
-
 
 
 class Derivation(models.Model):
@@ -411,8 +412,8 @@ class ProjectStage(models.Model):
         on_delete=models.SET_NULL,
     )
     subsidy_period = models.ForeignKey(
-        SubsidyPeriod, verbose_name="convocatòria", null=True,
-        on_delete=models.SET_NULL)
+        SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL
+    )
     exclude_from_justification = models.BooleanField(
         "No incloure a l'excel de justificació",
         default=False,
@@ -546,15 +547,24 @@ class ProjectStage(models.Model):
 
     def clean(self):
         super().clean()
+        errors = {}
         if self.axis:
             subaxis_options = get_subaxis_for_axis(str(self.axis))
             if self.subaxis not in subaxis_options:
-                raise ValidationError(
+                errors.update(
                     {
-                        "subaxis": "Has seleccionat un sub-eix que no es "
-                        "correspon a l'eix."
+                        "subaxis": ValidationError(
+                            "Has seleccionat un sub-eix que no es " "correspon a l'eix."
+                        )
                     }
                 )
+        if not self.stage_state:
+            errors.update(
+                {"stage_state": ValidationError("Aquest camp és obligatori.")}
+            )
+                
+        if errors:
+            raise ValidationError(errors)
 
     def get_full_type_str(self):
         txt = self.get_stage_type_display()
@@ -719,8 +729,13 @@ class EmploymentInsertion(models.Model):
         ordering = ["-insertion_date"]
 
     project = models.ForeignKey(
-        Project, on_delete=models.PROTECT, verbose_name="projecte acompanyat",
-        related_name="employment_insertions", blank=True, null=True)
+        Project,
+        on_delete=models.PROTECT,
+        verbose_name="projecte acompanyat",
+        related_name="employment_insertions",
+        blank=True,
+        null=True,
+    )
     activity = models.ForeignKey(
         "cc_courses.Activity",
         verbose_name="sessió",
@@ -759,12 +774,8 @@ class EmploymentInsertion(models.Model):
 
     @classmethod
     def validate_extended_fields(
-            cls,
-            user_obj,
-            project_obj,
-            activity_obj,
-            subsidy_period,
-            link_to_project=True):
+        cls, user_obj, project_obj, activity_obj, subsidy_period, link_to_project=True
+    ):
         if not isinstance(user_obj, User):
             raise ValidationError(
                 {"user": ValidationError("Aquest camp és obligatori.")}
@@ -776,7 +787,8 @@ class EmploymentInsertion(models.Model):
             link_to_project,
         )
         activity_subsidy_period_error = cls.get_activity_field_errors(
-            activity_obj, subsidy_period,
+            activity_obj,
+            subsidy_period,
         )
 
         errors = []
@@ -802,12 +814,14 @@ class EmploymentInsertion(models.Model):
                 "birth_place": "- Lloc de naixement.<br />",
                 "town": "- Municipi.<br />",
             }
-            user_errors = [value for key, value in user_obj_errors.items() if
-                           not getattr(user_obj, key)]
+            user_errors = [
+                value
+                for key, value in user_obj_errors.items()
+                if not getattr(user_obj, key)
+            ]
         if user_errors:
             user_url = reverse(
-                'admin:coopolis_user_change',
-                kwargs={'object_id': user_obj.id}
+                "admin:coopolis_user_change", kwargs={"object_id": user_obj.id}
             )
             url = f'<a href="{user_url}" target="_blank">Fitxa de la Persona</a>'
             msg += (
