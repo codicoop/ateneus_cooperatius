@@ -3832,6 +3832,9 @@ a {
 .project__intro-banner {
   --margin-top: var(--pad4);
 }
+.project__intro-btn {
+  --width: 100%;
+}
 .project .logo {
   --width: var(--pad4);
   --height: var(--pad4);
@@ -3859,6 +3862,9 @@ a {
   }
   .project__intro-banner {
     --margin-top: 0;
+  }
+  .project__intro-btn {
+    --width: fit-content;
   }
   .project .logo {
     --width: var(--pad7);
@@ -3943,6 +3949,7 @@ a {
   grid-row: 2;
   grid-column: 3/span 3;
   margin-top: var(--pad6);
+  width: var(--width);
 }
 .project__form .form li:nth-child(2) {
   display: none;
@@ -4760,7 +4767,7 @@ a {
 @media (min-width: 900px) {
   .support {
     --border-top-main: none;
-    --padding-main: var(--pad4) 0 0 0;
+    --padding-main: var(--pad4) 0;
   }
   .support__nav {
     --margin-nav: var(--pad4);

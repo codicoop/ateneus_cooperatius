@@ -36,6 +36,8 @@
 		<div class="grid-item-wide project__intro-title title-2">
 			<p>{{ project.name }}</p>
 		</div>
+		<!-- FALTA -->
+    <!-- if no acompanyament ni esborrany -->
 		<div class="grid-item-wide project__intro-btn title-2">
       <a href="{% url 'project_stage_start' pk=project.id %}">
 				<div class="btn btn--second">
@@ -45,7 +47,7 @@
 				</div>
 			</a>
 		</div>
-    <!-- if esborrany acompanyament -->
+		<!-- else if hi ha esborrany -->
 		<div class="grid-item-wide project__intro-banner">
       <div class="text-md is-bold">
         <p>Sol·licitud pendent:</p>
@@ -64,8 +66,8 @@
 				</div>
 			</a>
     </div>
-    <!-- else està obert però no confirmat -->
-    <div class="grid-item-wide project__intro-banner is-hidden">
+    <!-- else if està obert però no confirmat -->
+    <div class="grid-item-wide project__intro-banner">
       <div class="text-md is-bold">
         <p>Acompanyament obert:</p>
       </div>

@@ -16,6 +16,9 @@
   &__intro-banner {
     --margin-top: var(--pad4);
   }
+  &__intro-btn {
+    --width: 100%;
+  }
   .logo {
     --width: var(--pad4);
     --height: var(--pad4);
@@ -48,6 +51,9 @@
     }
     &__intro-banner {
       --margin-top: 0;
+    }
+    &__intro-btn {
+      --width: fit-content;
     }
     .logo {
       --width: var(--pad7);
@@ -142,6 +148,7 @@
     grid-row: 2;
     grid-column: 3 / span 3;
     margin-top: var(--pad6);
+    width: var(--width);
   }
   &__form {
     .form {
