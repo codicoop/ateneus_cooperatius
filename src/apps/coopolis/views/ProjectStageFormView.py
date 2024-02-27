@@ -76,10 +76,14 @@ def project_stage_characteristics_view(request, pk):
     if request.method == "POST":
         form = ProjectCharacteristicsForm(request.POST, instance=project)
         if form.is_valid():
-            newproject = form.save()
-            newproject.partners.add(request.user)
+            new_project = form.save()
+            new_project.partners.add(request.user)
+            new_project_stage = ProjectStage()
+            new_project_stage.project = new_project
+            new_project_stage.save()
             project.notify_new_request_to_ateneu()
             project.notify_request_confirmation()
+            
             messages.success(
                 request,
                 "S'ha enviat una sol·licitud d'acompanyament del projecte. En els"
