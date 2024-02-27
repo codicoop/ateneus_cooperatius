@@ -29,6 +29,8 @@ def project_stage_data_view(request, pk):
     form = ProjectStageStartForm(request.POST, instance=project)
     if request.method == "POST":
         if form.is_valid():
+            project.is_draft = True
+            project.save()
             form.save()
             return redirect("project_stage_attatch", pk=pk)
     else:
@@ -77,13 +79,15 @@ def project_stage_characteristics_view(request, pk):
         form = ProjectCharacteristicsForm(request.POST, instance=project)
         if form.is_valid():
             new_project = form.save()
+            project.is_draft = False
+            project.save()
             new_project.partners.add(request.user)
             new_project_stage = ProjectStage()
             new_project_stage.project = new_project
             new_project_stage.save()
             project.notify_new_request_to_ateneu()
             project.notify_request_confirmation()
-            
+
             messages.success(
                 request,
                 "S'ha enviat una sol·licitud d'acompanyament del projecte. En els"
