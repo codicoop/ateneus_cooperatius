@@ -182,6 +182,9 @@ class Project(models.Model):
         "etiquetes, per evitar-ho escriu-la entre cometes dobles, "
         '"etiqueta amb espais".',
     )
+    is_draft = models.BooleanField(
+        default=False,
+    )
 
     @property
     def has_estatus(self):
