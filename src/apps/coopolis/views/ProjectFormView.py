@@ -5,8 +5,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.views import generic
 
+from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.coopolis.forms import ProjectForm
-from apps.coopolis.models import Project
+from apps.coopolis.models import Project, ProjectStage
 from apps.coopolis.views import LoginSignupContainerView
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -26,7 +27,22 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     def get(self, request):
         if self.request.user.project is None:
             return HttpResponseRedirect(urls.reverse("new_project"))
+        open_project_stages = ProjectStage.objects.filter(
+            project=self.request.user.project, stage_state=ProjectStageStatesChoices.OPEN
+        )
+        if open_project_stages:
+            return HttpResponseRedirect(urls.reverse("project_stage_sessions", kwargs={'pk': self.request.user.project.pk }))
         return super().get(self, request)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = self.request.user.project
+        open_project_stages = ProjectStage.objects.filter(
+            project=project, stage_state=ProjectStageStatesChoices.PENDING
+        )
+        context["is_pending"] = project.is_draft
+        context["is_open"] = open_project_stages
+        return context
 
 
 class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
