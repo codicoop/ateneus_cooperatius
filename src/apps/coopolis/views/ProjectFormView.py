@@ -40,7 +40,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 
     def form_valid(self, form):
         newproject = form.save()
-        # newproject.partners.add(self.request.user)
+        newproject.partners.add(self.request.user)
         messages.success(self.request, "Dades del projecte guardades correctament.")
         return HttpResponseRedirect(self.get_success_url())
 
