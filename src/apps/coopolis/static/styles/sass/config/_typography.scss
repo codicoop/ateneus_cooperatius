@@ -116,6 +116,13 @@ body,
   font-size: var(--font-size);
   line-height: var(--line-height);
 }
+.action-text {
+  font-weight: medium;
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: var(--second);
+}
 
 .is-bold {
   font-weight: 700;

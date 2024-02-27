@@ -1,5 +1,5 @@
 
-// Estilar checkboxes
+// Estilar inputs
 function onLoadFunction(){
   // Trobar els inputs de la pàgina
   const allInputs = document.querySelectorAll("input")

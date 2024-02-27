@@ -55,6 +55,7 @@
       border: 3px solid var(--second-2);
       text-align: left;
       font-size: 14px;
+      color: var(--primary-dark);
 
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
@@ -65,9 +66,11 @@
     .errorlist {
       order: 2;
       padding-bottom: var(--pad-3);
-      color: var(--red);
+      color: var(--error);
       font-size: 12px;
       line-height: 16px;
+      text-align: right;
+      font-weight: bold;
     }
 
     // Camp upload file

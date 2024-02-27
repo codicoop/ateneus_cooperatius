@@ -107,7 +107,11 @@ function showListView() {
   listBtn.classList.add("is-active")
 }
 // Perfil - input imatge
-function clickFileInput() {
+function clickUserProfileFileInput() {
   let input = document.getElementById("profile_image")
+  input.click()
+}
+function clickProjectLogoInput() {
+  let input = document.getElementById("id_logo")
   input.click()
 }

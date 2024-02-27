@@ -6,11 +6,101 @@
 {% block projects_is_active %}is-active{% endblock %}
 
 {% block content %}
-{% include './components/header_topbar.html' %}
-<h2>{{ project.name }}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p}}
-    <button type="submit">Següent</button>
-</form>
+<div class="support support-1">
+  <section class="support__nav grid-content">
+    <div class="grid-item-wide">
+      <a href="{% url 'project_stage_data' pk=project.pk %}">
+        <div class="support-nav__item is-active">
+          <div class="text">
+            <p>Dades del projecte</p>
+          </div>
+          <div class="number">
+            <p>1</p>
+          </div>
+        </div>
+      </a>
+      <a href="{% url 'project_stage_attatch' pk=project.pk %}">
+        <div class="support-nav__item">
+          <div class="text">
+            <p>Material adjunt</p>
+          </div>
+          <div class="number">
+            <p>2</p>
+          </div>
+        </div>
+      </a>
+      <a href="{% url 'project_stage_initial_petition' pk=project.pk %}">
+        <div class="support-nav__item">
+          <div class="text">
+            <p>Petició inicial</p>
+          </div>
+          <div class="number">
+            <p>3</p>
+          </div>
+        </div>
+      </a>
+      <a href="{% url 'project_stage_characteristics' pk=project.pk %}">
+        <div class="support-nav__item">
+          <div class="text">
+            <p>Característiques</p>
+          </div>
+          <div class="number">
+            <p>4</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+  <section class="support__intro grid-content">
+    <div class="grid-item-wide title-1">
+      <p>Digues-nos quin és el teu projecte o revisa si totes les dades són correctes:</p>
+    </div>
+  </section>
+  <section class="support__form grid-content">
+    <form class="form grid-item-full" method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+      id="support-form-1">
+      {% csrf_token %}
+      {{ form.as_ul }}
+      {% if messages %}
+      <div class="modal">
+        <div class="modal__background" onclick="hideMessageModal(event)"></div>
+        <div class="modal__card">
+          <div class="modal__title title-1">
+            <p>Confirmació</p>
+          </div>
+          <div class="modal__close" onclick="hideMessageModal(event)">
+            <svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 9.46 9.46">
+              <path d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+            </svg>
+          </div>
+          <div class="modal__form">
+            {% for message in messages %}
+
+            <div class="modal__intro text-md">
+              <div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
+                <p>{{ message }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if form.errors %}
+      <div class="message-container">
+        <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
+        </p>
+        {% for error in form.non_field_errors %}
+        <p class="error-message">{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="form__submit">
+        <input type="submit" class="btn btn--primary btn__text" value="Següent" />
+      </div>
+      <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+  </section>
+</div>
+
 {% endblock %}

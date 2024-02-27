@@ -1,0 +1,26 @@
+.project-tag {
+  display: flex;
+  gap: var(--pad-2);
+  align-items: center;
+  flex-wrap: wrap;
+  width: fit-content;
+  padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad-2);
+  margin-bottom: var(--pad2);
+  background-color: var(--primary-1);
+  border-radius: 35px;
+  
+  &__logo {
+    height: var(--pad1-5);
+    width: var(--pad1-5);
+    border-radius: 50%;
+    background-color: var(--white);
+    overflow: hidden;
+  }
+  &__title {
+    border-radius: 50px;
+    color: var(--primary);
+    white-space: nowrap;
+    font-weight: bold;
+  }
+}
+

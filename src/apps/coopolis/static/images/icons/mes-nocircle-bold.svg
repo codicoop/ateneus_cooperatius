@@ -7,16 +7,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Capa_1"
-   data-name="Capa 1"
-   viewBox="0 0 19.42 19.42"
+   viewBox="0 0 24 24"
+   width="24"
+   height="24"
    version="1.1"
-   sodipodi:docname="img.svg"
-   width="19.42"
-   height="19.42"
+   id="svg4"
+   sodipodi:docname="mes-nocircle-bold.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <metadata
-     id="metadata8">
+     id="metadata10">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -28,7 +27,7 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs6" />
+     id="defs8" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -38,25 +37,24 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="705"
-     id="namedview4"
+     inkscape:window-width="1440"
+     inkscape:window-height="837"
+     id="namedview6"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:zoom="14.328571"
-     inkscape:cx="8.8376171"
-     inkscape:cy="13.50661"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:zoom="24.242044"
+     inkscape:cx="12.131576"
+     inkscape:cy="11.254991"
+     inkscape:window-x="1358"
+     inkscape:window-y="-6"
      inkscape:window-maximized="1"
-     inkscape:current-layer="Capa_1" />
-  <path
-     id="image_FILL0_wght400_GRAD0_opsz48"
-     data-name="image FILL0 wght400 GRAD0 opsz48"
-     d="M 3.13,15.18 H 16.32 L 12.36,9.89 8.8,14.5 6.29,11.08 3.14,15.18 Z M 1.62,19.41 C 0.73,19.39 0.02,18.68 0,17.79 V 1.62 C 0.02,0.74 0.73,0.02 1.62,0 H 17.8 c 0.88,0.02 1.6,0.73 1.62,1.62 V 17.8 c -0.02,0.88 -0.73,1.6 -1.62,1.62 H 1.62 Z m 0,-1.62 H 17.8 V 1.62 H 1.62 v 16.18 0 z m 0,-16.18 v 0 16.19 0 -16.18 z"
-     inkscape:connector-curvature="0"
-     style="fill:#fe8cb3;fill-opacity:1" />
+     inkscape:current-layer="svg4" />
+  <polygon
+     transform="matrix(2,0,0,2,-23,-23)"
+     points="16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 "
+     id="polygon2"
+     style="opacity:1;fill:#ffffff;fill-opacity:1" />
 </svg>

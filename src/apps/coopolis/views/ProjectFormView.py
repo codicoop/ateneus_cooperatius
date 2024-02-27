@@ -14,7 +14,7 @@ from conf.custom_mail_manager import MyMailTemplate
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     model = Project
     form_class = ProjectForm
-    template_name = "project.html"
+    template_name = "project_info.html"
     success_message = "Dades del projecte actualitzades correctament."
 
     def get_success_url(self):

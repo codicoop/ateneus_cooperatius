@@ -6,13 +6,14 @@
   --grey-lighter: #D3BFC640;
   --white: #fff;
 
-  --red: #FF0000;
+  --error: #FF0000;
   --orange: #E99401;
   --yellow: #F6BF00;
   --violet: #c4b6c3;
   --violet-dark: #a77f8d;
   
   // App colors
+  --primary-1: #F0E8F3;
   --primary-lightest: hsla(339, 100%, 89%, 0.35);
   --primary-lighter: #FFC5D9;
   --primary-light: #FE8CB3;
@@ -31,6 +32,9 @@
   
   // Border radius
   --br: 8px;
+
+  // Shadows
+  --shadow: 4px 3px 8px -2px var(--primary-lighter);
 
   // Pads
   --pad-base: 16px;
