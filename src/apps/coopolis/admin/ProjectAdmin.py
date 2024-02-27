@@ -133,6 +133,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     list_display = (
         "project_field_ellipsis",
         "date_start",
+        "stage_state",
         "stage_type",
         "stage_responsible_field_ellipsis",
         "service",
@@ -149,6 +150,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         SubserviceFilter,
         ("stage_responsible", admin.RelatedOnlyFieldListFilter),
         "date_start",
+        "stage_state",
         "stage_type",
         "axis",
         "circle",
@@ -227,8 +229,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             "js/chained_dropdown.js",
         )
         css = {"all": ("styles/grappellihacks.css",)}
-
-
 
     def _has_certificate(self, obj):
         if obj.scanned_certificate:

@@ -12,12 +12,10 @@ from django.utils.timezone import now
 
 from apps.cc_courses.choices import ProjectStageStatesChoices, StageTypeChoices
 from apps.cc_courses.models import Cofunding, Entity, Organizer, StrategicLine
-from apps.coopolis.choices import (CirclesChoices, ServicesChoices,
-                                   SubServicesChoices)
+from apps.coopolis.choices import CirclesChoices, ServicesChoices, SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
-from apps.coopolis.storage_backends import (PrivateMediaStorage,
-                                            PublicMediaStorage)
+from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -394,8 +392,8 @@ class ProjectStage(models.Model):
         max_length=8,
         choices=ProjectStageStatesChoices.choices,
         null=True,
-        blank=True,
-        default="",
+        blank=False,
+        default=None,
     )
     stage_type = models.CharField(
         "tipus d'acompanyament",
@@ -558,11 +556,25 @@ class ProjectStage(models.Model):
                         )
                     }
                 )
-        if not self.stage_state:
-            errors.update(
-                {"stage_state": ValidationError("Aquest camp és obligatori.")}
-            )
-                
+
+    def validate_stage_state(self):
+        errors = {}
+        super().clean()
+        if self.stage_state == ProjectStageStatesChoices.OPEN:
+            open_project_stages = ProjectStage.objects.filter(
+                project=self.project,
+                stage_state=ProjectStageStatesChoices.OPEN,
+            ).exclude(id=self.id)
+
+            if open_project_stages.count():
+                errors.update(
+                    {
+                        "stage_state": ValidationError(
+                            "No es pot tenir més d'un acompanyament obert."
+                        )
+                    }
+                )
+
         if errors:
             raise ValidationError(errors)
 

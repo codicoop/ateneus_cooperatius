@@ -786,7 +786,7 @@ class ProjectStageInlineFormSet(models.BaseInlineFormSet):
         super().clean()
         total_open_stages = 0
         for form in self.forms:
-            if form.cleaned_data['stage_state'] == ProjectStageStatesChoices.OPEN:
+            if "stage_state" in form.cleaned_data and form.cleaned_data['stage_state'] == ProjectStageStatesChoices.OPEN:
                 total_open_stages +=1
         if total_open_stages > 1:
             raise forms.ValidationError("No es pot tenir més d'un acompanyament obert.")
