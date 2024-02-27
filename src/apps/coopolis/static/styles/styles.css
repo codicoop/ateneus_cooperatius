@@ -911,6 +911,7 @@ a {
   border: 3px solid var(--second-2);
   text-align: left;
   font-size: 14px;
+  color: var(--primary-dark);
 }
 .form li.field input:-webkit-autofill,
 .form li.field select:-webkit-autofill,
