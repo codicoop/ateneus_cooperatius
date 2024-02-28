@@ -32,10 +32,15 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         project = self.request.user.project
-        open_project_stages = ProjectStage.objects.filter(
+        pending_project_stages = ProjectStage.objects.filter(
             project=project, stage_state=ProjectStageStatesChoices.PENDING
         )
-        context["is_pending"] = project.is_draft
+        open_project_stages = ProjectStage.objects.filter(
+            project=project, stage_state=ProjectStageStatesChoices.OPEN
+        )
+        print(open_project_stages)
+        context["is_draft"] = project.is_draft
+        context["is_pending"] = pending_project_stages
         context["is_open"] = open_project_stages
         return context
 

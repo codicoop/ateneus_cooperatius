@@ -37,8 +37,7 @@
 			<p>{{ project.name }}</p>
 		</div>
 
-    <!-- if no acompanyament ni esborrany -->
-		{% if is_pending %}
+		{% if is_draft %}
 		<div class="grid-item-wide project__intro-banner">
       <div class="text-md is-bold">
         <p>Sol·licitud pendent:</p>
@@ -57,7 +56,7 @@
 				</div>
 			</a>
     </div>
-    {% elif is_open %}
+    {% elif is_pending %}
     <div class="grid-item-wide project__intro-banner">
       <div class="text-md is-bold">
         <p>Acompanyament obert:</p>
@@ -66,7 +65,7 @@
         <p>Tens una demanda d'acompanyament obert. En breus ens posarem en contacte amb tu.</p>
       </div>
     </div>
-	{% else %}
+	{% elif not is_open %}
 	<div class="grid-item-wide project__intro-btn title-2">
   <a href="{% url 'project_stage_start' pk=project.id %}">
 			<div class="btn btn--second">

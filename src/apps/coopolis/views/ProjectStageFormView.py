@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
+from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.coopolis.forms import (
     ProjectCharacteristicsForm,
     ProjectStageAttachForm,
@@ -9,6 +10,7 @@ from apps.coopolis.forms import (
     ProjectStageStartForm,
 )
 from apps.coopolis.models import Project, ProjectStage, ProjectStageSession
+from apps.dataexports.models import SubsidyPeriod
 
 
 @login_required
@@ -59,6 +61,7 @@ def project_stage_attatch_view(request, pk):
 def project_stage_initial_petition_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
     form = ProjectStageInitialPetitionForm(request.POST, instance=project)
+    print(SubsidyPeriod.objects.latest("date_start"))
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -78,12 +81,16 @@ def project_stage_characteristics_view(request, pk):
     if request.method == "POST":
         form = ProjectCharacteristicsForm(request.POST, instance=project)
         if form.is_valid():
-            new_project = form.save()
+            form.save()
             project.is_draft = False
             project.save()
-            new_project.partners.add(request.user)
+            project.partners.add(request.user)
             new_project_stage = ProjectStage()
-            new_project_stage.project = new_project
+            new_project_stage.project = project
+            new_project_stage.stage_state = ProjectStageStatesChoices.PENDING
+            new_project_stage.subsidy_period = SubsidyPeriod.objects.latest(
+                "date_start"
+            )
             new_project_stage.save()
             project.notify_new_request_to_ateneu()
             project.notify_request_confirmation()
