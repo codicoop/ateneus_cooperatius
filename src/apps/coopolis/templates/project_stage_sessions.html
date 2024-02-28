@@ -13,18 +13,21 @@
     <p>Quines necessitats resol el vostre projecte?: {{ project.solves_necessities }}</p>
     <p>Compta el vostre projecte amb una base social?:{{ project.social_base }}</p>
     {% for project_stage in project.stages.all %}
-        <h2>Acompanyaments:</h2>
-        <h1>{{ project_stage.get_stage_type_display }}</h1>
-        <h1>{{ project_stage.date_start }}</h1>
-        {% for stage_session in project_stage.stage_sessions.all %}
-            <h2>{{ project_stage.stage_sessions.count }} Sessions</h2>
-            <p>{{ stage_session.date }}</p>
-            <p>{{ stage_session.objective }}</p>
-            <p>{{ stage_session.result }}</p>
-            <p>Material adjunt:</p>
-            <p>{{ stage_session.file1 }}</p>
-            <p>{{ stage_session.file2 }}</p>
-            <p>{{ stage_session.file3 }}</p>
-        {% endfor %}
+    {{project_stage.stage_state}}
+        {% if project_stage.stage_state != "PENDING" %}
+            <h2>Acompanyaments:</h2>
+            <h1>{{ project_stage.get_stage_type_display }}</h1>
+            <h1>{{ project_stage.date_start }}</h1>
+            {% for stage_session in project_stage.stage_sessions.all %}
+                <h2>{{ project_stage.stage_sessions.count }} Sessions</h2>
+                <p>{{ stage_session.date }}</p>
+                <p>{{ stage_session.objective }}</p>
+                <p>{{ stage_session.result }}</p>
+                <p>Material adjunt:</p>
+                <p>{{ stage_session.file1 }}</p>
+                <p>{{ stage_session.file2 }}</p>
+                <p>{{ stage_session.file3 }}</p>
+            {% endfor %}
+        {% endif %}
     {% endfor %}
 {% endblock %}
