@@ -61,7 +61,6 @@ def project_stage_attatch_view(request, pk):
 def project_stage_initial_petition_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
     form = ProjectStageInitialPetitionForm(request.POST, instance=project)
-    print(SubsidyPeriod.objects.latest("date_start"))
     if request.method == "POST":
         if form.is_valid():
             form.save()

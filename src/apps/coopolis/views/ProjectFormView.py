@@ -29,6 +29,21 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
             return HttpResponseRedirect(urls.reverse("new_project"))
         return super().get(self, request)
 
+    def post(self, request, *args, **kwargs):
+        if "delete" in request.POST:
+            project = Project.objects.get(pk=request.POST.get("delete"))
+            project.is_draft = False
+            project.object_finality = ""
+            project.project_status = ""
+            project.motivation = ""
+            project.save()
+            messages.success(
+                request,
+                "Dades del acompanyament borrades correctament.",
+            )
+            return HttpResponseRedirect(urls.reverse("edit_project"))
+        return super().post(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         project = self.request.user.project
