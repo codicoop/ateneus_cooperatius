@@ -559,21 +559,18 @@ class ProjectStage(models.Model):
                         )
                     }
                 )
-
-    def validate_stage_state(self):
-        errors = {}
-        super().clean()
+                
         if self.stage_state == ProjectStageStatesChoices.OPEN:
             open_project_stages = ProjectStage.objects.filter(
                 project=self.project,
                 stage_state=ProjectStageStatesChoices.OPEN,
             ).exclude(id=self.id)
-
+            print(open_project_stages.count())
             if open_project_stages.count():
                 errors.update(
                     {
                         "stage_state": ValidationError(
-                            "No es pot tenir més d'un acompanyament obert."
+                            "No es pot tenir més d'un acompanyament en procés."
                         )
                     }
                 )
