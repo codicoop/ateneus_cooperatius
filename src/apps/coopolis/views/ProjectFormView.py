@@ -27,11 +27,6 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     def get(self, request):
         if self.request.user.project is None:
             return HttpResponseRedirect(urls.reverse("new_project"))
-        open_project_stages = ProjectStage.objects.filter(
-            project=self.request.user.project, stage_state=ProjectStageStatesChoices.OPEN
-        )
-        if open_project_stages:
-            return HttpResponseRedirect(urls.reverse("project_stage_sessions", kwargs={'pk': self.request.user.project.pk }))
         return super().get(self, request)
 
     def get_context_data(self, **kwargs):

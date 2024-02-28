@@ -13,7 +13,6 @@
     <p>Quines necessitats resol el vostre projecte?: {{ project.solves_necessities }}</p>
     <p>Compta el vostre projecte amb una base social?:{{ project.social_base }}</p>
     {% for project_stage in project.stages.all %}
-    {{project_stage.stage_state}}
         {% if project_stage.stage_state != "PENDING" %}
             <h2>Acompanyaments:</h2>
             <h1>{{ project_stage.get_stage_type_display }}</h1>
