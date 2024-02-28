@@ -9,7 +9,8 @@ from django.views.generic.base import RedirectView
 from apps.cc_users.decorators import anonymous_required
 
 from .views import (
-    project_stage_characteristics_view,    
+    project_stage_characteristics_view,
+    project_stage_sessions_view, 
     project_stage_initial_petition_view,
     ActivityPollView,
     CoopolisLoginView,
@@ -99,6 +100,7 @@ urlpatterns += [
         project_stage_characteristics_view,
         name="project_stage_characteristics",
     ),
+    path("project/stage/sessions/<int:pk>/", project_stage_sessions_view, name="project_stage_sessions"),
     path(
         "email_template_test/",
         TemplateView.as_view(template_name="emails/base.html"),
