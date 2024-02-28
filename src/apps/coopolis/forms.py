@@ -75,7 +75,7 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
     ]
 
 
-class ProjectStageStartForm(FormDistrictValidationMixin, forms.ModelForm):
+class ProjectStageStartForm(forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
@@ -91,7 +91,7 @@ class ProjectStageStartForm(FormDistrictValidationMixin, forms.ModelForm):
         )
 
 
-class ProjectStageAttachForm(FormDistrictValidationMixin, forms.ModelForm):
+class ProjectStageAttachForm(forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
@@ -103,7 +103,7 @@ class ProjectStageAttachForm(FormDistrictValidationMixin, forms.ModelForm):
         )
 
 
-class ProjectStageInitialPetitionForm(FormDistrictValidationMixin, forms.ModelForm):
+class ProjectStageInitialPetitionForm(forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
@@ -114,7 +114,7 @@ class ProjectStageInitialPetitionForm(FormDistrictValidationMixin, forms.ModelFo
         )
 
 
-class ProjectCharacteristicsForm(FormDistrictValidationMixin, forms.ModelForm):
+class ProjectCharacteristicsForm(forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
