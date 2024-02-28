@@ -115,3 +115,16 @@ function clickProjectLogoInput() {
   let input = document.getElementById("id_logo")
   input.click()
 }
+// Acompanyament - dropdown
+function openThisDropdown(event) {
+  const thisTopbar = event
+  const thisBottom = thisTopbar.nextElementSibling
+  thisTopbar.classList.add("is-hidden")
+  thisBottom.classList.remove("is-hidden")
+}
+function closeThisDropdown(event) {
+  const thisBottom = event
+  const thisTopbar = thisBottom.previousElementSibling
+  thisTopbar.classList.remove("is-hidden")
+  thisBottom.classList.add("is-hidden")
+}
