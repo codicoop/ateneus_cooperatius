@@ -131,4 +131,15 @@ def project_stage_sessions_view(request, pk):
     context["is_draft"] = project.is_draft
     context["is_pending"] = pending_project_stages
     context["is_open"] = open_project_stages
+    if request.method == "POST" and "delete" in request.POST:
+        project.is_draft = False
+        project.object_finality = ""
+        project.project_status = ""
+        project.motivation = ""
+        project.save()
+        messages.success(
+            request,
+            "Dades del acompanyament borrades correctament.",
+        )
+        return redirect("project_stage_sessions", pk=pk)
     return render(request, "project_stage_sessions.html", context)
