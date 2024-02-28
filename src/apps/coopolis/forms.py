@@ -789,4 +789,4 @@ class ProjectStageInlineFormSet(models.BaseInlineFormSet):
             if "stage_state" in form.cleaned_data and form.cleaned_data['stage_state'] == ProjectStageStatesChoices.OPEN:
                 total_open_stages +=1
         if total_open_stages > 1:
-            raise forms.ValidationError("No es pot tenir més d'un acompanyament obert.")
+            raise forms.ValidationError("No es pot tenir més d'un acompanyament en procés.")
