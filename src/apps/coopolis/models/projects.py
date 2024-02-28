@@ -559,13 +559,13 @@ class ProjectStage(models.Model):
                         )
                     }
                 )
-                
+
         if self.stage_state == ProjectStageStatesChoices.OPEN:
             open_project_stages = ProjectStage.objects.filter(
                 project=self.project,
                 stage_state=ProjectStageStatesChoices.OPEN,
             ).exclude(id=self.id)
-            print(open_project_stages.count())
+
             if open_project_stages.count():
                 errors.update(
                     {
