@@ -38,7 +38,6 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
         open_project_stages = ProjectStage.objects.filter(
             project=project, stage_state=ProjectStageStatesChoices.OPEN
         )
-        print(open_project_stages)
         context["is_draft"] = project.is_draft
         context["is_pending"] = pending_project_stages
         context["is_open"] = open_project_stages

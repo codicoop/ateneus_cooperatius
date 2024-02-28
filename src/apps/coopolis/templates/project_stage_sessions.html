@@ -7,6 +7,45 @@
 
 {% block content %}
 {% include './components/header_topbar.html' %}
+    {% if is_draft %}
+    <div class="grid-item-wide project__intro-banner">
+    <div class="text-md is-bold">
+    <p>Sol·licitud pendent:</p>
+    </div>
+    <div>
+    <p>Tens una demanda d'acompanyament sense acabar. Pots tornar a l'esborrany per finalitzar el procés i enviar la sol·licitud.</p>
+    </div>
+        <div class="action-text">
+            <p>Eliminar esborrany</p>
+        </div>
+        <a href="{% url 'project_stage_start' pk=project.id %}">
+            <div class="btn btn--second">
+                <div class="btn__text">
+                    <p>Continuar</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% elif is_pending %}
+    <div class="grid-item-wide project__intro-banner">
+    <div class="text-md is-bold">
+    <p>Acompanyament obert:</p>
+    </div>
+    <div>
+    <p>Tens una demanda d'acompanyament obert. En breus ens posarem en contacte amb tu.</p>
+    </div>
+    </div>
+    {% elif not is_open %}
+    <div class="grid-item-wide project__intro-btn title-2">
+    <a href="{% url 'project_stage_start' pk=project.id %}">
+        <div class="btn btn--second">
+            <div class="btn__text">
+                <p>Sol·licitar acompanyament</p>
+            </div>
+        </div>
+    </a>
+    </div>
+    {% endif %}
     <h1>{{ project.name }}</h1>
     <p>Estat del projecte: {{ project.get_project_status_display }}</p>
     <p>Orígens del projecte: {{ project.project_origins }}</p>

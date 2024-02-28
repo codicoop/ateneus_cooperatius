@@ -117,7 +117,15 @@ def project_stage_characteristics_view(request, pk):
 @login_required
 def project_stage_sessions_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    context = {
-        "project": project,
-    }
+    context = {}
+    context["project"] = project
+    pending_project_stages = ProjectStage.objects.filter(
+        project=project, stage_state=ProjectStageStatesChoices.PENDING
+    )
+    open_project_stages = ProjectStage.objects.filter(
+        project=project, stage_state=ProjectStageStatesChoices.OPEN
+    )
+    context["is_draft"] = project.is_draft
+    context["is_pending"] = pending_project_stages
+    context["is_open"] = open_project_stages
     return render(request, "project_stage_sessions.html", context)
