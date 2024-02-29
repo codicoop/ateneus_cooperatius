@@ -108,7 +108,7 @@
 		</div>
     <div class="profile__links">
       <div class="profile__link profile__image-link text-xsm" onclick="clickUserProfileFileInput()">
-        <p>Canvia la imatge</p>
+        <p>Canviar imatge</p>
       </div>
       <div 
       class="profile__link text-menu"
@@ -122,22 +122,6 @@
 		<div class="form grid-item-wide">
 			<form method="post" action="" id="profile_form">
 				{% csrf_token %}
-        <!-- Exemple de radio -->
-        <li class="field field-radio">
-          <label>Gènere</label>
-          <span>
-            <input type="radio" id="gender_f" name="gender" value="FEMALE">
-            <label for="gender_f">Dona</label>
-          </span>
-          <span>
-            <input type="radio" id="gender_m" name="gender" value="MALE">
-            <label for="gender_m">Home</label>
-          </span>
-          <span>
-            <input type="radio" id="gender_o" name="gender" value="OTHER">
-            <label for="gender_o">Altre</label>
-          </span>
-        </li>
 				{{ form.as_ul }}
 			</form>
 			{% if form.errors %}

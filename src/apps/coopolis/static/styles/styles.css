@@ -968,7 +968,7 @@ a {
 }
 .form li.field-checkbox input {
   position: relative;
-  width: 15px;
+  width: 20px;
   height: 16px;
   padding: 0;
   margin: 6px 0 0 0;
@@ -1154,21 +1154,18 @@ a {
 }
 
 .form li.field-radio {
-  display: grid;
-  grid-template-columns: 27% 27% 27%;
+  display: flex;
+  flex-direction: column-reverse;
 }
 .form li.field-radio label {
   grid-row: 1;
   grid-column: 1/span 3;
 }
-.form li.field-radio span {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
-  align-items: center;
-  gap: var(--pad-3);
+.form li.field-radio ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
-.form li.field-radio span input {
+.form li.field-radio li input {
   width: 16px;
   height: 16px;
   padding: 0;
@@ -1176,12 +1173,20 @@ a {
   border: 2px solid var(--second-2);
   border-radius: 50px;
 }
-.form li.field-radio span label {
+.form li.field-radio li label {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--pad-3);
   color: var(--primary-dark);
   font-size: 14px;
-  line-height: 24px;
+  line-height: 18px;
   font-weight: normal;
   text-transform: none;
+}
+.form li.field-radio li label::after {
+  display: none;
 }
 
 .course-card__title {
@@ -2663,11 +2668,17 @@ a {
   .profile .form {
     --display: flex;
   }
+  .profile .form form {
+    --display-form: grid;
+  }
 
   .project .form {
     --display: grid;
   }
 
+  .form form {
+    --display-form: flex;
+  }
   .form__submit {
     --margin: var(--pad4) 0;
   }
@@ -2682,7 +2693,9 @@ a {
   gap: 0 var(--pad1);
 }
 .form form {
-  display: flex;
+  display: var(--display-form);
+  grid-template-columns: 50% 50%;
+  gap: 0 var(--pad1);
   flex-direction: column;
 }
 .form__error {
@@ -4087,6 +4100,9 @@ a {
 }
 .profile__form .form {
   flex-direction: column;
+}
+.profile__form .form li:nth-child(2).field-file {
+  display: none;
 }
 .profile__form .form__submit {
   align-self: center;

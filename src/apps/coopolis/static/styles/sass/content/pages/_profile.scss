@@ -157,6 +157,11 @@
   &__form {
     .form {
       flex-direction: column;
+
+      // Camp fotografia amagat
+      & li:nth-child(2).field-file {
+        display: none;
+      }
     }
     .form__submit {
       align-self: center;

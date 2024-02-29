@@ -14,7 +14,7 @@ function onLoadFunction(){
       checkboxParent.classList.add("field-checkbox")
     }
     if (el.type === "radio") {
-      let radioParent = el.parentElement
+      let radioParent = el.parentElement.parentElement.parentElement.parentElement
       radioParent.classList.add("field", "field-radio")
     }
     if (el.type === "number") {
@@ -64,8 +64,9 @@ function onLoadFunction(){
   // Pàgina de projectes
   const projectPage = document.querySelector(".project")
   const profilePage = document.querySelector(".profile")
+  const supportPage = document.querySelector(".support")
 
-  if (projectPage || registerPage || profilePage) {
+  if (projectPage || registerPage || profilePage || supportPage) {
     // Mostrant districte només si Barcelona
     const townInput = document.querySelector("#id_town")
     const districtField = document.querySelector("#id_district").parentElement

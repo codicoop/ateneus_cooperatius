@@ -26,6 +26,10 @@
   .profile {
     .form {
       --display: flex;
+      
+      form {
+        --display-form: grid;
+      }
     }
   }
   .project {
@@ -34,6 +38,9 @@
     }
   }
   .form {
+    form {
+      --display-form: flex;
+    }
     &__submit {
       --margin: var(--pad4) 0;
     }
@@ -50,9 +57,11 @@
   display: var(--display);
   grid-template-columns: 50% 50%;
   gap: 0 var(--pad1);
-
+  
   form {
-    display: flex;
+    display: var(--display-form);
+    grid-template-columns: 50% 50%;
+    gap: 0 var(--pad1);
     flex-direction: column;
   }
 

@@ -78,14 +78,12 @@
   {% for project_stage in project.stages.all %}
     {% if project_stage.stage_state != "PENDING" %}
     <section class="support-list__item dropdown">
-      <div class="dropdown__topbar grid-content is-hidden" onclick="openThisDropdown(this)">
+      <div class="dropdown__topbar grid-content" onclick="openThisDropdown(this)">
         <div class="pretitle">
           <p>{{ project_stage.date_start }}</p>
         </div>
         <div class="title text-md">
-          <p>Transformació d'associació a cooperativa</p>
-          <!-- FALTA -->
-          <!-- {# <p>{{ support.title }}</p> #} -->
+          <p>{{ project_stage.get_stage_type_display }}</p>
         </div>
         {% if project_stage.stage_sessions.count %}
         <div class="subtitle">
@@ -99,7 +97,7 @@
           </svg>
         </div>
       </div>
-      <div class="dropdown__bottom grid-content">
+      <div class="dropdown__bottom grid-content is-hidden">
         <div class="info">
           <div class="pretitle">
             <p>{{ project_stage.date_start }}</p>
@@ -143,7 +141,7 @@
                 <p>Sessió </p>
               </div>
               <div class="date text-xsm">
-                <p>{{ stage_session.date }}</p>
+                <p>{{ stage_session.date|date:"F Y" }}</p>
                 <!-- No tinc clara la diferència entre aquesta data i la de dins -->
                 <!-- <p>Agost 2022</p> -->
               </div>
@@ -163,7 +161,7 @@
                     <p>Data</p>
                   </div>
                   <div class="info__text">
-                    <p>{{ stage_session.date }}</p>
+                    <p>{{ stage_session.date|date:"d/m/Y" }}</p>
                   </div>
                 </div>
               </div>
