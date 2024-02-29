@@ -1,5 +1,5 @@
 from datetime import datetime
-from apps.cc_courses.choices import ProjectStageStatesChoices
+
 from constance import config
 from django import forms
 from django.conf import settings
@@ -11,6 +11,7 @@ from django.forms import models
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 
+from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.mixins import FormDistrictValidationMixin
 from apps.coopolis.models import ActivityPoll, EmploymentInsertion, Project, User
@@ -106,6 +107,11 @@ class ProjectStageAttachForm(forms.ModelForm):
 class ProjectStageInitialPetitionForm(forms.ModelForm):
     required_css_class = "required"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["project_status"].required = True
+        self.fields["motivation"].required = True
+
     class Meta:
         model = Project
         fields = (
@@ -116,6 +122,12 @@ class ProjectStageInitialPetitionForm(forms.ModelForm):
 
 class ProjectCharacteristicsForm(forms.ModelForm):
     required_css_class = "required"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["project_origins"].required = True
+        self.fields["solves_necessities"].required = True
+        self.fields["social_base"].required = True
 
     class Meta:
         model = Project
@@ -176,10 +188,10 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
             # user row read only when editing).
             # New (unsaved yet) ones will have data['id'] == None
             EmploymentInsertion.validate_extended_fields(
-                data['user'],
-                data['project'],
-                None, 
-                data.get('subsidy_period'),
+                data["user"],
+                data["project"],
+                None,
+                data.get("subsidy_period"),
                 False,
             )
 
@@ -210,7 +222,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
             self.cleaned_data.get("activity"),
             self.cleaned_data.get("project"),
         )
-        
+
         return self.cleaned_data
 
 
@@ -786,7 +798,12 @@ class ProjectStageInlineFormSet(models.BaseInlineFormSet):
         super().clean()
         total_open_stages = 0
         for form in self.forms:
-            if "stage_state" in form.cleaned_data and form.cleaned_data['stage_state'] == ProjectStageStatesChoices.OPEN:
-                total_open_stages +=1
+            if (
+                "stage_state" in form.cleaned_data
+                and form.cleaned_data["stage_state"] == ProjectStageStatesChoices.OPEN
+            ):
+                total_open_stages += 1
         if total_open_stages > 1:
-            raise forms.ValidationError("No es pot tenir més d'un acompanyament en procés.")
+            raise forms.ValidationError(
+                "No es pot tenir més d'un acompanyament en procés."
+            )
