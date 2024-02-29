@@ -90,14 +90,14 @@
 				</div>
 			</span>
 			<div class="intro__bloc-list">
-			<!-- {# {% for enrollment in enrolled_activities %} #} -->
+			{% for enrollment in enrolled_activities.all %}
 				<div class="card">
-					<a href="#0">
+					<a href="{% url 'course' slug=enrollment.activity.course.slug %}">
 						<div class="card__pretitle text-xsm">
-							<p>Tallers cooperatiu febrer 2023</p>
+							<p>{{ enrollment.activity.course.title }}</p>
 						</div>
 						<div class="card__title text-md is-bold">
-							<p>Taller de mentida per fer proves</p>
+							<p>{{ enrollment.activity.name }}</p>
 						</div>
 						<div class="card__arrow">
 							<svg class="icon-pathfill-primary" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35">
@@ -106,22 +106,7 @@
 						</div>
 					</a>
 				</div>
-			<!-- {# {% endfor %} #} -->
-				<div class="card">
-					<a href="#0">
-						<div class="card__pretitle text-xsm">
-							<p>Tallers cooperatiu febrer 2023</p>
-						</div>
-						<div class="card__title text-md is-bold">
-							<p>Taller de mentida per fer proves</p>
-						</div>
-						<div class="card__arrow">
-							<svg class="icon-pathfill-primary" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35">
-								<path id="Trazado_495" data-name="Trazado 495" d="M17.58,23.35l5.85-5.85-5.85-5.85-1.68,1.68,2.96,2.97h-7.29v2.4h7.29l-2.97,2.97,1.68,1.69Z"/>
-							</svg>
-						</div>
-					</a>
-				</div>
+			{% endfor %}			
 				<a class="intro__bloc-link" href="{% url 'my_activities' %}">
 					<div class="btn__text text-menu">
 						<p>Veure tots els meus cursos</p>
