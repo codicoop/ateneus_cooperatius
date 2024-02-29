@@ -22,13 +22,6 @@ function closeSessionCard(event) {
   closeBtn.classList.add("is-hidden")
 }
 
-function showDeleteModal(event) {
-  window.scrollTo(0,0)
-  const card = event.target.parentElement.parentElement.parentElement
-  const modal = card.querySelector(".delete-modal")
-  modal.classList.remove("is-hidden")
-}
-
 function copyVideocallUrl(link) {
   const alert = document.querySelector(".copied_alert")
   // Copiem el link
