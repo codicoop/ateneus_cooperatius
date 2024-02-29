@@ -30,7 +30,7 @@
         <div class="course-card__pretitle text-xsm">
           <!-- Nou: sector o cercle, potser? -->
           <!-- Cadascun ha de tenir el seu color propi -->
-          <h2>Ecofeminismes</h2>
+          <h2>XXXXXXXXXXX</h2>
         </div>
         <div class="course-card__title text-md">
           <h2>{{ course.title }}</h2>
@@ -56,29 +56,34 @@
             <p>Adreçat a</p>
           </div>
           <div class="course-card__text richtext">
-            <!-- Nou: públic objectiu -->
-            <p>{{ course.aimed_at|safe }}</p>
+            {% if not course.aimed_at|safe == "None" %}
+              <p>{{ course.aimed_at|safe }}</p>
+            {% else %}
+              <p>No hi ha cap públic objectiu definit per aquesta sessió.</p>
+              {% if user.is_superuser or user.is_staff %}
+                <p>Si vols pots afegir-ne un al 
+                  <a href="{% url 'admin:index'%}">
+                    panell d'administració.
+                  </a>
+                </p>
+              {% endif %}
+            {% endif %}
           </div>
         </div>
         <div class="course-card__bloc grid-bloc">          
           <div class="course-card__subtitle text-menu">
-            <!-- Nou: nombre de sessions -->
             <p>Sessions: {{ course.activities.count }}</p>
           </div>
-          <!-- Nou FOR: per cada sessió -->
           {% for session in course.activities.all %}
           <div class="course-card__subbloc subbloc">
-            <!-- Data sessió. Format 24/07/2023-->
             <div class="subbloc__title text-sm">
               <p>{{ session.date_start|date:"d/m/y" }}</p>
             </div>
-            <!-- Horari sessió: format HH:mm - HH:mm -->
             <div class="subbloc__subtitle text-sm">
               <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
             </div>
-            <!-- Descripció sessió, clipped -->
-            <div class="subbloc__text text-sm">
-              <p>{{ session.objectives }}</p>
+            <div class="subbloc__text text-sm richtext">
+              {{ session.objectives }}
             </div>
           </div>
           {% endfor %}
