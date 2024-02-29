@@ -128,8 +128,8 @@
 		</div>
 		{% endif %}
 
-		<!-- {# {% if request.user.projects.count is 0 %} #} -->
-		<!-- <div class="intro__bloc intro__bloc grid-item-4-6">
+		{% if not open_projects %}
+		<div class="intro__bloc intro__bloc grid-item-4-6">
 			<div class="intro__bloc-title text-menu">
 				<p>Projectes</p>
 			</div>
@@ -137,7 +137,7 @@
 				Des de {{ config.PROJECT_NAME }} acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a cooperatives.
 			</div>
 			<div class="intro__bloc-btn">
-				<a href="{% url 'project_info' %}">
+				<a href="{% url 'new_project' %}">
 					<div class="btn btn--primary">
 						<div class="btn__text">
 							{% if request.user.projects.all %}
@@ -149,9 +149,9 @@
 					</div>
 				</a>
 			</div>
-		</div> -->
+		</div>
 
-		<!-- {# {% else %} #} -->
+		{% else %}
 		<div class="intro__bloc grid-item-4-6">
 			<span>
 				<div class="intro__bloc-subtitle text-menu">
@@ -161,24 +161,24 @@
 					<p>Acompanyaments oberts:</p>
 				</div>
 			</span>
-			<!-- {# {% for each acompanyament %} #} -->
+			{% for open_project in open_projects %}
 			<div class="intro__bloc-supercard">
 				<div class="supercard">
 					<div class="supercard__logo">
 					</div>
 					<div class="supercard__title text-md">
-						<p>La Meva Entitat SCCL</p>
+						<p>{{ open_project.name }}</p>
 					</div>
-					<a class="supercard__edit text-menu" href="">
+					<a class="supercard__edit text-menu" href="{% url 'edit_project' %}">
 						<p>Editar dades</p>
 					</a>
 					<div class="card">
-						<a href="#0">
+						<a href="{% url 'project_stage_sessions' pk=open_project.pk %}">
 							<div class="card__pretitle text-xsm">
-								<p>Tallers cooperatiu febrer 2023</p>
+								<p>{{ open_project.registration_date|date:"d/m/y" }}</p>
 							</div>
 							<div class="card__title text-md is-bold">
-								<p>Taller de mentida per fer proves</p>
+								<p>{{ open_project.get_motivation_display }}</p>
 							</div>
 							<div class="card__arrow">
 								<svg class="icon-pathfill-primary" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35">
@@ -197,10 +197,10 @@
 					</div>
 				</a>
 			</div>
-			<!-- {# {% endfor %} #} -->
+			{% endfor %}
 		</div>
 
-		<!-- {# {% endif %} #} -->
+		{% endif %}
 
 	</section>
 	{% endif %}
