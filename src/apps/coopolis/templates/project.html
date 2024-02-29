@@ -17,11 +17,13 @@
 						<p>El meu projecte</p>
 					</div>
 				</a>
-				<a href="{% url 'project_stage_sessions' pk=project.id %}">
-					<div class="submenu__item">
-						<p>Acompanyaments</p>
-					</div>
-				</a>
+				{% if request.user.projects ==  None %}
+					<a href="{% url 'project_stage_sessions' pk=project.id %}">
+						<div class="submenu__item">
+							<p>Acompanyaments</p>
+						</div>
+					</a>
+				{% endif %}
 			</div>
 		</div>
 	</section>

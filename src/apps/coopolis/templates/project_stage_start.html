@@ -9,9 +9,11 @@
 <div class="support support-0">
   <section class="support__intro grid-content">
     <div class="grid-item-wide support__project-tag project-tag">
-      <div class="project-tag__logo">
-        <img src="{{ project.logo.url }}" alt="Logo de {{ project.name }}">
-      </div>
+      {% if project.logo %}
+        <div class="project-tag__logo">
+          <img src="{{ project.logo.url }}" alt="Logo de {{ project.name }}">
+        </div>
+      {% endif %}
       <div class="project-tag__title">
         <p>{{ project.name }}</p>
       </div>
