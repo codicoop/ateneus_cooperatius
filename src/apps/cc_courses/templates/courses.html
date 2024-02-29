@@ -78,7 +78,7 @@
             </div>
             <!-- Descripció sessió, clipped -->
             <div class="subbloc__text text-sm">
-              <p>{{ session.objectives }}</p>
+              <p>{{ session.objectives|safe }}</p>
             </div>
           </div>
           {% endfor %}
