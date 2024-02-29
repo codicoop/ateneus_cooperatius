@@ -50,7 +50,8 @@ class MyAccountView(SuccessMessageMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         if "delete" in request.POST:
             user = self.get_object()
-            user.delete()
+            user.is_active = False
+            user.save()
             return redirect("home")
         return super().post(request, *args, **kwargs)
 
