@@ -99,10 +99,13 @@
       </div>
     </div>
 		<div class="profile__title">
-			<p>{{ user.first_name }} {{ user.last_name }} {{ user.surname2 }}</p>
+      
+			<p>{{ user.first_name }} {{ user.last_name }} {% if user.surname2 %} {{ user.surname2 }} {% endif %}</p>
 		</div>
 		<div class="profile__info text-md">
-			<p>{{ user.id_number }}</p>
+      {% if user.id_number %}
+			  <p>{{ user.id_number }}</p>
+      {% endif %}
 			<p>{{ user.email }}</p>
 			<p>{{ user.town.name|lower|capfirst }}</p>
 		</div>
