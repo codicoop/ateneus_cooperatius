@@ -62,16 +62,16 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             {
                 "fields": (
                     "first_name",
-                    "email",
                     "last_name",
-                    "phone_number",
                     "surname2",
-                    "birthdate",
                     "id_number",
-                    "birth_place",
                     "cannot_share_id",
-                    "town",
                     "gender",
+                    "email",
+                    "phone_number",
+                    "birthdate",
+                    "birth_place",
+                    "town",
                     "address",
                 )
             },
@@ -81,8 +81,8 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             {
                 "fields": (
                     "educational_level",
-                    "discovered_us",
                     "employment_situation",
+                    "discovered_us",
                     "project_involved",
                 )
             },

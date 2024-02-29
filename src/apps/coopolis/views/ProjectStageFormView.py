@@ -28,8 +28,8 @@ def project_stage_start_view(request, pk):
 @login_required
 def project_stage_data_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    form = ProjectStageStartForm(request.POST, instance=project)
     if request.method == "POST":
+        form = ProjectStageStartForm(request.POST, instance=project)
         if form.is_valid():
             project.is_draft = True
             project.save()
@@ -45,10 +45,14 @@ def project_stage_data_view(request, pk):
 @login_required
 def project_stage_attatch_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    form = ProjectStageAttachForm(request.POST, instance=project)
     if request.method == "POST":
+        form = ProjectStageAttachForm(request.POST, instance=project)
         if form.is_valid():
-            form.save()
+            files_fields = ["estatuts", "viability", "sostenibility"]
+            for field in files_fields:
+                if field in request.POST and request.POST[field]:
+                    setattr(project, field, request.POST[field])
+            project.save()
             return redirect("project_stage_initial_petition", pk=pk)
     else:
         form = ProjectStageAttachForm(instance=project)
@@ -61,7 +65,6 @@ def project_stage_attatch_view(request, pk):
 def project_stage_initial_petition_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
     form = ProjectStageInitialPetitionForm(request.POST, instance=project)
-    print(SubsidyPeriod.objects.latest("date_start"))
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -128,4 +131,15 @@ def project_stage_sessions_view(request, pk):
     context["is_draft"] = project.is_draft
     context["is_pending"] = pending_project_stages
     context["is_open"] = open_project_stages
+    if request.method == "POST" and "delete" in request.POST:
+        project.is_draft = False
+        project.object_finality = ""
+        project.project_status = ""
+        project.motivation = ""
+        project.save()
+        messages.success(
+            request,
+            "Dades del acompanyament borrades correctament.",
+        )
+        return redirect("project_stage_sessions", pk=pk)
     return render(request, "project_stage_sessions.html", context)

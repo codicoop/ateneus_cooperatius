@@ -2,8 +2,9 @@ from django.db import models
 
 
 class ProjectStageStatesChoices(models.TextChoices):
-    PENDING = "PENDING", "En procés"
-    OPEN = "OPEN", "Sol·licitat"
+    __empty__ = "Sense indicar"
+    PENDING = "PENDING", "Sol·licitat"
+    OPEN = "OPEN", "En procés"
     CLOSE = "CLOSE", "Finalizat"
 
 
