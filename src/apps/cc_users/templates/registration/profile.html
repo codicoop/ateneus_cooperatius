@@ -91,14 +91,13 @@
     </div>
     <div class="profile__image">
       <div class="image">
-        <img src="{{ user.photo.url }}" alt="Imatge d'usuari">
+        <img src="{% if user.photo %}{{ user.photo.url }} {% endif %}" alt="Imatge d'usuari">
       </div>
       <div class="profile__image-link text-xsm" onclick="clickUserProfileFileInput()">
         <p>Canvia la imatge</p>
       </div>
     </div>
 		<div class="profile__title">
-      
 			<p>{{ user.first_name }} {{ user.last_name }} {% if user.surname2 %} {{ user.surname2 }} {% endif %}</p>
 		</div>
 		<div class="profile__info text-md">
