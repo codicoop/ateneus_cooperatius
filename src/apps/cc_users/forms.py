@@ -26,7 +26,7 @@ class LogInForm(AuthenticationForm):
         return self.cleaned_data
 
 
-class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
+class MyAccountForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = (
