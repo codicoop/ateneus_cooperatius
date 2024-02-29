@@ -13,7 +13,7 @@
 >
 	<section class="signup__welcome grid-content">
 		<div class="title-1 grid-item-wide">
-			<p>Per a inscriure't a les activitats o sol·licitar acompanyament per al teu projecte, crea un compte amb els formularis que hi ha a continuació.</p>
+			<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de Coòpolis!</p>
 		</div>
 	</section>
 	<section class="signup__form grid-content">
@@ -24,14 +24,14 @@
 		>
 			{% csrf_token %}
 			{{ signup_form.as_ul }}
+			<div class="form__submit">
+				<input type="submit" class="btn btn--second btn__text" value="Crear compte" />
+			</div>
 			<div class="form__text">
 				<p>Consulta el
 					<a href="{{ config.PROJECT_LEGAL_URL }}" target="_blank" class="is-bold">text complet</a>
 					de l'avís legal i de protecció de dades.
 				</p>
-			</div>
-			<div class="form__submit">
-				<input type="submit" class="btn btn--second btn__text" value="Crear compte" />
 			</div>
 			<input type="hidden" name="next" value="{{ next }}" />
 		</form>

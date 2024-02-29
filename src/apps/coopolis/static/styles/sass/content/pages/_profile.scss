@@ -149,71 +149,70 @@
       .form {
         form {
           --display-form: grid;
-
-      // Nom
-      & li:nth-child(3) {
-        order: initial;
-      }
-      // Email
-      & li:nth-child(4) {
-        order:  initial;
-      }
-      // Cognom
-      & li:nth-child(5) {
-        order:  initial;
-      }
-      // Phone
-      & li:nth-child(6) {
-        order:  initial;
-      }
-      // Segon cognom
-      & li:nth-child(7) {
-        order:  initial;
-      }
-      // dob
-      & li:nth-child(8) {
-        order:  initial;
-      }
-      // dni
-      & li:nth-child(9) {
-        order:  initial;
-      }
-      // lloc naixement
-      & li:nth-child(10) {
-        order:  initial;
-      }
-      // NO dni
-      & li:nth-child(11) {
-        order:  initial;
-      }
-      // poblacio
-      & li:nth-child(12) {
-        order:  initial;
-      }
-      // genere
-      & li:nth-child(13) {
-        order:  initial;
-      }
-      // adreça
-      & li:nth-child(14) {
-        order:  initial;
-      }
-      // estudis
-      & li:nth-child(15) {
-        order:  initial;
-      }
-      // conegut
-      & li:nth-child(16) {
-        order:  initial;
-      }
-      // laboral
-      & li:nth-child(17) {
-        order:  initial;
-      }
-      // ess
-      & li:nth-child(18) {
-        order:  initial;
-      }
+          // Nom
+          & li:nth-child(3) {
+            order: initial;
+          }
+          // Email
+          & li:nth-child(4) {
+            order:  initial;
+          }
+          // Cognom
+          & li:nth-child(5) {
+            order:  initial;
+          }
+          // Phone
+          & li:nth-child(6) {
+            order:  initial;
+          }
+          // Segon cognom
+          & li:nth-child(7) {
+            order:  initial;
+          }
+          // dob
+          & li:nth-child(8) {
+            order:  initial;
+          }
+          // dni
+          & li:nth-child(9) {
+            order:  initial;
+          }
+          // lloc naixement
+          & li:nth-child(10) {
+            order:  initial;
+          }
+          // NO dni
+          & li:nth-child(11) {
+            order:  initial;
+          }
+          // poblacio
+          & li:nth-child(12) {
+            order:  initial;
+          }
+          // genere
+          & li:nth-child(13) {
+            order:  initial;
+          }
+          // adreça
+          & li:nth-child(14) {
+            order:  initial;
+          }
+          // estudis
+          & li:nth-child(15) {
+            order:  initial;
+          }
+          // conegut
+          & li:nth-child(16) {
+            order:  initial;
+          }
+          // laboral
+          & li:nth-child(17) {
+            order:  initial;
+          }
+          // ess
+          & li:nth-child(18) {
+            order:  initial;
+          }
         }
       }
     }
