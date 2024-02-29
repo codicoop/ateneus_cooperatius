@@ -76,7 +76,6 @@ class ProjectStageSessionsInline(admin.StackedInline):
         (
             "Informació que es mostrarà a les sòcies del projecte",
             {
-                "classes": ("grp-collapse grp-closed",),
                 "fields": (
                     "objective",
                     "result",
@@ -833,7 +832,6 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         (
             "Informació que es mostrarà a les sòcies del projecte",
             {
-                "classes": ("grp-collapse grp-closed",),
                 "fields": (
                     "objective",
                     "result",
