@@ -58,7 +58,7 @@
   </section>
   <section class="support__form grid-content">
     <form class="form grid-item-full" method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
-      id="support-form-1">
+      id="support-form-1" enctype="multipart/form-data">
       {% csrf_token %}
       {{ form.as_ul }}
       {% if messages %}

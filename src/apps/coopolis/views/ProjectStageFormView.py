@@ -46,13 +46,9 @@ def project_stage_data_view(request, pk):
 def project_stage_attatch_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
     if request.method == "POST":
-        form = ProjectStageAttachForm(request.POST, instance=project)
+        form = ProjectStageAttachForm(request.POST, request.FILES, instance=project)
         if form.is_valid():
-            files_fields = ["estatuts", "viability", "sostenibility"]
-            for field in files_fields:
-                if field in request.POST and request.POST[field]:
-                    setattr(project, field, request.POST[field])
-            project.save()
+            form.save()
             return redirect("project_stage_initial_petition", pk=pk)
     else:
         form = ProjectStageAttachForm(instance=project)
