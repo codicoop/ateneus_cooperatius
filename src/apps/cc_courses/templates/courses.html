@@ -57,30 +57,31 @@
           </div>
           <div class="course-card__text richtext">
             <!-- Nou: públic objectiu -->
-            <p>XXXXXXXX</p>
+            <p>{{ course.aimed_at|safe }}</p>
           </div>
         </div>
         <div class="course-card__bloc grid-bloc">          
           <div class="course-card__subtitle text-menu">
             <!-- Nou: nombre de sessions -->
-            <p>Sessions: XXX</p>
+            <p>Sessions: {{ course.activities.count }}</p>
           </div>
           <!-- Nou FOR: per cada sessió -->
+          {% for session in course.activities.all %}
           <div class="course-card__subbloc subbloc">
             <!-- Data sessió. Format 24/07/2023-->
             <div class="subbloc__title text-sm">
-              <p>XXXXX</p>
+              <p>{{ session.date_start|date:"d/m/y" }}</p>
             </div>
             <!-- Horari sessió: format HH:mm - HH:mm -->
             <div class="subbloc__subtitle text-sm">
-              <p>XXXXXX</p>
+              <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
             </div>
             <!-- Descripció sessió, clipped -->
             <div class="subbloc__text text-sm">
-              <p>XXXXXX</p>
+              <p>{{ session.objectives }}</p>
             </div>
           </div>
-          <!-- ENDFOR -->
+          {% endfor %}
         </div>
         <div class="course-card__btn">
           <a href="{{ course.absolute_url }}">
