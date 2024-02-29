@@ -83,7 +83,19 @@
           <p>{{ project_stage.date_start }}</p>
         </div>
         <div class="title text-md">
-          <p>XXXXXXXXXXXXXXXXXXXX</p>
+          {% if project.motivation == "COOPERATIVISM_EDUCATION" %}
+          <p>Formació en cooperativisme</p>
+          {% elif project.motivation == "COOPERATIVE_CREATION" %}
+          <p>Constitució d'una cooperativa</p>
+          {% elif project.motivation == "TRANSFORM_FROM_ASSOCIATION" %}
+          <p>Transformació d'associació a cooperativa</p>
+          {% elif project.motivation == "TRANSFORM_FROM_SCP" %}
+          <p>Transformació de SCP a cooperativa</p>
+          {% elif project.motivation == "CONSOLIDATION" %}
+          <p>Consolidació</p>
+          {% elif project.motivation == "OTHER" %}
+          <p>Altres</p>
+          {% endif %}
         </div>
         {% if project_stage.stage_sessions.count %}
         <div class="subtitle">
@@ -103,9 +115,19 @@
             <p>{{ project_stage.date_start }}</p>
           </div>
           <div class="title title-1" onclick="closeThisDropdown(this)">
-            <p>XXXXXXXXXXXXXXXXXXXX</p>
-            <!-- FALTA -->
-            <!-- {# <p>{{ support.title }}</p> #} -->
+            {% if project.motivation == "COOPERATIVISM_EDUCATION" %}
+            <p>Formació en cooperativisme</p>
+            {% elif project.motivation == "COOPERATIVE_CREATION" %}
+            <p>Constitució d'una cooperativa</p>
+            {% elif project.motivation == "TRANSFORM_FROM_ASSOCIATION" %}
+            <p>Transformació d'associació a cooperativa</p>
+            {% elif project.motivation == "TRANSFORM_FROM_SCP" %}
+            <p>Transformació de SCP a cooperativa</p>
+            {% elif project.motivation == "CONSOLIDATION" %}
+            <p>Consolidació</p>
+            {% elif project.motivation == "OTHER" %}
+            <p>Altres</p>
+            {% endif %}
           </div>
           <div class="info__title text-xsm text-xsm">
             <p>Estat del projecte</p>

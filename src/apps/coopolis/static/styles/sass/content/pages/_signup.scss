@@ -26,13 +26,13 @@
     & li:nth-child(6) {
       order: 3;
     }
-    // dni
-    & li:nth-child(7) {
-      order: 4;
-    }
     // dob
-    & li:nth-child(8) {
+    & li:nth-child(7) {
       order: 9;
+    }
+    // dni
+    & li:nth-child(8) {
+      order: 4;
     }
     // lloc naixement
     & li:nth-child(9) {
