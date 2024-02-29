@@ -83,7 +83,7 @@
               <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
             </div>
             <div class="subbloc__text text-sm richtext">
-              {{ session.objectives }}
+              {{ session.objectives|safe }}
             </div>
           </div>
           {% endfor %}
