@@ -116,7 +116,7 @@
   }
   input {
     position: relative;
-    width: 25px;
+    width: 16px;
     height: 16px;
     padding: 0;
     margin: 13px 0 0 0;
@@ -345,6 +345,8 @@
       margin: 0;
       border: 2px solid var(--second-2);
       border-radius: 50px;
+      -webkit-appearance: auto;
+      -moz-appearance: auto;
     }
     label {
       display: flex;
@@ -358,6 +360,7 @@
       line-height: 18px;
       font-weight: normal;
       text-transform: none;
+      cursor: pointer;
 
       &::after {
         display: none;

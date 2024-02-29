@@ -91,8 +91,7 @@
     </div>
     <div class="profile__image">
       <div class="image">
-        <img src="{{ user.photo }}" alt="Imatge d'usuari">
-        {{ user.photo }}
+        <img src="{{ user.photo.url }}" alt="Imatge d'usuari">
       </div>
       <div class="profile__image-link text-xsm" onclick="clickUserProfileFileInput()">
         <p>Canvia la imatge</p>
@@ -123,7 +122,12 @@
   </section>
 	<section class="profile__form grid-content">
 		<div class="form grid-item-wide">
-        <form method="post" action="" id="profile_form" enctype="multipart/form-data">
+			<form 
+        method="post"
+        action=""
+        id="profile_form"
+        enctype="multipart/form-data"
+      >
 				{% csrf_token %}
 				{{ form.as_ul }}
 			</form>

@@ -10,7 +10,11 @@
     &__topbar {
       --margin: 0 var(--pad4-5);
     }
-
+    .info {
+      &__doc {
+        --word-break: break-all;
+      }
+    }
   }
 }
 
@@ -75,6 +79,11 @@
       }
       &__text {
         padding-bottom: var(--pad1);
+
+        a {
+          font-weight: bold;
+          cursor: pointer;
+        }
       }
       &__doc a div {
         display: flex;
@@ -90,6 +99,9 @@
         p {
           font-weight: bold;
           color: var(--primary);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: var(--word-break);
         }
       }
       &__doc + .info__doc {

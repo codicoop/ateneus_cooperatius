@@ -968,7 +968,7 @@ a {
 }
 .form li.field-checkbox input {
   position: relative;
-  width: 25px;
+  width: 16px;
   height: 16px;
   padding: 0;
   margin: 13px 0 0 0;
@@ -1172,6 +1172,8 @@ a {
   margin: 0;
   border: 2px solid var(--second-2);
   border-radius: 50px;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
 }
 .form li.field-radio li label {
   display: flex;
@@ -1184,6 +1186,7 @@ a {
   line-height: 18px;
   font-weight: normal;
   text-transform: none;
+  cursor: pointer;
 }
 .form li.field-radio li label::after {
   display: none;
@@ -1213,6 +1216,7 @@ a {
   background-color: var(--white);
   border-radius: var(--br);
   box-shadow: 3px 3px 10px rgba(254, 26, 104, 0.1019607843);
+  color: var(--primary-dark);
 }
 .course-card .richtext p + p {
   margin-top: 0;
@@ -1892,10 +1896,18 @@ a {
 .session-card {
   --margin-top: var(--pad4);
 }
+.session-card__bloc {
+  --display: block;
+  --margin: var(--pad1);
+}
 
 @media (min-width: 900px) {
   .session-card {
     --margin-top: 0;
+  }
+  .session-card__bloc {
+    --display: grid;
+    --margin: var(--pad2);
   }
 }
 .session-card {
@@ -1947,8 +1959,14 @@ a {
   background-color: var(--white);
 }
 .session-card__bloc {
-  margin: var(--pad1);
+  display: var(--display);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--pad2);
+  margin: var(--margin);
   background-color: var(--white);
+}
+.session-card__bloc .info {
+  grid-column: auto !important;
 }
 .session-card__bloc1 {
   border-bottom: 1px solid var(--grey-light);
@@ -3087,6 +3105,9 @@ a {
   .dropdown__topbar {
     --margin: 0 var(--pad4-5);
   }
+  .dropdown .info__doc {
+    --word-break: break-all;
+  }
 }
 .dropdown__topbar {
   position: relative;
@@ -3145,6 +3166,10 @@ a {
 .dropdown__bottom .info__text {
   padding-bottom: var(--pad1);
 }
+.dropdown__bottom .info__text a {
+  font-weight: bold;
+  cursor: pointer;
+}
 .dropdown__bottom .info__doc a div {
   display: flex;
   gap: var(--pad-2);
@@ -3159,6 +3184,9 @@ a {
 .dropdown__bottom .info__doc a div p {
   font-weight: bold;
   color: var(--primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: var(--word-break);
 }
 .dropdown__bottom .info__doc + .info__doc {
   margin-top: var(--pad-2);

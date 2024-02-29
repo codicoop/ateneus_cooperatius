@@ -28,6 +28,8 @@
   background-color: var(--white);
   border-radius: var(--br);
   box-shadow: 3px 3px 10px #FE1A681A;
+  color: var(--primary-dark);
+  
   // Exception
   .richtext p + p {
     margin-top: 0;

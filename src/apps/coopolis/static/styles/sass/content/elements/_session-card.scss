@@ -1,11 +1,21 @@
 // Dynamic variables
 .session-card {
   --margin-top: var(--pad4);
+
+  &__bloc {
+    --display: block;
+    --margin: var(--pad1);
+  }
 }
 
 @media (min-width: 900px) {
   .session-card {
     --margin-top: 0;
+
+    &__bloc {
+      --display: grid;
+      --margin: var(--pad2);
+    }
   }
 }
 
@@ -62,9 +72,15 @@
     background-color: var(--white);
   }
   &__bloc {
-    margin: var(--pad1);
+    display: var(--display);
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--pad2);
+    margin: var(--margin);
     background-color: var(--white);
 
+    .info {
+      grid-column: auto!important;
+    }
   }
   &__bloc1 {
     border-bottom: 1px solid var(--grey-light);
