@@ -91,9 +91,9 @@
     </div>
     <div class="profile__image">
       <div class="image">
-        <!-- Imatge del perfil -->
+        <img src="{{ user.photo }}" alt="Imatge d'usuari">
+        {{ user.photo }}
       </div>
-      <input form="profile_form" type="file" name="profile_image" id="profile_image">
       <div class="profile__image-link text-xsm" onclick="clickUserProfileFileInput()">
         <p>Canvia la imatge</p>
       </div>

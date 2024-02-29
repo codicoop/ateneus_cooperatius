@@ -108,7 +108,7 @@ function showListView() {
 }
 // Perfil - input imatge
 function clickUserProfileFileInput() {
-  let input = document.getElementById("profile_image")
+  let input = document.getElementById("id_photo")
   input.click()
 }
 function clickProjectLogoInput() {
@@ -123,7 +123,8 @@ function openThisDropdown(event) {
   thisBottom.classList.remove("is-hidden")
 }
 function closeThisDropdown(event) {
-  const thisBottom = event
+  const thisTitle = event
+  const thisBottom = thisTitle.parentElement.parentElement
   const thisTopbar = thisBottom.previousElementSibling
   thisTopbar.classList.remove("is-hidden")
   thisBottom.classList.add("is-hidden")

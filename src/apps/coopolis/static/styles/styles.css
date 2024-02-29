@@ -1899,6 +1899,9 @@ a {
   border-left: 2px solid var(--primary);
   margin-top: var(--margin-top);
 }
+.session-card + .session-card {
+  margin-top: var(--pad2);
+}
 .session-card::before {
   content: "";
   position: absolute;
@@ -3125,6 +3128,7 @@ a {
   width: 80%;
   padding-bottom: var(--pad2);
   color: var(--primary);
+  cursor: pointer;
 }
 .dropdown__bottom .info__title {
   padding-bottom: var(--pad-3);
@@ -4842,6 +4846,9 @@ a {
 }
 .support-list__intro-btn {
   margin: 0 var(--pad1);
+}
+.support-list .sessions .session-card:last-child {
+  border: none;
 }
 
 /*# sourceMappingURL=styles.css.map */
