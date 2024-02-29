@@ -4,7 +4,7 @@ from tagulous.models import TagField
 
 from apps.cc_users.managers import CCUserManager
 from apps.cc_users.models import BaseUser
-from apps.coopolis.storage_backends import PrivateMediaStorage
+from apps.coopolis.storage_backends import PublicMediaStorage
 
 from .general import Town
 
@@ -21,10 +21,12 @@ class User(BaseUser):
 
     photo = models.FileField(
         "fotografia",
+        storage=PublicMediaStorage(),
+        max_length=250,
         blank=True,
         null=True,
-        storage=PrivateMediaStorage(),
-        max_length=250,
+        default="",
+        help_text="Clica per carregar una imatge",
     )
     fake_email = models.BooleanField(
         "e-mail inventat",

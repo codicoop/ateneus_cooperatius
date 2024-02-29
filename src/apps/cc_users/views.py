@@ -44,6 +44,7 @@ class MyAccountView(SuccessMessageMixin, UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        print(self.request.user.photo)
         kwargs["request"] = self.request
         return kwargs
 
