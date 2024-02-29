@@ -3535,10 +3535,10 @@ a {
   order: 3;
 }
 .signup .form li:nth-child(7) {
-  order: 4;
+  order: 9;
 }
 .signup .form li:nth-child(8) {
-  order: 9;
+  order: 4;
 }
 .signup .form li:nth-child(9) {
   order: 10;
