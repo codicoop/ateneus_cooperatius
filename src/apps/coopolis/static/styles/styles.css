@@ -1216,6 +1216,7 @@ a {
   background-color: var(--white);
   border-radius: var(--br);
   box-shadow: 3px 3px 10px rgba(254, 26, 104, 0.1019607843);
+  color: var(--primary-dark);
 }
 .course-card .richtext p + p {
   margin-top: 0;
