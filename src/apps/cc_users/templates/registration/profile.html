@@ -79,7 +79,6 @@
             method="post" 
             action="" 
             id="delete_"
-            enctype="multipart/form-data"
           >
             {% csrf_token %}
             <input type="hidden" id="" name="" value="">
@@ -121,7 +120,7 @@
   </section>
 	<section class="profile__form grid-content">
 		<div class="form grid-item-wide">
-			<form method="post" action="" id="profile_form">
+        <form method="post" action="" id="profile_form" enctype="multipart/form-data">
 				{% csrf_token %}
         <!-- Exemple de radio -->
         <li class="field field-radio">
