@@ -34,6 +34,78 @@
       --padding: var(--pad2);
     }
   }
+  &__form {
+    .form {
+      form {
+        --display-form: flex;
+
+      // Nom
+      & li:nth-child(3) {
+        order: 1;
+      }
+      // Email
+      & li:nth-child(4) {
+        order: 7;
+      }
+      // Cognom
+      & li:nth-child(5) {
+        order: 2;
+      }
+      // Phone
+      & li:nth-child(6) {
+        order: 8;
+      }
+      // Segon cognom
+      & li:nth-child(7) {
+        order: 3;
+      }
+      // dob
+      & li:nth-child(8) {
+        order: 9;
+      }
+      // dni
+      & li:nth-child(9) {
+        order: 4;
+      }
+      // lloc naixement
+      & li:nth-child(10) {
+        order: 10;
+      }
+      // NO dni
+      & li:nth-child(11) {
+        order: 5;
+      }
+      // poblacio
+      & li:nth-child(12) {
+        order: 11;
+      }
+      // genere
+      & li:nth-child(13) {
+        order: 6;
+      }
+      // adreça
+      & li:nth-child(14) {
+        order: 12;
+      }
+      // estudis
+      & li:nth-child(15) {
+        order: 13;
+      }
+      // conegut
+      & li:nth-child(16) {
+        order: 15;
+      }
+      // laboral
+      & li:nth-child(17) {
+        order: 14;
+      }
+      // ess
+      & li:nth-child(18) {
+        order: 16;
+      }
+      }
+    }
+  }
 }
 
 @media (min-width: 900px) {
@@ -71,6 +143,78 @@
       }
       .profile__link {
         --padding: var(--pad2) var(--pad2) var(--pad2) 0;
+      }
+    }
+    &__form {
+      .form {
+        form {
+          --display-form: grid;
+
+      // Nom
+      & li:nth-child(3) {
+        order: initial;
+      }
+      // Email
+      & li:nth-child(4) {
+        order:  initial;
+      }
+      // Cognom
+      & li:nth-child(5) {
+        order:  initial;
+      }
+      // Phone
+      & li:nth-child(6) {
+        order:  initial;
+      }
+      // Segon cognom
+      & li:nth-child(7) {
+        order:  initial;
+      }
+      // dob
+      & li:nth-child(8) {
+        order:  initial;
+      }
+      // dni
+      & li:nth-child(9) {
+        order:  initial;
+      }
+      // lloc naixement
+      & li:nth-child(10) {
+        order:  initial;
+      }
+      // NO dni
+      & li:nth-child(11) {
+        order:  initial;
+      }
+      // poblacio
+      & li:nth-child(12) {
+        order:  initial;
+      }
+      // genere
+      & li:nth-child(13) {
+        order:  initial;
+      }
+      // adreça
+      & li:nth-child(14) {
+        order:  initial;
+      }
+      // estudis
+      & li:nth-child(15) {
+        order:  initial;
+      }
+      // conegut
+      & li:nth-child(16) {
+        order:  initial;
+      }
+      // laboral
+      & li:nth-child(17) {
+        order:  initial;
+      }
+      // ess
+      & li:nth-child(18) {
+        order:  initial;
+      }
+        }
       }
     }
   }
@@ -156,8 +300,14 @@
   }
   &__form {
     .form {
+      display: flex;
       flex-direction: column;
 
+      form {
+        display: var(--display-form);
+        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+      }
       // Camp fotografia amagat
       & li:nth-child(2).field-file {
         display: none;

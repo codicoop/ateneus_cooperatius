@@ -146,21 +146,20 @@
 <div class="generated-form">
     {% if form.errors %}
     <div class="message-container">
-        <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del
-            formulari.</p>
+      <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.</p>
     </div>
     {% endif %}
     {% if messages %}
     <ul class="message-container">
-       {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
-       {% endfor %}
+      {% for message in messages %}
+      <li {% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
+      {% endfor %}
     </ul>
     {% endif %}
     <h1>Gestió del teu compte</h1>
     <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
-       {% csrf_token %}
-       {{ form.as_p }}
+      {% csrf_token %}
+      {{ form.as_p }}
         <p>Contrasenya:</p>
         <p>Accedeix <a href="{% url 'password_change' %}">aquí</a> per modificar la contrasenya.</p>
     <button type="submit">Guardar els canvis</button>

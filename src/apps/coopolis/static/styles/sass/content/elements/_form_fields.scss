@@ -116,10 +116,10 @@
   }
   input {
     position: relative;
-    width: 20px;
+    width: 25px;
     height: 16px;
     padding: 0;
-    margin: 6px 0 0 0;
+    margin: 13px 0 0 0;
     border: 2px solid var(--second-2);
     border-radius: 3px;
 
@@ -328,7 +328,7 @@
 .form li.field-radio {
   display: flex;
   flex-direction: column-reverse;
-  
+
   label {
     grid-row: 1;
     grid-column: 1 / span 3;

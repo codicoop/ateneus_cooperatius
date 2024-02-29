@@ -968,10 +968,10 @@ a {
 }
 .form li.field-checkbox input {
   position: relative;
-  width: 20px;
+  width: 25px;
   height: 16px;
   padding: 0;
-  margin: 6px 0 0 0;
+  margin: 13px 0 0 0;
   border: 2px solid var(--second-2);
   border-radius: 3px;
 }
@@ -2665,13 +2665,6 @@ a {
     --display: grid;
   }
 
-  .profile .form {
-    --display: flex;
-  }
-  .profile .form form {
-    --display-form: grid;
-  }
-
   .project .form {
     --display: grid;
   }
@@ -3990,6 +3983,57 @@ a {
 .profile__links .profile__link {
   --padding: var(--pad2);
 }
+.profile__form .form form {
+  --display-form: flex;
+}
+.profile__form .form form li:nth-child(3) {
+  order: 1;
+}
+.profile__form .form form li:nth-child(4) {
+  order: 7;
+}
+.profile__form .form form li:nth-child(5) {
+  order: 2;
+}
+.profile__form .form form li:nth-child(6) {
+  order: 8;
+}
+.profile__form .form form li:nth-child(7) {
+  order: 3;
+}
+.profile__form .form form li:nth-child(8) {
+  order: 9;
+}
+.profile__form .form form li:nth-child(9) {
+  order: 4;
+}
+.profile__form .form form li:nth-child(10) {
+  order: 10;
+}
+.profile__form .form form li:nth-child(11) {
+  order: 5;
+}
+.profile__form .form form li:nth-child(12) {
+  order: 11;
+}
+.profile__form .form form li:nth-child(13) {
+  order: 6;
+}
+.profile__form .form form li:nth-child(14) {
+  order: 12;
+}
+.profile__form .form form li:nth-child(15) {
+  order: 13;
+}
+.profile__form .form form li:nth-child(16) {
+  order: 15;
+}
+.profile__form .form form li:nth-child(17) {
+  order: 14;
+}
+.profile__form .form form li:nth-child(18) {
+  order: 16;
+}
 
 @media (min-width: 900px) {
   .profile {
@@ -4022,6 +4066,57 @@ a {
   }
   .profile__links .profile__link {
     --padding: var(--pad2) var(--pad2) var(--pad2) 0;
+  }
+  .profile__form .form form {
+    --display-form: grid;
+  }
+  .profile__form .form form li:nth-child(3) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(4) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(5) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(6) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(7) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(8) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(9) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(10) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(11) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(12) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(13) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(14) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(15) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(16) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(17) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(18) {
+    order: initial;
   }
 }
 .profile {
@@ -4099,7 +4194,13 @@ a {
   color: var(--second);
 }
 .profile__form .form {
+  display: flex;
   flex-direction: column;
+}
+.profile__form .form form {
+  display: var(--display-form);
+  flex-direction: column;
+  grid-template-columns: repeat(2, 1fr);
 }
 .profile__form .form li:nth-child(2).field-file {
   display: none;
