@@ -5,7 +5,7 @@ class ProjectStageStatesChoices(models.TextChoices):
     __empty__ = "Sense indicar"
     PENDING = "PENDING", "Sol·licitat"
     OPEN = "OPEN", "En procés"
-    CLOSE = "CLOSE", "Finalizat"
+    CLOSE = "CLOSE", "Finalitzat"
 
 
 class StageTypeChoices(models.TextChoices):
