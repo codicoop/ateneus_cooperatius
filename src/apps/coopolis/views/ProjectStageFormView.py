@@ -109,7 +109,12 @@ def project_stage_initial_petition_view(request, pk):
 @login_required
 def project_stage_characteristics_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    if request.user not in project.partners.all():
+    project_stages = project.stages.filter(
+        stage_state__in=[
+            ProjectStageStatesChoices.OPEN,
+        ]
+    )
+    if request.user not in project.partners.all() or project_stages:
         return redirect("home")
     if request.method == "POST":
         form = ProjectCharacteristicsForm(request.POST, instance=project)
