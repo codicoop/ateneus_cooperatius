@@ -168,13 +168,13 @@
 					</button>
 				</div>
 			</div>
-      <div class="session-card grid-item-full
+      <div class="course-session-card grid-item-full
 				{% if activity.is_past_due is True %} is-past{% endif %}
 				{% if activity.remaining_spots < 1 %} is-full{% endif %}
 				{% if user in activity.enrolled.all %} is-inscribed{% endif %}
 				"
 			>
-        <div class="session-card__title text-md">
+        <div class="course-session-card__title text-md">
 					<div class="text-menu">
 						<p>Sessió 1</p>
 					</div>
@@ -182,20 +182,20 @@
 						<h2>{{ activity.name }}</h2>
 					</div>
         </div>
-				<div class="session-card__action action-open text-menu"
+				<div class="course-session-card__action action-open text-menu"
 					onclick="openSessionCard(event)"
 				>
 					<p>Més informació</p>
 				</div>
-				<div class="session-card__action action-close text-menu is-hidden"
+				<div class="course-session-card__action action-close text-menu is-hidden"
 					onclick="closeSessionCard(event)"
 				>
 					<p>Menys informació</p>
 				</div>
-				<div class="session-card__action action-none text-menu">
+				<div class="course-session-card__action action-none text-menu">
 					<p>Sessió conclosa</p>
 				</div>
-				<div class="session-card__time text-sm">
+				<div class="course-session-card__time text-sm">
 						<svg
 							class="icon-pathfill-lilac"
 							xmlns="http://www.w3.org/2000/svg"
@@ -213,7 +213,7 @@
 						</svg>
 						<p>{{ activity.starting_time }} - {{ activity.ending_time }} H</p>
 				</div>
-				<div class="session-card__bloc">
+				<div class="course-session-card__bloc">
 					<h3 class="title text-menu">Lloc</h3>
 					<p class="text">{{ activity.place|default_if_none:"" }}</p>
 					{% if activity.teacher %}
@@ -221,13 +221,13 @@
 					<p class="text">{{ activity.teacher }}</p>
 					{% endif %}
 				</div>
-				<div class="session-card__bloc">
+				<div class="course-session-card__bloc">
 					<h3 class="title text-menu">Descripció</h3>
 					<p class="text">{{ activity.objectives|safe }}</p>
 				</div>
 				<!-- Si estas loggejat -->
 				{% if user.is_authenticated %}
-					<div class="session-card__btn">
+					<div class="course-session-card__btn">
 						<!-- Si l'activitat està activa -->
 						{% if activity.is_past_due is False %}
 							<!-- Si NO estàs inscrit -->
@@ -265,7 +265,7 @@
 					<!-- Si NO estas loggejat -->
 					<!-- Si l'activitat està activa -->
 					{% if activity.is_past_due is False %}
-					<div class="session-card__login">
+					<div class="course-session-card__login">
 						<div class="text-sm">
 							<p>Has d'accedir al teu compte abans de inscriure't a cap activitat.</p>
 						</div>

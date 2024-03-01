@@ -1,0 +1,256 @@
+// Dynamic variables
+.course-session-card {
+  --padding-card: var(--pad1) 0;
+  --max-width: 500px;
+  --display-card: flex;
+  --align-items: flex-start;
+
+  &__title {
+    --padding: 0 var(--pad1) var(--pad2) var(--pad1);
+  }
+  &__action {
+    --padding: var(--pad1) var(--pad1) 0 var(--pad1);
+    --text-align: left;
+    --width-text: auto;
+    --width-action: 100%;
+    --border-bottom: 2px solid var(--grey-lighter);
+    --content: none;
+  }
+  &__btn {
+    --margin: var(--pad2) var(--pad2) var(--pad1) var(--pad2);
+    --position: relative;
+    --bottom: 0;
+    --right: 0;
+  }
+  &__time {
+    --display: none;
+    --padding: var(--pad2) var(--pad1) var(--pad1) var(--pad1);
+  }
+  &__bloc {
+    --padding: var(--pad1) var(--pad1) 0 var(--pad1);
+  }
+}
+
+@media (min-width: 900px) {
+  .course-session-card {
+    --padding-card: var(--pad2) 0;
+    --max-width: none;
+    --display-card: grid;
+    --align-items: center;
+    
+    &__title {
+      --padding: 0 var(--pad2) var(--pad1-5) var(--pad2);
+    }
+    &__action {
+      --padding: var(--pad1) var(--pad2);
+      --text-align: center;
+      --width-text: 70px;
+      --width-action: auto;
+      --border-bottom: none;
+      --content: "";
+    }
+    &__btn {
+      --margin: var(--pad2) var(--pad2) 0 var(--pad2);
+      --position: absolute;
+      --bottom: var(--pad1);
+      --right: var(--pad1);
+    }
+    &__time {
+      --display: grid;
+      --padding: 0;
+    }
+    &__bloc {
+      --padding: var(--pad1) var(--pad2) 0 var(--pad2);
+    }
+  }
+}
+
+.course-session-card {
+  position: relative;
+  display: var(--display-card);
+  flex-direction: column;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: var(--align-items);
+  max-width: var(--max-width);
+  padding: var(--padding-card);
+  background-color: var(--second-3);
+  border-radius: var(--br);
+  border: 1px solid var(--grey-lighter);
+  box-shadow: 3px 3px 10px #FE1A6826;
+
+  // Desplegable obert
+  &.is-open {
+    
+    .course-session-card__bloc,
+    .course-session-card__login {
+      display: block;
+    }
+    .course-session-card__btn {
+      display: flex;
+    }
+    .course-session-card__time {
+      display: grid;
+    }
+    .course-session-card__action {
+      padding-bottom: var(--pad1);
+      border-bottom: var(--border-bottom);
+    }
+  }
+  // Si la sessió està conclosa
+  &.is-past {
+    box-shadow: none;
+    background-color: var(--white);
+    border: none;
+    opacity: 0.4;
+    
+    .action-none {
+      display: block;
+    }
+    .action-open {
+      display: none;
+    }
+  }
+  // Si la sessió està plena
+  &.is-full {
+    background-color: var(--grey-lighter);
+    
+    .course-session-card__title {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      &::before {
+        content: "Llista d'espera";
+        padding-bottom: var(--pad-3);
+        font-size: 10px;
+        line-height: 12px;
+        color: var(--primary-light);
+        text-transform: uppercase;
+      }
+    }
+  }
+  // Si ja estas inscrit
+  &.is-inscribed { 
+    .course-session-card__title {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      &::before {
+        content: "Ja estàs inscrit";
+        padding-bottom: var(--pad-3);
+        font-size: 10px;
+        line-height: 12px;
+        color: var(--primary-light);
+        text-transform: uppercase;
+      }
+    }
+    .btn__text {
+      color: var(--second);
+      font-weight: 400;
+    }
+  }
+  // Si hi ha més d'un title-text dins de un bloc
+  .text + .title {
+    margin-top: var(--pad2);
+  }
+  &__title {
+    grid-column: 1 / span 4;
+    padding: var(--padding);
+
+    .text-menu {
+      color: var(--primary);
+      padding-bottom: var(--pad-3);
+    }
+  }
+  &__action {
+    position: relative;
+    grid-column: 6;
+    justify-self: end;
+    padding: var(--padding);
+    width: var(--width-action);
+    color: var(--second);
+    font-weight: 500;
+    cursor: pointer;
+    text-align: var(--text-align);
+
+    &::before {
+      content: var(--content);
+      position: absolute;
+      top: -24px;
+      left: -1.7vw;
+      display: block;
+      height: 100px;
+      width: 2px;
+      background-color: var(--grey-lighter);
+    }
+    p {
+      pointer-events: none;
+      width: var(--width-text);
+    }
+    &.action-none {
+      display: none;
+      color: var(--primary);
+    }
+  }
+  &__bloc {
+    grid-column: span 2;
+    align-self: start;
+    display: none;
+    padding: var(--padding);
+
+    .title {
+      color: var(--primary);
+      padding-bottom: var(--pad1);
+    }
+  }
+  &__btn {
+    align-self: center;
+    position: var(--position);
+    bottom: var(--bottom);
+    right: var(--right);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-top: var(--pad3);
+    max-width: 90%;
+    cursor: pointer;
+
+    p {
+      pointer-events: none;
+    }
+    .text-md {
+      cursor: auto;
+    }
+    .btn {
+      min-width: 170px;
+      width: fit-content;
+    }
+  }
+  &__time {
+    grid-column: 5;
+    grid-row: 1;
+    display: var(--display);
+    grid-template-columns: 15px 1fr;
+    align-items: center;
+    gap: var(--pad-2);
+    padding: var(--padding);
+    color: var(--violet-dark);
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+  }
+  &__login {
+    align-self: end;
+    grid-column: 5 / span 2;
+    display: none;
+    padding: var(--pad1);
+
+    .text-sm {
+      padding: var(--pad1);
+      cursor: auto;
+    }
+  }
+}
