@@ -1006,16 +1006,19 @@ a {
 .form li.field-checkbox.field-checkbox--long {
   display: grid;
   grid-template-columns: 25px 1fr;
-  align-items: center;
+  align-items: start;
+  margin-bottom: var(--pad1);
 }
 .form li.field-checkbox.field-checkbox--long input {
   grid-column: 1;
   grid-row: 1;
+  margin: 0;
 }
 .form li.field-checkbox.field-checkbox--long label {
   grid-column: 2;
   grid-row: 1;
   font-weight: bold;
+  padding: 0 0 var(--pad-2) 0;
 }
 .form li.field-checkbox.field-checkbox--long .helptext {
   grid-column: 2;
