@@ -2,10 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
+from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.coopolis.models import Project
 from apps.coopolis.views import LoginSignupContainerView
-from apps.cc_courses.choices import ProjectStageStatesChoices
+
 
 class HomeView(LoginSignupContainerView):
     template_name = "home.html"
@@ -24,6 +25,6 @@ class HomeView(LoginSignupContainerView):
         )
         context["open_projects"] = Project.objects.filter(
             partners=self.request.user,
-            stages__stage_state=ProjectStageStatesChoices.OPEN
+            stages__stage_state=ProjectStageStatesChoices.OPEN,
         )
         return context
