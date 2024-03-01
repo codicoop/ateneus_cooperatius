@@ -1219,13 +1219,14 @@ a {
     --padding-bottom: var(--pad7);
   }
   .course-card__btn {
-    --margin: auto 0 0 0;
+    --margin: var(--pad2) 0 0 0;
   }
 }
 .course-card {
   position: relative;
   display: flex;
   flex-direction: column;
+  height: fit-content;
   width: 100%;
   max-width: 500px;
   padding: var(--pad1);
