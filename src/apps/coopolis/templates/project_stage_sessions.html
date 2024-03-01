@@ -74,7 +74,6 @@
 		</div>
 		{% endif %}
 	</section>
-	<!-- Per cada acompanyament acceptat -->
   {% for project_stage in project.stages.all %}
     {% if project_stage.stage_state != "PENDING" %}
     <section class="support-list__item dropdown">
@@ -155,6 +154,11 @@
           </div>
         </div>
         <div class="sessions">
+          {% if not stage_session %}
+          <div class="session-empty">
+            <p class="title-1">Encara no heu fet cap sessió. Tan aviat com se us assigni una, apareixerà aquí i podràs consultar la informació que li correspongui.</p>
+          </div>
+          {% endif %}
           {% for stage_session in project_stage.stage_sessions.all %}
           <div class="session-card">
             <div class="session-card__top">
