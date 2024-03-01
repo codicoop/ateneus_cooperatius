@@ -51,25 +51,16 @@
             <p>{{ course.description|safe }}</p>
           </div>
         </div>
-        <div class="course-card__bloc">          
+        {% if course.aimed_at != "" %}
+        <div class="course-card__bloc">
           <div class="course-card__subtitle text-menu">
             <p>Adreçat a</p>
           </div>
           <div class="course-card__text richtext">
-            {% if not course.aimed_at|safe == "None" %}
-              <p>{{ course.aimed_at|safe }}</p>
-            {% else %}
-              <p>No hi ha cap públic objectiu definit per aquesta sessió.</p>
-              {% if user.is_superuser or user.is_staff %}
-                <p>Si vols pots afegir-ne un al 
-                  <a href="{% url 'admin:index'%}">
-                    panell d'administració.
-                  </a>
-                </p>
-              {% endif %}
-            {% endif %}
+            <p>{{ course.aimed_at|safe }}</p>
           </div>
         </div>
+        {% endif %}
         <div class="course-card__bloc grid-bloc">          
           <div class="course-card__subtitle text-menu">
             <p>Sessions: {{ course.activities.count }}</p>
