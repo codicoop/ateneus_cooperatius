@@ -91,7 +91,9 @@
     </div>
     <div class="profile__image">
       <div class="image">
-        <img src="{% if user.photo %}{{ user.photo.url }} {% endif %}" alt="Imatge d'usuari">
+        {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="Imatge d'usuari">
+        {% endif %}
       </div>
       <div class="profile__image-link text-xsm" onclick="clickUserProfileFileInput()">
         <p>Canvia la imatge</p>
