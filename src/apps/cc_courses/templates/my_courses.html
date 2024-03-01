@@ -419,7 +419,7 @@
       <div class="my-course-card__title text-md">
         <h2>{{ enrollment.activity.course }}</h2>
       </div>
-      <a class="my-course-card__link text-xsm" href="{{ enrollment.activity.url }}">
+      <a class="my-course-card__link text-xsm" href="{% url 'course' slug=enrollment.activity.course.slug %}">
         <p>Pàgina de la formació</p>
         <svg
           class="icon-pathfill-second icon-7"
