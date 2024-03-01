@@ -22,16 +22,27 @@ def project_stage_view(request):
 @login_required
 def project_stage_start_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    if request.user not in project.partners.all():
+    project_stages = project.stages.filter(
+        stage_state__in=[
+            ProjectStageStatesChoices.OPEN,
+            ProjectStageStatesChoices.PENDING,
+        ]
+    )
+    if request.user not in project.partners.all() or project_stages:
         return redirect("home")
-
     return render(request, "project_stage_start.html", {"project": project})
 
 
 @login_required
 def project_stage_data_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    if request.user not in project.partners.all():
+    project_stages = project.stages.filter(
+        stage_state__in=[
+            ProjectStageStatesChoices.OPEN,
+            ProjectStageStatesChoices.PENDING,
+        ]
+    )
+    if request.user not in project.partners.all() or project_stages:
         return redirect("home")
     if request.method == "POST":
         form = ProjectStageStartForm(request.POST, instance=project)
@@ -50,7 +61,13 @@ def project_stage_data_view(request, pk):
 @login_required
 def project_stage_attatch_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    if request.user not in project.partners.all():
+    project_stages = project.stages.filter(
+        stage_state__in=[
+            ProjectStageStatesChoices.OPEN,
+            ProjectStageStatesChoices.PENDING,
+        ]
+    )
+    if request.user not in project.partners.all() or project_stages:
         return redirect("home")
     if request.method == "POST":
         form = ProjectStageAttachForm(request.POST, request.FILES, instance=project)
@@ -67,7 +84,13 @@ def project_stage_attatch_view(request, pk):
 @login_required
 def project_stage_initial_petition_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    if request.user not in project.partners.all():
+    project_stages = project.stages.filter(
+        stage_state__in=[
+            ProjectStageStatesChoices.OPEN,
+            ProjectStageStatesChoices.PENDING,
+        ]
+    )
+    if request.user not in project.partners.all() or project_stages:
         return redirect("home")
     form = ProjectStageInitialPetitionForm(request.POST, instance=project)
     if request.method == "POST":
