@@ -395,7 +395,7 @@ class ProjectStage(models.Model):
         max_length=8,
         choices=ProjectStageStatesChoices.choices,
         null=True,
-        blank=False,
+        blank=True,
         default=None,
     )
     stage_type = models.CharField(
