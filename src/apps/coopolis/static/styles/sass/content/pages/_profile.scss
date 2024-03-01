@@ -250,6 +250,12 @@
       border-radius: 50%;
       overflow: clip;
       box-shadow: 4px 6px 15px -5px var(--primary-lighter);
+      
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
     }
     .profile__image-link {
       display: var(--display);

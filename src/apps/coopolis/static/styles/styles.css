@@ -3484,7 +3484,7 @@ a {
 }
 .dropdown__bottom .info__doc a div svg {
   width: 13px;
-  height: auto;
+  height: 18px;
 }
 .dropdown__bottom .info__doc a div p {
   font-weight: bold;
@@ -4024,6 +4024,9 @@ a {
   flex-direction: column;
 }
 
+.project {
+  --padding-project: var(--pad1);
+}
 .project__intro {
   --padding-intro: var(--pad1) 0 var(--pad2) 0;
   --margin-intro: var(--pad4) 0 var(--pad1-5) 0;
@@ -4056,6 +4059,9 @@ a {
 }
 
 @media (min-width: 900px) {
+  .project {
+    --padding-project: var(--pad1) 0 var(--pad3) 0;
+  }
   .project__intro {
     --padding-intro: var(--pad7) 0 var(--pad3) 0;
     --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
@@ -4088,7 +4094,7 @@ a {
 }
 .project {
   height: 100%;
-  padding: var(--pad1);
+  padding: var(--padding-project);
   background-color: var(--second-3);
 }
 .project__intro {
@@ -4127,6 +4133,11 @@ a {
   border-radius: 50%;
   box-shadow: var(--shadow);
   overflow: hidden;
+}
+.project__intro-logo .logo img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 .project__intro-title {
   grid-row: 1;
@@ -4195,6 +4206,11 @@ a {
   margin-bottom: var(--pad-2);
   border-radius: 50%;
   background-color: var(--yellow);
+}
+.project__people-item .image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 .project__people-item .text-btn {
   margin-top: var(--pad-2);
@@ -4429,6 +4445,11 @@ a {
   border-radius: 50%;
   overflow: clip;
   box-shadow: 4px 6px 15px -5px var(--primary-lighter);
+}
+.profile__image .image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 .profile__image .profile__image-link {
   display: var(--display);
@@ -5237,6 +5258,11 @@ a {
   border-radius: 50%;
   box-shadow: var(--shadow);
   overflow: hidden;
+}
+.support-list__intro-title .logo img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 .support-list__intro-btn {
   margin: 0 var(--pad1);
