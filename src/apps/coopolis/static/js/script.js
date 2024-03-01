@@ -134,8 +134,6 @@ function closeThisDropdown(event) {
 function showDeleteModal(event) {
   window.scrollTo(0,0)
   const card = event.parentElement.parentElement.parentElement
-  console.log(event);
-  console.log(card);
   const modal = card.querySelector(".delete-modal")
   modal.classList.remove("is-hidden")
 }
@@ -143,8 +141,6 @@ function showDeleteModal(event) {
 function deleteModalWaitingList(event) {
   window.scrollTo(0,0)
   const card = event.parentElement.parentElement.parentElement.parentElement.parentElement
-  console.log(event);
-  console.log(card);
   const modal = card.querySelector(".delete-modal")
   modal.classList.remove("is-hidden")
 }
