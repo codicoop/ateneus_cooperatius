@@ -98,6 +98,7 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
+  margin: 13px 0 0 0;
 
   label {
     display: flex;
@@ -119,7 +120,6 @@
     width: 16px;
     height: 16px;
     padding: 0;
-    margin: 13px 0 0 0;
     border: 2px solid var(--second-2);
     border-radius: 3px;
 

@@ -720,8 +720,6 @@ a {
 }
 .card {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 50px;
   background-color: var(--white);
   padding: var(--pad2);
   border-radius: var(--br);
@@ -772,7 +770,6 @@ a {
   padding: 0;
 }
 .card.card-link a {
-  grid-column: 1/span 2;
   display: grid;
   grid-template-columns: 1fr 50px;
   align-items: center;
@@ -964,6 +961,7 @@ a {
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
+  margin: 13px 0 0 0;
 }
 .form li.field-checkbox label {
   display: flex;
@@ -985,7 +983,6 @@ a {
   width: 16px;
   height: 16px;
   padding: 0;
-  margin: 13px 0 0 0;
   border: 2px solid var(--second-2);
   border-radius: 3px;
 }
@@ -4874,9 +4871,6 @@ a {
 .login-page .login__form.form div:nth-child(8) {
   order: 4;
 }
-.login-page .login__error {
-  color: var(--primary);
-}
 
 .project-out {
   --padding-project: var(--pad2) var(--pad1);
@@ -5248,6 +5242,46 @@ a {
 }
 .support-list .sessions .session-card:last-child {
   border: none;
+}
+
+.modal-page {
+  --margin-card: var(--pad3) var(--pad2);
+  --top: 91px;
+  --left: 0;
+}
+
+@media (min-width: 900px) {
+  .modal-page {
+    --margin-card: var(--pad3) var(--pad2);
+    --top: 0;
+    --left: 128px;
+  }
+}
+.modal-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-page__background {
+  position: fixed;
+  top: var(--top);
+  bottom: 0;
+  left: var(--left);
+  right: 0;
+  background-color: var(--violet);
+  z-index: 100;
+}
+.modal-page__card {
+  z-index: 110;
+  width: 100%;
+  max-width: 400px;
+  margin: var(--margin-card);
+}
+.modal-page .card__subtitle {
+  padding-bottom: var(--pad2);
+}
+.modal-page__form .form__submit {
+  margin-bottom: 0;
 }
 
 /*# sourceMappingURL=styles.css.map */
