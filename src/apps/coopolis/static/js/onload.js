@@ -65,8 +65,9 @@ function onLoadFunction(){
   const projectPage = document.querySelector(".project")
   const profilePage = document.querySelector(".profile")
   const supportPage = document.querySelector(".support")
+  const signupPage = document.querySelector(".signup")
 
-  if (projectPage || registerPage || profilePage || supportPage) {
+  if (projectPage || registerPage || profilePage || supportPage || signupPage) {
     // Mostrant districte només si Barcelona
     const townInput = document.querySelector("#id_town")
     const districtField = document.querySelector("#id_district").parentElement
