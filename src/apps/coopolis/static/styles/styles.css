@@ -701,17 +701,8 @@ a {
   --template-columns: 33px 1fr 100px;
 }
 .supercard__logo {
-  --grid-row: 1 / span 2;
   --width: var(--pad2);
   --height: var(--pad2);
-}
-.supercard__title {
-  --align-self: start;
-}
-.supercard__edit {
-  --grid-column: 2;
-  --align-self: start;
-  --justify-self: start;
 }
 
 @media (min-width: 900px) {
@@ -723,21 +714,14 @@ a {
     --template-columns: 50px 1fr 100px;
   }
   .supercard__logo {
-    --grid-row: 1;
     --width: var(--pad3);
     --height: var(--pad3);
-  }
-  .supercard__title {
-    --align-self: center;
-  }
-  .supercard__edit {
-    --grid-column: 3;
-    --align-self: center;
-    --justify-self: end;
   }
 }
 .card {
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr 50px;
   background-color: var(--white);
   padding: var(--pad2);
   border-radius: var(--br);
@@ -784,11 +768,25 @@ a {
   margin-top: var(--space-between-cards);
 }
 
+.card.card-link {
+  padding: 0;
+}
+.card.card-link a {
+  grid-column: 1/span 2;
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  align-items: center;
+  padding: var(--pad2);
+}
+.card.card-link .card__title {
+  padding-bottom: 0;
+}
+
 .supercard {
   display: grid;
   grid-template-columns: var(--template-columns);
   gap: 0 var(--pad1);
-  align-content: center;
+  align-items: center;
   height: fit-content;
   padding: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
   border-radius: var(--br);
@@ -796,10 +794,28 @@ a {
 }
 .supercard .card {
   grid-column: 1/span 3;
+  position: relative;
   margin-top: var(--pad1);
 }
+.supercard .card__pretitle {
+  grid-column: 1;
+  padding-bottom: 0;
+  color: var(--primary-light);
+}
+.supercard .card__title {
+  grid-column: 1;
+  padding-bottom: 0;
+  color: var(--primary-dark);
+}
+.supercard .card__subtitle {
+  grid-column: 1;
+  color: var(--primary-dark);
+}
+.supercard .card__arrow {
+  grid-column: 2;
+  grid-row: 1/span 3;
+}
 .supercard__logo {
-  grid-row: var(--grid-row);
   width: var(--width);
   height: var(--height);
   background-color: var(--primary);
@@ -808,12 +824,10 @@ a {
 }
 .supercard__title {
   grid-column: 2;
-  align-self: var(--align-self);
 }
 .supercard__edit {
-  grid-column: var(--grid-column);
-  align-self: var(--align-self);
-  justify-self: var(--justify-self);
+  grid-column: 3;
+  justify-self: end;
   color: var(--second);
 }
 
@@ -3533,8 +3547,7 @@ a {
   --padding-bottom: var(--pad4);
 }
 .home .intro__bloc-btn {
-  --align-self: auto;
-  --margin-bottom: 0;
+  --margin: var(--pad3);
 }
 .home .outro {
   --padding-outro: var(--pad4) var(--pad1) var(--pad2) var(--pad1);
@@ -3608,8 +3621,7 @@ a {
     --padding-bottom: var(--pad3);
   }
   .home .intro__bloc-btn {
-    --align-self: center;
-    --margin-bottom: var(--pad6);
+    --margin-bottom: var(--pad4);
   }
   .home .outro {
     --padding-outro: var(--pad8) 0 var(--pad9) 0;
@@ -3746,9 +3758,9 @@ a {
   color: var(--primary);
 }
 .home .intro__bloc-btn {
-  align-self: var(--align-self);
+  align-self: start;
   justify-self: center;
-  margin-bottom: var(--margin-bottom);
+  margin: var(--margin);
 }
 .home .intro__bloc-link p {
   display: inline;

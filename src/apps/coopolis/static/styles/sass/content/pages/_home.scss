@@ -55,8 +55,7 @@
       --padding-bottom: var(--pad4);
     }
     &__bloc-btn {
-      --align-self: auto;
-      --margin-bottom: 0;
+      --margin: var(--pad3);
     }
   }
   .outro {
@@ -143,8 +142,7 @@
         --padding-bottom: var(--pad3);
       }
       &__bloc-btn {
-        --align-self: center;
-        --margin-bottom: var(--pad6);
+        --margin-bottom: var(--pad4);
       }
     }
     .outro {
@@ -305,9 +303,9 @@
       color: var(--primary);
     }
     &__bloc-btn {
-      align-self: var(--align-self);
+      align-self: start;
       justify-self: center;
-      margin-bottom: var(--margin-bottom);
+      margin: var(--margin);
     }
     &__bloc-link {
       p {

@@ -3,7 +3,6 @@
 
 {% block content %}
 <div class="home {% if not user.is_authenticated %}not-logged{% endif %}">
-
 	{% if user.is_authenticated %}
 	<section class="home__welcome welcome grid-content">
 		<div class="welcome__content is-logged">
@@ -91,7 +90,7 @@
 			</span>
 			<div class="intro__bloc-list">
 			{% for enrollment in enrolled_activities.all %}
-				<div class="card">
+				<div class="card card-link">
 					<a href="{% url 'course' slug=enrollment.activity.course.slug %}">
 						<div class="card__pretitle text-xsm">
 							<p>{{ enrollment.activity.course.title }}</p>
@@ -165,6 +164,9 @@
 			<div class="intro__bloc-supercard">
 				<div class="supercard">
 					<div class="supercard__logo">
+						{% if open_project.logo %}
+						<img src="{{ open_project.logo.url }}" alt="Logo de {{ open_project.name }}">
+						{% endif %}
 					</div>
 					<div class="supercard__title text-md">
 						<p>{{ open_project.name }}</p>
@@ -172,13 +174,16 @@
 					<a class="supercard__edit text-menu" href="{% url 'edit_project' %}">
 						<p>Editar dades</p>
 					</a>
-					<div class="card">
+					<div class="card card-link">
 						<a href="{% url 'project_stage_sessions' pk=open_project.pk %}">
 							<div class="card__pretitle text-xsm">
 								<p>{{ open_project.registration_date|date:"d/m/y" }}</p>
 							</div>
-							<div class="card__title text-md is-bold">
+							<div class="card__title is-bold">
 								<p>{{ open_project.get_motivation_display }}</p>
+							</div>
+							<div class="card__subtitle">
+								<p>{{ open_project.name }}</p>
 							</div>
 							<div class="card__arrow">
 								<svg class="icon-pathfill-primary" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35">

@@ -6,17 +6,8 @@
   --template-columns: 33px 1fr 100px;
 
   &__logo {
-    --grid-row: 1 / span 2;
     --width: var(--pad2);
     --height: var(--pad2);
-  }
-  &__title {
-    --align-self: start;
-  }
-  &__edit {
-    --grid-column: 2;
-    --align-self: start;
-    --justify-self: start;
   }
 }
 
@@ -28,23 +19,16 @@
     --template-columns: 50px 1fr 100px;
 
     &__logo {
-      --grid-row: 1;
       --width: var(--pad3);
       --height: var(--pad3);
-    }
-    &__title {
-      --align-self: center;
-    }
-    &__edit {
-      --grid-column: 3;
-      --align-self: center;
-      --justify-self: end;
     }
   }
 }
 
 .card {
   position: relative;
+  display: grid;
+  grid-template-columns:1fr 50px;
   background-color: var(--white);
   padding: var(--pad2);
   border-radius: var(--br);
@@ -94,11 +78,25 @@
   }
 }
 
+.card.card-link {
+  padding: 0;
+
+  a {
+    grid-column: 1 / span 2;
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    align-items: center;
+    padding: var(--pad2);
+  }
+  .card__title {
+    padding-bottom: 0;
+  }
+}
 .supercard {
   display: grid;
   grid-template-columns: var(--template-columns);
   gap: 0 var(--pad1);
-  align-content: center;
+  align-items: center;
   height: fit-content;
   padding: var(--pad1) var(--pad1) var(--pad2) var(--pad1);
   border-radius: var(--br);
@@ -106,10 +104,30 @@
 
   .card {
     grid-column: 1 / span 3;
+    position: relative;
     margin-top: var(--pad1);
+
+
+    &__pretitle {
+      grid-column: 1;
+      padding-bottom: 0;
+      color: var(--primary-light);
+    }
+    &__title {
+      grid-column: 1;
+      padding-bottom: 0;
+      color: var(--primary-dark);
+    }
+    &__subtitle {
+      grid-column: 1;
+      color: var(--primary-dark);
+    }
+    &__arrow {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+    }
   }
   &__logo {
-    grid-row: var(--grid-row);
     width: var(--width);
     height: var(--height);
     background-color: var(--primary);
@@ -118,12 +136,10 @@
   }
   &__title {
     grid-column: 2;
-    align-self: var(--align-self);
   }
   &__edit {
-    grid-column: var(--grid-column);
-    align-self: var(--align-self);
-    justify-self: var(--justify-self);
+    grid-column: 3;
+    justify-self: end;
     color: var(--second);
   }
 }

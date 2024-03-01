@@ -43,6 +43,7 @@ function showModal(event) {
   const card = event.target.parentElement.parentElement.parentElement
   const modal = card.querySelector(".modal")
   modal.classList.remove("is-hidden")
+  window.scrollTo(0,0)
 }
 function hideModal(event) {
   if (event.target.classList.contains("modal__close")) {
