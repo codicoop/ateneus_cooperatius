@@ -28,7 +28,7 @@
 		<div class="support-list__intro-title title-1">
 			<div class="logo" onclick="clickProjectLogoInput()">
 				{% if project.logo %}
-				<img src="{{ project.logo.url }}">
+				<img src="{{ project.logo.url }}"  alt="Logo de {{ project.name }}">
 				{% endif %}
 			</div>
 			<p>{{ project.name }}</p>
