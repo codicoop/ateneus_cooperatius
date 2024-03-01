@@ -3158,12 +3158,22 @@ a {
   cursor: pointer;
 }
 .dropdown__topbar .pretitle {
+  grid-column: 1;
+  grid-row: 1;
   color: var(--primary-light);
 }
 .dropdown__topbar .title {
+  grid-column: 1/span 3;
+  grid-row: 2;
   color: var(--primary);
 }
+.dropdown__topbar .subtitle {
+  grid-column: 4;
+  grid-row: 2;
+}
 .dropdown__topbar .icon {
+  grid-column: 6;
+  grid-row: 1/span 2;
   position: absolute;
   top: 41%;
   right: var(--pad1);

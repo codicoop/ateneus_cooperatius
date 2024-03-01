@@ -154,7 +154,7 @@
           </div>
         </div>
         <div class="sessions">
-          {% if not stage_session %}
+          {% if project_stage.stage_sessions.count == 0 %}
           <div class="session-empty">
             <p class="title-1">Encara no heu fet cap sessió. Tan aviat com se us assigni una, apareixerà aquí i podràs consultar la informació que li correspongui.</p>
           </div>
