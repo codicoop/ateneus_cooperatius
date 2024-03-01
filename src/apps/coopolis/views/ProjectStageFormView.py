@@ -22,12 +22,17 @@ def project_stage_view(request):
 @login_required
 def project_stage_start_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    if request.user not in project.partners.all():
+        return redirect("home")
+
     return render(request, "project_stage_start.html", {"project": project})
 
 
 @login_required
 def project_stage_data_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    if request.user not in project.partners.all():
+        return redirect("home")
     if request.method == "POST":
         form = ProjectStageStartForm(request.POST, instance=project)
         if form.is_valid():
@@ -45,6 +50,8 @@ def project_stage_data_view(request, pk):
 @login_required
 def project_stage_attatch_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    if request.user not in project.partners.all():
+        return redirect("home")
     if request.method == "POST":
         form = ProjectStageAttachForm(request.POST, request.FILES, instance=project)
         if form.is_valid():
@@ -60,6 +67,8 @@ def project_stage_attatch_view(request, pk):
 @login_required
 def project_stage_initial_petition_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    if request.user not in project.partners.all():
+        return redirect("home")
     form = ProjectStageInitialPetitionForm(request.POST, instance=project)
     if request.method == "POST":
         if form.is_valid():
@@ -77,13 +86,15 @@ def project_stage_initial_petition_view(request, pk):
 @login_required
 def project_stage_characteristics_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    if request.user not in project.partners.all():
+        return redirect("home")
     if request.method == "POST":
         form = ProjectCharacteristicsForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
             project.is_draft = False
             project.save()
-            project.partners.add(request.user)
+            # project.partners.add(request.user)
             new_project_stage = ProjectStage()
             new_project_stage.project = project
             new_project_stage.stage_state = ProjectStageStatesChoices.PENDING
@@ -116,6 +127,8 @@ def project_stage_characteristics_view(request, pk):
 @login_required
 def project_stage_sessions_view(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    if request.user not in project.partners.all():
+        return redirect("home")
     context = {}
     context["project"] = project
     pending_project_stages = ProjectStage.objects.filter(
