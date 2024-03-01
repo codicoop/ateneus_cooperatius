@@ -1237,7 +1237,7 @@ a {
 .course-card__bloc.grid-bloc {
   display: grid;
   grid-template-columns: 50% 50%;
-  gap: var(--pad1);
+  gap: var(--pad1) 0;
 }
 .course-card__bloc.grid-bloc .course-card__subtitle {
   grid-column: 1/span 2;
@@ -1251,17 +1251,23 @@ a {
   margin: var(--margin);
 }
 
+.subbloc {
+  margin-right: var(--pad1);
+}
 .subbloc__title {
   font-weight: bold;
   color: var(--primary);
   text-transform: uppercase;
 }
-.subbloc__text p {
+.subbloc__text p, .subbloc__text ul {
+  display: none;
+}
+.subbloc__text p:first-child {
+  display: block;
+  color: var(--violet-dark);
   text-overflow: ellipsis;
   overflow: hidden;
-  color: var(--violet-dark);
   white-space: nowrap;
-  max-width: 10vw;
 }
 
 .my-course-card {
@@ -3158,12 +3164,22 @@ a {
   cursor: pointer;
 }
 .dropdown__topbar .pretitle {
+  grid-column: 1;
+  grid-row: 1;
   color: var(--primary-light);
 }
 .dropdown__topbar .title {
+  grid-column: 1/span 3;
+  grid-row: 2;
   color: var(--primary);
 }
+.dropdown__topbar .subtitle {
+  grid-column: 4;
+  grid-row: 2;
+}
 .dropdown__topbar .icon {
+  grid-column: 6;
+  grid-row: 1/span 2;
   position: absolute;
   top: 41%;
   right: var(--pad1);
