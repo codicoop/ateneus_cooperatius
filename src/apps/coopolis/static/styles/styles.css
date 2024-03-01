@@ -1237,7 +1237,7 @@ a {
 .course-card__bloc.grid-bloc {
   display: grid;
   grid-template-columns: 50% 50%;
-  gap: var(--pad1);
+  gap: var(--pad1) 0;
 }
 .course-card__bloc.grid-bloc .course-card__subtitle {
   grid-column: 1/span 2;
@@ -1251,17 +1251,23 @@ a {
   margin: var(--margin);
 }
 
+.subbloc {
+  margin-right: var(--pad1);
+}
 .subbloc__title {
   font-weight: bold;
   color: var(--primary);
   text-transform: uppercase;
 }
-.subbloc__text p {
+.subbloc__text p, .subbloc__text ul {
+  display: none;
+}
+.subbloc__text p:first-child {
+  display: block;
+  color: var(--violet-dark);
   text-overflow: ellipsis;
   overflow: hidden;
-  color: var(--violet-dark);
   white-space: nowrap;
-  max-width: 10vw;
 }
 
 .my-course-card {
