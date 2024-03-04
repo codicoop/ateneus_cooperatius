@@ -135,6 +135,13 @@
 			{% if form.errors %}
 			<div class="form__error text-sm">
 					<p>Hi ha hagut un error: {{ form.error }}</p>
+          <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
 			</div>
 			{% endif %}
 

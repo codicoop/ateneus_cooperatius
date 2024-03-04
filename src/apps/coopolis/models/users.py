@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from tagulous.models import TagField
 
@@ -27,6 +28,9 @@ class User(BaseUser):
         null=True,
         default="",
         help_text="Clica per carregar una imatge",
+        validators=[
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "gif"])
+        ],
     )
     fake_email = models.BooleanField(
         "e-mail inventat",
