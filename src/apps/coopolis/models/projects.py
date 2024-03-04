@@ -4,6 +4,7 @@ import tagulous.models
 from constance import config
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import Q, Sum
 from django.urls import reverse
@@ -48,6 +49,11 @@ class Project(models.Model):
         null=True,
         default="",
         help_text="Clica per carregar una imatge",
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=["jpg", "jpeg", "png", "gif"]
+            )
+        ],
     )
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     SECTORS = (
