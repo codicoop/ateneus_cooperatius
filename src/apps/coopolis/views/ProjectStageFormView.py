@@ -117,12 +117,16 @@ def project_stage_characteristics_view(request, pk):
     if request.user not in project.partners.all() or project_stages:
         return redirect("home")
     if request.method == "POST":
+        if project.stages.filter(
+            stage_state=ProjectStageStatesChoices.PENDING
+        ).exists():
+            return redirect("project_stage_sessions", pk=pk)
+            
         form = ProjectCharacteristicsForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
             project.is_draft = False
             project.save()
-            # project.partners.add(request.user)
             new_project_stage = ProjectStage()
             new_project_stage.project = project
             new_project_stage.stage_state = ProjectStageStatesChoices.PENDING

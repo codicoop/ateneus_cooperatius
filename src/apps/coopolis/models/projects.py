@@ -50,9 +50,7 @@ class Project(models.Model):
         default="",
         help_text="Clica per carregar una imatge",
         validators=[
-            FileExtensionValidator(
-                allowed_extensions=["jpg", "jpeg", "png", "gif"]
-            )
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "gif"])
         ],
     )
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
@@ -577,6 +575,22 @@ class ProjectStage(models.Model):
                     {
                         "stage_state": ValidationError(
                             "No es pot tenir més d'un acompanyament en procés."
+                        )
+                    }
+                )
+
+        if self.stage_state == ProjectStageStatesChoices.PENDING:
+            if (
+                self.project.stages.filter(
+                    stage_state=ProjectStageStatesChoices.PENDING
+                )
+                .exclude(id=self.id)
+                .exists()
+            ):
+                errors.update(
+                    {
+                        "stage_state": ValidationError(
+                            "Aquest projecte ja té un acompanyament sol·licitat."
                         )
                     }
                 )
