@@ -39,6 +39,17 @@ function hideMessageModal(event) {
     modal.classList.add("is-hidden")
   }
 }
+function hideRedirectModal(event) {
+  if (event.target.classList.contains("modal__close")) {
+    const modal = event.target.parentElement.parentElement
+    modal.classList.add("is-hidden")
+  }
+  if (event.target.classList.contains("modal__background")) {
+    const modal = event.target.parentElement
+    modal.classList.add("is-hidden")
+  }
+  window.location.replace("/project/edit/")
+}
 function showModal(event) {
   const card = event.target.parentElement.parentElement.parentElement
   const modal = card.querySelector(".modal")

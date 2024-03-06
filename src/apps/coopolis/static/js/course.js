@@ -46,7 +46,6 @@ function toggleSection(event) {
 }
 
 function goToMyCourses(url) {
-  console.log(url)
   window.location.replace(url)
 }
 
