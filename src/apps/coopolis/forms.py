@@ -226,7 +226,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         return self.cleaned_data
 
 
-class MySignUpForm(UserCreationForm):
+class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
         fields = (
@@ -240,6 +240,7 @@ class MySignUpForm(UserCreationForm):
             "birth_place",
             "cannot_share_id",
             "town",
+            "district",
             "gender",
             "address",
             "educational_level",
