@@ -122,19 +122,18 @@
     </div>
   </section>
 	<section class="profile__form grid-content">
-		<div class="form grid-item-wide">
-			<form 
-        method="post"
-        action=""
-        id="profile_form"
-        enctype="multipart/form-data"
+    <div class="form grid-item-wide">
+      <form 
+      method="post"
+      action=""
+      id="profile_form"
+      enctype="multipart/form-data"
       >
-				{% csrf_token %}
-				{{ form.as_ul }}
-			</form>
-			{% if form.errors %}
-			<div class="form__error text-sm">
-					<p>Hi ha hagut un error: {{ form.error }}</p>
+      {% csrf_token %}
+      {{ form.as_ul }}
+      {% if form.errors %}
+      <div class="form__error text-sm">
+          <p>Hi ha hagut un error: {{ form.error }}</p>
           <ul>
             {% for field in form %}
                 {% for error in field.errors %}
@@ -142,9 +141,9 @@
                 {% endfor %}
             {% endfor %}
         </ul>
-			</div>
-			{% endif %}
-
+      </div>
+      {% endif %}
+			</form>
 			<div class="form__submit">
 				<button form="profile_form" type="submit" class="btn btn--second">
 					<p class="btn__text">
