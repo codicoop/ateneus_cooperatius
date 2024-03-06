@@ -71,7 +71,7 @@ function onLoadFunction(){
     // Mostrant districte només si Barcelona
     const townInput = document.querySelector("#id_town")
     const districtField = document.querySelector("#id_district").parentElement
-    townInput.onclick = toggleDistrict
+    townInput.onchange = toggleDistrict
     
     if (townInput.value === "90") {
       districtField.classList.remove("is-hidden")
