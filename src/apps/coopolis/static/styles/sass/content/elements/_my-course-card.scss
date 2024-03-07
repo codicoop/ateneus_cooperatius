@@ -322,7 +322,11 @@
     gap: var(--pad-2);
     padding: var(--padding);
     text-transform: uppercase;
-    color: var(--second);
+    
+    a {
+      text-decoration: none;
+      color: var(--second);
+    }
   }
   &__bloc {
     padding: var(--pad1);
