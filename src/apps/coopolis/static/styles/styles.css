@@ -3862,52 +3862,55 @@ a {
   order: 11;
 }
 .signup .form li:nth-child(12) {
-  order: 6;
-}
-.signup .form li:nth-child(13) {
   order: 12;
 }
+.signup .form li:nth-child(13) {
+  order: 6;
+}
 .signup .form li:nth-child(14) {
-  order: 13;
+  order: 12;
 }
 .signup .form li:nth-child(15) {
-  order: 15;
+  order: 13;
 }
 .signup .form li:nth-child(16) {
-  order: 14;
+  order: 15;
 }
 .signup .form li:nth-child(17) {
-  order: 16;
+  order: 14;
 }
 .signup .form li:nth-child(18) {
-  order: 17;
+  order: 16;
 }
 .signup .form li:nth-child(19) {
-  order: 18;
+  order: 17;
 }
 .signup .form li:nth-child(20) {
-  order: 19;
-  margin-top: var(--pad2);
-}
-.signup .form li:nth-child(20) input {
-  width: 15px;
+  order: 18;
 }
 .signup .form li:nth-child(21) {
-  order: 20;
+  order: 19;
+  margin-top: var(--pad2);
 }
 .signup .form li:nth-child(21) input {
   width: 15px;
 }
 .signup .form li:nth-child(22) {
-  order: 21;
+  order: 20;
 }
 .signup .form li:nth-child(22) input {
   width: 15px;
 }
-.signup .form div:nth-child(23) {
-  order: 23;
+.signup .form li:nth-child(23) {
+  order: 21;
+}
+.signup .form li:nth-child(23) input {
+  width: 15px;
 }
 .signup .form div:nth-child(24) {
+  order: 23;
+}
+.signup .form div:nth-child(25) {
   order: 22;
   margin-top: var(--pad2);
 }
@@ -3971,16 +3974,13 @@ a {
   }
   .signup .form li:nth-child(18) {
     order: initial;
-    grid-column: 1/span 2;
-    justify-self: center;
-    width: 50%;
-    margin-top: var(--pad7);
   }
   .signup .form li:nth-child(19) {
     order: initial;
     grid-column: 1/span 2;
-    width: 50%;
     justify-self: center;
+    width: 50%;
+    margin-top: var(--pad7);
   }
   .signup .form li:nth-child(20) {
     order: initial;
@@ -4000,14 +4000,20 @@ a {
     width: 50%;
     justify-self: center;
   }
-  .signup .form div:nth-child(23) {
+  .signup .form li:nth-child(23) {
+    order: initial;
+    grid-column: 1/span 2;
+    width: 50%;
+    justify-self: center;
+  }
+  .signup .form div:nth-child(24) {
     order: 23;
     grid-column: 1/span 2;
     width: 100%;
     display: flex;
     justify-content: center;
   }
-  .signup .form div:nth-child(24) {
+  .signup .form div:nth-child(25) {
     order: 22;
     grid-column: 1/span 2;
     width: 50%;
