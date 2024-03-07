@@ -7,7 +7,7 @@ class CourseAdmin(SummernoteModelAdmin):
         js = ('js/grappellihacks.js',)
 
     list_display = ('date_start', 'title', 'hours', 'activities_list_field', 'copy_clipboard_list_field',)
-    summernote_fields = ('description',)
+    summernote_fields = ('description', )
     readonly_fields = ('copy_clipboard_field', 'created',)
     exclude = ('slug',)
     search_fields = ('date_start', 'title__unaccent', 'description__unaccent',)

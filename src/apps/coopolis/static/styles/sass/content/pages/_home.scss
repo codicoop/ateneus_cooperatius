@@ -11,18 +11,15 @@
       &.is-logged {
         .welcome__logo {
           --height: var(--pad4);
+          --display: none;
         }
       }
     }
     &__logo {
-      --display: none;
+      --height: var(--pad7);
     }
     &__btns {
       --display: none;
-    }
-    &__text {
-      --font-size: 20px;
-      --line-height: 24px;
     }
   }
   .topbar {
@@ -44,21 +41,21 @@
       --width: auto;
     }
     &__bloc {
+      --grid-template-rows: 80px 1fr 150px;
       --padding-left-bloc: 0;
       --padding-bottom-bloc: var(--pad2);
       --height: 2px;
       --width: 100%;
       --top: 0;
     }
-    &__bloc-title {
+    &__bloc-subtitle {
       --padding-bottom: var(--pad1);
     }
     &__bloc-text {
       --padding-bottom: var(--pad4);
     }
     &__bloc-btn {
-      --align-self: auto;
-      --margin-bottom: 0;
+      --margin: var(--pad3);
     }
   }
   .outro {
@@ -68,23 +65,10 @@
       --align-self: auto;
     }
   }
-  // Diferències quan no estem loggejats
-  &.not-logged {
-    .home {
-      .welcome {
-        &__content {
-          --justify-content: center;
-          --align-items: center;
-          --padding: var(--pad2) var(--pad1);
-          --height-content: 450px;
-          
-          .welcome__logo {
-            --display: block;
-            --height: var(--pad9);
-          }
-        }
-      }
-    }
+}
+.home.not-logged {
+  .welcome__text {
+    --position: absolute;
   }
 }
 
@@ -101,11 +85,11 @@
         &.is-logged {
           .welcome__logo {
             --height: var(--pad4);
+            --display: block;
           }
         }
 
         .welcome__logo {
-          --display: block;
           --height: var(--pad10);
         }
         .welcome__btns {
@@ -123,10 +107,6 @@
           }
         }
       }
-      &__text {
-      --font-size: 28px;
-      --line-height: 32px;
-    }
     }
     .topbar {
     --justify-content: space-between;
@@ -148,21 +128,21 @@
         --width: 50%;
       }
       &__bloc {
+        --grid-template-rows: 150px 1fr 1fr;
         --padding-left-bloc: var(--pad2);
         --padding-bottom-bloc: var(--pad1);
         --height: 93%;
         --width: 2px;
         --top: auto;
       }
-      &__bloc-title {
+      &__bloc-subtitle {
         --padding-bottom: var(--pad4);
       }
       &__bloc-text {
-        --padding-bottom: var(--pad6);
+        --padding-bottom: var(--pad3);
       }
       &__bloc-btn {
-        --align-self: center;
-        --margin-bottom: var(--pad5);
+        --margin-bottom: var(--pad4);
       }
     }
     .outro {
@@ -171,6 +151,11 @@
       &__btn {
         --align-self: center;
       }
+    }
+  }
+  .home.not-logged {
+    .welcome__text {
+      --position: relative;
     }
   }
 }
@@ -204,9 +189,15 @@
       max-height: 700px;
       padding: var(--padding);
       color: var(--white);
+
+    // Cas excepcional del logo
+      &.is-logged {
+        .welcome__logo {
+          display: var(--display);
+        }
+      }
     }
     &__logo {
-      display: var(--display);
       margin-right: var(--pad4);
       
       img {
@@ -215,11 +206,9 @@
       }
     }
     &__text {
-      width: var(--pad20);
+      align-self: start;
       height: auto;
       color: var(--white);
-      font-size: var(--font-size);
-      line-height: var(--line-height);
     }
     &__btns {
       align-self: flex-start;
@@ -275,13 +264,13 @@
       padding: var(--pad6);
       text-align: center;
     }
+    // Info underneaath
     &__bloc {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding-top: var(--pad1);
-      padding-bottom: var(--padding-bottom-bloc);
+      display: grid;
+      grid-template-rows: var(--grid-template-rows);
+      gap: var(--pad3) 0;
+      padding: var(--pad1) var(--pad1) var(--padding-bottom-bloc) 0;
 
       & + .intro__bloc {
         padding-left: var(--padding-left-bloc);
@@ -297,16 +286,43 @@
         }
       }
     }
-    &__bloc-title {
+    // Cas sense inscripcions
+    .intro__bloc--empty {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    &__bloc-subtitle {
       padding-bottom: var(--padding-bottom);
+    }
+    &__bloc-title {
+      max-width: 80%;
     }
     &__bloc-text {
       padding-bottom: var(--padding-bottom);
       color: var(--primary);
     }
     &__bloc-btn {
-      align-self: var(--align-self);
-      margin-bottom: var(--margin-bottom);
+      align-self: center;
+      justify-self: center;
+      margin: var(--margin);
+    }
+    &__bloc-link {
+      p {
+        display: inline;
+      color: var(--second);
+      margin-top: var(--pad1);
+      
+    }
+    svg {
+      position: relative;
+      top: 10px;
+      display: inline;
+      height: 32px;
+      width: auto;
+      }
+    }
+    &__bloc-supercard {
     }
   }
   .outro {
@@ -326,3 +342,35 @@
     }
   }
 }
+
+// Diferències quan no estem loggejats
+.home.not-logged {
+  .welcome {
+    &__content {
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      padding: var(--pad2) var(--pad1);
+      height: 100vh;
+      
+      &__logo {
+        height: var(--pad9);
+      }
+    }
+    &__text {
+      position: var(--position);
+      bottom: var(--pad2);
+      left: var(--pad1);
+      align-self: center;
+      max-width: 320px;
+    }
+  }
+  .intro {
+    // Info underneaath
+    &__bloc {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+

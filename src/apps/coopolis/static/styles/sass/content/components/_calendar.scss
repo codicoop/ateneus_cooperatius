@@ -1,0 +1,82 @@
+// Dynamic variables
+.my-calendar {
+  .fc-toolbar-title {
+    --font-size: 20px;
+    --line-height: 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .my-calendar {
+    .fc-toolbar-title {
+      --font-size: 28px;
+      --line-height: 30px;
+    }
+  }
+}
+
+// Layout
+.my-calendar.fc {
+  border: none;
+
+  // Les fletxes per canviar el mes
+  .fc-button {
+    height: 31px;
+    width: 31px;
+    padding: 0;
+    background-color: var(--primary-lightest);
+    border-radius: 50px;
+    border: none;
+
+    .fc-icon {
+      color: var(--primary);
+      font-size: 25px;
+    }
+  }
+  // El títol del calendari
+  .fc-toolbar-title {
+    color: var(--primary);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+  }
+  // La cel·la del dia
+  &.fc-theme-standard td {
+    padding-bottom: var(--pad1);
+    border: none;
+    border-top: 1px solid var(--primary-lighter);
+  }
+  // El número de dia de la cel·la
+  .fc-daygrid-day-top {
+    color: var(--primary-light);
+    font-weight: bold;
+  }
+  // L'hora del event
+  .fc-event-time {
+    display: none;
+  }
+  // L'event
+  .fc-event {
+    position: relative;
+    height: 90px;
+    padding: var(--pad-3);
+    margin-top: var(--pad-3);
+    background-color: var(--white);
+
+    // El text de l'event
+    .fc-event-tite {
+      text-overflow: ellipsis;
+    }
+  }
+  .fc-event-main,
+  .fc-event-main-frame {
+    height: 100%;
+  }
+  .fc-event-title-container {
+    font-family: 'Inter', sans-serif;
+    color: var(--primary-dark);
+    font-size: 12px;
+    line-height: 14px;
+    text-overflow: ellipsis;
+  }
+}
+

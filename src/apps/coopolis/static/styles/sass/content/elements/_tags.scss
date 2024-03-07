@@ -1,0 +1,26 @@
+// Dynamic variables
+// .tags {}
+
+// @media (min-width: 900px) {
+//   .tags { }
+// }
+
+.tags {
+  display: flex;
+  gap: var(--pad-2);
+  flex-wrap: wrap;
+  padding-bottom: var(--pad1);
+
+  .tag {
+    display: flex;
+    gap: var(--pad-2);
+    align-items: center;
+    padding: 4px 8px;
+    border: 1px solid var(--violet-dark);
+    border-radius: 50px;
+    text-transform: uppercase;
+    color: var(--violet-dark);
+    white-space: nowrap;
+  }
+}
+

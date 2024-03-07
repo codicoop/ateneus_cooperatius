@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block home_is_active %}{% endblock %}
+{% block enrollments_is_active %}{% endblock %}
+{% block projects_is_active %}is-active{% endblock %}
+
+{% block content %}
+<div class="support support-4">
+  <section class="support__nav grid-content">
+    <div class="grid-item-wide">
+      <a href="{% url 'project_stage_data' pk=project.pk %}">
+        <div class="support-nav__item">
+          <div class="text">
+            <p>Dades del projecte</p>
+          </div>
+          <div class="number">
+            <p>1</p>
+          </div>
+        </div>
+      </a>
+      <a href="{% url 'project_stage_attatch' pk=project.pk %}">
+        <div class="support-nav__item">
+          <div class="text">
+            <p>Material adjunt</p>
+          </div>
+          <div class="number">
+            <p>2</p>
+          </div>
+        </div>
+      </a>
+      <a href="{% url 'project_stage_initial_petition' pk=project.pk %}">
+        <div class="support-nav__item">
+          <div class="text">
+            <p>Petició inicial</p>
+          </div>
+          <div class="number">
+            <p>3</p>
+          </div>
+        </div>
+      </a>
+      <a href="{% url 'project_stage_characteristics' pk=project.pk %}">
+        <div class="support-nav__item is-active">
+          <div class="text">
+            <p>Característiques</p>
+          </div>
+          <div class="number">
+            <p>4</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+  <section class="support__intro grid-content">
+    <div class="grid-item-wide title-1">
+      <p>Per acabar, explica'ns les característiques del teu projecte perquè et puguem ajudar:</p>
+    </div>
+  </section>
+  <section class="support__form grid-content">
+    <form class="form grid-item-full" method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+      id="support-form-1">
+      {% csrf_token %}
+      {{ form.as_ul }}
+      {% if messages %}
+      <div class="modal">
+        <div class="modal__background" onclick="hideRedirectModal(event)"></div>
+        <div class="modal__card">
+          <div class="modal__title title-1">
+            <p>Confirmació</p>
+          </div>
+          <div class="modal__close" onclick="hideRedirectModal(event)">
+            <svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 9.46 9.46">
+              <path d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+            </svg>
+          </div>
+          <div class="modal__form">
+            {% for message in messages %}
+
+            <div class="modal__intro text-md">
+              <div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
+                <p>{{ message }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if form.errors %}
+      <div class="message-container">
+        <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
+        </p>
+        {% for error in form.non_field_errors %}
+        <p class="error-message">{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="form__submit">
+        <input type="submit" class="btn btn--primary btn__text" value="Enviar sol·licitud" />
+      </div>
+      <input type="hidden" name="next" value="{{ next }}" />
+      <div class="support__back back-link">
+        <a href="{% url 'project_stage_initial_petition' pk=project.pk %}">
+          <div class="back-link__text">
+            <p>Anar enrere</p>
+          </div>
+        </a>
+      </div>
+    </form>
+  </section>
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+// Dynamic variables
+.filter {
+  &__btn {
+  }
+}
+
+@media (min-width: 900px) {
+  .filter {
+    &__btn {
+    }
+  }
+}
+
+.filter {
+  &__btn {
+    margin-top: var(--pad1-5);
+    margin-bottom: var(--pad4);
+    p {
+      pointer-events: none;
+    }
+  }
+  &__tags.tags {
+    padding: var(--pad2) 0;
+    border-top: 1px solid var(--primary-lighter);
+
+    svg {
+      cursor: pointer;
+    }
+  }
+}
+

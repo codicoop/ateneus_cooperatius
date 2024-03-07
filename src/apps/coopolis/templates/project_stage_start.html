@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block home_is_active %}{% endblock %}
+{% block enrollments_is_active %}{% endblock %}
+{% block projects_is_active %}is-active{% endblock %}
+
+{% block content %}
+<div class="support support-0">
+  <section class="support__intro grid-content">
+    <div class="grid-item-wide support__project-tag project-tag">
+      {% if project.logo %}
+        <div class="project-tag__logo">
+          <img src="{{ project.logo.url }}" alt="Logo de {{ project.name }}">
+        </div>
+      {% endif %}
+      <div class="project-tag__title">
+        <p>{{ project.name }}</p>
+      </div>
+    </div>
+    <div class="grid-item-wide title-1">
+      <p>Des de {{ config.PROJECT_NAME }} acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i creixement. També dissenyem itineraris per a la transformació d'associacions i altres formes d'empreses a cooperatives.</p>
+      <p>Si vols o necessites que et donem un cop de mà, explica'ns com és el teu projecte i ens posarem en contacte amb tu quan puguem!</p>
+    </div>
+    <div class="grid-item-wide support__intro-btn">
+      <a href="{% url 'project_stage_data' pk=project.pk %}">
+        <div class="btn btn--primary">
+          <p class="btn__text">Començem</p>
+        </div>
+      </a>
+    </div>
+  </section>
+</div>
+{% endblock %}

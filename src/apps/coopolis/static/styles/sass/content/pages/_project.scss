@@ -1,54 +1,359 @@
 // Dynamic variables
 .project {
+  --padding-project: var(--pad1);
+
   &__intro {
-    --padding-intro: var(--pad1) 0 var(--pad8) 0;
-    --margin-intro: 0 0 var(--pad1-5) 0;
+    --padding-intro: var(--pad1) 0 var(--pad2) 0;
+    --margin-intro: var(--pad4) 0 var(--pad1-5) 0;
+    --padding-input-image: 68px 16px;
+
+    &.grid-content {
+      --display: flex;
+    }
+  }
+  &__intro-title {
+    --max-width: 70%;
+    --text-align: center;
+  }
+  &__intro-banner {
+    --margin-top: var(--pad4);
+  }
+  &__intro-btn {
+    --width: 100%;
+  }
+  .logo {
+    --width: var(--pad4);
+    --height: var(--pad4);
+    --top: 20px;
+    --left: 20px;
+  }
+  &__people-grid {
+    --gap: var(--pad1);
+  }
+  &__people-item,
+  &__people-add {
+    --margin-top: var(--pad3);
+  }
+  &__form {
+    form {
+      --display-form: flex;
+
+      // Photo
+      & li:nth-child(2) {
+        display: none!important;
+      }
+      // Nom
+      & li:nth-child(3) {
+        order: 1;
+      }
+      // Poblacio
+      & li:nth-child(4) {
+        order: 6;
+      }
+      // Sector
+      & li:nth-child(5) {
+        order: 2;
+      }
+      // Districte
+      & li:nth-child(6) {
+        order: 7;
+      }
+      // Email
+      & li:nth-child(7) {
+        order: 3;
+      }
+      // web
+      & li:nth-child(8) {
+        order: 5;
+      }
+      // phone
+      & li:nth-child(9) {
+        order: 4;
+      }
+      // file 1 - estatuts
+      & li:nth-child(10) {
+        order: 8;
+      }
+      // file 2 - viabilitat
+      & li:nth-child(11) {
+        order: 9;
+      }
+      // file 3 - sostenibilitat
+      & li:nth-child(12) {
+        order: 10;
+      }
+    }
   }
 }
 
 @media (min-width: 900px) {
   .project {
+    --padding-project: var(--pad1) 0 var(--pad3) 0;
+
     &__intro {
-      --padding-intro: var(--pad2) 0 var(--pad4) 0;
+      --padding-intro: var(--pad7) 0 var(--pad3) 0;
       --margin-intro: 0 var(--pad4-5) var(--pad6) var(--pad4-5);
+
+      &.grid-content {
+        --display: grid;
+      }
+    }
+
+    &__intro-title {
+      --max-width: none;
+      --text-align: left;
+    }
+    &__intro-banner {
+      --margin-top: 0;
+    }
+    &__intro-btn {
+      --width: fit-content;
+    }
+    .logo {
+      --width: var(--pad7);
+      --height: var(--pad7);
+      --top: 43px;
+      --left: 43px;
+    }
+    &__people-grid {
+      --gap: var(--pad2);
+    }
+    &__people-item,
+    &__people-add {
+      --margin-top: var(--pad4);
+    }
+    &__form {
+      form {
+        --display-form: grid;
+  
+        // Photo
+        & li:nth-child(2) {
+          display: none;
+        }
+        // Nom
+        & li:nth-child(3) {
+          order: initial;
+        }
+        // Poblacio
+        & li:nth-child(4) {
+          order: initial;
+        }
+        // Sector
+        & li:nth-child(5) {
+          order: initial;
+        }
+        // Districte
+        & li:nth-child(6) {
+          order: initial;
+        }
+        // Email
+        & li:nth-child(7) {
+          order: initial;
+        }
+        // web
+        & li:nth-child(8) {
+          order: initial;
+        }
+        // phone
+        & li:nth-child(9) {
+          order: initial;
+        }
+        // file 1 - estatuts
+        & li:nth-child(10) {
+          order: initial;
+        }
+        // file 2 - viabilitat
+        & li:nth-child(11) {
+          order: initial;
+        }
+        // file 3 - sostenibilitat
+        & li:nth-child(12) {
+          order: initial;
+        }
+      }
     }
   }
 }
 
 // Layout
 .project {
-  padding: var(--pad1);
+  height: 100%;
+  padding: var(--padding-project);
   background-color: var(--second-3);
 
   &__intro {
     padding: var(--padding-intro);
     margin: var(--margin-intro);
-    border-bottom: 1px solid var(--primary-lightest);
+    border-bottom: 2px solid var(--primary-lightest);
     color: var(--primary);
+
+    &.grid-content {
+      display: var(--display);
+      flex-direction: column;
+      align-items: center;
+      gap: var(--pad1);
+    }
+  }
+  &__intro-logo {
+    grid-column: 2;
+    grid-row: 1;
+
+    &:hover {
+      .logo {
+        position: relative;
+        background-color: var(--primary);
+
+        &::before {
+          content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3Csvg xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:cc='http://creativecommons.org/ns%23' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23' xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' viewBox='0 0 24 24' width='24' height='24' version='1.1' id='svg4' sodipodi:docname='mes-nocircle-bold.svg' inkscape:version='0.92.4 (5da689c313, 2019-01-14)'%3E%3Cmetadata id='metadata10'%3E%3Crdf:RDF%3E%3Ccc:Work rdf:about=''%3E%3Cdc:format%3Eimage/svg+xml%3C/dc:format%3E%3Cdc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage' /%3E%3Cdc:title%3E%3C/dc:title%3E%3C/cc:Work%3E%3C/rdf:RDF%3E%3C/metadata%3E%3Cdefs id='defs8' /%3E%3Csodipodi:namedview pagecolor='%23ffffff' bordercolor='%23666666' borderopacity='1' objecttolerance='10' gridtolerance='10' guidetolerance='10' inkscape:pageopacity='0' inkscape:pageshadow='2' inkscape:window-width='1440' inkscape:window-height='837' id='namedview6' showgrid='false' fit-margin-top='0' fit-margin-left='0' fit-margin-right='0' fit-margin-bottom='0' inkscape:zoom='24.242044' inkscape:cx='12.131576' inkscape:cy='11.254991' inkscape:window-x='1358' inkscape:window-y='-6' inkscape:window-maximized='1' inkscape:current-layer='svg4' /%3E%3Cpolygon transform='matrix(2,0,0,2,-23,-23)' points='16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 ' id='polygon2' style='opacity:1;fill:%23ffffff;fill-opacity:1' /%3E%3C/svg%3E ");
+          position: absolute;
+          top: var(--top);
+          left: var(--left);
+        }
+        img {
+          opacity: 0;
+        }
+      }
+    }
+    .logo {
+      width: var(--width);
+      height: var(--height);
+      background-color: var(--white);
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+  &__intro-title {
+    grid-row: 1;
+    grid-column: 3 / span 3;
+    text-align: var(--text-align);
+    max-width: var(--max-width);
+  }
+  &__intro-banner {
+    grid-column: 3 / span 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-2);
+    width: 100%;
+    max-width: 400px;
+    margin-top: var(--margin-top);
+    padding: var(--pad1);
+    background-color: var(--primary-lightest);
+    border-radius: var(--br);
+    color: var(--primary-dark);
+
+    .action-text {
+      cursor: pointer;
+    }
+    a {
+      margin-top: var(--pad2);
+    }
+  }
+  &__intro-btn {
+    grid-row: 2;
+    grid-column: 3 / span 3;
+    margin-top: var(--pad6);
+    width: var(--width);
   }
   &__form {
-    .form {
-      li:nth-child(14) {
-        grid-row: 8;
-        grid-column: 1;
-      }
-      li:nth-child(15) {
-        grid-row: 8;
-        grid-column: 2;
-      }
-      li:nth-child(16) {
-        grid-row: 9;
-        grid-column: 1;
-      }
-      li:nth-child(17) {
-        grid-row: 9;
-        grid-column: 2;
-      }
+    form {
+      display: var(--display-form);
+      flex-direction: column;
+
       .form__submit {
+        order: 11;
         grid-row: 10;
         grid-column: 1 / span 2;
         justify-self: center;
       }
+    }
+  }
+  &__people {
+    padding-top: var(--pad1);
+    margin-bottom: var(--pad2);
+    border-top: 2px solid var(--primary-lightest);
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--gap);
+    }
+  }
+  &__people-title {
+    grid-column: 1 / -1;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+  &__people-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: var(--margin-top);
+
+    .image {
+      width: var(--pad5);
+      height: var(--pad5);
+      margin-bottom: var(--pad-2);
+      border-radius: 50%;
+      background-color: var(--yellow);
+
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+    .text-btn {
+      margin-top: var(--pad-2);
+      text-transform: uppercase;
+      color: var(--second);
+      font-weight: 500;
+    }
+  }
+  &__people-add {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--pad-2);
+    margin-top: var(--margin-top);
+
+    .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--pad5);
+      height: var(--pad5);
+      border-radius: 50%;
+      background-color: var(--primary);
+
+      svg {
+        width: var(--pad3);
+        height: var(--pad3);
+      }
+    }
+    .text-btn {
+      width: 60%;
+      margin-top: var(--pad-2);
+      text-transform: uppercase;
+      color: var(--second);
+      text-align: center;
+      font-weight: 500;
     }
   }
 }

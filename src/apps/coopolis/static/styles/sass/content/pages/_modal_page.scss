@@ -26,14 +26,17 @@
     background-color: var(--violet);
     z-index: 100;
   }
-  
   &__card {
     z-index: 110;
     width: 100%;
     max-width: 400px;
     margin: var(--margin-card);
   }
+  .card__subtitle {
+    padding-bottom: var(--pad2);
+  }
   &__form {
+
     .form__submit {
       margin-bottom: 0;
     }

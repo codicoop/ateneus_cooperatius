@@ -1,26 +1,27 @@
 import uuid
-
-from constance import config
-from django.core.exceptions import NON_FIELD_ERRORS
-from django.db import models, IntegrityError
-from django.shortcuts import reverse
-from django.conf import settings
 from datetime import date, datetime, time
 
+from constance import config
+from django.apps import apps
+from django.conf import settings
+from django.core.exceptions import NON_FIELD_ERRORS
+from django.core.validators import ValidationError
+from django.db import IntegrityError, models
+from django.shortcuts import reverse
 from django.utils import timezone
 from easy_thumbnails.fields import ThumbnailerImageField
-from django.apps import apps
-from django.core.validators import ValidationError
 
-from apps.cc_lib.utils import slugify_model
-from apps.coopolis.choices import ServicesChoices, CirclesChoices, \
-    SubServicesChoices, ActivityFileType
-from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
-from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
-from apps.coopolis.storage_backends import (
-    PrivateMediaStorage, PublicMediaStorage
+from apps.cc_lib.utils import slugify_model
+from apps.coopolis.choices import (
+    ActivityFileType,
+    CirclesChoices,
+    ServicesChoices,
+    SubServicesChoices,
 )
+from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
+from apps.coopolis.managers import Published
+from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -28,7 +29,9 @@ from conf.custom_mail_manager import MyMailTemplate
 class CoursePlace(models.Model):
     class Meta:
         verbose_name = "lloc"
-        ordering = ["name", ]
+        ordering = [
+            "name",
+        ]
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     town = models.ForeignKey(
@@ -36,7 +39,7 @@ class CoursePlace(models.Model):
         verbose_name="població",
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
     )
     address = models.CharField("adreça", max_length=200)
 
@@ -48,7 +51,9 @@ class Entity(models.Model):
     class Meta:
         verbose_name = "entitat"
         verbose_name_plural = "entitats"
-        ordering = ["name", ]
+        ordering = [
+            "name",
+        ]
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     legal_id = models.CharField("N.I.F.", max_length=9, blank=True, null=True)
@@ -66,7 +71,7 @@ class Organizer(models.Model):
     class Meta:
         verbose_name = "organitzadora"
         verbose_name_plural = "organitzadores"
-        ordering = ['name']
+        ordering = ["name"]
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
 
@@ -78,15 +83,11 @@ class Cofunding(models.Model):
     class Meta:
         verbose_name = "cofinançadora"
         verbose_name_plural = "cofinançadores"
-        ordering = ["name", ]
+        ordering = [
+            "name",
+        ]
 
-    name = models.CharField(
-        "nom",
-        max_length=200,
-        blank=False,
-        unique=True,
-        null=False
-    )
+    name = models.CharField("nom", max_length=200, blank=False, unique=True, null=False)
 
     def __str__(self):
         return self.name
@@ -96,15 +97,11 @@ class StrategicLine(models.Model):
     class Meta:
         verbose_name = "línia estratègica"
         verbose_name_plural = "línies estratègiques"
-        ordering = ["name", ]
+        ordering = [
+            "name",
+        ]
 
-    name = models.CharField(
-        "nom",
-        max_length=200,
-        blank=False,
-        unique=True,
-        null=False
-    )
+    name = models.CharField("nom", max_length=200, blank=False, unique=True, null=False)
 
     def __str__(self):
         return self.name
@@ -116,10 +113,7 @@ class Course(models.Model):
         verbose_name_plural = "accions"
         ordering = ["-date_start"]
 
-    TYPE_CHOICES = (
-        ('F', "Accions educatives"),
-        ('A', "Altres accions")
-    )
+    TYPE_CHOICES = (("F", "Accions educatives"), ("A", "Altres accions"))
     title = models.CharField("títol", max_length=250, blank=False)
     slug = models.CharField(max_length=250, unique=True)
     date_start = models.DateField("dia inici")
@@ -128,21 +122,16 @@ class Course(models.Model):
         "horaris",
         blank=False,
         max_length=200,
-        help_text="Indica només els horaris, sense els dies."
+        help_text="Indica només els horaris, sense els dies.",
     )
     description = models.TextField("descripció", null=True)
+    aimed_at = models.TextField("adreçat a", default="")
     publish = models.BooleanField("publicat")
     created = models.DateTimeField(
-        "data de creació",
-        null=True,
-        blank=True,
-        auto_now_add=True
+        "data de creació", null=True, blank=True, auto_now_add=True
     )
     banner = ThumbnailerImageField(
-        null=True,
-        storage=PublicMediaStorage(),
-        max_length=250,
-        blank=True
+        null=True, storage=PublicMediaStorage(), max_length=250, blank=True
     )
     place = models.ForeignKey(
         CoursePlace,
@@ -150,24 +139,24 @@ class Course(models.Model):
         null=True,
         verbose_name="lloc",
         blank=True,
-        help_text="Aquesta dada de moment és d'ús intern i no es publica."
+        help_text="Aquesta dada de moment és d'ús intern i no es publica.",
     )
     objects = models.Manager()
     published = Published()
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
-        slugify_model(instance, 'title')
+        slugify_model(instance, "title")
 
     @property
     def absolute_url(self):
         if self.slug:
-            return settings.ABSOLUTE_URL + reverse('course', args=[str(self.slug)])
+            return settings.ABSOLUTE_URL + reverse("course", args=[str(self.slug)])
         return None
 
     @staticmethod
     def autocomplete_search_fields():
-        return ("title__icontains", )
+        return ("title__icontains",)
 
     def __str__(self):
         return f"{self.title} ({self.date_start})"
@@ -184,7 +173,7 @@ class Activity(models.Model):
         Course,
         on_delete=models.CASCADE,
         verbose_name="acció",
-        related_name="activities"
+        related_name="activities",
     )
     name = models.CharField("títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("descripció", null=True)
@@ -201,21 +190,21 @@ class Activity(models.Model):
         help_text="Per informació interna. No afecta la publicació.",
     )
     spots = models.IntegerField(
-        'places totals',
+        "places totals",
         default=0,
         help_text="Si hi ha inscripcions en llista d'espera i augmentes el "
-                  "número de places, passaran a confirmades i se'ls hi "
-                  "notificarà el canvi. Si redueixes el número de places per "
-                  "sota del total d'inscrites les que ja estaven confirmades "
-                  "seguiran confirmades. Aquestes autotatitzacions únicament "
-                  "s'activen si la sessió té una data futura."
+        "número de places, passaran a confirmades i se'ls hi "
+        "notificarà el canvi. Si redueixes el número de places per "
+        "sota del total d'inscrites les que ja estaven confirmades "
+        "seguiran confirmades. Aquestes autotatitzacions únicament "
+        "s'activen si la sessió té una data futura.",
     )
     enrolled = models.ManyToManyField(
         "coopolis.User",
         blank=True,
-        related_name='enrolled_activities',
+        related_name="enrolled_activities",
         verbose_name="inscrites",
-        through="ActivityEnrolled"
+        through="ActivityEnrolled",
     )
     circle = models.SmallIntegerField(
         "Ateneu / Cercle",
@@ -224,18 +213,14 @@ class Activity(models.Model):
         blank=True,
     )
     entity = models.ForeignKey(
-        Entity,
-        verbose_name="entitat",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+        Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True
     )
     organizer = models.ForeignKey(
         Organizer,
         verbose_name="organitzadora",
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
     )
     responsible = models.ForeignKey(
         "coopolis.User",
@@ -243,10 +228,10 @@ class Activity(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name='activities_responsible',
+        related_name="activities_responsible",
         help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
-                  "al desplegable, cal que la persona tingui activada l'opció "
-                  "'Membre del personal'."
+        "al desplegable, cal que la persona tingui activada l'opció "
+        "'Membre del personal'.",
     )
     service = models.SmallIntegerField(
         "Servei",
@@ -266,7 +251,7 @@ class Activity(models.Model):
         choices=settings.AXIS_OPTIONS,
         null=True,
         blank=True,
-        max_length=1
+        max_length=1,
     )
     subaxis = models.CharField(
         "(OBSOLET) Sub-eix",
@@ -274,23 +259,43 @@ class Activity(models.Model):
         null=True,
         blank=True,
         max_length=2,
-        choices=get_subaxis_choices()
+        choices=get_subaxis_choices(),
     )
-    photo1 = models.FileField("fotografia", blank=True, null=True,
-                              storage=PrivateMediaStorage(), max_length=250)
-    photo3 = models.FileField("fotografia 2", blank=True, null=True,
-                              storage=PrivateMediaStorage(), max_length=250)
-    photo2 = models.FileField("document acreditatiu", blank=True, null=True,
-                              storage=PrivateMediaStorage(), max_length=250)
-    file1 = models.FileField("material de difusió", blank=True, null=True,
-                             storage=PrivateMediaStorage(), max_length=250)
+    photo1 = models.FileField(
+        "fotografia",
+        blank=True,
+        null=True,
+        storage=PrivateMediaStorage(),
+        max_length=250,
+    )
+    photo3 = models.FileField(
+        "fotografia 2",
+        blank=True,
+        null=True,
+        storage=PrivateMediaStorage(),
+        max_length=250,
+    )
+    photo2 = models.FileField(
+        "document acreditatiu",
+        blank=True,
+        null=True,
+        storage=PrivateMediaStorage(),
+        max_length=250,
+    )
+    file1 = models.FileField(
+        "material de difusió",
+        blank=True,
+        null=True,
+        storage=PrivateMediaStorage(),
+        max_length=250,
+    )
     publish = models.BooleanField("publicada", default=True)
     # minors
     for_minors = models.BooleanField(
         "acció dirigida a menors",
         default=False,
         help_text="Determina el tipus de justificació i en aquest cas, s'han "
-                  "d'omplir els camps relatius a menors."
+        "d'omplir els camps relatius a menors.",
     )
     minors_school_name = models.CharField(
         "nom del centre educatiu", blank=True, null=True, max_length=150
@@ -299,23 +304,21 @@ class Activity(models.Model):
         "CIF del centre educatiu", blank=True, null=True, max_length=12
     )
     MINORS_GRADE_OPTIONS = (
-        ('PRIM', "Primària"),
-        ('ESO', "Secundària obligatòria"),
-        ('BATX', "Batxillerat"),
-        ('FPGM', "Formació professional grau mig"),
-        ('FPGS', "Formació professional grau superior")
+        ("PRIM", "Primària"),
+        ("ESO", "Secundària obligatòria"),
+        ("BATX", "Batxillerat"),
+        ("FPGM", "Formació professional grau mig"),
+        ("FPGS", "Formació professional grau superior"),
     )
     minors_grade = models.CharField(
         "grau d'estudis",
         blank=True,
         null=True,
         max_length=4,
-        choices=MINORS_GRADE_OPTIONS
+        choices=MINORS_GRADE_OPTIONS,
     )
     minors_participants_number = models.IntegerField(
-        "número d'alumnes participants",
-        blank=True,
-        null=True
+        "número d'alumnes participants", blank=True, null=True
     )
     minors_teacher = models.ForeignKey(
         "coopolis.User",
@@ -330,19 +333,19 @@ class Activity(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="related_activities"
+        related_name="related_activities",
     )
     room = models.ForeignKey(
         apps.get_model("facilities_reservations", "Room", False),
         on_delete=models.SET_NULL,
         verbose_name="sala",
-        related_name='activities',
+        related_name="activities",
         null=True,
         blank=True,
         help_text="Si selecciones una sala, quan guardis quedarà reservada "
-                  "per la sessió. <br>Consulta el "
-                  "<a href=\"/reservations/calendar/\" target=\"_blank\">"
-                  "CALENDARI DE RESERVES</a> per veure la disponibilitat."
+        "per la sessió. <br>Consulta el "
+        '<a href="/reservations/calendar/" target="_blank">'
+        "CALENDARI DE RESERVES</a> per veure la disponibilitat.",
     )
     # cofunding options module
     cofunded = models.ForeignKey(
@@ -351,7 +354,7 @@ class Activity(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='cofunded_activities'
+        related_name="cofunded_activities",
     )
     cofunded_ateneu = models.BooleanField(
         "Cofinançat amb Ateneus Cooperatius", default=False
@@ -362,7 +365,7 @@ class Activity(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        related_name='strategic_line_activities'
+        related_name="strategic_line_activities",
     )
 
     # Camps pel material formatiu
@@ -373,13 +376,12 @@ class Activity(models.Model):
         "instruccions per participar",
         null=True,
         blank=True,
-        help_text=
-            "Aquest text s'inclourà al correu de recordatori. És molt "
-            "important que el formateig del text sigui el menor possible, i en"
-            " particular, que si copieu i enganxeu el text d'algun altre lloc "
-            "cap aquí, ho feu amb l'opció \"enganxar sense format\", ja que "
-            "sinó arrossegarà molta informació de formateig que "
-            "probablement farà que el correu es vegi malament."
+        help_text="Aquest text s'inclourà al correu de recordatori. És molt "
+        "important que el formateig del text sigui el menor possible, i en"
+        " particular, que si copieu i enganxeu el text d'algun altre lloc "
+        'cap aquí, ho feu amb l\'opció "enganxar sense format", ja que '
+        "sinó arrossegarà molta informació de formateig que "
+        "probablement farà que el correu es vegi malament.",
     )
     poll_sent = models.DateTimeField(
         "data d'enviament de l'enquesta",
@@ -397,13 +399,12 @@ class Activity(models.Model):
         "Cos del correu de recordatori d'omplir l'enquesta",
         null=True,
         blank=True,
-        help_text=
-            "Aquest text s'inclourà al correu de recordatori. És molt "
-            "important que el formateig del text sigui el menor possible, i en"
-            " particular, que si copieu i enganxeu el text d'algun altre lloc "
-            "cap aquí, ho feu amb l'opció \"enganxar sense format\", ja que "
-            "sinó arrossegarà molta informació de formateig que "
-            "probablement farà que el correu es vegi malament."
+        help_text="Aquest text s'inclourà al correu de recordatori. És molt "
+        "important que el formateig del text sigui el menor possible, i en"
+        " particular, que si copieu i enganxeu el text d'algun altre lloc "
+        'cap aquí, ho feu amb l\'opció "enganxar sense format", ja que '
+        "sinó arrossegarà molta informació de formateig que "
+        "probablement farà que el correu es vegi malament.",
     )
     equipments = models.ManyToManyField(
         to="facilities_reservations.Equipment",
@@ -430,15 +431,11 @@ class Activity(models.Model):
 
     @property
     def waiting_list(self):
-        return self.enrollments.filter(
-            waiting_list=True
-        ).order_by('date_enrolled')
+        return self.enrollments.filter(waiting_list=True).order_by("date_enrolled")
 
     @property
     def confirmed_enrollments(self):
-        return self.enrollments.filter(
-            waiting_list=False
-        ).order_by('date_enrolled')
+        return self.enrollments.filter(waiting_list=False).order_by("date_enrolled")
 
     def user_is_confirmed(self, user):
         res = self.confirmed_enrollments.filter(user=user).all()
@@ -454,10 +451,7 @@ class Activity(models.Model):
 
     @property
     def datetime_start(self):
-        if (
-                isinstance(self.date_start, date) and
-                isinstance(self.starting_time, time)
-        ):
+        if isinstance(self.date_start, date) and isinstance(self.starting_time, time):
             return datetime.combine(self.date_start, self.starting_time)
         return None
 
@@ -471,17 +465,18 @@ class Activity(models.Model):
         return datetime.combine(self.date_end, self.ending_time)
 
     def axis_summary(self):
-        axis = self.axis if self.axis else '(cap)'
-        subaxis = self.subaxis if self.subaxis else '(cap)'
+        axis = self.axis if self.axis else "(cap)"
+        subaxis = self.subaxis if self.subaxis else "(cap)"
         return f"{axis} - {subaxis}"
+
     axis_summary.short_description = "Eix - Subeix"
-    axis_summary.admin_order_field = 'subaxis'
+    axis_summary.admin_order_field = "subaxis"
 
     @property
     def subsidy_period(self):
         if not self.date_start:
             return None
-        model = apps.get_model('dataexports', 'SubsidyPeriod')
+        model = apps.get_model("dataexports", "SubsidyPeriod")
         # Using date start as the reference one, if an activity last for more
         # than 1 day it should not matter here.
         obj = model.objects.get(
@@ -490,7 +485,7 @@ class Activity(models.Model):
         return obj
 
     def poll_access_allowed(self):
-         # Si la data actual és superior o igual a la data i hora d'inici,
+        # Si la data actual és superior o igual a la data i hora d'inici,
         # mostrem  l'enquesta.
         naive_datetime = datetime.combine(self.date_start, self.starting_time)
         aware_datetime = timezone.make_aware(naive_datetime)
@@ -510,11 +505,11 @@ class Activity(models.Model):
         super().clean()
         errors = {}
         if (
-                self.minors_grade or
-                self.minors_participants_number or
-                self.minors_school_cif or
-                self.minors_school_name or
-                self.minors_teacher
+            self.minors_grade
+            or self.minors_participants_number
+            or self.minors_school_cif
+            or self.minors_school_name
+            or self.minors_teacher
         ):
             if not self.for_minors:
                 errors.update(
@@ -534,8 +529,7 @@ class Activity(models.Model):
                 errors.update(
                     {
                         "subaxis": ValidationError(
-                            "Has seleccionat un sub-eix que no es "
-                            "correspon a l'eix."
+                            "Has seleccionat un sub-eix que no es " "correspon a l'eix."
                         )
                     }
                 )
@@ -544,8 +538,7 @@ class Activity(models.Model):
         if self.date_start and self.date_end:
             try:
                 SubsidyPeriod.objects.get(
-                    date_start__lte=self.date_start,
-                    date_end__gte=self.date_start
+                    date_start__lte=self.date_start, date_end__gte=self.date_start
                 )
             except SubsidyPeriod.DoesNotExist:
                 errors.update(
@@ -560,12 +553,14 @@ class Activity(models.Model):
         # Prevents changing the date in a way that will change the subsidy
         # period in case there's an EmploymentInsertion linked to this Activity.
         if self.employment_insertions.exclude(
-                subsidy_period=self.subsidy_period,
+            subsidy_period=self.subsidy_period,
         ).count():
-            msg = ("Aquesta sessió està vinculada a una inserció laboral de la "
-                   f"convocatòria {self.subsidy_period}, per aquest motiu no "
-                   "es pot indicar una data que caigui fora d'aquesta "
-                   "convocatòria.")
+            msg = (
+                "Aquesta sessió està vinculada a una inserció laboral de la "
+                f"convocatòria {self.subsidy_period}, per aquest motiu no "
+                "es pot indicar una data que caigui fora d'aquesta "
+                "convocatòria."
+            )
             errors.update({"date_start": ValidationError(msg)})
 
         if errors:
@@ -581,43 +576,32 @@ class Activity(models.Model):
         self.save()
 
     def get_poll_email(self, user):
-        mail = MyMailTemplate('EMAIL_ENROLLMENT_POLL')
-        mail.subject_strings = {
-            'activitat_nom': self.name
-        }
+        mail = MyMailTemplate("EMAIL_ENROLLMENT_POLL")
+        mail.subject_strings = {"activitat_nom": self.name}
         absolute_url_activity = ""
         if self.resources.exists():
-            absolute_url_activity = (
-                settings.ABSOLUTE_URL +
-                reverse('my_activities')
-            )
+            absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
             absolute_url_activity = (
                 "Descàrrega del material formatiu: <a "
-                f"href=\"{absolute_url_activity}\">Fitxa de la sessió</a>."
+                f'href="{absolute_url_activity}">Fitxa de la sessió</a>.'
             )
-        absolute_url_poll = (
-            settings.ABSOLUTE_URL +
-            reverse(
-                'activity_poll', kwargs={'uuid': self.uuid}
-            )
+        absolute_url_poll = settings.ABSOLUTE_URL + reverse(
+            "activity_poll", kwargs={"uuid": self.uuid}
         )
         poll_reminder_body = self.poll_reminder_body or ""
-        poll_reminder_body = poll_reminder_body.replace('\n', '<br />')
+        poll_reminder_body = poll_reminder_body.replace("\n", "<br />")
         mail.body_strings = {
-            'activitat_nom': self.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
-            'persona_nom': user.first_name,
-            'activitat_data_inici':
-                self.date_start.strftime("%d-%m-%Y"),
-            'activitat_hora_inici':
-                self.starting_time.strftime("%H:%M"),
-            'activitat_lloc': self.place,
-            'absolute_url_activity': absolute_url_activity,
-            'absolute_url_poll': absolute_url_poll,
-            'absolute_url_my_activities':
-                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
-            'poll_reminder_body': poll_reminder_body,
+            "activitat_nom": self.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "persona_nom": user.first_name,
+            "activitat_data_inici": self.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": self.starting_time.strftime("%H:%M"),
+            "activitat_lloc": self.place,
+            "absolute_url_activity": absolute_url_activity,
+            "absolute_url_poll": absolute_url_poll,
+            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+            "poll_reminder_body": poll_reminder_body,
         }
         return mail
 
@@ -635,14 +619,11 @@ class Activity(models.Model):
         mail = MyMailTemplate("EMAIL_ACTIVITY_RESPONSIBLE_REMINDER")
         mail.subject_strings = {
             "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
-            "activity_name": self.name
+            "activity_name": self.name,
         }
-        absolute_url_admin_activity = (
-                settings.ABSOLUTE_URL +
-                reverse(
-                    "admin:cc_courses_activity_change",
-                    kwargs={"object_id": self.id},
-                )
+        absolute_url_admin_activity = settings.ABSOLUTE_URL + reverse(
+            "admin:cc_courses_activity_change",
+            kwargs={"object_id": self.id},
         )
         mail.body_strings = {
             "absolute_url_admin_activity": absolute_url_admin_activity,
@@ -661,12 +642,12 @@ class Activity(models.Model):
             return ""
         return reverse(
             "admin:cc_courses_activity_change",
-            kwargs={'object_id': self.id},
+            kwargs={"object_id": self.id},
         )
 
     @staticmethod
     def autocomplete_search_fields():
-        return ('name__icontains',)
+        return ("name__icontains",)
 
 
 class ActivityResourceFile(models.Model):
@@ -676,16 +657,9 @@ class ActivityResourceFile(models.Model):
         ordering = ["name"]
 
     image = models.FileField("fitxer", storage=PublicMediaStorage())
-    name = models.CharField(
-        "nom del recurs",
-        max_length=120,
-        null=False,
-        blank=False
-    )
+    name = models.CharField("nom del recurs", max_length=120, null=False, blank=False)
     activity = models.ForeignKey(
-        Activity,
-        on_delete=models.CASCADE,
-        related_name="resources"
+        Activity, on_delete=models.CASCADE, related_name="resources"
     )
 
     def __str__(self):
@@ -699,9 +673,7 @@ class ActivityFile(models.Model):
         ordering = ["name"]
 
     activity = models.ForeignKey(
-        Activity,
-        on_delete=models.CASCADE,
-        related_name="files"
+        Activity, on_delete=models.CASCADE, related_name="files"
     )
     file = models.FileField(
         "fitxer adjunt",
@@ -725,7 +697,7 @@ class ActivityFile(models.Model):
         null=False,
         blank=False,
         help_text="Pensa un nom prou descriptiu com perquè ajudi a altres "
-        "persones a preparar possibles requeriments d'aquí uns mesos o anys."
+        "persones a preparar possibles requeriments d'aquí uns mesos o anys.",
     )
 
     def __str__(self):
@@ -760,8 +732,8 @@ class ActivityFile(models.Model):
 
 class ActivityEnrolled(models.Model):
     class Meta:
-        db_table = 'cc_courses_activity_enrolled'
-        unique_together = ('user', 'activity')
+        db_table = "cc_courses_activity_enrolled"
+        unique_together = ("user", "activity")
         verbose_name = "inscripció"
         verbose_name_plural = "inscripcions"
 
@@ -769,24 +741,20 @@ class ActivityEnrolled(models.Model):
         Activity,
         on_delete=models.CASCADE,
         verbose_name="sessió",
-        related_name="enrollments"
+        related_name="enrollments",
     )
     user = models.ForeignKey(
         "coopolis.User",
         on_delete=models.CASCADE,
         verbose_name="persona",
-        related_name="enrollments"
+        related_name="enrollments",
     )
     date_enrolled = models.DateTimeField(
-        "data d'inscripció",
-        auto_now_add=True,
-        null=True
+        "data d'inscripció", auto_now_add=True, null=True
     )
     user_comments = models.TextField("comentaris", null=True, blank=True)
     waiting_list = models.BooleanField("en llista d'espera", default=False)
-    reminder_sent = models.DateTimeField(
-        "Recordatori enviat", null=True, blank=True
-    )
+    reminder_sent = models.DateTimeField("Recordatori enviat", null=True, blank=True)
 
     def can_access_poll(self):
         if self.waiting_list or not self.activity.poll_access_allowed():
@@ -794,19 +762,17 @@ class ActivityEnrolled(models.Model):
         return True
 
     def can_access_details(self):
-        if (
-            not self.waiting_list
-            and (
-                self.activity.videocall_url
-                or self.activity.instructions
-                or len(self.activity.resources.all()) > 0
-            )
+        if not self.waiting_list and (
+            self.activity.videocall_url
+            or self.activity.instructions
+            or len(self.activity.resources.all()) > 0
         ):
             return True
         return False
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
 
         # Aquí hi feia un "if not self.id", de manera que l'actualització de
         # waiting_list només passava a les inscripcions noves, i provocava que
@@ -822,74 +788,57 @@ class ActivityEnrolled(models.Model):
             )
         except IntegrityError as e:
             if "duplicate" in str(e):
-                raise ValidationError({
-                    NON_FIELD_ERRORS: 'Ja tens inscripció a aquesta activitat.',
-                })
+                raise ValidationError(
+                    {
+                        NON_FIELD_ERRORS: "Ja tens inscripció a aquesta activitat.",
+                    }
+                )
             raise e
 
-
     def send_confirmation_email(self):
-        mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
-        mail.subject_strings = {
-            'activitat_nom': self.activity.name
-        }
+        mail = MyMailTemplate("EMAIL_ENROLLMENT_CONFIRMATION")
+        mail.subject_strings = {"activitat_nom": self.activity.name}
         mail.body_strings = {
-            'activitat_nom': self.activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
-            'activitat_data_inici':
-                self.activity.date_start.strftime("%d-%m-%Y"),
-            'activitat_hora_inici':
-                self.activity.starting_time.strftime("%H:%M"),
-            'activitat_lloc': self.activity.place,
-            'absolute_url_my_activities':
-                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            "activitat_nom": self.activity.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
+            "activitat_lloc": self.activity.place,
+            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
         }
         mail.send_to_user(self.user)
 
     def send_waiting_list_email(self):
-        mail = MyMailTemplate('EMAIL_ENROLLMENT_WAITING_LIST')
-        mail.subject_strings = {
-            'activitat_nom': self.activity.name
-        }
+        mail = MyMailTemplate("EMAIL_ENROLLMENT_WAITING_LIST")
+        mail.subject_strings = {"activitat_nom": self.activity.name}
         mail.body_strings = {
-            'activitat_nom': self.activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
-            'activitat_data_inici':
-                self.activity.date_start.strftime("%d-%m-%Y"),
-            'activitat_hora_inici':
-                self.activity.starting_time.strftime("%H:%M"),
-            'activitat_lloc': self.activity.place,
-            'url_els_meus_cursos':
-                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_ateneu': settings.ABSOLUTE_URL,
+            "activitat_nom": self.activity.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
+            "activitat_lloc": self.activity.place,
+            "url_els_meus_cursos": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_ateneu": settings.ABSOLUTE_URL,
         }
         mail.send_to_user(self.user)
 
     @staticmethod
     def get_reminder_email(user, activity):
-        mail = MyMailTemplate('EMAIL_ENROLLMENT_REMINDER')
-        mail.subject_strings = {
-            'activitat_nom': activity.name
-        }
-        absolute_url_activity = (
-            settings.ABSOLUTE_URL +
-            reverse('my_activities')
-        )
+        mail = MyMailTemplate("EMAIL_ENROLLMENT_REMINDER")
+        mail.subject_strings = {"activitat_nom": activity.name}
+        absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
         mail.body_strings = {
-            'activitat_nom': activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
-            'persona_nom': user.first_name,
-            'activitat_data_inici':
-                activity.date_start.strftime("%d-%m-%Y"),
-            'activitat_hora_inici':
-                activity.starting_time.strftime("%H:%M"),
-            'activitat_lloc': activity.place,
-            'activitat_instruccions': activity.instructions,
-            'absolute_url_activity': absolute_url_activity,
-            'absolute_url_my_activities':
-                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            "activitat_nom": activity.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "persona_nom": user.first_name,
+            "activitat_data_inici": activity.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": activity.starting_time.strftime("%H:%M"),
+            "activitat_lloc": activity.place,
+            "activitat_instruccions": activity.instructions,
+            "absolute_url_activity": absolute_url_activity,
+            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
         }
         return mail
 

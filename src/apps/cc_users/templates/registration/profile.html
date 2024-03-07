@@ -49,27 +49,101 @@
 		</div>
 	</section>
 	<section class="profile__intro grid-content">
-		<div class="profile__title grid-item-wide">
-			<p>{{ user.first_name }} {{ user.last_name }} {{ user.surname2 }}</p>
+    <!-- Imagino que al intentar eliminar, com a altres llocs
+      demana confirmació -->
+    <div class="delete-modal is-hidden">
+      <div class="modal__background" onclick="hideModal(event)"></div>
+      <div class="modal__card">
+        <div class="modal__title title-1">
+          <p>Confirmació d'eliminació de compte</p>
+        </div>
+        <div class="modal__close" onclick="hideModal(event)">
+          <svg
+            class="icon-pathfill-primary"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="modal__form form">
+          <div class="modal__intro text-md">
+            <div class="text-md">
+              <p></p>
+            </div>
+            <div class="text-sm">
+              <p>Segur que vols continuar? </br> El teu compte s'eliminarà i perdràs accés a l'aplicatiu, així com tota la informació del teu historial. </p>
+            </div>
+          </div>
+          <form 
+            method="post" 
+            action="" 
+            id="delete_"
+          >
+            {% csrf_token %}
+            <input type="hidden" id="" name="" value="">
+          </form>
+        </div>
+        <button form="delete_{{ d }}" class="modal__submit modal__submit1 btn btn--second btn__text" name="delete" type="submit">
+          Eliminar el compte
+        </button>
+      </div>
+    </div>
+    <div class="profile__image">
+      <div class="image">
+        {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="Imatge d'usuari">
+        {% endif %}
+      </div>
+      <div class="profile__image-link text-xsm" onclick="clickUserProfileFileInput()">
+        <p>Canvia la imatge</p>
+      </div>
+    </div>
+		<div class="profile__title">
+			<p>{{ user.first_name }} {{ user.last_name }} {% if user.surname2 %} {{ user.surname2 }} {% endif %}</p>
 		</div>
-		<div class="profile__info grid-item-wide text-md">
+		<div class="profile__info text-md">
+      {% if user.id_number %}
 			<p>{{ user.id_number }}</p>
+      {% endif %}
 			<p>{{ user.email }}</p>
 			<p>{{ user.town.name|lower|capfirst }}</p>
 		</div>
-	</section>
+    <div class="profile__links">
+      <div class="profile__link profile__image-link text-xsm" onclick="clickUserProfileFileInput()">
+        <p>Canviar imatge</p>
+      </div>
+      <div 
+      class="profile__link text-menu"
+        onclick="showDeleteModal(this)"
+      >
+        <p>Eliminar compte</p>
+      </div>
+    </div>
+  </section>
 	<section class="profile__form grid-content">
-		<div class="form grid-item-wide">
-			<form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" id="profile_form">
-				{% csrf_token %}
-				{{ form.as_ul }}
+    <div class="form grid-item-wide">
+      <form 
+      method="post"
+      action=""
+      id="profile_form"
+      enctype="multipart/form-data"
+      >
+      {% csrf_token %}
+      {{ form.as_ul }}
+      {% if form.errors %}
+      <div class="form__error text-sm">
+          <p>Hi ha hagut un error: {{ form.error }}</p>
+          <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
 			</form>
-			{% if form.errors %}
-			<div class="form__error text-sm">
-					<p>Hi ha hagut un error: {{ form.error }}</p>
-			</div>
-			{% endif %}
-
 			<div class="form__submit">
 				<button form="profile_form" type="submit" class="btn btn--second">
 					<p class="btn__text">
@@ -86,21 +160,20 @@
 <div class="generated-form">
     {% if form.errors %}
     <div class="message-container">
-        <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del
-            formulari.</p>
+      <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.</p>
     </div>
     {% endif %}
     {% if messages %}
     <ul class="message-container">
-       {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
-       {% endfor %}
+      {% for message in messages %}
+      <li {% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
+      {% endfor %}
     </ul>
     {% endif %}
     <h1>Gestió del teu compte</h1>
     <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
-       {% csrf_token %}
-       {{ form.as_p }}
+      {% csrf_token %}
+      {{ form.as_p }}
         <p>Contrasenya:</p>
         <p>Accedeix <a href="{% url 'password_change' %}">aquí</a> per modificar la contrasenya.</p>
     <button type="submit">Guardar els canvis</button>
