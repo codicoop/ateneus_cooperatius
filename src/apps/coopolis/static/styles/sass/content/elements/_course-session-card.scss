@@ -6,7 +6,9 @@
   --align-items: flex-start;
 
   &__title {
-    --padding: 0 var(--pad1) var(--pad2) var(--pad1);
+    --padding: 0 var(--pad1) var(--pad1) var(--pad1);
+    --margin-bottom: 0;
+    --border-bottom: 2px solid var(--grey-lighter);
   }
   &__action {
     --padding: var(--pad1) var(--pad1) 0 var(--pad1);
@@ -17,17 +19,16 @@
     --content: none;
   }
   &__btn {
-    --margin: var(--pad2) var(--pad2) var(--pad1) var(--pad2);
-    --position: relative;
-    --bottom: 0;
-    --right: 0;
+    --margin-top: var(--pad3);
+    --margin-bottom: 0;
   }
   &__time {
-    --display: none;
-    --padding: var(--pad2) var(--pad1) var(--pad1) var(--pad1);
+    --padding: var(--pad1) var(--pad1) 0 var(--pad1);
+    --margin-bottom: var(--pad1);
   }
   &__bloc {
     --padding: var(--pad1) var(--pad1) 0 var(--pad1);
+    --border-top: none;
   }
 }
 
@@ -39,7 +40,9 @@
     --align-items: center;
     
     &__title {
-      --padding: 0 var(--pad2) var(--pad1-5) var(--pad2);
+      --padding: 0 var(--pad2);
+      --margin-bottom: var(--pad2);
+      --border-bottom: none;
     }
     &__action {
       --padding: var(--pad1) var(--pad2);
@@ -50,17 +53,16 @@
       --content: "";
     }
     &__btn {
-      --margin: var(--pad2) var(--pad2) 0 var(--pad2);
-      --position: absolute;
-      --bottom: var(--pad1);
-      --right: var(--pad1);
+      --margin-top: 0;
+      --margin-bottom: var(--pad2);
     }
     &__time {
-      --display: grid;
       --padding: 0;
+      --margin-bottom: var(--pad2);
     }
     &__bloc {
-      --padding: var(--pad1) var(--pad2) 0 var(--pad2);
+      --padding: var(--pad2) var(--pad2) 0 var(--pad2);
+      --border-top: 2px solid var(--grey-lighter);
     }
   }
 }
@@ -78,24 +80,6 @@
   border: 1px solid var(--grey-lighter);
   box-shadow: 3px 3px 10px #FE1A6826;
 
-  // Desplegable obert
-  &.is-open {
-    
-    .course-session-card__bloc,
-    .course-session-card__login {
-      display: block;
-    }
-    .course-session-card__btn {
-      display: flex;
-    }
-    .course-session-card__time {
-      display: grid;
-    }
-    .course-session-card__action {
-      padding-bottom: var(--pad1);
-      border-bottom: var(--border-bottom);
-    }
-  }
   // Si la sessió està conclosa
   &.is-past {
     box-shadow: none;
@@ -107,6 +91,9 @@
       display: block;
     }
     .action-open {
+      display: none;
+    }
+    .course-session-card__bloc {
       display: none;
     }
   }
@@ -152,11 +139,14 @@
   }
   // Si hi ha més d'un title-text dins de un bloc
   .text + .title {
-    margin-top: var(--pad2);
+    margin-top: var(--pad1);
   }
   &__title {
     grid-column: 1 / span 4;
+    width: 100%;
     padding: var(--padding);
+    margin-bottom: var(--margin-bottom);
+    border-bottom: var(--border-bottom);
 
     .text-menu {
       color: var(--primary);
@@ -168,11 +158,13 @@
     grid-column: 6;
     justify-self: end;
     padding: var(--padding);
+    // padding-bottom: var(--pad1);
+    border-bottom: var(--border-bottom);
     width: var(--width-action);
     color: var(--second);
     font-weight: 500;
-    cursor: pointer;
     text-align: var(--text-align);
+    cursor: pointer;
 
     &::before {
       content: var(--content);
@@ -196,23 +188,26 @@
   &__bloc {
     grid-column: span 2;
     align-self: start;
-    display: none;
     padding: var(--padding);
+    border-top: var(--border-top);
 
     .title {
       color: var(--primary);
-      padding-bottom: var(--pad1);
+      padding-bottom: var(--pad-2);
     }
+  }
+  &__bloc2 {
+    grid-column: span 4;
   }
   &__btn {
     align-self: center;
-    position: var(--position);
-    bottom: var(--bottom);
-    right: var(--right);
-    display: none;
+    grid-row: 1;
+    grid-column: 6;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: var(--pad3);
+    margin-top: var(--margin-top);
+    margin-bottom: var(--margin-bottom);
     max-width: 90%;
     cursor: pointer;
 
@@ -230,11 +225,12 @@
   &__time {
     grid-column: 5;
     grid-row: 1;
-    display: var(--display);
+    display: grid;
     grid-template-columns: 15px 1fr;
     align-items: center;
     gap: var(--pad-2);
     padding: var(--padding);
+    margin-bottom: var(--margin-bottom);
     color: var(--violet-dark);
 
     div {
@@ -245,7 +241,6 @@
   &__login {
     align-self: end;
     grid-column: 5 / span 2;
-    display: none;
     padding: var(--pad1);
 
     .text-sm {

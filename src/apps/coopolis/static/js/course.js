@@ -1,27 +1,3 @@
-function openSessionCard(event) {
-  const card = event.target.parentElement
-  // Adding class for styling
-  card.classList.add("is-open")
-  // Hidding the opening button
-  const openBtn = card.querySelector(".action-open")
-  openBtn.classList.add("is-hidden")
-  // Showing the closing button
-  const closeBtn = card.querySelector(".action-close")
-  closeBtn.classList.remove("is-hidden")
-}
-
-function closeSessionCard(event) {
-  const card = event.target.parentElement
-  // Removing class for styling
-  card.classList.remove("is-open")
-  // Hidding the opening button
-  const openBtn = card.querySelector(".action-open")
-  openBtn.classList.remove("is-hidden")
-  // Showing the closing button
-  const closeBtn = card.querySelector(".action-close")
-  closeBtn.classList.add("is-hidden")
-}
-
 function copyVideocallUrl(link) {
   const alert = document.querySelector(".copied_alert")
   // Copiem el link
