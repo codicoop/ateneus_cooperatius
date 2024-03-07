@@ -1,0 +1,126 @@
+// Dynamic variables
+.dropdown {
+  &__topbar {
+    --margin: var(--pad2) 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .dropdown {
+    &__topbar {
+      --margin: 0 var(--pad4-5);
+    }
+    .info {
+      &__doc {
+        --word-break: break-all;
+      }
+    }
+  }
+}
+
+// Layout
+.dropdown {
+  &__topbar {
+    position: relative;
+    padding: var(--pad2) 0;
+    margin: var(--margin);
+    border-top: 1px solid var(--primary-lighter);
+    cursor: pointer;
+
+    .pretitle {
+      grid-column: 1;
+      grid-row: 1;
+      color: var(--primary-light);
+    }
+    .title {
+      grid-column: 1 / span 3;
+      grid-row: 2;
+      color: var(--primary);
+    }
+    .subtitle {
+      grid-column: 4;
+      grid-row: 2;
+    }
+    .icon {
+      grid-column: 6;
+      grid-row: 1 / span 2;
+      position: absolute;
+      top: 41%;
+      right: var(--pad1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
+      width: 24px;
+      background-color: var(--primary-lightest);
+      border-radius: 50%;
+  
+      svg {
+        pointer-events: none;
+        height: 12px;
+        width: 12px;
+  
+        polygon {
+          fill: var(--primary);
+        }
+      }
+    }
+  }
+  &__bottom {
+    margin-top: var(--pad2);
+
+    .info {
+      grid-column: 1 / span 3;
+
+      .pretitle {
+        color: var(--primary-light);
+      }
+      .title {
+        width: 80%;
+        padding-bottom: var(--pad2);
+        color: var(--primary);
+        cursor: pointer;
+      }
+      &__title {
+        padding-bottom: var(--pad-3);
+        text-transform: uppercase;
+        color: var(--primary);
+        font-weight: bold;
+      }
+      &__text {
+        padding-bottom: var(--pad1);
+
+        a {
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+      &__doc a div {
+        display: flex;
+        gap: var(--pad-2);
+        padding: var(--pad1);
+        background-color: var(--primary-lightest);
+        border-radius: var(--br);
+
+        svg {
+          width: 13px;
+          height: 18px;
+        }
+        p {
+          font-weight: bold;
+          color: var(--primary);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: var(--word-break);
+        }
+      }
+      &__doc + .info__doc {
+        margin-top: var(--pad-2);
+      }
+    }
+    .sessions {
+      grid-column: 4 / span 3;
+    }
+  }
+}
+

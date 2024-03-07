@@ -1,0 +1,27 @@
+// Dynamic variables
+// .back-link {}
+
+// @media (min-width: 900px) {
+//   .back-link { }
+// }
+
+.back-link {
+  align-self: center;
+  
+  position: relative;
+  margin-top: var(--pad1);
+
+  &__text {
+    padding: var(--pad-2) var(--pad-2) var(--pad-2) var(--pad1-5);
+    text-transform: uppercase;
+    
+    &::before {
+      content: "←";
+      position: absolute;
+      left: 5px;
+      bottom: 10px;
+      color: var(--white);
+    }
+  }
+}
+

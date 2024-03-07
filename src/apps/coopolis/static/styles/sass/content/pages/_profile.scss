@@ -4,7 +4,7 @@
 
   &__intro {
     --display: flex;
-    --padding-intro: var(--pad4) 0;
+    --padding-intro: var(--pad4) 0 0 0;
     --margin-intro: 0 0 var(--pad1-5) 0;
     --text-align: center;
   }
@@ -12,6 +12,103 @@
     --max-width: 300px;
     --font-size: 35px;
     --line-height: 40px;
+    --padding-bottom: var(--pad1);
+  }
+  &__info {
+    --padding-bottom: var(--pad4);
+  }
+  &__image {
+    --height: var(--pad4);
+    --width: var(--pad4);
+    // "Canvia la imatge" per desktop
+    .profile__image-link {
+      --display: none;
+    }
+  }
+  &__links {
+    // "Canvia la imatge" per mobile
+    .profile__image-link {
+      --display: block;
+    }
+    .profile__link {
+      --padding: var(--pad2);
+    }
+  }
+  &__form {
+    .form {
+      form {
+        --display-form: flex;
+
+      // Nom
+      & li:nth-child(3) {
+        order: 1;
+      }
+      // Email
+      & li:nth-child(4) {
+        order: 7;
+      }
+      // Cognom
+      & li:nth-child(5) {
+        order: 2;
+      }
+      // Phone
+      & li:nth-child(6) {
+        order: 8;
+      }
+      // Segon cognom
+      & li:nth-child(7) {
+        order: 3;
+      }
+      // dob
+      & li:nth-child(8) {
+        order: 9;
+      }
+      // dni
+      & li:nth-child(9) {
+        order: 4;
+      }
+      // lloc naixement
+      & li:nth-child(10) {
+        order: 10;
+      }
+      // NO dni
+      & li:nth-child(11) {
+        order: 5;
+      }
+      // poblacio
+      & li:nth-child(12) {
+        order: 11;
+      }
+      // districte
+      & li:nth-child(13) {
+        order: 12;
+      }
+      // genere
+      & li:nth-child(14) {
+        order: 6;
+      }
+      // adreça
+      & li:nth-child(15) {
+        order: 13;
+      }
+      // estudis
+      & li:nth-child(16) {
+        order: 14;
+      }
+      // conegut
+      & li:nth-child(17) {
+        order: 16;
+      }
+      // laboral
+      & li:nth-child(18) {
+        order: 15;
+      }
+      // ess
+      & li:nth-child(19) {
+        order: 17;
+      }
+      }
+    }
   }
 }
 
@@ -29,6 +126,103 @@
       --max-width: 500px;
       --font-size: 64px;
       --line-height: 64px;
+      --padding-bottom: var(--pad2);
+    }
+    &__info {
+      --padding-bottom: 0;
+    }
+    &__image {
+      --height: var(--pad8);
+      --width: var(--pad8);
+
+      // "Canvia la imatge" per desktop
+      .profile__image-link {
+        --display: block;
+      }
+    }
+    &__links {
+      // "Canvia la imatge" per mobile
+      .profile__image-link {
+        --display: none;
+      }
+      .profile__link {
+        --padding: var(--pad2) var(--pad2) var(--pad2) 0;
+      }
+    }
+    &__form {
+      .form {
+        form {
+          --display-form: grid;
+          // Nom
+          & li:nth-child(3) {
+            order: initial;
+          }
+          // Email
+          & li:nth-child(4) {
+            order:  initial;
+          }
+          // Cognom
+          & li:nth-child(5) {
+            order:  initial;
+          }
+          // Phone
+          & li:nth-child(6) {
+            order:  initial;
+          }
+          // Segon cognom
+          & li:nth-child(7) {
+            order:  initial;
+          }
+          // dob
+          & li:nth-child(8) {
+            order:  initial;
+          }
+          // dni
+          & li:nth-child(9) {
+            order:  initial;
+          }
+          // lloc naixement
+          & li:nth-child(10) {
+            order:  initial;
+          }
+          // NO dni
+          & li:nth-child(11) {
+            order:  initial;
+          }
+          // poblacio
+          & li:nth-child(12) {
+            order:  initial;
+          }
+          // districte
+          & li:nth-child(13) {
+            order:  initial;
+          }
+          // genere
+          & li:nth-child(14) {
+            order:  initial;
+          }
+          // adreça
+          & li:nth-child(15) {
+            order:  initial;
+          }
+          // estudis
+          & li:nth-child(16) {
+            order:  initial;
+          }
+          // conegut
+          & li:nth-child(17) {
+            order:  initial;
+          }
+          // laboral
+          & li:nth-child(18) {
+            order:  initial;
+          }
+          // ess
+          & li:nth-child(19) {
+            order:  initial;
+          }
+        }
+      }
     }
   }
 }
@@ -48,20 +242,93 @@
     border-bottom: 2px solid var(--primary-lightest);
     color: var(--primary);
   }
+  &__image {
+    grid-column: 5;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    .image {
+      height: var(--height);
+      width: var(--width);
+      margin-bottom: var(--pad1);
+      background-color: var(--grey-light);
+      border-radius: 50%;
+      overflow: clip;
+      box-shadow: 4px 6px 15px -5px var(--primary-lighter);
+      
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+    .profile__image-link {
+      display: var(--display);
+      text-transform: uppercase;
+      color: var(--second);
+    }
+    input {
+      display: none;
+    }
+  }
   &__title {
+    grid-column: 2 / span 2;
+    grid-row: 1;
     max-width: var(--max-width);
     font-size: var(--font-size);
     line-height: var(--line-height);
     text-align: var(--text-align);
-    padding-bottom: var(--pad1);
+    padding-bottom: var(--padding-bottom);
   }
   &__info {
+    grid-column: 2 / span 2;
+    grid-row: 2;
+    padding-bottom: var(--padding-bottom);
     text-align: var(--text-align);
     color: var(--primary);
   }
+  &__links {
+    grid-column: 2;
+    grid-row: 3;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .profile__link {
+      padding: var(--padding);
+      font-weight: normal;
+      color: var(--second);
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    // "Canvia la imatge" per mobile
+    .profile__image-link {
+      display: var(--display);
+      text-transform: uppercase;
+      color: var(--second);
+    }
+  }
   &__form {
     .form {
+      display: flex;
       flex-direction: column;
+
+      form {
+        display: var(--display-form);
+        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+      }
+      // Camp fotografia amagat
+      & li:nth-child(2).field-file {
+        display: none;
+      }
     }
     .form__submit {
       align-self: center;

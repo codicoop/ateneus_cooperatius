@@ -8,9 +8,13 @@
     --padding: 0 var(--pad1) var(--pad-2) var(--pad1);
   }
   &__title {
-    --padding: 0 var(--pad1) var(--pad4) var(--pad1);
+    --padding: 0 var(--pad1) var(--pad3) var(--pad1);
+  }
+  &__link {
+    --padding: var(--pad1);
   }
   &__btn {
+    --width: auto;
     --margin: var(--pad3) var(--pad2) var(--pad2) var(--pad2);
   }
   .section {
@@ -71,25 +75,73 @@
 }
 .my-course-card.past-activities,
 .my-course-card.waiting-activities {
-  &.is-open {
-    .top {
-      --padding-top: 0 var(--pad1) var(--pad1) var(--pad1);
-    }
+  .is-open {
     .bottom {
       --display-bottom: block;
     }
+    .open {
+      --display: none;
+    }
+    .close {
+      --display: block;
+    }
+  }
+  .open {
+    --display: block;
+  }
+  .close {
+    --display: none;
+  }
+  .my-course-card__session {
+    --padding-session: var(--pad1) 0;
+  }
+  .my-course-card__link {
+    --align-self: start;
   }
   .top {
-    --padding-top: 0 var(--pad1) 0 var(--pad1);
     --display-top: flex;
+    --padding-top: var(--pad1);
+    --grid-template-columns: 1fr 50px 50px;
     
     &__btn {
       --margin: var(--pad3) var(--pad2) 0 var(--pad2);
+    }
+    &__date {
+      --grid-column: 1;
+      --grid-row: 2;
+    }
+    &__files {
+      --grid-column: 2;
+      --grid-row: 1 / span 2;
+    }
+    &__action {
+      --grid-column: 3;
+      --grid-row: 1 / span 2;
     }
   }
   .bottom {
     --display-bottom: none;
     --width: stretch;
+    --padding: 0 var(--pad1);
+
+    .bottom__btn {
+      --padding-top: var(--pad3);
+    }
+    .my-course-card__subtitle {
+      --padding: var(--pad1) 0 0 0;
+    }
+  }
+  .middle {
+    --display-middle: flex;
+    --padding-middle: 0 var(--pad1);
+
+    &__date {
+      --padding-bottom: var(--pad3);
+      --align-self: flex-start;
+    }
+    &__btn {
+      --width: 100%;
+    }
   }
 }
 
@@ -97,15 +149,19 @@
   .my-course-card {
     --max-width: none;
     --display-card: grid;
-    --padding-card: var(--pad1) 0 0 0;
+    --padding-card: 0;
 
     &__pretitle {
-      --padding: 0 var(--pad2) var(--pad-2) var(--pad2);
+      --padding: var(--pad2) var(--pad2) var(--pad-2) var(--pad2);
     }
     &__title {
       --padding: 0 0 var(--pad2) var(--pad2);
     }
+    &__link {
+      --padding: var(--pad2);
+    }
     &__btn {
+      --width: fit-content;
       --margin: var(--pad2) var(--pad2) var(--pad2) 0;
     }
     .section {
@@ -167,25 +223,70 @@
   }
   .my-course-card.past-activities,
   .my-course-card.waiting-activities {
-    &.is-open {
+    .is-open {
       .top {
-        --padding-top: 0 var(--pad2) var(--pad1) var(--pad2);
+        --padding-top: 0 var(--pad2) var(--pad2) var(--pad2);
       }
       .bottom {
         --display-bottom: grid;
       }
     }
+    .my-course-card__session {
+      --padding-session: var(--pad2) 0;
+    }
+    .my-course-card__link {
+      --align-self: center;
+    }
     .top {
-      --padding-top: 0 var(--pad2) 0 var(--pad2);
       --display-top: grid;
+      --padding-top: 0 var(--pad2) 0 var(--pad2);
+      --grid-template-columns: 1fr 1fr 50px 50px;
+      --align-items: center;
       
       &__btn {
         --margin: 0;
+      }
+      &__date {
+        --grid-column: 2;
+        --grid-row: 1;
+      }
+      &__files {
+        --grid-column: 3;
+        --grid-row: 1;
+      }
+      &__files {
+        --grid-column: 3;
+        --grid-row: 1;
+      }
+      &__action {
+        --grid-column: 4;
+        --grid-row: 1;
       }
     }
     .bottom {
       --display-bottom: none;
       --width: fit-content;
+      --padding: 0 var(--pad2);
+
+      .bottom__btn {
+        --margin-right: var(--pad1);
+        --padding-top: var(--pad2);
+      }
+      .my-course-card__subtitle {
+        --padding: var(--pad2) 0 var(--pad-2) 0;
+      }
+    }
+    .middle {
+      --display-middle: grid;
+      --padding-middle: 0 var(--pad2);
+      
+      &__date {
+        --padding-bottom: 0;
+        --align-self: center;
+      }
+      &__btn {
+        --width: fit-content;
+      }
     }
   }
 }
@@ -215,6 +316,14 @@
     grid-row: 2;
     padding: var(--padding);
   }
+  &__link {
+    position: relative;
+    display: flex;
+    gap: var(--pad-2);
+    padding: var(--padding);
+    text-transform: uppercase;
+    color: var(--second);
+  }
   &__bloc {
     padding: var(--pad1);
     border-top: 2px solid var(--grey-lighter);
@@ -223,11 +332,20 @@
     color: var(--primary);
     padding: var(--pad1) 0 var(--pad-2) 0;
   }
+  &__text {
+    &.has-accent {
+      color: var(--second);
+    }
+  }
   &__btn {
     grid-column: 3;
     grid-row: 1 / span 2;
+    justify-self: end;
+
+    width: var(--width);
     margin: var(--margin);
     cursor: pointer;
+
     p {
       pointer-events: none;
     }
@@ -354,55 +472,93 @@
       grid-row: 2;
     }
     .description {
-      grid-column: 2;
-      grid-row: 1 / span 3;
-    }
-    .place {      
       grid-column: 1;
-      grid-row: 3;
+      grid-row: span 3;
     }
+    .content {      
+      grid-row: 1 /span 2;
+    }
+    // .teacher {}
+    // .place {}
   }
 }
 
 // Diferències per activitats pasades
 .my-course-card.past-activities {
-  display: flex;
-
   .my-course-card__pretitle {
+    grid-column: 1 / span 2;
     font-weight: bold;
     color: var(--primary);
     text-transform: uppercase;
   }
   .my-course-card__title {
+    grid-column: 1 / span 2;
     padding-bottom:  var(--pad2);
   }
+  .my-course-card__link {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: var(--align-self);
+    justify-self: end;
+  }
   .my-course-card__session {
+    grid-column: 1 / span 3;
     border-top: 2px solid var(--grey-lighter);
-    padding: var(--pad1) 0;
+    padding: var(--padding-session);
   }
   .top {
     display: grid;
-    grid-template-columns: 1fr 50px 50px;
+    grid-template-columns: var(--grid-template-columns);
+    align-items: var(--align-items);
     gap: var(--pad1) var(--pad2);
     padding: var(--padding-top);
     
     &__title {
+      grid-column: 1;
+      grid-row: 1;
       font-weight: bold;
       pointer-events: none;
     }
     &__date {
-      grid-column: 1;
+      grid-column: var(--grid-column);
+      grid-row: var(--grid-row);
       display: flex;
       gap: var(--pad-2);
       color: var(--violet);
       pointer-events: none;
     }
+    &__files {
+      grid-column: var(--grid-column);
+      grid-row: var(--grid-row);
+      position: relative;
+      align-self: center;
+      justify-self: end;
+
+      span {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--primary);
+        border-radius: 50%;
+        color: var(--white);
+      }
+    }
     &__action {
-      grid-column: 3;
+      grid-column: var(--grid-column);
+      grid-row: var(--grid-row);
+      align-self: center;
       pointer-events: none;
 
       .close {
-        display: none;
+        display: var(--display);
+      }
+      .open {
+        display: var(--display);
       }
     }
   }
@@ -410,64 +566,83 @@
     display: var(--display-bottom);
     grid-template-columns: repeat(3, 1fr);
     gap: 0 var(--pad3);
-    padding: 0 var(--pad1);
+    padding: var(--padding);
     border-top: 2px solid var(--grey-lighter);
 
-    .poll {
+    .bottom__btn {
       grid-column: 3;
-      padding-top: var(--pad3);
+      padding-top: var(--padding-top);
+      margin-right: var(--margin-right);
       justify-self: end;
 
       .btn {
         width: var(--width);
       }
     }
+    .my-course-card__subtitle {
+      padding: var(--padding);
+    }
   }
 }
 
 // Diferències per llista d'espera
 .my-course-card.waiting-activities {
-  display: flex;
 
   .my-course-card__pretitle {
+    grid-column: 1 / span 2;
     font-weight: bold;
     color: var(--primary);
     text-transform: uppercase;
   }
   .my-course-card__title {
+    grid-column: 1 / span 2;
     padding-bottom:  var(--pad2);
   }
-  .my-course-card__session {
-    border-top: 2px solid var(--grey-lighter);
-    padding: var(--pad1) 0;
+  .my-course-card__link {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: var(--align-self);
+    justify-self: end;
   }
-  .top {
-    display: var(--display-top);
+  .my-course-card__session {
+    grid-column: 1 / span 3;
+    border-top: 2px solid var(--grey-lighter);
+    padding: var(--padding-session);
+  }
+  .middle {
+    display: var(--display-middle);
     flex-direction: column;
     grid-template-columns: repeat(3, 1fr);
-    padding: var(--padding-top);
+    gap: 0 var(--pad2);
+    padding: var(--padding-middle);
     
     &__title {
-      grid-column: 1;
       padding-bottom: var(--pad1);
       font-weight: bold;
       pointer-events: none;
     }
     &__date {
-      grid-column: 2;
-      display: flex;
-      gap: var(--pad-2);
-      padding-bottom: var(--pad-2);
-      color: var(--violet);
+      align-self: var(--align-self);
+      padding-bottom: var(--padding-bottom);
+      color: var(--primary-light);
       pointer-events: none;
+
+      span {
+        display: flex;
+        gap: var(--pad-2);
+        
+        + span {
+          padding-top: var(--pad-2);
+        }
+      }
     }
     &__btn {
       grid-column: 3;
       grid-row: 1 / span 2;
       justify-self: end;
       align-self: center;
-      margin: var(--margin);
-      width: fit-content;
+      margin: 0;
+      width: var(--width);
     }
   }
 }

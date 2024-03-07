@@ -35,6 +35,14 @@
       text-transform: uppercase;
       color: var(--primary);
     }
+    // Variació rosa del camp
+    &.field--primary {
+      input,
+      select,
+      textarea {
+        border: 3px solid var(--primary-lighter);
+      }
+    }
     // Camp de text normal
     input,
     select,
@@ -47,18 +55,22 @@
       border: 3px solid var(--second-2);
       text-align: left;
       font-size: 14px;
+      color: var(--primary-dark);
 
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
       }
     }
+    
     // Errors
     .errorlist {
       order: 2;
       padding-bottom: var(--pad-3);
-      color: var(--red);
+      color: var(--error);
       font-size: 12px;
       line-height: 16px;
+      text-align: right;
+      font-weight: bold;
     }
 
     // Camp upload file
@@ -82,48 +94,49 @@
   }
 }
 
-.field-checkbox {
+.form li.field-checkbox {
   display: flex;
   flex-direction: row-reverse;
-  align-items: flex-start;
   justify-content: flex-end;
-  padding-bottom: var(--pad1);
-  
+  margin: 13px 0 0 0;
+
   label {
-    display: inline;
-    padding-bottom: 0;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: var(--pad1);
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: var(--pad1);
     padding-left: var(--pad-2);
-    width: 80%;
     font-weight: 500;
     font-size: 12px;
     line-height: 16px;
     text-transform: none;
-    color: var(--primary-dark);
+    color: var(--primary-med);
     cursor: pointer;
   }
   input {
     position: relative;
-    width: var(--pad1);
-    height: var(--pad1);
+    width: 16px;
+    height: 16px;
     padding: 0;
+    margin: 0;
     border: 2px solid var(--second-2);
-    border-radius: 50px;
+    border-radius: 3px;
 
     &::after {
       content: "";
       display: block;
       position: absolute;
-      top: 2px;
-      left: 2px;
+      top: 1px;
+      left: 1px;
       width: 9px;
-      height: 9px;
-      border-radius: 20px;
+      height: 10px;
+      border-radius: 2px;
       background-color: var(--white);
     }
   }
   input:checked {
-    background-color: var(--second-lighter);
-
     &::after {
       background-color: var(--second);
     }
@@ -132,16 +145,19 @@
   &.field-checkbox--long {
     display: grid;
     grid-template-columns: 25px 1fr;
-    align-items: center;
+    align-items: start;
+    margin-bottom: var(--pad1);
 
     input {
       grid-column: 1;
       grid-row: 1;
+      margin: 0;
     }
     label {
       grid-column: 2;
       grid-row: 1;
       font-weight: bold;
+      padding: 0 0 var(--pad-2) 0;
     }
     .helptext {
       grid-column: 2;
@@ -176,7 +192,7 @@
     }
   }
   &::after {
-    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 13.1 7.8400002' width='13.1' height='7.8400002'%3E%3Cpolygon points='12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 ' id='polygon2' transform='translate(-10.95,-13.58)' style='fill:%23fe8cb3' /%3E%3C/svg%3E");
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 13.1 7.8400002' width='13.1' height='7.8400002'%3E%3Cpolygon points='12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 ' id='polygon2' transform='translate(-10.95,-13.58)' style='fill:%23af62a0' /%3E%3C/svg%3E");
     position: absolute;
     right: 14px;
     top: 37px;
@@ -251,7 +267,7 @@
       text-overflow: ellipsis;
       
       &::before {
-        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 15.54 19.43'%3E%3Cpath d='M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z' style='fill:%23d6085b;fill-opacity:1' /%3E%3C/svg%3E");
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 15.54 19.43'%3E%3Cpath d='M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z' style='fill:%2398066b;fill-opacity:1' /%3E%3C/svg%3E");
         position: absolute;
         left: 19px;
         top: 10px;
@@ -309,6 +325,50 @@
     & input:nth-child(6) {
       order: unset;
       grid-column: span 2;
+    }
+  }
+}
+
+.form li.field-radio {
+  display: flex;
+  flex-direction: column-reverse;
+
+  label {
+    grid-row: 1;
+    grid-column: 1 / span 3;
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  li {
+    input {
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      margin: 0;
+      border: 2px solid var(--second-2);
+      border-radius: 50px;
+      -webkit-appearance: auto;
+      -moz-appearance: auto;
+    }
+    label {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      align-items: center;
+      gap: var(--pad-3);
+
+      color: var(--primary-dark);
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: normal;
+      text-transform: none;
+      cursor: pointer;
+
+      &::after {
+        display: none;
+      }
     }
   }
 }

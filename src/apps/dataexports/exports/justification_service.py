@@ -1,5 +1,6 @@
 from django.db.models import Q
 
+from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.coopolis.choices import CirclesChoices, SubServicesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
@@ -172,13 +173,18 @@ class ExportJustificationService:
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
                 )
             )
-        ).exclude(stage_sessions__isnull=True)
+        ).exclude(
+            Q(stage_sessions__isnull=True)
+            | Q(stage_state=ProjectStageStatesChoices.PENDING)
+        )
 
     def actuacions_rows_stages(self):
         """
         Acompanyaments que han d'aparèixer:
         - Tots els que siguin tipus Creació o Consolidació.
         - Idem però pels acompanyaments d'Incubació.
+        - Sempre que ProjectStage.stage_state NO sigui
+          ProjectStageStatesChoices.PENDING
         Per tant com a màxim apareixerà 2 vegades.
 
         A banda hi ha l'exportació en 2 itineraris, on s'hi separaran els de

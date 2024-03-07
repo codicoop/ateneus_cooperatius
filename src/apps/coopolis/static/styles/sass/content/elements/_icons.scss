@@ -4,6 +4,12 @@
     fill: var(--white);
   }
 }
+.icon-pathfill-second {
+  fill: none;
+  path {
+    fill: var(--second);
+  }
+}
 .icon-pathfill-second-3 {
   fill: none;
   path {
@@ -21,4 +27,24 @@
   path {
     fill: var(--primary);
   }
+}
+.icon-pathfill-primary-light {
+  fill: none;
+  
+  path {
+    fill: var(--primary-light);
+  }
+}
+.icon-fill-primary-light {
+  fill: var(--primary-light);
+  fill-opacity: 1;
+}
+
+.icon-7 {
+  width: 7px;
+  height: auto;
+}
+.icon-16 {
+  width: 16px;
+  height: auto;
 }

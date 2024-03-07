@@ -1,0 +1,131 @@
+// Dynamic variables
+.overlay {
+  &__card {
+    --min-height: none;
+  }
+  &__submit {
+    --margin-top: var(--pad4);
+  }
+}
+
+@media (min-width: 900px) {
+  .overlay {
+    &__card {
+      --min-height: 808px;
+    }
+    &__submit {
+      --margin-top: auto;
+    }
+  }
+}
+
+// Layout
+.overlay {
+  &__background {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--violet);
+    opacity: 0.75;
+    z-index: 1000;
+  }
+  
+  &__card form {
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: var(--min-height);
+    width: 329px;
+    padding: var(--pad2) var(--pad1);
+    background-color: var(--white);
+    z-index: 1010;
+    overflow: clip;
+  }
+  &__close {
+    position: fixed;
+    top: var(--pad2);
+    right: var(--pad1);
+    background-color: var(--primary-lightest);
+    border-radius: 50%;
+    height: 34px;
+    width: 34px;
+
+    svg {
+      pointer-events: none;
+      height: 34px;
+      width: 34px;
+
+      polygon {
+        fill: var(--primary);
+      }
+    }
+  }
+  &__title {
+    font-weight: bold;
+    color: var(--primary);
+    padding-bottom: var(--pad2);
+  }
+  &__option {
+    // Si està desplegat
+    &.is-open {
+      .overlay__option-arrow {
+        transform: rotate(180deg);
+        transition: transform 0.5s ease-out;
+      }
+    }
+  }
+  &__option-topbar {
+    display: flex;
+    justify-content: space-between;
+    padding-top: var(--pad1);
+    padding-bottom: 6px;
+    p, .overlay__option-arrow {
+      pointer-events: none;
+    }
+  }
+  &__option-list {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--pad2);
+    max-height: 270px;
+    overflow-y: scroll;
+  }
+  &__option-dates {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--pad1);
+    padding-top: var(--pad1);
+    
+    p {
+      text-transform: uppercase;
+      color: var(--violet-dark);
+    }
+    input {
+      margin-top: var(--pad1);
+    }
+  }
+  &__clean {
+    padding-top: var(--pad1);
+    color: var(--second);
+    text-transform: uppercase;
+  }
+  &__submit {
+    margin-top: var(--margin-top);
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+.separator {
+  display: inline-block;
+  height: 1px;
+  width: 115%;
+  margin-left: -20px;
+  background-color: var(--violet);
+}
+

@@ -25,6 +25,7 @@
     <!-- XDSoft DateTimePicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    {% block extra_head %}{% endblock %}
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/onload.js' %}"></script>
   </head>
@@ -159,7 +160,7 @@
             </a>
           </li>
           <li>
-            <a href="{% url 'project_info' %}">
+            <a href="{% url 'new_project' %}">
               <div class="menu__item {% block projects_is_active %}{% endblock %}">
                 <div class="menu__icon">
                   <svg
