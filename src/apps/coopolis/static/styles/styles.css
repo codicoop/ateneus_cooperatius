@@ -1853,6 +1853,9 @@ a {
   gap: var(--pad-2);
   padding: var(--padding);
   text-transform: uppercase;
+}
+.my-course-card__link a {
+  text-decoration: none;
   color: var(--second);
 }
 .my-course-card__bloc {
