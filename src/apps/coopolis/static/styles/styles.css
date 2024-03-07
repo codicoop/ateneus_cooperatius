@@ -4073,7 +4073,7 @@ a {
   --display-form: flex;
 }
 .project__form form li:nth-child(2) {
-  display: none;
+  display: none !important;
 }
 .project__form form li:nth-child(3) {
   order: 1;
