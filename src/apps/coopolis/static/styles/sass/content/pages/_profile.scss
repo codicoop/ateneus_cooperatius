@@ -79,29 +79,33 @@
       & li:nth-child(12) {
         order: 11;
       }
-      // genere
+      // districte
       & li:nth-child(13) {
+        order: 12;
+      }
+      // genere
+      & li:nth-child(14) {
         order: 6;
       }
       // adreça
-      & li:nth-child(14) {
-        order: 12;
-      }
-      // estudis
       & li:nth-child(15) {
         order: 13;
       }
-      // conegut
+      // estudis
       & li:nth-child(16) {
-        order: 15;
-      }
-      // laboral
-      & li:nth-child(17) {
         order: 14;
       }
-      // ess
-      & li:nth-child(18) {
+      // conegut
+      & li:nth-child(17) {
         order: 16;
+      }
+      // laboral
+      & li:nth-child(18) {
+        order: 15;
+      }
+      // ess
+      & li:nth-child(19) {
+        order: 17;
       }
       }
     }
@@ -189,28 +193,32 @@
           & li:nth-child(12) {
             order:  initial;
           }
-          // genere
+          // districte
           & li:nth-child(13) {
             order:  initial;
           }
-          // adreça
+          // genere
           & li:nth-child(14) {
             order:  initial;
           }
-          // estudis
+          // adreça
           & li:nth-child(15) {
             order:  initial;
           }
-          // conegut
+          // estudis
           & li:nth-child(16) {
             order:  initial;
           }
-          // laboral
+          // conegut
           & li:nth-child(17) {
             order:  initial;
           }
-          // ess
+          // laboral
           & li:nth-child(18) {
+            order:  initial;
+          }
+          // ess
+          & li:nth-child(19) {
             order:  initial;
           }
         }

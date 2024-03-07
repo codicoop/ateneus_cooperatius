@@ -3868,50 +3868,50 @@ a {
   order: 6;
 }
 .signup .form li:nth-child(14) {
-  order: 12;
-}
-.signup .form li:nth-child(15) {
   order: 13;
 }
-.signup .form li:nth-child(16) {
-  order: 15;
-}
-.signup .form li:nth-child(17) {
+.signup .form li:nth-child(15) {
   order: 14;
 }
-.signup .form li:nth-child(18) {
+.signup .form li:nth-child(16) {
   order: 16;
 }
-.signup .form li:nth-child(19) {
+.signup .form li:nth-child(17) {
+  order: 15;
+}
+.signup .form li:nth-child(18) {
   order: 17;
 }
-.signup .form li:nth-child(20) {
+.signup .form li:nth-child(19) {
   order: 18;
 }
-.signup .form li:nth-child(21) {
+.signup .form li:nth-child(20) {
   order: 19;
+}
+.signup .form li:nth-child(21) {
+  order: 20;
   margin-top: var(--pad2);
 }
 .signup .form li:nth-child(21) input {
   width: 15px;
 }
 .signup .form li:nth-child(22) {
-  order: 20;
+  order: 21;
 }
 .signup .form li:nth-child(22) input {
   width: 15px;
 }
 .signup .form li:nth-child(23) {
-  order: 21;
+  order: 22;
 }
 .signup .form li:nth-child(23) input {
   width: 15px;
 }
 .signup .form div:nth-child(24) {
-  order: 23;
+  order: 24;
 }
 .signup .form div:nth-child(25) {
-  order: 22;
+  order: 23;
   margin-top: var(--pad2);
 }
 
@@ -4069,6 +4069,42 @@ a {
 .project__people-item, .project__people-add {
   --margin-top: var(--pad3);
 }
+.project__form form {
+  --display-form: flex;
+}
+.project__form form li:nth-child(2) {
+  display: none;
+}
+.project__form form li:nth-child(3) {
+  order: 1;
+}
+.project__form form li:nth-child(4) {
+  order: 6;
+}
+.project__form form li:nth-child(5) {
+  order: 2;
+}
+.project__form form li:nth-child(6) {
+  order: 7;
+}
+.project__form form li:nth-child(7) {
+  order: 3;
+}
+.project__form form li:nth-child(8) {
+  order: 5;
+}
+.project__form form li:nth-child(9) {
+  order: 4;
+}
+.project__form form li:nth-child(10) {
+  order: 8;
+}
+.project__form form li:nth-child(11) {
+  order: 9;
+}
+.project__form form li:nth-child(12) {
+  order: 10;
+}
 
 @media (min-width: 900px) {
   .project {
@@ -4102,6 +4138,42 @@ a {
   }
   .project__people-item, .project__people-add {
     --margin-top: var(--pad4);
+  }
+  .project__form form {
+    --display-form: grid;
+  }
+  .project__form form li:nth-child(2) {
+    display: none;
+  }
+  .project__form form li:nth-child(3) {
+    order: initial;
+  }
+  .project__form form li:nth-child(4) {
+    order: initial;
+  }
+  .project__form form li:nth-child(5) {
+    order: initial;
+  }
+  .project__form form li:nth-child(6) {
+    order: initial;
+  }
+  .project__form form li:nth-child(7) {
+    order: initial;
+  }
+  .project__form form li:nth-child(8) {
+    order: initial;
+  }
+  .project__form form li:nth-child(9) {
+    order: initial;
+  }
+  .project__form form li:nth-child(10) {
+    order: initial;
+  }
+  .project__form form li:nth-child(11) {
+    order: initial;
+  }
+  .project__form form li:nth-child(12) {
+    order: initial;
   }
 }
 .project {
@@ -4186,10 +4258,12 @@ a {
   margin-top: var(--pad6);
   width: var(--width);
 }
-.project__form .form li:nth-child(2) {
-  display: none;
+.project__form form {
+  display: var(--display-form);
+  flex-direction: column;
 }
-.project__form .form .form__submit {
+.project__form form .form__submit {
+  order: 11;
   grid-row: 10;
   grid-column: 1/span 2;
   justify-self: center;
@@ -4333,22 +4407,25 @@ a {
   order: 11;
 }
 .profile__form .form form li:nth-child(13) {
-  order: 6;
+  order: 12;
 }
 .profile__form .form form li:nth-child(14) {
-  order: 12;
+  order: 6;
 }
 .profile__form .form form li:nth-child(15) {
   order: 13;
 }
 .profile__form .form form li:nth-child(16) {
-  order: 15;
-}
-.profile__form .form form li:nth-child(17) {
   order: 14;
 }
-.profile__form .form form li:nth-child(18) {
+.profile__form .form form li:nth-child(17) {
   order: 16;
+}
+.profile__form .form form li:nth-child(18) {
+  order: 15;
+}
+.profile__form .form form li:nth-child(19) {
+  order: 17;
 }
 
 @media (min-width: 900px) {
@@ -4432,6 +4509,9 @@ a {
     order: initial;
   }
   .profile__form .form form li:nth-child(18) {
+    order: initial;
+  }
+  .profile__form .form form li:nth-child(19) {
     order: initial;
   }
 }
@@ -5125,6 +5205,28 @@ a {
   --margin: var(--pad4) 0 0 0;
 }
 
+.support-1 form li:nth-child(2) {
+  order: 1;
+}
+.support-1 form li:nth-child(3) {
+  order: 4;
+}
+.support-1 form li:nth-child(4) {
+  order: 2;
+}
+.support-1 form li:nth-child(5) {
+  order: 5;
+}
+.support-1 form li:nth-child(6) {
+  order: 3;
+}
+.support-1 form li:nth-child(7) {
+  order: 6;
+}
+.support-1 form li:nth-child(8) {
+  order: 7;
+}
+
 @media (min-width: 900px) {
   .support {
     --border-top-main: none;
@@ -5144,6 +5246,28 @@ a {
   }
   .support .form__submit {
     --margin: var(--pad7) 0 0 0;
+  }
+
+  .support-1 form li:nth-child(2) {
+    order: initial;
+  }
+  .support-1 form li:nth-child(4) {
+    order: initial;
+  }
+  .support-1 form li:nth-child(5) {
+    order: initial;
+  }
+  .support-1 form li:nth-child(6) {
+    order: initial;
+  }
+  .support-1 form li:nth-child(7) {
+    order: initial;
+  }
+  .support-1 form li:nth-child(8) {
+    order: initial;
+  }
+  .support-1 form li:nth-child(9) {
+    order: initial;
   }
 }
 .support {
@@ -5226,6 +5350,7 @@ a {
   color: var(--white);
 }
 .support__form .form__submit {
+  order: 8;
   grid-column: 1/-1;
   justify-self: center;
   margin: var(--margin);

@@ -77,6 +77,7 @@ function onLoadFunction(){
       districtField.classList.remove("is-hidden")
     } else {
       districtField.classList.add("is-hidden")
+      districtField.value = ""
     }
     
   }

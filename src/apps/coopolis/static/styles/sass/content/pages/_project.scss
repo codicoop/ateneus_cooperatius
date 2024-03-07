@@ -34,6 +34,56 @@
   &__people-add {
     --margin-top: var(--pad3);
   }
+  &__form {
+    form {
+      --display-form: flex;
+
+      // Photo
+      & li:nth-child(2) {
+        display: none;
+      }
+      // Nom
+      & li:nth-child(3) {
+        order: 1;
+      }
+      // Poblacio
+      & li:nth-child(4) {
+        order: 6;
+      }
+      // Sector
+      & li:nth-child(5) {
+        order: 2;
+      }
+      // Districte
+      & li:nth-child(6) {
+        order: 7;
+      }
+      // Email
+      & li:nth-child(7) {
+        order: 3;
+      }
+      // web
+      & li:nth-child(8) {
+        order: 5;
+      }
+      // phone
+      & li:nth-child(9) {
+        order: 4;
+      }
+      // file 1 - estatuts
+      & li:nth-child(10) {
+        order: 8;
+      }
+      // file 2 - viabilitat
+      & li:nth-child(11) {
+        order: 9;
+      }
+      // file 3 - sostenibilitat
+      & li:nth-child(12) {
+        order: 10;
+      }
+    }
+  }
 }
 
 @media (min-width: 900px) {
@@ -71,6 +121,56 @@
     &__people-item,
     &__people-add {
       --margin-top: var(--pad4);
+    }
+    &__form {
+      form {
+        --display-form: grid;
+  
+        // Photo
+        & li:nth-child(2) {
+          display: none;
+        }
+        // Nom
+        & li:nth-child(3) {
+          order: initial;
+        }
+        // Poblacio
+        & li:nth-child(4) {
+          order: initial;
+        }
+        // Sector
+        & li:nth-child(5) {
+          order: initial;
+        }
+        // Districte
+        & li:nth-child(6) {
+          order: initial;
+        }
+        // Email
+        & li:nth-child(7) {
+          order: initial;
+        }
+        // web
+        & li:nth-child(8) {
+          order: initial;
+        }
+        // phone
+        & li:nth-child(9) {
+          order: initial;
+        }
+        // file 1 - estatuts
+        & li:nth-child(10) {
+          order: initial;
+        }
+        // file 2 - viabilitat
+        & li:nth-child(11) {
+          order: initial;
+        }
+        // file 3 - sostenibilitat
+        & li:nth-child(12) {
+          order: initial;
+        }
+      }
     }
   }
 }
@@ -166,11 +266,12 @@
     width: var(--width);
   }
   &__form {
-    .form {
-      li:nth-child(2) {
-        display: none;
-      }
+    form {
+      display: var(--display-form);
+      flex-direction: column;
+
       .form__submit {
+        order: 11;
         grid-row: 10;
         grid-column: 1 / span 2;
         justify-self: center;

@@ -7,10 +7,7 @@
 
 {% block content %}
 {% include '../components/header_topbar.html' %}
-<div 
-	class="signup {% if not user.is_authenticated %}not-logged{% endif %}"
-	
->
+<div class="signup {% if not user.is_authenticated %}not-logged{% endif %}">
 	<section class="signup__welcome grid-content">
 		<div class="title-1 grid-item-wide">
 			<p>Per a inscriure't a les activitats o sol·licitar acompanyament per al teu projecte, crea un compte amb els formularis que hi ha a continuació.</p>

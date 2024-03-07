@@ -20,6 +20,38 @@
     }
   }
 }
+.support-1 {
+  form {
+    // Nom
+    & li:nth-child(2) {
+      order: 1;
+    }
+    // Poblacio
+    & li:nth-child(3) {
+      order: 4;
+    }
+    // Sector
+    & li:nth-child(4) {
+      order: 2;
+    }
+    // Districte
+    & li:nth-child(5) {
+      order: 5;
+    }
+    // Email
+    & li:nth-child(6) {
+      order: 3;
+    }
+    // phone
+    & li:nth-child(7) {
+      order: 6;
+    }
+    // objecte
+    & li:nth-child(8) {
+      order: 7;
+    }
+  }
+}
 
 @media (min-width: 900px) {
   .support {
@@ -40,6 +72,38 @@
 
       &__submit {
         --margin: var(--pad7) 0 0 0;
+      }
+    }
+  }
+  .support-1 {
+    form {
+      // Nom
+      & li:nth-child(2) {
+        order: initial;
+      }
+      // Poblacio
+      & li:nth-child(4) {
+        order: initial;
+      }
+      // Sector
+      & li:nth-child(5) {
+        order: initial;
+      }
+      // Districte
+      & li:nth-child(6) {
+        order: initial;
+      }
+      // Email
+      & li:nth-child(7) {
+        order: initial;
+      }
+      // phone
+      & li:nth-child(8) {
+        order: initial;
+      }
+      // objecte
+      & li:nth-child(9) {
+        order: initial;
       }
     }
   }
@@ -153,6 +217,7 @@
         }
       }
       &__submit {
+        order: 8;
         grid-column: 1 / -1;
         justify-self: center;
         margin: var(--margin);
