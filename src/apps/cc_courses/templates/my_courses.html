@@ -163,7 +163,7 @@
                     <p>Contingut</p>
                   </div>
                   <div class="my-course-card__text richtext">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A molestias rem esse, rerum sunt natus impedit modi doloremque deleniti recusandae, dicta tempora error quas totam soluta! Provident perferendis recusandae quo.</p>
+                    <p>{{ enrollment.activity.objectives|safe }}</p>
                   </div>
                 </div>
                 {% if enrollment.activity.teacher %}
