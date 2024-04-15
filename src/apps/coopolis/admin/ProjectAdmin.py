@@ -902,13 +902,6 @@ class CreatedEntityAdmin(admin.ModelAdmin):
         "entity",
     )
 
-    class Media:
-        js = (
-            "js/grappellihacks.js",
-            "js/chained_dropdown.js",
-        )
-        css = {"all": ("styles/grappellihacks.css",)}
-
     @staticmethod
     @admin.display(
         description="Avís"
