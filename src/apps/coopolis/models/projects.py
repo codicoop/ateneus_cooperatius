@@ -961,9 +961,10 @@ class CreatedEntity(models.Model):
         return f"Entitat creada: {self.project.name}"
 
     @classmethod
-    def validate_extended_fields(cls, project_obj):
-        if not isinstance(project_obj, Project):
+    def validate_extended_fields(cls, project_stage_obj):
+        if not isinstance(project_stage_obj, ProjectStage):
             return True
+        project_obj = project_stage_obj.project
         project_obj_errors = {
             "cif": "- NIF.<br />",
             "constitution_date": "- Data de constitució. <br/>",
