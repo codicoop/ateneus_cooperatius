@@ -892,6 +892,15 @@ class CreatedEntityAdmin(admin.ModelAdmin):
             "project",
         ],
     }
+    readonly_fields = (
+        "deprecated_alert_field",
+        "project",
+        "service",
+        "sub_service",
+        "subsidy_period",
+        "circle",
+        "entity",
+    )
 
     class Media:
         js = (
@@ -899,3 +908,30 @@ class CreatedEntityAdmin(admin.ModelAdmin):
             "js/chained_dropdown.js",
         )
         css = {"all": ("styles/grappellihacks.css",)}
+
+    @staticmethod
+    @admin.display(
+        description="Avís"
+    )
+    def deprecated_alert_field(obj):
+        return mark_safe(
+            "<h2>Atenció</h2>"
+            "<br>"
+            "S'està reestructurant aquest apartat.<br>"
+            "Tots els camps que aparèixen com a obsolets seràn eliminats"
+            " properament ja que aquestes dades passaran a penjar de "
+            "l'acompanyament que s'indiqui al nou camp 'Acompanyament'.<br>"
+            "<br>"
+            "Com que no es pot deduïr automàticament a quin acompanyament "
+            "correspon cada entitat creada, cal que reviseu manualment totes "
+            "les entitats creades i les assigneu a l'acompanyament que toqui."
+            "<br>"
+            "<br>"
+            "Per fer-ho, simplement ompliu el camp Acompanyament i deseu els "
+            "canvis."
+            "<br>"
+            "<br>"
+            "Al llistat s'hi ha afegit un filtre per ajudar-vos a localitzar "
+            "les entitats creades a les que estigui pendent assigna'ls-hi "
+            "acompanyament."
+        )
