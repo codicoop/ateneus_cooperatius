@@ -886,10 +886,10 @@ class CreatedEntityAdmin(admin.ModelAdmin):
         "circle",
         "entity",
     )
-    raw_id_fields = ("project",)
+    raw_id_fields = ("project_stage",)
     autocomplete_lookup_fields = {
         "fk": [
-            "project",
+            "project_stage",
         ],
     }
     readonly_fields = (

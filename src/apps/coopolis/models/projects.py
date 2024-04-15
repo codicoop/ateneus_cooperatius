@@ -644,6 +644,13 @@ class ProjectStage(models.Model):
         )
         return txt
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return (
+            "project__id__iexact",
+            "project__name__icontains",
+        )
+
 
 class ProjectStageSession(models.Model):
     class Meta:
