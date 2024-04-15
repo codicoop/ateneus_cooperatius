@@ -911,6 +911,13 @@ class EmploymentInsertion(models.Model):
 
 
 class CreatedEntity(models.Model):
+    project_stage = models.OneToOneField(
+        ProjectStage,
+        verbose_name="Acompanyament vinculat a la creació de l'entitat",
+        blank=False,
+        null=True,
+        on_delete=models.CASCADE,
+    )
     project = models.ForeignKey(
         Project,
         verbose_name="(Obsolet) Projecte",

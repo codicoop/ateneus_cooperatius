@@ -778,6 +778,7 @@ class EntityCreatedAdminForm(models.ModelForm):
     class Meta:
         model = CreatedEntity
         fields = (
+            "project_stage",
             "project",
             "service",
             "sub_service",
