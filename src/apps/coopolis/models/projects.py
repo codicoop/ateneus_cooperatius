@@ -913,33 +913,34 @@ class EmploymentInsertion(models.Model):
 class CreatedEntity(models.Model):
     project = models.ForeignKey(
         Project,
+        verbose_name="(Obsolet) Projecte",
         on_delete=models.CASCADE,
         related_name="created_entities",
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "(Obsolet) Servei",
         choices=ServicesChoices.choices,
         null=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "(Obsolet) Sub-servei",
         choices=SubServicesChoices.choices,
         null=True,
     )
     subsidy_period = models.ForeignKey(
         SubsidyPeriod,
-        verbose_name="convocatòria de la constitució",
+        verbose_name="(Obsolet) Convocatòria de la constitució",
         null=True,
         on_delete=models.SET_NULL,
     )
     circle = models.SmallIntegerField(
-        "Ateneu / Cercle",
+        "(Obsolet) Ateneu / Cercle",
         choices=CirclesChoices.choices_named(),
         null=True,
     )
     entity = models.ForeignKey(
         Entity,
-        verbose_name="Entitat",
+        verbose_name="(Obsolet) Entitat",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
