@@ -870,6 +870,25 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         return False
 
 
+class FilterByProjectStageIsSet(admin.SimpleListFilter):
+    title = "S'ha indicat acompanyament"
+    parameter_name = "project_stage"
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Sí'),
+            ('no', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "yes":
+            queryset = queryset.filter(project_stage__isnull=False)
+        if value == "no":
+            queryset = queryset.filter(project_stage__isnull=True)
+        return queryset
+
+
 @admin.register(CreatedEntity)
 class CreatedEntityAdmin(admin.ModelAdmin):
     form = EntityCreatedAdminForm
@@ -885,6 +904,7 @@ class CreatedEntityAdmin(admin.ModelAdmin):
         "subsidy_period",
         "circle",
         "entity",
+        FilterByProjectStageIsSet,
     )
     raw_id_fields = ("project_stage",)
     autocomplete_lookup_fields = {
