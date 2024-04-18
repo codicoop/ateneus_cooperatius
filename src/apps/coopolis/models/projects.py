@@ -924,6 +924,7 @@ class CreatedEntity(models.Model):
         blank=False,
         null=True,
         on_delete=models.CASCADE,
+        related_name="created_entity",
     )
     project = models.ForeignKey(
         Project,
