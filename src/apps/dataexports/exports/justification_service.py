@@ -46,7 +46,6 @@ class ExportJustificationService:
         }
         self.stages_obj = None
         self.sessions_obj = None
-        self.created_entities = self.get_created_entities()
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
@@ -107,7 +106,10 @@ class ExportJustificationService:
         self.actuacions_rows_activities()
         self.actuacions_rows_stages()
         self.actuacions_rows_nouniversitaris()
-        self.actuacions_rows_founded_projects()
+        # Abans hi havia un últim bloc on apareixien els projectes creats
+        # a banda. S'ha canviat de manera que els projectes creats han d'anar
+        # vinculats a un acompanyament i, per tant, els projectes creats
+        # apareixeran enmig del bloc actuacions_rows_stages.
         # Total Stages: self.export_manager.row_number-Total Activities-1
 
     def actuacions_rows_activities(self):
@@ -387,55 +389,6 @@ class ExportJustificationService:
             ]
             self.export_manager.fill_row_data(row)
 
-    def actuacions_rows_founded_projects(self):
-        self.number_of_founded_projects = len(self.created_entities)
-        for created_entity in self.created_entities:
-            service = (
-                created_entity.get_service_display()
-                if created_entity.service else ("", True)
-            )
-            sub_service = (
-                created_entity.get_sub_service_display()
-                if created_entity.sub_service else ("", True)
-            )
-            circle = (
-                CirclesChoices(created_entity.circle).label
-                if created_entity.circle else ("", True)
-            )
-            entity = (
-                str(created_entity.entity)
-                if created_entity.entity else ("", True)
-            )
-
-            self.export_manager.row_number += 1
-            town = (
-                self.export_manager.get_correlation(
-                    "towns", created_entity.project.town.name,
-                )
-                if created_entity.project.town else ("", True)
-            )
-
-            row = [
-                service,  # Servei
-                sub_service,  # Sub servei
-                created_entity.project.name,  # Nom de l'actuació
-                created_entity.project.constitution_date,  # Data inici
-                "",  # Període
-                entity,  # Entitat que realitza
-                circle,  # Cercle / ateneu
-                town,  # Municipi
-                ("", True),  # Nº participants
-                "No",  # Material difusió
-                "",  # Doc. acreditatiu
-                "",  # Incidències
-                '(no aplicable)',  # Lloc
-                '(no aplicable)',  # Acció
-                "",  # Cofinançat
-                "",  # Cofinançat amb AACC
-                created_entity.get_circle_display(),  # [Ateneu / cercle]
-            ]
-            self.export_manager.fill_row_data(row)
-
     def export_stages(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
             "Acompanyaments")
@@ -526,42 +479,58 @@ class ExportJustificationService:
         self.founded_projects_rows()
 
     def founded_projects_rows(self):
-        # The Ids start at 1, so later we add 1 to this number to have the 
-        # right ID.
-        founded_projects_reference_number = (
-            self.number_of_stages
-            + self.number_of_activities
-            + self.number_of_nouniversitaris
-        )
-        for created_entity in self.created_entities:
-            founded_projects_reference_number += 1
-            circle = (
-                CirclesChoices(created_entity.circle).label
-                if created_entity.circle else ("", True)
-            )
-            contact_details = (
-                created_entity.project.partners.all()[0].full_name
-                if created_entity.project.partners.all() else ("", True)
-            )
-            self.export_manager.row_number += 1
-            row = [
-                self.get_formatted_reference(
-                    founded_projects_reference_number,
-                    created_entity.sub_service,
-                    created_entity.entity,
-                    created_entity.circle,
-                ),  # Referència
-                "",  # Nom actuació
-                created_entity.project.name,  # Nom del projecte
-                created_entity.project.cif or ("", True),  # NIF del projecte
-                contact_details,  # Nom i cognoms persona de contacte
-                created_entity.project.mail or ("", True),  # Correu electrònic
-                created_entity.project.phone or ("", True),  # Telèfon
-                "Sí",  # Economia solidària
-                circle,  # Ateneu / Cercle
-                created_entity.project.stages_list,  # Acompanyaments
-            ]
-            self.export_manager.fill_row_data(row)
+        """
+        By april 2024, created entities are changed. Previously each creation
+        had its own row in Actuacions, and then here each CreatedEntity
+        was filled in this sheet, calculating its reference number by the
+        normal incrementation of the row number and so.
+        Now, each creation has to be linked to a ProjectStage, so the rows
+        in Actuacions dedicated to CreatedEntity don't exist anymore, and the
+        reference number needs to be the corresponding ProjectStage's one.
+
+        When ProjectStages rows are rendered, we're creating a dictionary
+        with all the information that includes the row number.
+        We're using that here, by doing:
+        1. Loop through all self.stages_obj
+        2. For each ProjectStage, check if there's a CreatedEntity registry.
+        3. If so, create the row, and calculate the reference number using
+        this stages_obj stored row number.
+        """
+
+        self.export_manager.row_number += 1
+        for project_id, project in self.stages_obj.items():
+            for group_name, group in project.items():
+                stage = group['obj']
+                if not hasattr(stage, "created_entity"):
+                    continue
+                stage_reference_number = group['row_number']
+                created_entity = stage.created_entity
+                circle = (
+                    CirclesChoices(created_entity.circle).label
+                    if created_entity.circle else ("", True)
+                )
+                contact_details = (
+                    created_entity.project.partners.all()[0].full_name
+                    if created_entity.project.partners.all() else ("", True)
+                )
+                row = [
+                    self.get_formatted_reference(
+                        stage_reference_number,
+                        created_entity.sub_service,
+                        created_entity.entity,
+                        created_entity.circle,
+                    ),  # Referència
+                    "",  # Nom actuació
+                    created_entity.project.name,  # Nom del projecte
+                    created_entity.project.cif or ("", True),  # NIF del projecte
+                    contact_details,  # Nom i cognoms persona de contacte
+                    created_entity.project.mail or ("", True),  # Correu electrònic
+                    created_entity.project.phone or ("", True),  # Telèfon
+                    "Sí",  # Economia solidària
+                    circle,  # Ateneu / Cercle
+                    created_entity.project.stages_list,  # Acompanyaments
+                ]
+                self.export_manager.fill_row_data(row)
 
     def export_participants(self):
         self.export_manager.worksheet = \
@@ -933,9 +902,4 @@ class ExportJustificationService:
         circle = CirclesChoices(circle_id).label
         return (
             f"{ref_num} - {sub_service} {subsidy_period} {entity} - {circle}"
-        )
-
-    def get_created_entities(self):
-        return CreatedEntity.objects.filter(
-            subsidy_period=self.export_manager.subsidy_period,
         )

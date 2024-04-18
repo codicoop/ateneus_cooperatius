@@ -644,6 +644,13 @@ class ProjectStage(models.Model):
         )
         return txt
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return (
+            "project__id__iexact",
+            "project__name__icontains",
+        )
+
 
 class ProjectStageSession(models.Model):
     class Meta:
@@ -911,35 +918,44 @@ class EmploymentInsertion(models.Model):
 
 
 class CreatedEntity(models.Model):
+    project_stage = models.OneToOneField(
+        ProjectStage,
+        verbose_name="Acompanyament vinculat a la creació de l'entitat",
+        blank=False,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="created_entity",
+    )
     project = models.ForeignKey(
         Project,
+        verbose_name="(Obsolet) Projecte",
         on_delete=models.CASCADE,
         related_name="created_entities",
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "(Obsolet) Servei",
         choices=ServicesChoices.choices,
         null=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "(Obsolet) Sub-servei",
         choices=SubServicesChoices.choices,
         null=True,
     )
     subsidy_period = models.ForeignKey(
         SubsidyPeriod,
-        verbose_name="convocatòria de la constitució",
+        verbose_name="(Obsolet) Convocatòria de la constitució",
         null=True,
         on_delete=models.SET_NULL,
     )
     circle = models.SmallIntegerField(
-        "Ateneu / Cercle",
+        "(Obsolet) Ateneu / Cercle",
         choices=CirclesChoices.choices_named(),
         null=True,
     )
     entity = models.ForeignKey(
         Entity,
-        verbose_name="Entitat",
+        verbose_name="(Obsolet) Entitat",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -953,9 +969,10 @@ class CreatedEntity(models.Model):
         return f"Entitat creada: {self.project.name}"
 
     @classmethod
-    def validate_extended_fields(cls, project_obj):
-        if not isinstance(project_obj, Project):
+    def validate_extended_fields(cls, project_stage_obj):
+        if not isinstance(project_stage_obj, ProjectStage):
             return True
+        project_obj = project_stage_obj.project
         project_obj_errors = {
             "cif": "- NIF.<br />",
             "constitution_date": "- Data de constitució. <br/>",

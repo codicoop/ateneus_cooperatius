@@ -778,6 +778,7 @@ class EntityCreatedAdminForm(models.ModelForm):
     class Meta:
         model = CreatedEntity
         fields = (
+            "project_stage",
             "project",
             "service",
             "sub_service",
@@ -789,7 +790,7 @@ class EntityCreatedAdminForm(models.ModelForm):
     def clean(self):
         super().clean()
         CreatedEntity.validate_extended_fields(
-            self.cleaned_data.get("project"),
+            self.cleaned_data.get("project_stage"),
         )
         return self.cleaned_data
 
