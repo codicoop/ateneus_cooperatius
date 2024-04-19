@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.conf import settings
-from extra_settings.admin import register_extra_settings_admin
 
 from apps.coopolis.models import (
     User, Project, ProjectStage, Derivation, EmploymentInsertion,
@@ -43,6 +42,3 @@ class TownAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
-
-
-register_extra_settings_admin("apps.coopolis")
