@@ -108,6 +108,14 @@ class MyDashboard(Dashboard):
                     models=('mailing_manager.models.Mail',),
                 )
             )
+            # group_children.append(
+            #     modules.ModelList(
+            #         title="Configuració i personalització",
+            #         column=1,
+            #         collapsible=False,
+            #         models=('extra_settings.models.*',),
+            #     )
+            # )
 
         self.children.append(modules.Group(
             title="Backoffice",
