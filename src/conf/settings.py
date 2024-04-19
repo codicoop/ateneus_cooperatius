@@ -86,19 +86,6 @@ EXTERNAL_STATIC = AWS_S3_ENDPOINT_URL+"/"+AWS_STORAGE_BUCKET_NAME+"/local"
 AWS_PRIVATE_MEDIA_LOCATION = env.str('AWS_PRIVATE_MEDIA_LOCATION', default="")
 MEDIA_FILE_OVERWRITE = True
 
-# Usually each File field specifies the storage backend (PrivateMediaStorage or
-# PublicMediaStorage).
-# With the django_extra_settings package, we cannot specify it directly, so we
-# include this setting only for this reason. It is recommended that each file
-# field still specifies the storage, to make it easier to see if the file will
-# be public or private, given that making some sensitive file public would be
-# a big issue.
-STORAGES = {
-    "default": {
-        "BACKEND": "apps.coopolis.storage_backends.PublicMediaStorage",
-    },
-}
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # TODO: delete this commented code if it proves to be deprecatred.
@@ -132,9 +119,8 @@ INSTALLED_APPS = [
     'apps.facilities_reservations',
     'apps.coopolis',
     'apps.celery',
-    'extra_settings',
-    # 'grappelli.dashboard',
-    # 'grappelli',
+    'grappelli.dashboard',
+    'grappelli',
     'tagulous',
     'logentry_admin',
     'constance.backends.database',
@@ -520,18 +506,3 @@ if LOGGLY_TOKEN:
             },
         },
     }
-
-# Django Extra Settings
-EXTRA_SETTINGS_DEFAULTS = [
-    {
-        "name": "LOGO",
-        "type": "image",
-        "value": "",
-    },
-    {
-        "name": "TEST_FILE",
-        "type": "file",
-        "value": "",
-    },
-]
-EXTRA_SETTINGS_VERBOSE_NAME = "Configuració i personalització (al name)"

@@ -33,7 +33,6 @@ django-summernote = "^0.8.20"
 celery = "^5.2.7"
 qrcode = "^7.4.2"
 loggly-python-handler = "^1.0.1"
-django-extra-settings = "^0.12.0"
 
 [tool.poetry.dev-dependencies]
 
