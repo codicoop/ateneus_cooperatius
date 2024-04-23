@@ -829,6 +829,7 @@ class EmploymentInsertion(models.Model):
             activity_obj,
             subsidy_period,
         )
+        activity_excluded_error = cls.get_activity_excluded_error(activity_obj)
 
         errors = []
         if user_errors:
@@ -837,9 +838,28 @@ class EmploymentInsertion(models.Model):
             errors.append(ValidationError(cif_error))
         if activity_subsidy_period_error:
             errors.append(ValidationError(activity_subsidy_period_error))
+        if activity_excluded_error:
+            errors.append(ValidationError(activity_excluded_error))
 
         if errors:
             raise ValidationError(errors)
+
+    @classmethod
+    def get_activity_excluded_error(cls, activity_obj):
+        msg = ""
+        if activity_obj and activity_obj.exclude_from_justification:
+            url = reverse(
+                "admin:cc_courses_activity_change",
+                kwargs={"object_id": activity_obj.id},
+            )
+            a_tag = f'<a href="{url}" target="_blank">fitxa de l\'activitat</a>'
+            msg = (
+                "L'activitat seleccionada no és vàlida perquè està exclosa de "
+                "l'exportació de la justificació. Per poder vincular insercions"
+                f" laborals a aquesta activitat, cal que aneu a la {a_tag} i "
+                f"hi desactiveu el camp 'No incloure a l'excel de justificació'."
+            )
+        return mark_safe(msg)
 
     @staticmethod
     def get_user_field_errors(user_obj):

@@ -206,7 +206,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                        'date_end', 'starting_time', 'ending_time',
                        'confirmed', 'equipments',
                        'spots', 'service', 'sub_service', 'circle', 'entity',
-                       'responsible', 'organizer_reminded', 'publish', ]
+                       'responsible', 'organizer_reminded', 'publish',
+                       'exclude_from_justification', ]
         }),
         ("Documents per la justificació", {
             'classes': ('grp-collapse grp-closed',),
