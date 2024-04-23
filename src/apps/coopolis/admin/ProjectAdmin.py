@@ -532,7 +532,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             {
                 "fields": [
                     "id",
-                    "logo",
                     "name",
                     "sector",
                     "web",
@@ -551,6 +550,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                     "project_origins",
                     "solves_necessities",
                     "social_base",
+                    "logo",
                 ]
             },
         ),
