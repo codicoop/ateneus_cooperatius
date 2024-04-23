@@ -56,6 +56,8 @@ class ExportJustificationService:
                 Q(cofunded__isnull=True) | (
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
                 )
+            ) & Q(
+                exclude_from_justification=False
             )
         )
     
