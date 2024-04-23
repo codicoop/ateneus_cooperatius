@@ -233,6 +233,10 @@ class Activity(models.Model):
         "al desplegable, cal que la persona tingui activada l'opció "
         "'Membre del personal'.",
     )
+    exclude_from_justification = models.BooleanField(
+        "No incloure a l'excel de justificació",
+        default=False,
+    )
     service = models.SmallIntegerField(
         "Servei",
         choices=ServicesChoices.choices,
