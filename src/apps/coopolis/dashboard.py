@@ -108,6 +108,14 @@ class MyDashboard(Dashboard):
                     models=('mailing_manager.models.Mail',),
                 )
             )
+            group_children.append(
+                modules.ModelList(
+                    title="Personalització de les imatges",
+                    column=1,
+                    collapsible=False,
+                    models=('apps.coopolis.models.general.Customization',),
+                )
+            )
 
         self.children.append(modules.Group(
             title="Backoffice",

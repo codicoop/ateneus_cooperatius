@@ -14,7 +14,7 @@
     <meta name="description" content="description here">
     <meta name="keywords" content="keywords,here">
     <link rel="stylesheet" href="{% static 'styles/stylesheet.css' %}" type="text/css">
-    <link rel="icon" href="{% external_static "/logo.png" %}">
+    <link rel="icon" href="{{ customization.logo }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{% static 'js/js.cookie-2.2.0.min.js' %}"></script>
     <!-- XDSoft DateTimePicker -->
@@ -32,7 +32,7 @@
                 <div>
                     <a href="{% url 'home' %}" class="title-link">
                         <div class="logo">
-                            <img src="{% external_static "/logo.png" %}" />
+                            <img src="{{ customization.logo }}" />
                             <div class="title">
                                 <h1>{{ config.PROJECT_NAME }}</h1>
                                 <h2>Plataforma de gestió de projectes i inscripcions</h2>
