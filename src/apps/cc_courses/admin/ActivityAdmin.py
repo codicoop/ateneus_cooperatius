@@ -350,7 +350,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         qr_poll_uri = f"data:image/png;base64,{qr_poll_base64}"
         customization = get_customization_context()
         footer_img = customization["customization"]["signatures_pdf_footer"]
-        content = t1emp.render(
+        content = temp.render(
             {
                 "assistants": Activity.objects.get(uuid=uuid).enrolled.filter(
                     enrollments__waiting_list=False),
