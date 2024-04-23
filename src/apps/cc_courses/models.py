@@ -533,7 +533,7 @@ class Activity(models.Model):
                 errors.update(
                     {
                         "subaxis": ValidationError(
-                            "Has seleccionat un sub-eix que no es " "correspon a l'eix."
+                            "Has seleccionat un sub-eix que no es correspon a l'eix."
                         )
                     }
                 )
@@ -566,6 +566,22 @@ class Activity(models.Model):
                 "convocatòria."
             )
             errors.update({"date_start": ValidationError(msg)})
+
+        # Excluding the activity from the justification excel while it has
+        # empoyment insertions linked will most likely not be the desired
+        # behaviour and will be difficult to detect, so we decided to make
+        # the activity mandatory in the justification in that case.
+        if (
+            hasattr(self, "employment_insertions")
+            and self.employment_insertions.count()
+            and self.exclude_from_justification
+        ):
+            msg = (
+                "Aquest sessió està vinculada a (com a mínim) una inserció "
+                "laboral, per aquest motiu no es pot excloure de la "
+                "justificació."
+            )
+            errors.update({"exclude_from_justification": ValidationError(msg)})
 
         if errors:
             raise ValidationError(errors)
