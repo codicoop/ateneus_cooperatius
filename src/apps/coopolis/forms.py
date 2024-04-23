@@ -145,26 +145,27 @@ class ProjectFormAdmin(ProjectForm):
 
     def clean(self):
         super().clean()
-        if EmploymentInsertion.objects.filter(
-            project=self.instance.id,
-        ).count():
-            msg = (
-                "Aquest projecte està vinculat a insercions laborals, "
-                "per aquest motiu, aquest camp és obligatori."
-            )
-            if not self.cleaned_data.get("cif"):
-                self.add_error("cif", msg)
-        if CreatedEntity.objects.filter(
-            project=self.instance.id,
-        ).count():
-            msg = (
-                "Aquest projecte està vinculat a una creació d'entitat, "
-                "per aquest motiu, aquest camp és obligatori."
-            )
-            if not self.cleaned_data.get("cif"):
-                self.add_error("cif", msg)
-            if not self.cleaned_data.get("constitution_date"):
-                self.add_error("constitution_date", msg)
+        if self.instance.id:
+            if EmploymentInsertion.objects.filter(
+                project=self.instance.id,
+            ).count():
+                msg = (
+                    "Aquest projecte està vinculat a insercions laborals, "
+                    "per aquest motiu, aquest camp és obligatori."
+                )
+                if not self.cleaned_data.get("cif"):
+                    self.add_error("cif", msg)
+            if CreatedEntity.objects.filter(
+                project=self.instance.id,
+            ).count():
+                msg = (
+                    "Aquest projecte està vinculat a una creació d'entitat, "
+                    "per aquest motiu, aquest camp és obligatori."
+                )
+                if not self.cleaned_data.get("cif"):
+                    self.add_error("cif", msg)
+                if not self.cleaned_data.get("constitution_date"):
+                    self.add_error("constitution_date", msg)
         return self.cleaned_data
 
 
