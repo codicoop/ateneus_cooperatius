@@ -23,7 +23,11 @@ def get_customization_context():
                 "logo",
                 "logo.png",
             ),
-            "signatures_pdf_footer": obj.signatures_pdf_footer,
+            "signatures_pdf_footer": get_customization_or_external_static(
+                obj,
+                "signatures_pdf_footer",
+                "peu_signatures_pdf.png",
+            )
         }
     }
 

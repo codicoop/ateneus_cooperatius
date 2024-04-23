@@ -12,13 +12,13 @@ from django.urls import path, reverse, reverse_lazy
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django_summernote.admin import SummernoteModelAdminMixin
-from constance import config
 from datetime import datetime
 import modelclone
 import weasyprint
 import django.template.loader as loader
 
-from apps.coopolis.choices import ActivityFileType, ServicesChoices
+from apps.coopolis.choices import ActivityFileType
+from apps.coopolis.context_processors import get_customization_context
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
 from apps.cc_courses.models import (
     Activity,
@@ -348,13 +348,14 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         qr_poll.save(buffered, format="JPEG")
         qr_poll_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
         qr_poll_uri = f"data:image/png;base64,{qr_poll_base64}"
-
-        content = temp.render(
+        customization = get_customization_context()
+        footer_img = customization["customization"]["signatures_pdf_footer"]
+        content = t1emp.render(
             {
                 "assistants": Activity.objects.get(uuid=uuid).enrolled.filter(
                     enrollments__waiting_list=False),
                 "activity": Activity.objects.get(uuid=uuid),
-                "footer_image": config.ATTENDEE_LIST_FOOTER_IMG,
+                "footer_image": footer_img,
                 "qr_poll": qr_poll_uri,
                 "poll_url": absolute_url_poll,
             }
