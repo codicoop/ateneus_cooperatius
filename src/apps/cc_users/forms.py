@@ -33,8 +33,7 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = (
-            'first_name', 'last_name', 'surname2', 'email', 'id_number',
-            'cannot_share_id',
+            'first_name', 'last_name', 'surname2', 'email', 'id_number_type', 'id_number',
             'phone_number', 'birthdate', 'birth_place', 'town', 'district',
             'address', 'gender', 'educational_level', 'employment_situation',
             'discovered_us', 'project_involved', 'authorize_communications',
@@ -59,29 +58,6 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
         self.label_suffix = ""
         if 'password' in self.fields:
             self.fields.pop('password')
-
-    def clean(self):
-        super().clean()
-        cannot_share_id = self.cleaned_data.get('cannot_share_id')
-        id_number = self.cleaned_data.get('id_number')
-        if not id_number and not cannot_share_id:
-            msg = ("Necessitem el DNI, NIF o passaport per justificar la "
-                   "participació davant dels organismes públics que financen "
-                   "aquestes activitats.")
-            self.add_error('id_number', msg)
-        return self.cleaned_data
-
-    def clean_id_number(self):
-        model = get_user_model()
-        value = self.cleaned_data.get("id_number")
-        if value and (
-            model.objects
-            .filter(id_number__iexact=value)
-            .exclude(id=self.request.user.id)
-            .exists()
-        ):
-            raise ValidationError("El DNI ja existeix.")
-        return value
 
 
 class PasswordResetForm(BasePasswordResetForm):

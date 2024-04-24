@@ -57,6 +57,10 @@ function onLoadFunction(){
   
     readAcceptedOne.classList.add("field-checkbox--long")
     readAcceptedTwo.classList.add("field-checkbox--long")
+    // Afegint funcionalitat per deshabilitar el camp DNI
+    const IdType = document.getElementById("id_id_number_type")
+    IdType.setAttribute("onchange", "blockIdNumber()")
+    blockIdNumber()
   }
 
   // Pàgina de projectes

@@ -51,11 +51,16 @@
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
       }
+      &:disabled {
+        background-color: var(--grey-light);
+        cursor: not-allowed;
+      }
     }
     // Errors
     .errorlist {
       order: 2;
       padding-bottom: var(--pad-3);
+      padding-left: var(--pad-2);
       color: var(--red);
       font-size: 12px;
       line-height: 16px;
