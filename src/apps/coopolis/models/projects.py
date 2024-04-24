@@ -121,16 +121,6 @@ class Project(models.Model):
         "compta el vostre projecte amb una base social?", blank=True, null=True
     )
     constitution_date = models.DateField("data de constitució", blank=True, null=True)
-    subsidy_period = models.ForeignKey(
-        SubsidyPeriod,
-        verbose_name="(OBSOLET) Convocatòria de la constitució",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        help_text="Anteriorment es feia servir aquest camp per saber quins "
-        "projectes incloure a la justificació com a Constituïts. Ara "
-        "això es fa des de l'apartat Entitats Creades.",
-    )
     estatuts = models.FileField(
         "estatuts", blank=True, null=True, storage=PrivateMediaStorage(), max_length=250
     )
