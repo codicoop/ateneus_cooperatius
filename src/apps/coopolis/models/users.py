@@ -1,13 +1,20 @@
+import re
+from tagulous.models import TagField
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from tagulous.models import TagField
+from django.contrib.auth import get_user_model
 
 from apps.cc_users.managers import CCUserManager
 from apps.cc_users.models import BaseUser
 from apps.coopolis.storage_backends import PublicMediaStorage
 
 from .general import Town
+from django.core.validators import ValidationError
+from localflavor.es.forms import ESIdentityCardNumberField
+from apps.coopolis.choices import DocumentTypes
+from apps.cc_users.constansts import PASSPORT_REGEX_PATTERNS
 
 
 class User(BaseUser):
@@ -42,8 +49,15 @@ class User(BaseUser):
     username = models.CharField(
         unique=False, null=True, max_length=150, verbose_name="nom d'usuari/a"
     )
-    surname2 = models.CharField("segon cognom", max_length=50, blank=True, null=True)
-    id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11)
+    username = models.CharField(unique=False, null=True, max_length=150,
+                                verbose_name="nom d'usuari/a")
+    surname2 = models.CharField("segon cognom", max_length=50, blank=True,
+                                null=True)
+    id_number_type = models.CharField("tipus de document", blank=True, null=True,
+                                      choices=DocumentTypes.choices, max_length=10)
+    id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11, 
+        help_text="Si degut a la teva situació legal et suposa un inconvenient"
+        " indicar el DNI, deixa'l en blanc.")
     cannot_share_id = models.BooleanField(
         "Si degut a la teva situació legal et suposa un inconvenient"
         " indicar el DNI, deixa'l en blanc i marca aquesta casella",
@@ -177,3 +191,55 @@ class User(BaseUser):
 
     def __str__(self):
         return self.get_full_name()
+
+    def check_id_number_in_database(self, id_number):
+        model = get_user_model()
+        if id_number and (
+            model.objects
+            .filter(id_number__iexact=id_number)
+            .exclude(id=self.id)
+            .exists()
+        ):
+            raise ValidationError({ 
+                "id_number": ValidationError("El document ja existeix.") 
+            })
+
+    def _validate_passport(self, id_number):
+        country_match = any(re.match(pattern, id_number) for pattern in PASSPORT_REGEX_PATTERNS)
+        if not country_match:
+            return { "id_number": ValidationError("Si us plau, introduïu un document vàlid.")}
+        else:
+            return {}
+               
+    def _validate_dni_nie(self, id_number):
+        try: 
+            ESIdentityCardNumberField().clean(id_number)
+            return {}
+        except ValidationError: 
+            return { 
+                "id_number": ValidationError("Si us plau, introduïu un document vàlid.") 
+            }
+        
+    def clean(self):
+        super().clean()
+        errors = {}
+        id_number_type = self.id_number_type
+        id_number = self.id_number
+        if not id_number_type:    
+            errors.update({
+                "id_number_type": ValidationError("Has de triar un tipus de document.")
+            })
+        if not id_number and id_number_type != DocumentTypes.NO_DNI:
+            errors.update({
+                "id_number": ValidationError("Aquest camp es obligatori.")
+            })     
+        elif id_number_type and id_number_type != DocumentTypes.NO_DNI:
+            if id_number_type == DocumentTypes.PASSPORT:
+                id_number_validation = errors.update(self._validate_passport(id_number))            
+            else: 
+                id_number_validation = errors.update(self._validate_dni_nie(id_number))
+            if not id_number_validation:
+                self.check_id_number_in_database(id_number)   
+        
+        if errors:
+            raise ValidationError(errors)

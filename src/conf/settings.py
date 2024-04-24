@@ -136,6 +136,7 @@ INSTALLED_APPS = [
     'mailing_manager',
     'django.contrib.humanize',
     "django_q",
+    'localflavor',
 ]
 
 MIDDLEWARE = [

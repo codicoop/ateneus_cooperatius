@@ -60,6 +60,10 @@
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
       }
+      &:disabled {
+        background-color: var(--grey-light);
+        cursor: not-allowed;
+      }
     }
     
     // Errors

@@ -207,3 +207,10 @@ class CirclesChoices(models.IntegerChoices):
 class ActivityFileType(models.TextChoices):
     WORK = "WORK", "De treball"
     JUSTIFICATION = "JUSTIFICATION", "Justificatori"
+
+
+class DocumentTypes(models.TextChoices):
+    DNI = 'DNI', 'DNI'
+    NIE = 'NIE', 'NIE'
+    PASSPORT = 'PASSPORT', 'Passaport'
+    NO_DNI = 'NO_DNI', 'No puc donar el DNI'

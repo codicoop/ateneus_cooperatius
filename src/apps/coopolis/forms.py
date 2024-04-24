@@ -299,6 +299,13 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             },
         ),
     ]
+            'first_name', 'last_name', 'surname2', 'email',
+            'phone_number', 'id_number_type', 'id_number', 
+            'birthdate', 'birth_place', 'town', 'district',
+            'address', 'gender', 'educational_level', 'employment_situation',
+            'discovered_us', 'project_involved', 'authorize_communications',
+            'password1', 'password2',
+        )
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
@@ -334,26 +341,6 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                 config.CONTENT_SIGNUP_LEGAL2
             )
         self.label_suffix = ""
-
-    def clean(self):
-        super().clean()
-        cannot_share_id = self.cleaned_data.get("cannot_share_id")
-        id_number = self.cleaned_data.get("id_number")
-        if not id_number and not cannot_share_id:
-            msg = (
-                "Necessitem el DNI, NIF o passaport per justificar la "
-                "participació davant dels organismes públics que financen "
-                "aquestes activitats."
-            )
-            self.add_error("id_number", msg)
-        return self.cleaned_data
-
-    def clean_id_number(self):
-        model = get_user_model()
-        value = self.cleaned_data.get("id_number")
-        if value and model.objects.filter(id_number__iexact=value).exists():
-            raise ValidationError("El DNI ja existeix.")
-        return value
 
 
 class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
@@ -430,16 +417,6 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
 
     def clean(self):
         super().clean()
-        cannot_share_id = self.cleaned_data.get("cannot_share_id")
-        id_number = self.cleaned_data.get("id_number")
-        if not id_number and not cannot_share_id:
-            msg = (
-                "Necessitem el DNI, NIF o passaport per justificar la "
-                "participació davant dels organismes públics que financen "
-                "aquestes activitats."
-            )
-            self.add_error("id_number", msg)
-
         if EmploymentInsertion.objects.filter(
             user=self.instance.id,
         ).count():
