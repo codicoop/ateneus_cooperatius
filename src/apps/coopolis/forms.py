@@ -3,7 +3,6 @@ from datetime import datetime
 from constance import config
 from django import forms
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.db.models import BLANK_CHOICE_DASH
@@ -266,7 +265,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                     "surname2",
                     "email",
                     "id_number",
-                    "cannot_share_id",
+                    "id_number_type",
                     "phone_number",
                     "birthdate",
                     "birth_place",
@@ -299,13 +298,6 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             },
         ),
     ]
-            'first_name', 'last_name', 'surname2', 'email',
-            'phone_number', 'id_number_type', 'id_number', 
-            'birthdate', 'birth_place', 'town', 'district',
-            'address', 'gender', 'educational_level', 'employment_situation',
-            'discovered_us', 'project_involved', 'authorize_communications',
-            'password1', 'password2',
-        )
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)

@@ -65,8 +65,8 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
                     "first_name",
                     "last_name",
                     "surname2",
+                    "id_number_type",
                     "id_number",
-                    "cannot_share_id",
                     "gender",
                     "email",
                     "phone_number",
@@ -89,11 +89,6 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             },
         ),
     ]
-            'first_name', 'last_name', 'surname2', 'email', 'id_number_type', 'id_number',
-            'phone_number', 'birthdate', 'birth_place', 'town', 'district',
-            'address', 'gender', 'educational_level', 'employment_situation',
-            'discovered_us', 'project_involved', 'authorize_communications',
-        )
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)

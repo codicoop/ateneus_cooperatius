@@ -121,8 +121,8 @@ class UserAdmin(admin.ModelAdmin):
         "last_name",
         "surname2",
         "gender",
+        "id_number_type",
         "id_number",
-        "cannot_share_id",
         "email",
         "fake_email",
         "birthdate",
@@ -145,13 +145,6 @@ class UserAdmin(admin.ModelAdmin):
         "date_joined",
         "last_login",
         "new_password",
-        'id', 'first_name', 'last_name', 'surname2', 'gender', 
-        'email', 'fake_email', 'id_number_type','id_number','birthdate', 'birth_place',
-        'town', 'district', 'address', 'phone_number', 'educational_level',
-        'employment_situation', 'discovered_us', 'project_involved',
-        'cooperativism_knowledge', 'authorize_communications', 'project',
-        'tags', 'is_staff', 'groups', 'is_active', 'date_joined', 'last_login',
-        'new_password',
     )
     readonly_fields = (
         "id",
