@@ -29,12 +29,6 @@ class Town(models.Model):
         default=None,
     )
     name = models.CharField("nom", max_length=250)
-    name_for_justification = models.CharField(
-        "nom per la justificació",
-        max_length=250,
-        default="",
-        blank=True,
-    )
 
     def __str__(self):
         return self.name

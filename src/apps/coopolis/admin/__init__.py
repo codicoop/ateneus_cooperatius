@@ -34,7 +34,7 @@ admin.site.index_title = settings.ADMIN_INDEX_TITLE
 
 @admin.register(Town)
 class TownAdmin(admin.ModelAdmin):
-    search_fields = ("name", "name_for_justification", )
+    search_fields = ("name", )
 
     def has_add_permission(self, request):
         return False
