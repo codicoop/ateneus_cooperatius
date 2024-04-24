@@ -75,9 +75,9 @@ class User(BaseUser):
         max_length=11,
         editable=False,
     )
+    # Marcat com a obsolet el 25/4/24
     cannot_share_id = models.BooleanField(
-        "Si degut a la teva situació legal et suposa un inconvenient"
-        " indicar el DNI, deixa'l en blanc i marca aquesta casella",
+        "Obsolet",
         default=False,
     )
     GENDERS = (("OTHER", "Altre"), ("FEMALE", "Dona"), ("MALE", "Home"))
