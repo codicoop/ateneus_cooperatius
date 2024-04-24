@@ -36,7 +36,9 @@ class User(BaseUser):
         default="",
         help_text="Clica per carregar una imatge",
         validators=[
-            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "gif"])
+            FileExtensionValidator(
+                allowed_extensions=["jpg", "jpeg", "png", "gif"],
+            )
         ],
     )
     fake_email = models.BooleanField(
@@ -49,15 +51,30 @@ class User(BaseUser):
     username = models.CharField(
         unique=False, null=True, max_length=150, verbose_name="nom d'usuari/a"
     )
-    username = models.CharField(unique=False, null=True, max_length=150,
-                                verbose_name="nom d'usuari/a")
     surname2 = models.CharField("segon cognom", max_length=50, blank=True,
                                 null=True)
-    id_number_type = models.CharField("tipus de document", blank=True, null=True,
-                                      choices=DocumentTypes.choices, max_length=10)
-    id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11, 
+    id_number_type = models.CharField(
+        "tipus de document",
+        blank=True,
+        null=True,
+        choices=DocumentTypes.choices,
+        max_length=10,
+    )
+    id_number = models.CharField(
+        "DNI/NIE/Passaport",
+        null=True,
+        max_length=11,
         help_text="Si degut a la teva situació legal et suposa un inconvenient"
-        " indicar el DNI, deixa'l en blanc.")
+        " indicar el DNI, deixa'l en blanc.",
+    )
+    # Per eliminar: aquest camp s'ha creat per conservar els valors dels DNIs
+    # originals abans del procés que els valida i actualitza tots, a 25/4/23.
+    id_number_backup = models.CharField(
+        "Còpia de seguretat id_number",
+        null=True,
+        max_length=11,
+        editable=False,
+    )
     cannot_share_id = models.BooleanField(
         "Si degut a la teva situació legal et suposa un inconvenient"
         " indicar el DNI, deixa'l en blanc i marca aquesta casella",
@@ -204,15 +221,19 @@ class User(BaseUser):
                 "id_number": ValidationError("El document ja existeix.") 
             })
 
-    def _validate_passport(self, id_number):
+    def validate_passport(self, id_number=None):
+        if not id_number:
+            id_number = self.id_number
         country_match = any(re.match(pattern, id_number) for pattern in PASSPORT_REGEX_PATTERNS)
         if not country_match:
             return { "id_number": ValidationError("Si us plau, introduïu un document vàlid.")}
         else:
             return {}
                
-    def _validate_dni_nie(self, id_number):
-        try: 
+    def validate_dni_nie(self, id_number=None):
+        if not id_number:
+            id_number = self.id_number
+        try:
             ESIdentityCardNumberField().clean(id_number)
             return {}
         except ValidationError: 
@@ -235,9 +256,9 @@ class User(BaseUser):
             })     
         elif id_number_type and id_number_type != DocumentTypes.NO_DNI:
             if id_number_type == DocumentTypes.PASSPORT:
-                id_number_validation = errors.update(self._validate_passport(id_number))            
+                id_number_validation = errors.update(self.validate_passport())
             else: 
-                id_number_validation = errors.update(self._validate_dni_nie(id_number))
+                id_number_validation = errors.update(self.validate_dni_nie())
             if not id_number_validation:
                 self.check_id_number_in_database(id_number)   
         
