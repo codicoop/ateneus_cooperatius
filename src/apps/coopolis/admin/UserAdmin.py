@@ -92,6 +92,7 @@ class UserAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "id_number",
+        "id_number_type",
         "email",
         "project",
         "enrolled_activities_count",
