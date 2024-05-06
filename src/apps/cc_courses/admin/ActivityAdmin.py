@@ -34,6 +34,7 @@ from apps.facilities_reservations.models import Reservation, \
     ReservationEquipment
 from apps.coopolis.filters import SubserviceFilter
 
+
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
     """
     Allows Activities to be filtered according to their date_start using a
@@ -260,6 +261,18 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
+    """
+    READ BEFORE ADDING INLINES
+    
+    If you add any inline containing files or images, you must exclude them from
+    the duplicating (cloning) process, at:
+    ActivityAdmin.tweak_cloned_inline_fields
+    In some cases, it happened that when deleting the file value (or the 
+    registry) from one of the registries, the other registry was linked to the 
+    same file and therefore it stopped working. I could not reproduce this error
+    locally, but given that it was reported and it's safer, we're just 
+    excluding those while duplicating.
+    """
     inlines = (
         ActivityResourcesInlineAdmin,
         ActivityEnrolledInline,
@@ -300,19 +313,18 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         return custom_urls + urls
 
     def tweak_cloned_inline_fields(self, related_name, fields_list):
-        """
-        fields_list contains every m2m record that was in the Inline.
+        fields = super().tweak_cloned_inline_fields(related_name, fields_list)
+        if related_name == "files":
+            return list()
+        return fields
 
-            Filtering for the "activityenrolled_set" just in case we add more
-        inlines in the future.
-
-        :param related_name: contains activityenrolled_set
-        :param fields_list: contains [{'user': 897, 'user_comments': None},
-        {'user': 898, 'user_comments': None}, ETC.
-        :return: empty list
-        """
-        matches_name = related_name == "activityenrolled_set"
-        return list() if matches_name else fields_list
+    def tweak_cloned_fields(self, fields):
+        fields = super().tweak_cloned_fields(fields)
+        fields["photo1"] = None
+        fields["photo2"] = None
+        fields["photo3"] = None
+        fields["file1"] = None
+        return fields
 
     def render_change_form(self, request, context, *args, **kwargs):
         """ modelclone not showing Save button because of a bug.

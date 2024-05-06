@@ -170,6 +170,19 @@ class Course(models.Model):
 
 
 class Activity(models.Model):
+    """
+    READ BEFORE ADDING FIELDS
+
+    If any File or Image field is added, you have to also add them in
+    ActivityAdmin.tweak_cloned_fields so it gets ignored when duplicating
+    (cloning) the registry in admin.
+    We need to avoid duplicating the File values because in some cases, it
+    happened that when deleting the file value (or the registry) from one of
+    the registries, the other registry was linked to the same file and therefore
+    it stopped working.
+    I could not reproduce this error locally, but given that it was reported and
+    it's safer, we're just excluding those while duplicating.
+    """
     class Meta:
         verbose_name = "sessió"
         verbose_name_plural = "sessions"
