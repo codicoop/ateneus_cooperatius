@@ -11,7 +11,11 @@ class CourseDetailView(DetailView):
         context['activities'] = (
             Activity
             .published.filter(course=context['course'])
-            .order_by("date_start")
+            .order_by("date_start", "starting_time", "name")
         )
-        context['enrollment_failed'] = self.request.session.pop('enrollment_failed', False)
+        # TO DELETE, since 6/5/24:
+        # context['enrollment_failed'] = self.request.session.pop(
+        #     'enrollment_failed',
+        #     False,
+        # )
         return context
