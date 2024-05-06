@@ -314,7 +314,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
 
     def tweak_cloned_inline_fields(self, related_name, fields_list):
         fields = super().tweak_cloned_inline_fields(related_name, fields_list)
-        if related_name == "files":
+        if related_name in ("files", "enrollments", "resources"):
             return list()
         return fields
 
