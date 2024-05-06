@@ -13,7 +13,8 @@ class CoursesListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['future_courses'] = (
             Course.published.filter(
-                activities__date_start__gte=timezone.now().date()
+                activities__date_start__gte=timezone.now().date(),
+                activities__publish=True,
             ).distinct()
             .order_by("date_start")
         )
