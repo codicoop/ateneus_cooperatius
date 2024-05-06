@@ -132,7 +132,7 @@ class MyDashboard(Dashboard):
             links_children.append(["Registre d'e-mails enviats", 'mailqueue/mailermessage/'])
             links_children.append(["Django-Q scheduling", 'django_q/'])
             links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
-            links_children.append(["Descàrrega de còpia de seguretat de les 00:00", reverse('db_backup_download')])
+            links_children.append(["Descàrrega de la base de dades de les 00:00", reverse('db_backup_download')])
 
         self.children.append(modules.LinkList(
             title='Enllaços',
