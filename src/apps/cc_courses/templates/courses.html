@@ -57,7 +57,7 @@
           <div class="course-card__subtitle text-menu">
             <p>Sessions: {{ course.activities.count }}</p>
           </div>
-          {% for session in course.activities.all %}
+          {% for session in course.get_public_activities %}
           <div class="course-card__subbloc subbloc">
             <div class="subbloc__title text-sm">
               <p>{{ session.date_start|date:"d/m/y" }}</p>

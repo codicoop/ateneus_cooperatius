@@ -158,6 +158,13 @@ class Course(models.Model):
     def autocomplete_search_fields():
         return ("title__icontains",)
 
+    def get_public_activities(self):
+        return (
+            self.activities
+            .filter(publish=True)
+            .order_by("date_start", "starting_time", "name")
+        )
+
     def __str__(self):
         return f"{self.title} ({self.date_start})"
 
