@@ -335,7 +335,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
 
 # CC Courses
 
-COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
 COURSES_CLASS_TO_ENROLL = 'coopolis.User'
 COURSES_CLASSES_CAN_ENROLL = ['apps.cc_courses.models.Course']
 
