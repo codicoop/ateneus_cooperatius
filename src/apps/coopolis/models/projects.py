@@ -121,16 +121,6 @@ class Project(models.Model):
         "compta el vostre projecte amb una base social?", blank=True, null=True
     )
     constitution_date = models.DateField("data de constitució", blank=True, null=True)
-    subsidy_period = models.ForeignKey(
-        SubsidyPeriod,
-        verbose_name="(OBSOLET) Convocatòria de la constitució",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        help_text="Anteriorment es feia servir aquest camp per saber quins "
-        "projectes incloure a la justificació com a Constituïts. Ara "
-        "això es fa des de l'apartat Entitats Creades.",
-    )
     estatuts = models.FileField(
         "estatuts", blank=True, null=True, storage=PrivateMediaStorage(), max_length=250
     )
@@ -644,6 +634,13 @@ class ProjectStage(models.Model):
         )
         return txt
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return (
+            "project__id__iexact",
+            "project__name__icontains",
+        )
+
 
 class ProjectStageSession(models.Model):
     class Meta:
@@ -822,6 +819,7 @@ class EmploymentInsertion(models.Model):
             activity_obj,
             subsidy_period,
         )
+        activity_excluded_error = cls.get_activity_excluded_error(activity_obj)
 
         errors = []
         if user_errors:
@@ -830,9 +828,28 @@ class EmploymentInsertion(models.Model):
             errors.append(ValidationError(cif_error))
         if activity_subsidy_period_error:
             errors.append(ValidationError(activity_subsidy_period_error))
+        if activity_excluded_error:
+            errors.append(ValidationError(activity_excluded_error))
 
         if errors:
             raise ValidationError(errors)
+
+    @classmethod
+    def get_activity_excluded_error(cls, activity_obj):
+        msg = ""
+        if activity_obj and activity_obj.exclude_from_justification:
+            url = reverse(
+                "admin:cc_courses_activity_change",
+                kwargs={"object_id": activity_obj.id},
+            )
+            a_tag = f'<a href="{url}" target="_blank">fitxa de l\'activitat</a>'
+            msg = (
+                "L'activitat seleccionada no és vàlida perquè està exclosa de "
+                "l'exportació de la justificació. Per poder vincular insercions"
+                f" laborals a aquesta activitat, cal que aneu a la {a_tag} i "
+                f"hi desactiveu el camp 'No incloure a l'excel de justificació'."
+            )
+        return mark_safe(msg)
 
     @staticmethod
     def get_user_field_errors(user_obj):
@@ -911,35 +928,44 @@ class EmploymentInsertion(models.Model):
 
 
 class CreatedEntity(models.Model):
+    project_stage = models.OneToOneField(
+        ProjectStage,
+        verbose_name="Acompanyament vinculat a la creació de l'entitat",
+        blank=False,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="created_entity",
+    )
     project = models.ForeignKey(
         Project,
+        verbose_name="(Obsolet) Projecte",
         on_delete=models.CASCADE,
         related_name="created_entities",
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "(Obsolet) Servei",
         choices=ServicesChoices.choices,
         null=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "(Obsolet) Sub-servei",
         choices=SubServicesChoices.choices,
         null=True,
     )
     subsidy_period = models.ForeignKey(
         SubsidyPeriod,
-        verbose_name="convocatòria de la constitució",
+        verbose_name="(Obsolet) Convocatòria de la constitució",
         null=True,
         on_delete=models.SET_NULL,
     )
     circle = models.SmallIntegerField(
-        "Ateneu / Cercle",
+        "(Obsolet) Ateneu / Cercle",
         choices=CirclesChoices.choices_named(),
         null=True,
     )
     entity = models.ForeignKey(
         Entity,
-        verbose_name="Entitat",
+        verbose_name="(Obsolet) Entitat",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -953,9 +979,10 @@ class CreatedEntity(models.Model):
         return f"Entitat creada: {self.project.name}"
 
     @classmethod
-    def validate_extended_fields(cls, project_obj):
-        if not isinstance(project_obj, Project):
+    def validate_extended_fields(cls, project_stage_obj):
+        if not isinstance(project_stage_obj, ProjectStage):
             return True
+        project_obj = project_stage_obj.project
         project_obj_errors = {
             "cif": "- NIF.<br />",
             "constitution_date": "- Data de constitució. <br/>",

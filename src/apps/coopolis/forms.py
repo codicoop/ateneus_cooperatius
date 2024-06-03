@@ -3,7 +3,6 @@ from datetime import datetime
 from constance import config
 from django import forms
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.db.models import BLANK_CHOICE_DASH
@@ -145,26 +144,27 @@ class ProjectFormAdmin(ProjectForm):
 
     def clean(self):
         super().clean()
-        if EmploymentInsertion.objects.filter(
-            project=self.instance.id,
-        ).count():
-            msg = (
-                "Aquest projecte està vinculat a insercions laborals, "
-                "per aquest motiu, aquest camp és obligatori."
-            )
-            if not self.cleaned_data.get("cif"):
-                self.add_error("cif", msg)
-        if CreatedEntity.objects.filter(
-            project=self.instance.id,
-        ).count():
-            msg = (
-                "Aquest projecte està vinculat a una creació d'entitat, "
-                "per aquest motiu, aquest camp és obligatori."
-            )
-            if not self.cleaned_data.get("cif"):
-                self.add_error("cif", msg)
-            if not self.cleaned_data.get("constitution_date"):
-                self.add_error("constitution_date", msg)
+        if self.instance.id:
+            if EmploymentInsertion.objects.filter(
+                project=self.instance.id,
+            ).count():
+                msg = (
+                    "Aquest projecte està vinculat a insercions laborals, "
+                    "per aquest motiu, aquest camp és obligatori."
+                )
+                if not self.cleaned_data.get("cif"):
+                    self.add_error("cif", msg)
+            if CreatedEntity.objects.filter(
+                project=self.instance.id,
+            ).count():
+                msg = (
+                    "Aquest projecte està vinculat a una creació d'entitat, "
+                    "per aquest motiu, aquest camp és obligatori."
+                )
+                if not self.cleaned_data.get("cif"):
+                    self.add_error("cif", msg)
+                if not self.cleaned_data.get("constitution_date"):
+                    self.add_error("constitution_date", msg)
         return self.cleaned_data
 
 
@@ -236,9 +236,9 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             "phone_number",
             "surname2",
             "birthdate",
+            "id_number_type",
             "id_number",
             "birth_place",
-            "cannot_share_id",
             "town",
             "district",
             "gender",
@@ -264,8 +264,8 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                     "last_name",
                     "surname2",
                     "email",
+                    "id_number_type",
                     "id_number",
-                    "cannot_share_id",
                     "phone_number",
                     "birthdate",
                     "birth_place",
@@ -333,26 +333,6 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                 config.CONTENT_SIGNUP_LEGAL2
             )
         self.label_suffix = ""
-
-    def clean(self):
-        super().clean()
-        cannot_share_id = self.cleaned_data.get("cannot_share_id")
-        id_number = self.cleaned_data.get("id_number")
-        if not id_number and not cannot_share_id:
-            msg = (
-                "Necessitem el DNI, NIF o passaport per justificar la "
-                "participació davant dels organismes públics que financen "
-                "aquestes activitats."
-            )
-            self.add_error("id_number", msg)
-        return self.cleaned_data
-
-    def clean_id_number(self):
-        model = get_user_model()
-        value = self.cleaned_data.get("id_number")
-        if value and model.objects.filter(id_number__iexact=value).exists():
-            raise ValidationError("El DNI ja existeix.")
-        return value
 
 
 class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
@@ -429,16 +409,6 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
 
     def clean(self):
         super().clean()
-        cannot_share_id = self.cleaned_data.get("cannot_share_id")
-        id_number = self.cleaned_data.get("id_number")
-        if not id_number and not cannot_share_id:
-            msg = (
-                "Necessitem el DNI, NIF o passaport per justificar la "
-                "participació davant dels organismes públics que financen "
-                "aquestes activitats."
-            )
-            self.add_error("id_number", msg)
-
         if EmploymentInsertion.objects.filter(
             user=self.instance.id,
         ).count():
@@ -778,6 +748,7 @@ class EntityCreatedAdminForm(models.ModelForm):
     class Meta:
         model = CreatedEntity
         fields = (
+            "project_stage",
             "project",
             "service",
             "sub_service",
@@ -789,7 +760,7 @@ class EntityCreatedAdminForm(models.ModelForm):
     def clean(self):
         super().clean()
         CreatedEntity.validate_extended_fields(
-            self.cleaned_data.get("project"),
+            self.cleaned_data.get("project_stage"),
         )
         return self.cleaned_data
 

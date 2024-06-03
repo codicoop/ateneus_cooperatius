@@ -37,9 +37,9 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             "phone_number",
             "surname2",
             "birthdate",
+            "id_number_type",
             "id_number",
             "birth_place",
-            "cannot_share_id",
             "town",
             "district",
             "gender",
@@ -65,8 +65,8 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
                     "first_name",
                     "last_name",
                     "surname2",
+                    "id_number_type",
                     "id_number",
-                    "cannot_share_id",
                     "gender",
                     "email",
                     "phone_number",
@@ -113,18 +113,6 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
         if "password" in self.fields:
             self.fields.pop("password")
 
-    def clean(self):
-        super().clean()
-        cannot_share_id = self.cleaned_data.get("cannot_share_id")
-        id_number = self.cleaned_data.get("id_number")
-        if not id_number and not cannot_share_id:
-            msg = (
-                "Necessitem el DNI, NIF o passaport per justificar la "
-                "participació davant dels organismes públics que financen "
-                "aquestes activitats."
-            )
-            self.add_error("id_number", msg)
-        return self.cleaned_data
 
     def clean_id_number(self):
         model = get_user_model()

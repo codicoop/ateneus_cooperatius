@@ -1,4 +1,3 @@
-from .CoopolisCoursesListView import CoopolisCoursesListView
 from .LoginSignupContainerView import LoginSignupContainerView, CoopolisSignUpView, CoopolisLoginView
 from .HomeView import HomeView
 from .ProjectFormView import ProjectFormView, ProjectCreateFormView, ProjectInfoView
@@ -6,3 +5,4 @@ from .ProjectStageFormView import project_stage_view, project_stage_start_view, 
 from .RegistrationMailView import CustomPasswordResetView
 from .ActivityPollView import ActivityPollView
 from .ChainedDropdownView import get_sub_services
+from .db_backup_download import db_backup_download_view

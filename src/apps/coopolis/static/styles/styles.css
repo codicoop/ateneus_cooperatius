@@ -937,6 +937,15 @@ a {
 .form .field textarea:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
+.form li.field input:disabled,
+.form li.field select:disabled,
+.form li.field textarea:disabled,
+.form .field input:disabled,
+.form .field select:disabled,
+.form .field textarea:disabled {
+  background-color: var(--grey-light);
+  cursor: not-allowed;
+}
 .form li.field .errorlist,
 .form .field .errorlist {
   order: 2;

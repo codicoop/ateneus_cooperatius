@@ -158,11 +158,31 @@ class Course(models.Model):
     def autocomplete_search_fields():
         return ("title__icontains",)
 
+    def get_public_activities(self):
+        return (
+            self.activities
+            .filter(publish=True)
+            .order_by("date_start", "starting_time", "name")
+        )
+
     def __str__(self):
         return f"{self.title} ({self.date_start})"
 
 
 class Activity(models.Model):
+    """
+    READ BEFORE ADDING FIELDS
+
+    If any File or Image field is added, you have to also add them in
+    ActivityAdmin.tweak_cloned_fields so it gets ignored when duplicating
+    (cloning) the registry in admin.
+    We need to avoid duplicating the File values because in some cases, it
+    happened that when deleting the file value (or the registry) from one of
+    the registries, the other registry was linked to the same file and therefore
+    it stopped working.
+    I could not reproduce this error locally, but given that it was reported and
+    it's safer, we're just excluding those while duplicating.
+    """
     class Meta:
         verbose_name = "sessió"
         verbose_name_plural = "sessions"
@@ -232,6 +252,10 @@ class Activity(models.Model):
         help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
         "al desplegable, cal que la persona tingui activada l'opció "
         "'Membre del personal'.",
+    )
+    exclude_from_justification = models.BooleanField(
+        "No incloure a l'excel de justificació",
+        default=False,
     )
     service = models.SmallIntegerField(
         "Servei",
@@ -529,7 +553,7 @@ class Activity(models.Model):
                 errors.update(
                     {
                         "subaxis": ValidationError(
-                            "Has seleccionat un sub-eix que no es " "correspon a l'eix."
+                            "Has seleccionat un sub-eix que no es correspon a l'eix."
                         )
                     }
                 )
@@ -562,6 +586,22 @@ class Activity(models.Model):
                 "convocatòria."
             )
             errors.update({"date_start": ValidationError(msg)})
+
+        # Excluding the activity from the justification excel while it has
+        # empoyment insertions linked will most likely not be the desired
+        # behaviour and will be difficult to detect, so we decided to make
+        # the activity mandatory in the justification in that case.
+        if (
+            hasattr(self, "employment_insertions")
+            and self.employment_insertions.count()
+            and self.exclude_from_justification
+        ):
+            msg = (
+                "Aquest sessió està vinculada a (com a mínim) una inserció "
+                "laboral, per aquest motiu no es pot excloure de la "
+                "justificació."
+            )
+            errors.update({"exclude_from_justification": ValidationError(msg)})
 
         if errors:
             raise ValidationError(errors)

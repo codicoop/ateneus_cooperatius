@@ -151,7 +151,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "date_start",
         "stage_state",
         "stage_type",
-        "axis",
         "circle",
         "project__sector",
     )
@@ -219,6 +218,8 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "earliest_session_field",
         "justification_documents_total",
         "field_county",
+        "axis",
+        "subaxis",
     )
     subsidy_period_filter_param = "subsidy_period"
 
@@ -375,15 +376,6 @@ class ProjectStagesInline(admin.StackedInline):
                 ),
             },
         ),
-        (
-            "Camps convocatòries < 2020",
-            {
-                "fields": [
-                    "axis",
-                    "subaxis",
-                ]
-            },
-        ),
     )
     readonly_fields = (
         "hours_sum",
@@ -435,11 +427,6 @@ class ProjectStagesInline(admin.StackedInline):
             )
 
         return fieldsets
-
-    def get_readonly_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
-        return super().get_readonly_fields(request, obj)
 
 
 class EmploymentInsertionInline(admin.TabularInline):
@@ -532,7 +519,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             {
                 "fields": [
                     "id",
-                    "logo",
                     "name",
                     "sector",
                     "web",
@@ -551,6 +537,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                     "project_origins",
                     "solves_necessities",
                     "social_base",
+                    "logo",
                 ]
             },
         ),
@@ -870,6 +857,25 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         return False
 
 
+class FilterByProjectStageIsSet(admin.SimpleListFilter):
+    title = "S'ha indicat acompanyament"
+    parameter_name = "project_stage"
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Sí'),
+            ('no', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "yes":
+            queryset = queryset.filter(project_stage__isnull=False)
+        if value == "no":
+            queryset = queryset.filter(project_stage__isnull=True)
+        return queryset
+
+
 @admin.register(CreatedEntity)
 class CreatedEntityAdmin(admin.ModelAdmin):
     form = EntityCreatedAdminForm
@@ -885,17 +891,47 @@ class CreatedEntityAdmin(admin.ModelAdmin):
         "subsidy_period",
         "circle",
         "entity",
+        FilterByProjectStageIsSet,
     )
-    raw_id_fields = ("project",)
+    raw_id_fields = ("project_stage",)
     autocomplete_lookup_fields = {
         "fk": [
-            "project",
+            "project_stage",
         ],
     }
+    readonly_fields = (
+        "deprecated_alert_field",
+        "project",
+        "service",
+        "sub_service",
+        "subsidy_period",
+        "circle",
+        "entity",
+    )
 
-    class Media:
-        js = (
-            "js/grappellihacks.js",
-            "js/chained_dropdown.js",
+    @staticmethod
+    @admin.display(
+        description="Avís"
+    )
+    def deprecated_alert_field(obj):
+        return mark_safe(
+            "<h2>Atenció</h2>"
+            "<br>"
+            "S'està reestructurant aquest apartat.<br>"
+            "Tots els camps que aparèixen com a obsolets seràn eliminats"
+            " properament ja que aquestes dades passaran a penjar de "
+            "l'acompanyament que s'indiqui al nou camp 'Acompanyament'.<br>"
+            "<br>"
+            "Com que no es pot deduïr automàticament a quin acompanyament "
+            "correspon cada entitat creada, cal que reviseu manualment totes "
+            "les entitats creades i les assigneu a l'acompanyament que toqui."
+            "<br>"
+            "<br>"
+            "Per fer-ho, simplement ompliu el camp Acompanyament i deseu els "
+            "canvis."
+            "<br>"
+            "<br>"
+            "Al llistat s'hi ha afegit un filtre per ajudar-vos a localitzar "
+            "les entitats creades a les que estigui pendent assigna'ls-hi "
+            "acompanyament."
         )
-        css = {"all": ("styles/grappellihacks.css",)}

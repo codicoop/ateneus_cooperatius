@@ -10,7 +10,7 @@ from apps.cc_users.decorators import anonymous_required
 
 from .views import (
     project_stage_characteristics_view,
-    project_stage_sessions_view, 
+    project_stage_sessions_view,
     project_stage_initial_petition_view,
     ActivityPollView,
     CoopolisLoginView,
@@ -26,6 +26,7 @@ from .views import (
     project_stage_data_view,
     project_stage_start_view,
     project_stage_view,
+    db_backup_download_view,
 )
 
 urlpatterns = [
@@ -117,4 +118,5 @@ urlpatterns += [
     ),
     path("chained_dropdowns/get_sub_services/", get_sub_services),
     path("admin/", admin.site.urls),
+    path("db_backup_download/", db_backup_download_view, name="db_backup_download"),
 ]

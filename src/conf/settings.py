@@ -2,26 +2,10 @@ import environ
 import os
 
 from django.core.management.utils import get_random_secret_key
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env()
 # False if not in os.environ
 DEBUG = env.bool('DEBUG', False)
-
-sentry_sdk.init(
-    dsn=env("SENTRY_DSN", default=""),
-    integrations=[DjangoIntegration()],
-
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=0.1,
-
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
-)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 # Instance's absolute URL (given we're not using Sites framework)
@@ -151,7 +135,7 @@ INSTALLED_APPS = [
     'mailqueue',
     'mailing_manager',
     'django.contrib.humanize',
-    "django_q",
+    'localflavor',
 ]
 
 MIDDLEWARE = [
@@ -180,6 +164,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.coopolis.context_processors.global_context',
             ],
         },
     },
@@ -349,7 +334,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
 
 # CC Courses
 
-COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
 COURSES_CLASS_TO_ENROLL = 'coopolis.User'
 COURSES_CLASSES_CAN_ENROLL = ['apps.cc_courses.models.Course']
 
@@ -441,6 +425,7 @@ PROJECT_STATUS = (
     ('ENVIAT', "Enviat email amb proposta de data per trobar-nos"),
     ('CONCERTADA', "Data de trobada concertada"),
     ('ACOLLIT', "Acollida realitzada"),
+    ('EN_CURS', "Acompanyament en curs"),
     ('PAUSA', "Acompanyament en pausa"),
     ('CANCEL', "Acompanyament cancel·lat")
 )
@@ -457,14 +442,6 @@ THUMBNAIL_ALIASES = {
     },
 }
 THUMBNAIL_DEFAULT_STORAGE = 'apps.cc_lib.storages.MediaStorage'
-
-# Django-Q
-Q_CLUSTER = {
-    "name": "ateneus-backoffice",
-    "orm": "default",  # Use Django's ORM + database for broker
-    "timeout": 30,
-    "workers": 1,
-}
 
 # Celery
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
