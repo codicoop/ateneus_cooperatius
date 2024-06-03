@@ -103,6 +103,7 @@ class ExportJustificationService:
             ("[Cofinançat]", 20),
             ("[Cofinançat amb AACC]", 20),
             ("[Ateneu/Cercle]", 20),
+            ("[Línia estratègica]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -163,6 +164,7 @@ class ExportJustificationService:
                 str(item.cofunded or "No"),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 item.get_circle_display(),
+                item.strategic_line.name if item.strategic_line else "",
             ]
             self.export_manager.fill_row_data(row)
 
@@ -334,6 +336,7 @@ class ExportJustificationService:
                     str(item.cofunded or "No"),  # Cofinançat
                     "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                     item.get_circle_display(),
+                    item.strategic_line.name if item.strategic_line else "",
                 ]
                 self.export_manager.fill_row_data(row)
 
