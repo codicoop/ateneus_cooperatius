@@ -130,7 +130,6 @@ class MyDashboard(Dashboard):
         if context['request'].user.is_superuser:
             links_children.append(['Gestió de textos del back-office', 'constance/config'])
             links_children.append(["Registre d'e-mails enviats", 'mailqueue/mailermessage/'])
-            links_children.append(["Django-Q scheduling", 'django_q/'])
             links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
             links_children.append(["Descàrrega de la base de dades de les 00:00", reverse('db_backup_download')])
 

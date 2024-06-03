@@ -135,7 +135,6 @@ INSTALLED_APPS = [
     'mailqueue',
     'mailing_manager',
     'django.contrib.humanize',
-    "django_q",
     'localflavor',
 ]
 
@@ -443,14 +442,6 @@ THUMBNAIL_ALIASES = {
     },
 }
 THUMBNAIL_DEFAULT_STORAGE = 'apps.cc_lib.storages.MediaStorage'
-
-# Django-Q
-Q_CLUSTER = {
-    "name": "ateneus-backoffice",
-    "orm": "default",  # Use Django's ORM + database for broker
-    "timeout": 30,
-    "workers": 1,
-}
 
 # Celery
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
