@@ -426,6 +426,7 @@ PROJECT_STATUS = (
     ('ENVIAT', "Enviat email amb proposta de data per trobar-nos"),
     ('CONCERTADA', "Data de trobada concertada"),
     ('ACOLLIT', "Acollida realitzada"),
+    ('EN_CURS', "Acompanyament en curs"),
     ('PAUSA', "Acompanyament en pausa"),
     ('CANCEL', "Acompanyament cancel·lat")
 )
