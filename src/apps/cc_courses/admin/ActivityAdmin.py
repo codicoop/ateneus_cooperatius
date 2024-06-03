@@ -185,11 +185,12 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     list_display = (
         'date_start', 'spots', 'remaining_spots', 'name', 'service',
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field',
-        'teacher',
+        'teacher', 'subsidy_period_field',
     )
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
-        'activity_poll_field', 'organizer_reminded', )
+        'activity_poll_field', 'organizer_reminded', 'subsidy_period_field',
+    )
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives', 'teacher', )
     list_filter = (
@@ -204,8 +205,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         (None, {
             'fields': ['course', 'name', 'objectives', 'teacher', 'place', 'room',
                        'date_start',
-                       'date_end', 'starting_time', 'ending_time',
-                       'confirmed', 'equipments',
+                       'date_end', 'subsidy_period_field', 'starting_time',
+                       'ending_time', 'confirmed', 'equipments',
                        'spots', 'service', 'sub_service', 'circle', 'entity',
                        'responsible', 'organizer_reminded', 'publish',
                        'exclude_from_justification', ]
@@ -589,3 +590,12 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         if not request.user.is_superuser:
             return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
         return super().get_readonly_fields(request, obj)
+
+    @admin.display(
+        description="Convocatòria",
+    )
+    def subsidy_period_field(self, obj):
+        if obj.id is None:
+            return '-'
+
+        return obj.subsidy_period
