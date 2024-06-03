@@ -12,13 +12,13 @@ from django.urls import path, reverse, reverse_lazy
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django_summernote.admin import SummernoteModelAdminMixin
-from constance import config
 from datetime import datetime
 import modelclone
 import weasyprint
 import django.template.loader as loader
 
-from apps.coopolis.choices import ActivityFileType, ServicesChoices
+from apps.coopolis.choices import ActivityFileType
+from apps.coopolis.context_processors import get_customization_context
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
 from apps.cc_courses.models import (
     Activity,
@@ -33,6 +33,7 @@ from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation, \
     ReservationEquipment
 from apps.coopolis.filters import SubserviceFilter
+
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
     """
@@ -184,11 +185,13 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     list_display = (
         'date_start', 'spots', 'remaining_spots', 'name', 'service',
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field',
-        'teacher',
+        'teacher', 'subsidy_period_field',
     )
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
-        'activity_poll_field', 'organizer_reminded', )
+        'activity_poll_field', 'organizer_reminded', 'subsidy_period_field',
+        "axis", "subaxis",
+    )
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives', 'teacher', )
     list_filter = (
@@ -203,10 +206,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         (None, {
             'fields': ['course', 'name', 'objectives', 'teacher', 'place', 'room',
                        'date_start',
-                       'date_end', 'starting_time', 'ending_time',
-                       'confirmed', 'equipments',
+                       'date_end', 'subsidy_period_field', 'starting_time',
+                       'ending_time', 'confirmed', 'equipments',
                        'spots', 'service', 'sub_service', 'circle', 'entity',
-                       'responsible', 'organizer_reminded', 'publish', ]
+                       'responsible', 'organizer_reminded', 'publish',
+                       'exclude_from_justification', ]
         }),
         ("Documents per la justificació", {
             'classes': ('grp-collapse grp-closed',),
@@ -259,6 +263,18 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
+    """
+    READ BEFORE ADDING INLINES
+    
+    If you add any inline containing files or images, you must exclude them from
+    the duplicating (cloning) process, at:
+    ActivityAdmin.tweak_cloned_inline_fields
+    In some cases, it happened that when deleting the file value (or the 
+    registry) from one of the registries, the other registry was linked to the 
+    same file and therefore it stopped working. I could not reproduce this error
+    locally, but given that it was reported and it's safer, we're just 
+    excluding those while duplicating.
+    """
     inlines = (
         ActivityResourcesInlineAdmin,
         ActivityEnrolledInline,
@@ -299,19 +315,18 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         return custom_urls + urls
 
     def tweak_cloned_inline_fields(self, related_name, fields_list):
-        """
-        fields_list contains every m2m record that was in the Inline.
+        fields = super().tweak_cloned_inline_fields(related_name, fields_list)
+        if related_name in ("files", "enrollments", "resources"):
+            return list()
+        return fields
 
-            Filtering for the "activityenrolled_set" just in case we add more
-        inlines in the future.
-
-        :param related_name: contains activityenrolled_set
-        :param fields_list: contains [{'user': 897, 'user_comments': None},
-        {'user': 898, 'user_comments': None}, ETC.
-        :return: empty list
-        """
-        matches_name = related_name == "activityenrolled_set"
-        return list() if matches_name else fields_list
+    def tweak_cloned_fields(self, fields):
+        fields = super().tweak_cloned_fields(fields)
+        fields["photo1"] = None
+        fields["photo2"] = None
+        fields["photo3"] = None
+        fields["file1"] = None
+        return fields
 
     def render_change_form(self, request, context, *args, **kwargs):
         """ modelclone not showing Save button because of a bug.
@@ -348,13 +363,14 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         qr_poll.save(buffered, format="JPEG")
         qr_poll_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
         qr_poll_uri = f"data:image/png;base64,{qr_poll_base64}"
-
+        customization = get_customization_context()
+        footer_img = customization["customization"]["signatures_pdf_footer"]
         content = temp.render(
             {
                 "assistants": Activity.objects.get(uuid=uuid).enrolled.filter(
                     enrollments__waiting_list=False),
                 "activity": Activity.objects.get(uuid=uuid),
-                "footer_image": config.ATTENDEE_LIST_FOOTER_IMG,
+                "footer_image": footer_img,
                 "qr_poll": qr_poll_uri,
                 "poll_url": absolute_url_poll,
             }
@@ -575,3 +591,12 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         if not request.user.is_superuser:
             return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
         return super().get_readonly_fields(request, obj)
+
+    @admin.display(
+        description="Convocatòria",
+    )
+    def subsidy_period_field(self, obj):
+        if obj.id is None:
+            return '-'
+
+        return obj.subsidy_period

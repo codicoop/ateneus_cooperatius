@@ -4,7 +4,7 @@
 {% load static my_tag_library %}
 <section class="header-topbar grid-content">
   <div class="header-topbar__logo">
-    <img src="{% external_static "/logo.png" %}" alt="Logo de {{ config.PROJECT_NAME }}">
+    <img src="{{ customization.logo }}" alt="Logo de {{ config.PROJECT_NAME }}">
   </div>
   <div class="header-topbar__text">
     <div class="text-md is-bold">
