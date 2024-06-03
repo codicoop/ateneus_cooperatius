@@ -151,7 +151,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "date_start",
         "stage_state",
         "stage_type",
-        "axis",
         "circle",
         "project__sector",
     )
@@ -219,6 +218,8 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "earliest_session_field",
         "justification_documents_total",
         "field_county",
+        "axis",
+        "subaxis",
     )
     subsidy_period_filter_param = "subsidy_period"
 
@@ -375,15 +376,6 @@ class ProjectStagesInline(admin.StackedInline):
                 ),
             },
         ),
-        (
-            "Camps convocatòries < 2020",
-            {
-                "fields": [
-                    "axis",
-                    "subaxis",
-                ]
-            },
-        ),
     )
     readonly_fields = (
         "hours_sum",
@@ -435,11 +427,6 @@ class ProjectStagesInline(admin.StackedInline):
             )
 
         return fieldsets
-
-    def get_readonly_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
-        return super().get_readonly_fields(request, obj)
 
 
 class EmploymentInsertionInline(admin.TabularInline):
