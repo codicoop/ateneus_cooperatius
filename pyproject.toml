@@ -5,7 +5,7 @@ description = ""
 authors = ["Codi Cooperatiu <hola@codi.coop>"]
 
 [tool.poetry.dependencies]
-python = "^3.9.12"
+python = "^3.9.2"
 Django = "^3.2"
 psycopg2-binary = "^2.9.3"
 weasyprint = "59.0"
