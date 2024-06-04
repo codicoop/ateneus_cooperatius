@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Títol de l'esdeveniment
         'title': 'Event 1 hardcodejat de prova',
         // Data esdeveniment
-        'start': '2023-11-01',
+        'start': '2024-06-05',
         'className': 'calendar-event',
         'display': 'block',
         // Codi de color
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Títol de l'esdeveniment
         'title': 'Event 2 hardcodejat de prova',
         // Data esdeveniment
-        'start': '2023-11-04',
+        'start': '2024-06-05',
         'className': 'calendar-event',
         'display': 'block',
         // Codi de color
