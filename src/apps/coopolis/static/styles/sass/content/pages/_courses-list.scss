@@ -124,6 +124,9 @@
     grid-column: 1;
     grid-row: 1;
   }
+  &__calendar {
+    margin-top: var(--pad3);
+  }
 }
 
 // Diferències per llistat my courses
