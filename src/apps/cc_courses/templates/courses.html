@@ -1,9 +1,21 @@
+<!-- Aquesta és una còpia de quan es va avançar amb la maquetació del calendari -->
+<!-- Però com falta la part de back, doncs de moment es va esborrar de la release -->
 {% extends "base.html" %}
 {% load thumbnail static %}
 
 {% block home_is_active %}{% endblock %}
 {% block enrollments_is_active %}is-active{% endblock %}
 {% block projects_is_active %}{% endblock %}
+
+{% block extra_head %}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.css" rel="stylesheet" />
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/locales/ca.js"></script>
+<script src="{% static 'js/fullcalendar.js' %}"></script>
+
+{% endblock %}
 
 {% block content %}
 {% include './components/header_topbar.html' %}
@@ -24,25 +36,658 @@
 			</div>
 		</div>
 	</section>
-  <section class="courses-list__grid">
+  <div class="grid-content">
+    <section class="courses-list__view view-selector">
+      <div class="view-selector__title text-xxsm">
+        <p>Vista</p>
+      </div>
+      <div class="view-selector__btns">
+        <div class="selector-btn calendar-view-btn is-active"
+          onclick="showCalendarView()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 16 16">
+            <path d="m 10.008475,16.008475 v -6 h 6 v 6 z m -10.00000041,0 v -6 H 6.0084746 v 6 z M 10.008475,6.0084746 V 0.00847459 h 6 V 6.0084746 Z m -10.00000041,0 V 0.00847459 H 6.0084746 V 6.0084746 Z" />
+          </svg>
+          <p>Galeria</p>
+        </div>
+        <div class="selector-btn list-view-btn"
+          onclick="showListView()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 20.000001 20">
+            <path d="m 10.186441,12 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4,4 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z M 2.6864407,20 c -0.82,-0.02 -1.48,-0.68 -1.5,-1.5 V 3 c 0.02,-0.82 0.68,-1.48 1.5,-1.5 h 1.62 V 0 h 1.62 V 1.5 H 14.426441 V 0 h 1.62 v 1.5 h 1.62 c 0.82,0.02 1.48,0.68 1.5,1.5 v 15.5 c -0.02,0.82 -0.68,1.48 -1.5,1.5 z m 0,-1.5 H 17.686441 V 7.75 H 2.6864407 Z" />
+          </svg>
+          <p>Sessions</p>
+        </div>
+      </div>
+    </section>
+    <section class="courses-list__sorting sorting">
+      <form class="form" method="post">
+        <div class="sorting__title text-xxsm">
+          <p>Ordenar per</p>
+        </div>
+        {% csrf_token %}
+        <div class="sorting__field field field-select field--primary text-xsm">
+          <select name="{{ field.sort_by }}" id="id_{{ field.sort_by }}">
+            <option value="start_date" selected="">Data inici</option>
+            <option value="cercle">Cercle</option>
+            <option value="whatever">Whatever</option>
+          </select>
+        </div>
+      </form>
+    </section>
+    <!-- Nou: Aquest div apareix si hi ha filtres seleccionats -->
+    <!-- Cada tag ha de tenir el color del seu cercle -->
+    <div class="filter__btn btn btn--primary btn__text"
+      onclick="showFilters(event)"
+    >
+      <p>Filtrar</p>
+    </div>
+    <div class="filter__overlay overlay is-hidden">
+      <div class="overlay__background"
+        onclick="hideFilters(event)"></div>
+      <div class="overlay__card">
+        <form class="form" action="">
+          {% csrf_token %}
+          <div class="overlay__title text-md">
+            <p>Filtre</p>
+          </div>
+          <span class="separator"></span>
+          <div
+            class="overlay__close"
+            onclick="hideFilters(event)"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 35 35">
+              <polygon points="22.45 21.04 18.91 17.5 22.45 13.96 21.04 12.55 17.5 16.09 13.96 12.55 12.55 13.96 16.09 17.5 12.55 21.04 13.96 22.45 17.5 18.91 21.04 22.45 22.45 21.04"/>
+            </svg>
+          </div>
+          <!-- For each filter with checkboxes-->
+          <div class="overlay__option">
+            <div class="overlay__option-topbar" onclick="toggleFilterOption(event)">
+              <p>Temàtica</p>
+              <div class="overlay__option-arrow">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewbox="0 0 13.1 7.8400002"
+                  width="13.1"
+                  height="7.8400002"
+                >
+                  <polygon
+                    points="12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 "
+                    transform="translate(-10.95,-13.58)"
+                    style="fill:#fe8cb3"
+                  />
+                </svg>
+              </div>
+            </div>
+            <span class="separator"></span>
+            <div class="overlay__option-list is-hidden">
+              <!-- For each checkbox -->
+              <div class="field-checkbox">
+                <label>
+                  <p>Ecofeminismes</p>
+                  <input type="checkbox" name="remember_me" id="id_remember_me">
+                </label>
+              </div>
+              <!-- endfor -->
+              <div class="field-checkbox">
+                <label>
+                  <p>Ecofeminismes</p>
+                  <input type="checkbox" name="remember_me" id="id_remember_me">
+                </label>
+              </div>
+              <div class="field-checkbox">
+                <label>
+                  <p>Ecofeminismes</p>
+                  <input type="checkbox" name="remember_me" id="id_remember_me">
+                </label>
+              </div>
+              <div class="field-checkbox">
+                <label>
+                  <p>Ecofeminismes</p>
+                  <input type="checkbox" name="remember_me" id="id_remember_me">
+                </label>
+              </div>
+              <div class="field-checkbox">
+                <label>
+                  <p>Ecofeminismes</p>
+                  <input type="checkbox" name="remember_me" id="id_remember_me">
+                </label>
+              </div>
+              <div class="field-checkbox">
+                <label>
+                  <p>Ecofeminismes</p>
+                  <input type="checkbox" name="remember_me" id="id_remember_me">
+                </label>
+              </div>
+            </div>
+            <span class="separator list-separator is-hidden"></span>
+          </div>
+          <!-- Endfor -->
+          <!-- Date filter -->
+          <div class="overlay__option">
+            <div class="overlay__option-topbar" onclick="toggleFilterDates(event)">
+              <p>Dates</p>
+              <div class="overlay__option-arrow">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewbox="0 0 13.1 7.8400002"
+                  width="13.1"
+                  height="7.8400002"
+                >
+                  <polygon
+                    points="12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 "
+                    transform="translate(-10.95,-13.58)"
+                    style="fill:#fe8cb3"
+                  />
+                </svg>
+              </div>
+            </div>
+            <span class="separator"></span>
+            <div class="overlay__option-dates is-hidden">
+              <div class="field">
+                <div class="text-xxsm">
+                  <p>Des de</p>
+                </div>
+                <input type="date" name="" id="">
+              </div>
+              <div class="field">
+                <div class="text-xxsm">
+                  <p>Fins a</p>
+                </div>
+                <input type="date" name="" id="">
+              </div>
+            </div>
+            <span class="separator list-separator is-hidden"></span>
+          </div>
+          <div class="overlay__clean">
+            <p>Esborrar-ho tot</p>
+          </div>
+          <div class="overlay__submit">
+            <button type="submit" class="btn btn--primary">
+              <div class="btn__text">
+                <p>Actualitzar</p>
+              </div>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <section class="courses-list__filter">
+      <div class="filter__tags tags grid-item-full">
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+          <svg
+            class="tag__close icon-pathfill-primary icon-7"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46"
+            width="9.46"
+            height="9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag una mica llarga</p>
+          <svg
+            class="tag__close icon-pathfill-primary icon-7"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46"
+            width="9.46"
+            height="9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+          <svg
+            class="tag__close icon-pathfill-primary icon-7"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46"
+            width="9.46"
+            height="9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag una mica llarga</p>
+          <svg
+            class="tag__close icon-pathfill-primary icon-7"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46"
+            width="9.46"
+            height="9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+          <svg
+            class="tag__close icon-pathfill-primary icon-7"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46"
+            width="9.46"
+            height="9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag una mica llarga</p>
+          <svg
+            class="tag__close icon-pathfill-primary icon-7"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46"
+            width="9.46"
+            height="9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+          <svg
+            class="tag__close icon-pathfill-primary icon-7"
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 9.46 9.46"
+            width="9.46"
+            height="9.46">
+            <path
+              d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+          </svg>
+        </div>
+      </div>
+    </section>
+  </div>
+  <section class="courses-list__calendar">
+    <div class="calendar-modals">
+      <!-- FOR a modal for each session in the calendar -->
+      <div class="courses-list__modal modal is-hidden" id="{{ course.id }}">
+        <div class="modal__background" onclick=""></div>
+        <div class="course-card">
+          <!-- Nou: sector o cercle, potser? -->
+          <!-- Cadascun ha de tenir el seu color propi -->
+          <div class="course-card__pretitle text-xsm {{ course.cercle }}">
+            <h2>{{ course.cercle }}</h2>
+          </div>
+          <div class="course-card__title text-md">
+            <h2>{{ course.title }}</h2>
+          </div>
+          <!-- Nou: llistat de tags -->
+          <div class="couse-card__tags tags">
+            <!-- FOR each tag -->
+            <div class="tag text-xsm">
+              <p>{{ course.cercle_title }}</p>
+            </div>
+            <!-- ENDFOR tag -->
+          </div>
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Descripció</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>{{ course.description|safe }}</p>
+            </div>
+          </div>
+          <!-- Nou: públic objectiu -->
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Adreçat a</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>{{ course.target }}</p>
+            </div>
+          </div>
+          <div class="course-card__bloc grid-bloc">          
+            <!-- Nou: nombre de sessions -->
+            <div class="course-card__subtitle text-menu">
+              <p>Sessions: {{ course.session_total }}</p>
+            </div>
+    
+            <!-- FOR each per cada sessió -->
+            <div class="course-card__subbloc subbloc">
+              <!-- Data sessió. Format 24/07/2023-->
+              <div class="subbloc__title text-sm">
+                <p>{{ session.date_start }}</p>
+              </div>
+              <!-- Horari sessió: format HH:mm - HH:mm -->
+              <div class="subbloc__subtitle text-sm">
+                <p>{{ session.hours }}</p>
+              </div>
+              <!-- Descripció sessió, clipped -->
+              <div class="subbloc__text text-sm">
+                <p>{{ session.description }}</p>
+              </div>
+            </div>
+            <!-- ENDFOR sessions-->
+          </div>
+          <div class="course-card__btn">
+            <a href="{{ course.url_page }}">
+              <div class="btn btn--primary btn__text">
+                <p>Veure les sessions</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- ENDFOR dels modals -->
+      <!-- Aquests son per fer proves al front -->
+      <div class="courses-list__modal modal is-hidden" id="12345">
+        <div class="modal__background" onclick="hideModal(event)"></div>
+        <div class="course-card">
+          <div class="course-card__pretitle text-xsm">
+            <h2>Ecofeminismes</h2>
+          </div>
+          <div class="course-card__title text-md">
+            <h2>Cicle de tallers d'acompanyament a projectes d'habitatge cooperatiu en el disseny dels serveis comuns</h2>
+          </div>
+          <div class="couse-card__tags tags">
+            <div class="tag text-xsm">
+              <p>Presencial</p>
+            </div>
+            <div class="tag text-xsm">
+              <p>Bastant guay</p>
+            </div>
+          </div>
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Descripció</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat quidem aliquid autem tempora est placeat nihil cupiditate expedita. Non, quo modi. Totam esse officiis accusantium nemo quod, nesciunt pariatur quo?</p>
+            </div>
+          </div>
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Adreçat a</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo reiciendis molestiae sed, nulla iste praesentium dolor debitis hic cumque ipsa nam quam. At harum aperiam debitis quos culpa, suscipit a.</p>
+            </div>
+          </div>
+          <div class="course-card__bloc grid-bloc">
+            <div class="course-card__subtitle text-menu">
+              <p>Sessions: 4</p>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+          </div>
+          <div class="course-card__btn">
+            <a href="{{ course.url_page }}">
+              <div class="btn btn--primary btn__text">
+                <p>Veure les sessions</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="courses-list__modal modal is-hidden" id="1234">
+        <div class="modal__background" onclick="hideModal(event)"></div>
+        <div class="course-card">
+          <div class="course-card__pretitle text-xsm">
+            <h2>Ecofeminismes</h2>
+          </div>
+          <div class="course-card__title text-md">
+            <h2>Cicle 2 de tallers d'acompanyament a projectes d'habitatge cooperatiu en el disseny dels serveis comuns</h2>
+          </div>
+          <div class="couse-card__tags tags">
+            <div class="tag text-xsm">
+              <p>Presencial</p>
+            </div>
+            <div class="tag text-xsm">
+              <p>Bastant guay</p>
+            </div>
+          </div>
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Descripció</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat quidem aliquid autem tempora est placeat nihil cupiditate expedita. Non, quo modi. Totam esse officiis accusantium nemo quod, nesciunt pariatur quo?</p>
+            </div>
+          </div>
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Adreçat a</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo reiciendis molestiae sed, nulla iste praesentium dolor debitis hic cumque ipsa nam quam. At harum aperiam debitis quos culpa, suscipit a.</p>
+            </div>
+          </div>
+          <div class="course-card__bloc grid-bloc">
+            <div class="course-card__subtitle text-menu">
+              <p>Sessions: 4</p>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+          </div>
+          <div class="course-card__btn">
+            <a href="{{ course.url_page }}">
+              <div class="btn btn--primary btn__text">
+                <p>Veure les sessions</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="courses-list__modal modal is-hidden" id="123456">
+        <div class="modal__background" onclick="hideModal(event)"></div>
+        <div class="course-card">
+          <div class="course-card__pretitle text-xsm">
+            <h2>Ecofeminismes</h2>
+          </div>
+          <div class="course-card__title text-md">
+            <h2>Cicle 3 de tallers d'acompanyament a projectes d'habitatge cooperatiu en el disseny dels serveis comuns</h2>
+          </div>
+          <div class="couse-card__tags tags">
+            <div class="tag text-xsm">
+              <p>Presencial</p>
+            </div>
+            <div class="tag text-xsm">
+              <p>Bastant guay</p>
+            </div>
+          </div>
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Descripció</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat quidem aliquid autem tempora est placeat nihil cupiditate expedita. Non, quo modi. Totam esse officiis accusantium nemo quod, nesciunt pariatur quo?</p>
+            </div>
+          </div>
+          <div class="course-card__bloc">          
+            <div class="course-card__subtitle text-menu">
+              <p>Adreçat a</p>
+            </div>
+            <div class="course-card__text richtext">
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo reiciendis molestiae sed, nulla iste praesentium dolor debitis hic cumque ipsa nam quam. At harum aperiam debitis quos culpa, suscipit a.</p>
+            </div>
+          </div>
+          <div class="course-card__bloc grid-bloc">
+            <div class="course-card__subtitle text-menu">
+              <p>Sessions: 4</p>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+            <div class="course-card__subbloc subbloc">
+              <div class="subbloc__title text-sm">
+                <p>12/12/2023</p>
+              </div>
+              <div class="subbloc__subtitle text-sm">
+                <p>09:00 - 12:00</p>
+              </div>
+              <div class="subbloc__text text-sm">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
+              </div>
+            </div>
+          </div>
+          <div class="course-card__btn">
+            <a href="{{ course.url_page }}">
+              <div class="btn btn--primary btn__text">
+                <p>Veure les sessions</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="calendar" class="my-calendar"></div>
+  </section>
+  <section class="courses-list__grid is-hidden">
     {% for course in future_courses %}
       <div class="course-card">
-        <!-- <div class="course-card__pretitle text-xsm">
-          Nou: sector o cercle, potser?
-          Cadascun ha de tenir el seu color propi
-          <h2>XXXXXXXXXXX</h2>
-        </div> -->
+        <!-- Nou: sector o cercle, potser? -->
+        <!-- Cadascun ha de tenir el seu color propi -->
+        <div class="course-card__pretitle text-xsm">
+          <h2>Ecofeminismes</h2>
+        </div>
         <div class="course-card__title text-md">
           <h2>{{ course.title }}</h2>
         </div>
-        <!-- Nou: llistat de tags
+        <!-- Nou: llistat de tags -->
         <div class="couse-card__tags tags">
-          FOR cada tag
           <div class="tag text-xsm">
-            <p>XXXXX</p>
+            <p>Presencial</p>
           </div>
-          endfor
-        </div> -->
+          <div class="tag text-xsm">
+            <p>Tag una mica llarga</p>
+          </div>
+          <div class="tag text-xsm">
+            <p>Tag super llarga que no vegis</p>
+          </div>
+          <div class="tag text-xsm">
+            <p>Presencial</p>
+          </div>
+        </div>
+        <div class="course-card__bloc">          
+          <div class="course-card__subtitle text-menu">
+            <p>Descripció</p>
+          </div>
+          <div class="course-card__text richtext">
+            <p>{{ course.description|safe }}</p>
+          </div>
+        </div>
         {% if course.aimed_at != "" %}
         <div class="course-card__bloc">
           <div class="course-card__subtitle text-menu">
@@ -62,14 +707,16 @@
             <div class="subbloc__title text-sm">
               <p>{{ session.date_start|date:"d/m/y" }}</p>
             </div>
+            <!-- format HH:mm - HH:mm -->
             <div class="subbloc__subtitle text-sm">
               <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
             </div>
             <div class="subbloc__text text-sm richtext">
-              {{ session.name|safe }}
+              <p>{{ session.name|safe }}</p>
             </div>
           </div>
           {% endfor %}
+          </div>
         </div>
         <div class="course-card__btn">
           <a href="{{ course.absolute_url }}">
@@ -80,7 +727,550 @@
         </div>
       </div>
     {% endfor %}
-
+    <div class="course-card">
+      <!-- Nou: sector o cercle, potser? -->
+      <!-- Cadascun ha de tenir el seu color propi -->
+      <div class="course-card__pretitle text-xsm">
+        <h2>Ecofeminismes</h2>
+      </div>
+      <div class="course-card__title text-md">
+        <h2>Disseny gràfic per a la comunicació digital</h2>
+      </div>
+      <!-- Nou: llistat de tags -->
+      <div class="couse-card__tags tags">
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag una mica llarga</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag super llarga que no vegis</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+      </div>
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Descripció</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Com afrontar des de la col·lectivitat els reptes per a la sostenibilitat de projectes cooperatius</p>
+        </div>
+      </div>
+      <!-- Nou: públic objectiu -->
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Adreçat a</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Persones i equips que volen crear o consolidar projectes socioeconòmics que situen el seu àmbit d’acció en sectors estratègics per la transició ecològica i/o que incorporen la sostenibilitat ambiental en la intencionalitat del projecte.</p>
+        </div>
+      </div>
+      <div class="course-card__bloc grid-bloc">          
+        <!-- Nou: nombre de sessions -->
+        <div class="course-card__subtitle text-menu">
+          <p>Sessions: XXX</p>
+        </div>
+        <!-- Nou FOR: per cada sessió -->
+        <div class="course-card__subbloc subbloc">
+          <!-- Data sessió. Format 24/07/2023-->
+          <div class="subbloc__title text-sm">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió: format HH:mm - HH:mm -->
+          <div class="subbloc__subtitle text-sm">
+            <p>{{ course.hours }}</p>
+          </div>
+          <!-- Descripció sessió, clipped -->
+          <div class="subbloc__text text-sm">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <!-- ENDFOR -->
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="course-card__btn">
+        <a href="{{ course.absolute_url }}">
+          <div class="btn btn--primary btn__text">
+            <p>Veure les sessions</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="course-card">
+      <!-- Nou: sector o cercle, potser? -->
+      <!-- Cadascun ha de tenir el seu color propi -->
+      <div class="course-card__pretitle text-xsm">
+        <h2>Ecofeminismes</h2>
+      </div>
+      <div class="course-card__title text-md">
+        <h2>Disseny gràfic per a la comunicació digital</h2>
+      </div>
+      <!-- Nou: llistat de tags -->
+      <div class="couse-card__tags tags">
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag una mica llarga</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag super llarga que no vegis</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+      </div>
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Descripció</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Com afrontar des de la col·lectivitat els reptes per a la sostenibilitat de projectes cooperatius</p>
+        </div>
+      </div>
+      <!-- Nou: públic objectiu -->
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Adreçat a</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Persones i equips que volen crear o consolidar projectes socioeconòmics que situen el seu àmbit d’acció en sectors estratègics per la transició ecològica i/o que incorporen la sostenibilitat ambiental en la intencionalitat del projecte.</p>
+        </div>
+      </div>
+      <div class="course-card__bloc grid-bloc">          
+        <!-- Nou: nombre de sessions -->
+        <div class="course-card__subtitle text-menu">
+          <p>Sessions: XXX</p>
+        </div>
+        <!-- Nou FOR: per cada sessió -->
+        <div class="course-card__subbloc subbloc">
+          <!-- Data sessió. Format 24/07/2023-->
+          <div class="subbloc__title text-sm">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió: format HH:mm - HH:mm -->
+          <div class="subbloc__subtitle text-sm">
+            <p>{{ course.hours }}</p>
+          </div>
+          <!-- Descripció sessió, clipped -->
+          <div class="subbloc__text text-sm">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <!-- ENDFOR -->
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="course-card__btn">
+        <a href="{{ course.absolute_url }}">
+          <div class="btn btn--primary btn__text">
+            <p>Veure les sessions</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="course-card">
+      <!-- Nou: sector o cercle, potser? -->
+      <!-- Cadascun ha de tenir el seu color propi -->
+      <div class="course-card__pretitle text-xsm">
+        <h2>Ecofeminismes</h2>
+      </div>
+      <div class="course-card__title text-md">
+        <h2>Disseny gràfic per a la comunicació digital</h2>
+      </div>
+      <!-- Nou: llistat de tags -->
+      <div class="couse-card__tags tags">
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag una mica llarga</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag super llarga que no vegis</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+      </div>
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Descripció</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Com afrontar des de la col·lectivitat els reptes per a la sostenibilitat de projectes cooperatius</p>
+        </div>
+      </div>
+      <!-- Nou: públic objectiu -->
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Adreçat a</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Persones i equips que volen crear o consolidar projectes socioeconòmics que situen el seu àmbit d’acció en sectors estratègics per la transició ecològica i/o que incorporen la sostenibilitat ambiental en la intencionalitat del projecte.</p>
+        </div>
+      </div>
+      <div class="course-card__bloc grid-bloc">          
+        <!-- Nou: nombre de sessions -->
+        <div class="course-card__subtitle text-menu">
+          <p>Sessions: XXX</p>
+        </div>
+        <!-- Nou FOR: per cada sessió -->
+        <div class="course-card__subbloc subbloc">
+          <!-- Data sessió. Format 24/07/2023-->
+          <div class="subbloc__title text-sm">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió: format HH:mm - HH:mm -->
+          <div class="subbloc__subtitle text-sm">
+            <p>{{ course.hours }}</p>
+          </div>
+          <!-- Descripció sessió, clipped -->
+          <div class="subbloc__text text-sm">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <!-- ENDFOR -->
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="course-card__btn">
+        <a href="{{ course.absolute_url }}">
+          <div class="btn btn--primary btn__text">
+            <p>Veure les sessions</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="course-card">
+      <!-- Nou: sector o cercle, potser? -->
+      <!-- Cadascun ha de tenir el seu color propi -->
+      <div class="course-card__pretitle text-xsm">
+        <h2>Ecofeminismes</h2>
+      </div>
+      <div class="course-card__title text-md">
+        <h2>Disseny gràfic per a la comunicació digital</h2>
+      </div>
+      <!-- Nou: llistat de tags -->
+      <div class="couse-card__tags tags">
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag una mica llarga</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Tag super llarga que no vegis</p>
+        </div>
+        <div class="tag text-xsm">
+          <p>Presencial</p>
+        </div>
+      </div>
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Descripció</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Com afrontar des de la col·lectivitat els reptes per a la sostenibilitat de projectes cooperatius</p>
+        </div>
+      </div>
+      <!-- Nou: públic objectiu -->
+      <div class="course-card__bloc">          
+        <div class="course-card__subtitle text-menu">
+          <p>Adreçat a</p>
+        </div>
+        <div class="course-card__text richtext">
+          <p>Persones i equips que volen crear o consolidar projectes socioeconòmics que situen el seu àmbit d’acció en sectors estratègics per la transició ecològica i/o que incorporen la sostenibilitat ambiental en la intencionalitat del projecte.</p>
+        </div>
+      </div>
+      <div class="course-card__bloc grid-bloc">          
+        <!-- Nou: nombre de sessions -->
+        <div class="course-card__subtitle text-menu">
+          <p>Sessions: XXX</p>
+        </div>
+        <!-- Nou FOR: per cada sessió -->
+        <div class="course-card__subbloc subbloc">
+          <!-- Data sessió. Format 24/07/2023-->
+          <div class="subbloc__title text-sm">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió: format HH:mm - HH:mm -->
+          <div class="subbloc__subtitle text-sm">
+            <p>{{ course.hours }}</p>
+          </div>
+          <!-- Descripció sessió, clipped -->
+          <div class="subbloc__text text-sm">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <!-- ENDFOR -->
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+        <div class="course-card__subbloc">
+          <!-- Data sessió -->
+          <div class="subbloc__title text-menu">
+            <p>{{ course.date_start }}</p>
+          </div>
+          <!-- Horari sessió -->
+          <div class="subbloc__subtitle">
+            <p>{{ course.hours }}</p>
+          </div>
+          <div class="subbloc__text">
+            <p>{{ course.description }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="course-card__btn">
+        <a href="{{ course.absolute_url }}">
+          <div class="btn btn--primary btn__text">
+            <p>Veure les sessions</p>
+          </div>
+        </a>
+      </div>
+    </div>
     {% if not future_courses %}
       <p class="margin-block">En aquests moments no hi ha cap formació programada.</p>
     {% endif %}
