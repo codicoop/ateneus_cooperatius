@@ -2337,7 +2337,9 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 var(--pad2);
-  max-width: 600px;
+  width: 65%;
+  min-width: 350px;
+  max-width: 650px;
   margin-top: 100px;
   padding: var(--pad1) 0 var(--pad4) 0;
   background-color: var(--white);
@@ -2412,6 +2414,7 @@ a {
 .delete-modal__form textarea,
 .delete-modal .form textarea {
   height: 100%;
+  min-height: 150px;
 }
 .modal__submit,
 .delete-modal__submit {
