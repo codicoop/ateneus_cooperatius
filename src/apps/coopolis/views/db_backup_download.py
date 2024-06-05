@@ -11,7 +11,7 @@ def db_backup_download_view(request):
     if not request.user.is_superuser:
         raise PermissionDenied
     formatted_date = timezone.now().strftime("%y%m%d")
-    backup_file = f"server.backup/{formatted_date}/0000.postgress.sql"
+    backup_file = f"server.backup/{formatted_date}/0000.postgres.sql"
     file_url = generate_presigned_url(backup_file)
     if file_url:
         return HttpResponseRedirect(file_url)

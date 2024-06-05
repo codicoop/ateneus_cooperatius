@@ -941,6 +941,7 @@ class CreatedEntity(models.Model):
         verbose_name="(Obsolet) Projecte",
         on_delete=models.CASCADE,
         related_name="created_entities",
+        null=True,
     )
     service = models.SmallIntegerField(
         "(Obsolet) Servei",
@@ -976,7 +977,11 @@ class CreatedEntity(models.Model):
         verbose_name_plural = "Entitats creades"
 
     def __str__(self):
-        return f"Entitat creada: {self.project.name}"
+        if self.project_stage:
+            return f"Entitat creada: {self.project_stage.project.name}"
+        if self.project:
+            return f"Entitat creada: {self.project.name}"
+        return "Entitat creada sense projecte ni acompanyament assignat."
 
     @classmethod
     def validate_extended_fields(cls, project_stage_obj):

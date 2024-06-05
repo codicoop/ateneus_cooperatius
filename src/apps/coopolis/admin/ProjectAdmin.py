@@ -879,7 +879,9 @@ class FilterByProjectStageIsSet(admin.SimpleListFilter):
 @admin.register(CreatedEntity)
 class CreatedEntityAdmin(admin.ModelAdmin):
     form = EntityCreatedAdminForm
+    empty_value_display = "Pendent d'assignar acompanyament"
     list_display = (
+        "project_stage",
         "project",
         "service",
         "sub_service",
