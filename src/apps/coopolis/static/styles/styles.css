@@ -958,8 +958,6 @@ a {
   color: var(--error);
   font-size: 12px;
   line-height: 16px;
-  text-align: right;
-  font-weight: bold;
 }
 .form li.field input[type=file] ~ .field-file-custom::after,
 .form .field input[type=file] ~ .field-file-custom::after {
@@ -1881,6 +1879,7 @@ a {
   padding: var(--padding);
 }
 .my-course-card__link {
+  grid-column: 1/span 2;
   position: relative;
   display: flex;
   gap: var(--pad-2);

@@ -319,6 +319,7 @@
     padding: var(--padding);
   }
   &__link {
+    grid-column: 1 / span 2;
     position: relative;
     display: flex;
     gap: var(--pad-2);
