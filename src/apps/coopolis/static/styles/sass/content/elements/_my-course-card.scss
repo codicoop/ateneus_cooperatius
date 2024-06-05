@@ -12,6 +12,7 @@
   }
   &__link {
     --padding: var(--pad1);
+    --width-svg: 9px;
   }
   &__btn {
     --width: auto;
@@ -159,6 +160,7 @@
     }
     &__link {
       --padding: var(--pad2);
+      --width-svg: 12px;
     }
     &__btn {
       --width: fit-content;
@@ -322,10 +324,12 @@
     gap: var(--pad-2);
     padding: var(--padding);
     text-transform: uppercase;
-    
-    a {
-      text-decoration: none;
-      color: var(--second);
+    text-decoration: none;
+    color: var(--second);
+
+    svg {
+      width: var(--width-svg);
+      height: auto;
     }
   }
   &__bloc {

@@ -679,6 +679,11 @@ body {
   height: auto;
 }
 
+.icon-9 {
+  width: 9px;
+  height: auto;
+}
+
 .icon-16 {
   width: 16px;
   height: auto;
@@ -1401,6 +1406,7 @@ a {
   position: relative;
   display: flex;
   flex-direction: column;
+  grid-column: 1/span 3;
 }
 .course-session-card.is-full .course-session-card__title::before {
   content: "Llista d'espera";
@@ -1409,6 +1415,22 @@ a {
   line-height: 12px;
   color: var(--primary-light);
   text-transform: uppercase;
+}
+.course-session-card.is-full .course-session-card__time {
+  grid-row: 1;
+  grid-column: 4/span 3;
+  justify-self: end;
+  margin-right: var(--pad3);
+}
+.course-session-card.is-full .course-session-card__btn {
+  grid-row: 2;
+  grid-column: 4/span 3;
+  justify-self: end;
+  margin-right: var(--pad3);
+}
+.course-session-card.is-full .course-session-card__bloc,
+.course-session-card.is-full .course-session-card__bloc2 {
+  grid-row: 3;
 }
 .course-session-card.is-inscribed .course-session-card__title {
   position: relative;
@@ -1544,6 +1566,7 @@ a {
 }
 .my-course-card__link {
   --padding: var(--pad1);
+  --width-svg: 9px;
 }
 .my-course-card__btn {
   --width: auto;
@@ -1698,6 +1721,7 @@ a {
   }
   .my-course-card__link {
     --padding: var(--pad2);
+    --width-svg: 12px;
   }
   .my-course-card__btn {
     --width: fit-content;
@@ -1862,10 +1886,12 @@ a {
   gap: var(--pad-2);
   padding: var(--padding);
   text-transform: uppercase;
-}
-.my-course-card__link a {
   text-decoration: none;
   color: var(--second);
+}
+.my-course-card__link svg {
+  width: var(--width-svg);
+  height: auto;
 }
 .my-course-card__bloc {
   padding: var(--pad1);
