@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'className': 'calendar-event',
         'display': 'block',
         // Codi de color
-        'cercle': 'red',
+        'cercle': 'var(--primary)',
         // Número de sessió
         'session_num': '1',
         // Total de sessions del pack
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'className': 'calendar-event',
         'display': 'block',
         // Codi de color
-        'cercle': 'blue',
+        'cercle': 'var(--primary)',
         // Número de sessió
         'session_num': '2',
         // Total de sessions del pack
@@ -101,58 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // al calendari s'obre un modal amb tota la fitxa
         // el format d'això dona igual, però necessito aquests camps
         'id': '1234', //li diu 'publicId'
-        'cercle_title': 'Ecofeminismes',
-        'description': 'Un programa formatiu i d’acompanyament que neix amb la voluntat d’augmentar i enfortir les iniciatives cooperatives, i de l’ESS, que treballen en pro de la transició ecològica en el context urbà.',
-        // Adreçat a:
-        'target': 'Persones i equips que volen crear o consolidar projectes socioeconòmics que situen el seu àmbit d’acció en sectors estratègics per la transició ecològica i/o que incorporen la sostenibilitat ambiental en la intencionalitat del projecte.',
-        'tags': ['tag 1', 'tag2', 'Presencial'],
-        'sessions': [
-          // Per cada sessió
-          {
-            'date': '2302-12-12',
-            'start_time': '12:00',
-            'end_time': '14:00',
-            'title': "Sessió de formació en FFCC"
-          },
-          {
-            'date': '2302-12-14',
-            'start_time': '12:00',
-            'end_time': '14:00',
-            'title': "Sessió de formació en FFCC"
-          },
-          {
-            'date': '2302-12-16',
-            'start_time': '12:00',
-            'end_time': '14:00',
-            'title': "Sessió de formació en FFCC"
-          },
-        ],
-      },
-      {
-        // Per cada event necessito aquests camps amb aquests noms
-        // Per fer-los servir amb el Fullcalendar
-        // Títol de l'esdeveniment
-        'title': 'Event 3 hardcodejat de prova',
-        // Data esdeveniment
-        'start': '2023-11-04',
-        'className': 'calendar-event',
-        'display': 'block',
-        // Codi de color
-        'cercle': 'red',
-        // Número de sessió
-        'session_num': '3',
-        // Total de sessions del pack
-        'session_total': '3',
-        // Url de la pàgina de la sessió. Important que aquesta
-        // variable no es digui 'url' perquè necessitem saltar-nos
-        // el comportament default del calendari per mostrar el 
-        // modal, però encara necessito saber la url per després
-        'url_page': '',
-        
-        // Però també necessito la resta de la info, perquè al fer click
-        // al calendari s'obre un modal amb tota la fitxa
-        // el format d'això dona igual, però necessito aquests camps
-        'id': '123456', //li diu 'publicId'
         'cercle_title': 'Ecofeminismes',
         'description': 'Un programa formatiu i d’acompanyament que neix amb la voluntat d’augmentar i enfortir les iniciatives cooperatives, i de l’ESS, que treballen en pro de la transició ecològica en el context urbà.',
         // Adreçat a:

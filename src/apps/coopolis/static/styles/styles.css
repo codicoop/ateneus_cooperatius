@@ -3375,6 +3375,9 @@ a {
   line-height: var(--line-height);
   margin-bottom: var(--pad2);
 }
+.my-calendar.fc .fc-daygrid-day {
+  padding: 0 5px;
+}
 .my-calendar.fc.fc-theme-standard td {
   position: relative;
   padding-bottom: var(--pad1);
@@ -3406,9 +3409,6 @@ a {
 .my-calendar.fc .fc-event-time {
   display: none;
 }
-.my-calendar.fc .fc-daygrid-day {
-  padding: 5px;
-}
 .my-calendar.fc .fc-event {
   position: relative;
   height: 90px;
@@ -3429,6 +3429,9 @@ a {
   font-size: 12px;
   line-height: 14px;
   text-overflow: ellipsis;
+}
+.my-calendar.fc.fc-theme-standard table.fc-scrollgrid {
+  border: none;
 }
 
 .dropdown__topbar {

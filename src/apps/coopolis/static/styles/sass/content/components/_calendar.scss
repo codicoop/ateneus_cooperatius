@@ -40,6 +40,10 @@
     line-height: var(--line-height);
     margin-bottom: var(--pad2);
   }
+  // La cel·la exterior de dia
+  .fc-daygrid-day {
+    padding: 0 5px;
+  }
   // La cel·la del dia
   &.fc-theme-standard td {
     position: relative;
@@ -75,10 +79,6 @@
   .fc-event-time {
     display: none;
   }
-  // al cel·la de dia
-  .fc-daygrid-day {
-    padding: 5px;
-  }
   // L'event
   .fc-event {
     position: relative;
@@ -102,6 +102,10 @@
     font-size: 12px;
     line-height: 14px;
     text-overflow: ellipsis;
+  }
+  // Eliminant border calendari sencer
+  &.fc-theme-standard table.fc-scrollgrid {
+    border: none;
   }
 }
 
