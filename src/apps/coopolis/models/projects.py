@@ -977,7 +977,11 @@ class CreatedEntity(models.Model):
         verbose_name_plural = "Entitats creades"
 
     def __str__(self):
-        return f"Entitat creada: {self.project_stage.project.name}"
+        if self.project_stage:
+            return f"Entitat creada: {self.project_stage.project.name}"
+        if self.project:
+            return f"Entitat creada: {self.project.name}"
+        return "Entitat creada sense projecte ni acompanyament assignat."
 
     @classmethod
     def validate_extended_fields(cls, project_stage_obj):
