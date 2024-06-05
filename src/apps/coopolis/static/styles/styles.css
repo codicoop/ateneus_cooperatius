@@ -3162,12 +3162,12 @@ a {
   order: 5;
 }
 .login__signup {
-  border-top: 2px solid var(--grey-light);
+  border-top: 2px solid var(--primary);
 }
 .login__signup-text {
   padding-bottom: var(--pad1);
   padding-top: var(--pad-3);
-  color: var(--grey-light);
+  color: var(--primary);
 }
 
 .header-topbar {
