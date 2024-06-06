@@ -35,7 +35,7 @@ class AjaxProgramCalendarFeed(View):
         except:
             return JsonResponse(data, safe=False)
 
-        activities = Activity.objects.filter(date_start__gte=start, date_end__lte=end)
+        activities = Activity.objects.filter(date_start__gte=start, date_start__lte=end)
         for activity in activities:
             activity_data = {
                 'title': activity.name,
