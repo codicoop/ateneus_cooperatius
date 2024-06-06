@@ -9,16 +9,125 @@
 
 {% block extra_head %}
 
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.css" rel="stylesheet" />
+<link href='https://fonts.googleapis.com/css?family=Comfortaa|Lato:400,700' rel='stylesheet' type='text/css'/>
+<link href="{% static '/fullcalendar/main.min.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'styles/calendar.css' %}" type="text/css"/>
+<script src="{% static '/fullcalendar/index.global.min.js' %}"></script>
+<script src="{% static '/fullcalendar/locales/ca.js' %}"></script>
 
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/locales/ca.js"></script>
-<script src="{% static 'js/fullcalendar.js' %}"></script>
+<!-- <script src="{% static 'js/fullcalendar.js' %}"></script> -->
 
 {% endblock %}
 
 {% block content %}
 {% include './components/header_topbar.html' %}
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'ca',
+    firstDay: '1',
+    dayHeaders: false,
+    headerToolbar: {
+      left: 'dayGridMonth,customTimeGridWeek',
+      center: 'title',
+      right: 'prev,next'
+    },
+    weekends: true,
+    views: {
+      dayGridMonth: {
+        // Date Clicking & Selecting:
+        selectable: true,
+        selectMirror: false,
+        // Time Grid:
+        allDaySlot: false,
+        expandRows: true,
+      },
+           customTimeGridWeek: {
+        type: 'timeGrid',
+        buttonText: 'Setmana',
+        duration: { days: 7 },
+
+        // Date Clicking & Selecting:
+        selectable: true,
+        selectMirror: false,
+
+        select: function(info) {
+          var date_start = info.start.toLocaleString(
+            "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
+          )
+          var date_end = info.end.toLocaleString(
+            "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
+          )
+          var starting_time = info.start.toLocaleString(
+            "ca", {hour: 'numeric', minute: 'numeric'}
+          )
+          var ending_time = info.end.toLocaleString(
+            "ca", {hour: 'numeric', minute: 'numeric'}
+          )
+          dialog.showModal();
+        },
+
+        // Time Grid:
+        allDaySlot: false,
+        slotMaxTime: "22:00:00",
+        slotMinTime: "08:00:00",
+        expandRows: true,
+      },
+    },
+
+    // Date & Time Display:
+    weekends: true,
+    events: {
+      url: '/ajax/program_calendar/',
+      error: function() {
+          alert("No s'han pogut carregar les reserves. Recarrega la pàgina i si d'aquí uns minuts segueix fallant, si us plau avisa'ns.");
+      }
+    },
+    eventClick: function(info) {
+      var eventObj = info.event;
+      if (eventObj.url) {
+        window.open(eventObj.url);
+        info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
+      }
+    },
+
+    eventDidMount: function(info) {
+      let pill = document.createElement("div");
+      let session_num = info.event._def.extendedProps['session_num'];
+      let session_total = info.event._def.extendedProps['session_total'];
+      let color = info.event._def.extendedProps['cercle'];
+
+      if (session_num && session_total) {
+        pill.classList.add("calendar-event__top", "text-xsm")
+        pill.style.borderTop = `2px ${color} solid`
+        pill.style.color = color
+        pill.innerText = `${session_num}/${session_total}`;
+        let fctitle = info.el.querySelector('.fc-event-title-container');
+        fctitle.append(pill)
+      }
+    },
+    eventClick: function(info) {
+      // console.log("info click", info)
+      if (info.event._def.publicId) {
+        let thisModal = document.getElementById(`${info.event._def.publicId}`)
+        thisModal.classList.remove("is-hidden")
+
+        window.scrollTo(0,0)
+      }
+    },
+  });
+  console.log("URL!!!!", 'url');
+
+  calendar.render();
+});
+
+</script>
+
 <div class="courses-list">
   <section class="courses-list__submenu grid-content">
 		<div class="grid-item-full">
@@ -80,7 +189,11 @@
       </form>
     </section>
   </div>
+
   <section class="courses-list__calendar">
+
+    {% for course in future_courses %}
+
     <div class="calendar-modals">
       <!-- FOR a modal for each session in the calendar -->
       <div class="courses-list__modal modal is-hidden" id="{{ course.id }}">
@@ -152,6 +265,7 @@
         </div>
       </div>
       <!-- ENDFOR dels modals -->
+    {% endfor %}
       <!-- Aquests son per fer proves al front -->
       <div class="courses-list__modal modal is-hidden" id="12345">
         <div class="modal__background" onclick="hideModal(event)"></div>
@@ -160,7 +274,7 @@
             <h2>Ecofeminismes</h2>
           </div>
           <div class="course-card__title text-md">
-            <h2>Cicle de tallers d'acompanyament a projectes d'habitatge cooperatiu en el disseny dels serveis comuns</h2>
+            <h2>{{ course.title }}</h2>
           </div>
           <div class="couse-card__tags tags">
             <div class="tag text-xsm">
@@ -175,7 +289,7 @@
               <p>Descripció</p>
             </div>
             <div class="course-card__text richtext">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat quidem aliquid autem tempora est placeat nihil cupiditate expedita. Non, quo modi. Totam esse officiis accusantium nemo quod, nesciunt pariatur quo?</p>
+              <p>{{ course.description }}</p>
             </div>
           </div>
           <div class="course-card__bloc">          
@@ -183,327 +297,40 @@
               <p>Adreçat a</p>
             </div>
             <div class="course-card__text richtext">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo reiciendis molestiae sed, nulla iste praesentium dolor debitis hic cumque ipsa nam quam. At harum aperiam debitis quos culpa, suscipit a.</p>
+              <p>{{ course.aimed_at }}</p>
             </div>
           </div>
           <div class="course-card__bloc grid-bloc">
             <div class="course-card__subtitle text-menu">
-              <p>Sessions: 4</p>
+              <p>Sessions: {{ course.activities.count }} </p>
             </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
+            {% for session in course.get_public_activities %}
+              <div class="course-card__subbloc subbloc">
+                <div class="subbloc__title text-sm">
+                  <p>{{ session.date_start|date:"d/m/y" }}</p>
+                </div>
+                <!-- format HH:mm - HH:mm -->
+                <div class="subbloc__subtitle text-sm">
+                  <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
+                </div>
+                <div class="subbloc__text text-sm richtext">
+                  <p>{{ session.name|safe }}</p>
+                </div>
               </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-          </div>
-          <div class="course-card__btn">
-            <a href="{{ course.url_page }}">
-              <div class="btn btn--primary btn__text">
-                <p>Veure les sessions</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="courses-list__modal modal is-hidden" id="1234">
-        <div class="modal__background" onclick="hideModal(event)"></div>
-        <div class="course-card">
-          <div class="course-card__pretitle text-xsm">
-            <h2>Ecofeminismes</h2>
-          </div>
-          <div class="course-card__title text-md">
-            <h2>Cicle 2 de tallers d'acompanyament a projectes d'habitatge cooperatiu en el disseny dels serveis comuns</h2>
-          </div>
-          <div class="couse-card__tags tags">
-            <div class="tag text-xsm">
-              <p>Presencial</p>
-            </div>
-            <div class="tag text-xsm">
-              <p>Bastant guay</p>
-            </div>
-          </div>
-          <div class="course-card__bloc">          
-            <div class="course-card__subtitle text-menu">
-              <p>Descripció</p>
-            </div>
-            <div class="course-card__text richtext">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat quidem aliquid autem tempora est placeat nihil cupiditate expedita. Non, quo modi. Totam esse officiis accusantium nemo quod, nesciunt pariatur quo?</p>
-            </div>
-          </div>
-          <div class="course-card__bloc">          
-            <div class="course-card__subtitle text-menu">
-              <p>Adreçat a</p>
-            </div>
-            <div class="course-card__text richtext">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo reiciendis molestiae sed, nulla iste praesentium dolor debitis hic cumque ipsa nam quam. At harum aperiam debitis quos culpa, suscipit a.</p>
-            </div>
-          </div>
-          <div class="course-card__bloc grid-bloc">
-            <div class="course-card__subtitle text-menu">
-              <p>Sessions: 4</p>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-          </div>
-          <div class="course-card__btn">
-            <a href="{{ course.url_page }}">
-              <div class="btn btn--primary btn__text">
-                <p>Veure les sessions</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="courses-list__modal modal is-hidden" id="123456">
-        <div class="modal__background" onclick="hideModal(event)"></div>
-        <div class="course-card">
-          <div class="course-card__pretitle text-xsm">
-            <h2>Ecofeminismes</h2>
-          </div>
-          <div class="course-card__title text-md">
-            <h2>Cicle 3 de tallers d'acompanyament a projectes d'habitatge cooperatiu en el disseny dels serveis comuns</h2>
-          </div>
-          <div class="couse-card__tags tags">
-            <div class="tag text-xsm">
-              <p>Presencial</p>
-            </div>
-            <div class="tag text-xsm">
-              <p>Bastant guay</p>
-            </div>
-          </div>
-          <div class="course-card__bloc">          
-            <div class="course-card__subtitle text-menu">
-              <p>Descripció</p>
-            </div>
-            <div class="course-card__text richtext">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat quidem aliquid autem tempora est placeat nihil cupiditate expedita. Non, quo modi. Totam esse officiis accusantium nemo quod, nesciunt pariatur quo?</p>
-            </div>
-          </div>
-          <div class="course-card__bloc">          
-            <div class="course-card__subtitle text-menu">
-              <p>Adreçat a</p>
-            </div>
-            <div class="course-card__text richtext">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo reiciendis molestiae sed, nulla iste praesentium dolor debitis hic cumque ipsa nam quam. At harum aperiam debitis quos culpa, suscipit a.</p>
-            </div>
-          </div>
-          <div class="course-card__bloc grid-bloc">
-            <div class="course-card__subtitle text-menu">
-              <p>Sessions: 4</p>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-            <div class="course-card__subbloc subbloc">
-              <div class="subbloc__title text-sm">
-                <p>12/12/2023</p>
-              </div>
-              <div class="subbloc__subtitle text-sm">
-                <p>09:00 - 12:00</p>
-              </div>
-              <div class="subbloc__text text-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor Purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet.</p>
-              </div>
-            </div>
-          </div>
-          <div class="course-card__btn">
-            <a href="{{ course.url_page }}">
-              <div class="btn btn--primary btn__text">
-                <p>Veure les sessions</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="calendar" class="my-calendar"></div>
-  </section>
-  <section class="courses-list__grid is-hidden">
-    {% for course in future_courses %}
-      <div class="course-card">
-        <!-- Nou: sector o cercle, potser? -->
-        <!-- Cadascun ha de tenir el seu color propi -->
-        <div class="course-card__pretitle text-xsm">
-          <h2>Ecofeminismes</h2>
-        </div>
-        <div class="course-card__title text-md">
-          <h2>{{ course.title }}</h2>
-        </div>
-        <!-- Nou: llistat de tags -->
-        <div class="couse-card__tags tags">
-          <div class="tag text-xsm">
-            <p>Presencial</p>
-          </div>
-          <div class="tag text-xsm">
-            <p>Tag una mica llarga</p>
-          </div>
-          <div class="tag text-xsm">
-            <p>Tag super llarga que no vegis</p>
-          </div>
-          <div class="tag text-xsm">
-            <p>Presencial</p>
-          </div>
-        </div>
-        <div class="course-card__bloc">          
-          <div class="course-card__subtitle text-menu">
-            <p>Descripció</p>
-          </div>
-          <div class="course-card__text richtext">
-            <p>{{ course.description|safe }}</p>
-          </div>
-        </div>
-        {% if course.aimed_at != "" %}
-        <div class="course-card__bloc">
-          <div class="course-card__subtitle text-menu">
-            <p>Adreçat a</p>
-          </div>
-          <div class="course-card__text richtext">
-            <p>{{ course.aimed_at|safe }}</p>
-          </div>
-        </div>
-        {% endif %}
-        <div class="course-card__bloc grid-bloc">          
-          <div class="course-card__subtitle text-menu">
-            <p>Sessions: {{ course.activities.count }}</p>
-          </div>
-          {% for session in course.get_public_activities %}
-          <div class="course-card__subbloc subbloc">
-            <div class="subbloc__title text-sm">
-              <p>{{ session.date_start|date:"d/m/y" }}</p>
-            </div>
-            <!-- format HH:mm - HH:mm -->
-            <div class="subbloc__subtitle text-sm">
-              <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
-            </div>
-            <div class="subbloc__text text-sm richtext">
-              <p>{{ session.name|safe }}</p>
-            </div>
-          </div>
           {% endfor %}
-        </div>
-        <div class="course-card__btn">
-          <a href="{{ course.absolute_url }}">
-            <div class="btn btn--primary btn__text">
-              <p>Veure les sessions</p>
-            </div>
-          </a>
+          <div class="course-card__btn">
+            <a href="{{ course.url_page }}">
+              <div class="btn btn--primary btn__text">
+                <p>Veure les sessions</p>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
-    {% endfor %}
-    {% if not future_courses %}
-      <p class="margin-block">En aquests moments no hi ha cap formació programada.</p>
-    {% endif %}
+
+
   </section>
+      <div id="calendar" class="my-calendar"></div>
+
 </div>
 {% endblock %}

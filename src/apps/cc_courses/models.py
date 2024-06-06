@@ -201,7 +201,7 @@ class Activity(models.Model):
         CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc"
     )
     date_start = models.DateField("dia inici")
-    date_end = models.DateField("dia finalització", blank=True, null=True)
+    date_end = models.DateField("dia finalització", default=date.today())
     starting_time = models.TimeField("hora d'inici")
     ending_time = models.TimeField("hora de finalització")
     confirmed = models.BooleanField(
