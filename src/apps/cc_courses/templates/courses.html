@@ -290,68 +290,6 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <!-- ENDFOR dels modals -->
     {% endfor %}
-      <!-- Aquests son per fer proves al front -->
-      <div class="courses-list__modal modal is-hidden" id="12345">
-        <div class="modal__background" onclick="hideModal(event)"></div>
-        <div class="course-card">
-          <div class="course-card__pretitle text-xsm">
-            <h2>Ecofeminismes</h2>
-          </div>
-          <div class="course-card__title text-md">
-            <h2>{{ course.title }}</h2>
-          </div>
-          <div class="couse-card__tags tags">
-            <div class="tag text-xsm">
-              <p>Presencial</p>
-            </div>
-            <div class="tag text-xsm">
-              <p>Bastant guay</p>
-            </div>
-          </div>
-          <div class="course-card__bloc">          
-            <div class="course-card__subtitle text-menu">
-              <p>Descripció</p>
-            </div>
-            <div class="course-card__text richtext">
-              <p>{{ course.description }}</p>
-            </div>
-          </div>
-          <div class="course-card__bloc">          
-            <div class="course-card__subtitle text-menu">
-              <p>Adreçat a</p>
-            </div>
-            <div class="course-card__text richtext">
-              <p>{{ course.aimed_at }}</p>
-            </div>
-          </div>
-          <div class="course-card__bloc grid-bloc">
-            <div class="course-card__subtitle text-menu">
-              <p>Sessions: {{ course.activities.count }} </p>
-            </div>
-            {% for session in course.get_public_activities %}
-              <div class="course-card__subbloc subbloc">
-                <div class="subbloc__title text-sm">
-                  <p>{{ session.date_start|date:"d/m/y" }}</p>
-                </div>
-                <!-- format HH:mm - HH:mm -->
-                <div class="subbloc__subtitle text-sm">
-                  <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
-                </div>
-                <div class="subbloc__text text-sm richtext">
-                  <p>{{ session.name|safe }}</p>
-                </div>
-              </div>
-          {% endfor %}
-          <div class="course-card__btn">
-            <a href="{{ course.url_page }}">
-              <div class="btn btn--primary btn__text">
-                <p>Veure les sessions</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
 
   </section>
       <div id="calendar" class="my-calendar"></div>

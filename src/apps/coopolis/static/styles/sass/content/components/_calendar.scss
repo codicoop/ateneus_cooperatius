@@ -79,19 +79,6 @@
   .fc-event-time {
     display: none;
   }
-  // L'event
-  .fc-event {
-    position: relative;
-    height: 90px;
-    padding: var(--pad-3);
-    margin-top: var(--pad-3);
-    background-color: var(--white);
-
-    // El text de l'event
-    .fc-event-tite {
-      text-overflow: ellipsis;
-    }
-  }
   .fc-event-main,
   .fc-event-main-frame {
     height: 100%;

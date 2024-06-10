@@ -8,17 +8,24 @@
 }
 
 // Layout
-.calendar-event {
+.calendar-event.fc-event {
+  position: relative;
+  height: 90px;
+  padding: var(--pad-3);
+  margin-top: var(--pad-3);
+  background-color: var(--white)!important;
   border: none;
 
   .fc-event-title-container {
     display: flex;
     flex-direction: column;
   }
+  // El text de l'event
   .fc-event-title {
     order: 2;
     height: 100%;
     text-overflow: ellipsis;
+    white-space: wrap;
   }
   .calendar-event__top {
     order: 1;

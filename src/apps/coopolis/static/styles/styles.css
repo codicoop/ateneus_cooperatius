@@ -2568,19 +2568,25 @@ a {
   cursor: pointer;
 }
 
-.calendar-event {
+.calendar-event.fc-event {
+  position: relative;
+  height: 90px;
+  padding: var(--pad-3);
+  margin-top: var(--pad-3);
+  background-color: var(--white) !important;
   border: none;
 }
-.calendar-event .fc-event-title-container {
+.calendar-event.fc-event .fc-event-title-container {
   display: flex;
   flex-direction: column;
 }
-.calendar-event .fc-event-title {
+.calendar-event.fc-event .fc-event-title {
   order: 2;
   height: 100%;
   text-overflow: ellipsis;
+  white-space: wrap;
 }
-.calendar-event .calendar-event__top {
+.calendar-event.fc-event .calendar-event__top {
   order: 1;
   font-weight: bold;
   margin-bottom: var(--pad-2);
@@ -3437,16 +3443,6 @@ a {
 }
 .my-calendar.fc .fc-event-time {
   display: none;
-}
-.my-calendar.fc .fc-event {
-  position: relative;
-  height: 90px;
-  padding: var(--pad-3);
-  margin-top: var(--pad-3);
-  background-color: var(--white);
-}
-.my-calendar.fc .fc-event .fc-event-tite {
-  text-overflow: ellipsis;
 }
 .my-calendar.fc .fc-event-main,
 .my-calendar.fc .fc-event-main-frame {
