@@ -35,16 +35,26 @@ class AjaxProgramCalendarFeed(View):
         except:
             return JsonResponse(data, safe=False)
 
+        sessions_dict = dict()
         activities = Activity.objects.filter(date_start__gte=start, date_start__lte=end)
         for activity in activities:
+            if activity.course.id not in sessions_dict.keys():
+                sessions_dict[activity.course.id] = 1
+            else:
+                sessions_dict[activity.course.id] += 1
             activity_data = {
                 'title': activity.name,
                 'start': date_to_tull_calendar_format(
                     make_aware(datetime.combine(activity.date_start, activity.starting_time))),
                 'end': date_to_tull_calendar_format(
                     make_aware(datetime.combine(activity.date_start, activity.ending_time))),
-                'color': settings.CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE,
+                'session_num': sessions_dict[activity.course.id],
+                'session_total': Activity.objects.filter(
+                    date_start__gte=start, date_start__lte=end, course=activity.course.id).count(),
                 'url': activity.absolute_url,
+                'className': 'calendar-event',
+                'display': 'block',
+                'color': 'var(--primary)',
             }
             data.append(activity_data)
         return JsonResponse(data, safe=False)
