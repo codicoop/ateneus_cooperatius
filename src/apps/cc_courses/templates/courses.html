@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
     firstDay: '1',
     dayHeaders: false,
     headerToolbar: {
-      left: 'dayGridMonth,customTimeGridWeek',
+      left: 'prev',
       center: 'title',
-      right: 'prev,next'
+      right: 'next'
     },
     weekends: true,
     views: {
@@ -47,60 +47,86 @@ document.addEventListener('DOMContentLoaded', function() {
         allDaySlot: false,
         expandRows: true,
       },
-           customTimeGridWeek: {
-        type: 'timeGrid',
-        buttonText: 'Setmana',
-        duration: { days: 7 },
+      // Això comentat estava a la versió del Jesus però no a la de Marta
+      // customTimeGridWeek: {
+      //   type: 'timeGrid',
+      //   buttonText: 'Setmana',
+      //   duration: { days: 7 },
 
-        // Date Clicking & Selecting:
-        selectable: true,
-        selectMirror: false,
+      //   // Date Clicking & Selecting:
+      //   selectable: true,
+      //   selectMirror: false,
 
-        select: function(info) {
-          var date_start = info.start.toLocaleString(
-            "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
-          )
-          var date_end = info.end.toLocaleString(
-            "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
-          )
-          var starting_time = info.start.toLocaleString(
-            "ca", {hour: 'numeric', minute: 'numeric'}
-          )
-          var ending_time = info.end.toLocaleString(
-            "ca", {hour: 'numeric', minute: 'numeric'}
-          )
-          dialog.showModal();
-        },
-
-        // Time Grid:
-        allDaySlot: false,
-        slotMaxTime: "22:00:00",
-        slotMinTime: "08:00:00",
-        expandRows: true,
-      },
+      //   select: function(info) {
+      //     var date_start = info.start.toLocaleString(
+      //       "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
+      //     )
+      //     var date_end = info.end.toLocaleString(
+      //       "ca", {year: 'numeric', month: '2-digit', day: '2-digit'}
+      //     )
+      //     var starting_time = info.start.toLocaleString(
+      //       "ca", {hour: 'numeric', minute: 'numeric'}
+      //     )
+      //     var ending_time = info.end.toLocaleString(
+      //       "ca", {hour: 'numeric', minute: 'numeric'}
+      //     )
+      //     dialog.showModal();
+      //   },
+      //   // Time Grid:
+      //   allDaySlot: false,
+      //   slotMaxTime: "22:00:00",
+      //   slotMinTime: "08:00:00",
+      //   expandRows: true,
+      // },
     },
-
     // Date & Time Display:
     weekends: true,
+
+    // MODELO JSON PARA LO QUE DEVUELVE LA API DEL CALENDARIO
+    // {
+    //     // Para cada sessión de cada acción necessito:
+
+    //     // Título de la sessión
+    //     'title': 'Event 1 hardcodejat de prova',
+
+    //     // Fechas de la sessión
+    //     'start': '2024-06-05',
+    //     'end': '2024-06-05',
+
+    //     // Número de la sessión
+    //     'session_num': '1',
+
+    //     // Total de sessiones de la acción ala que pertenece la acción
+    //     'session_total': '3',
+
+    //     // Url de la pàgina de la sessión
+    //     'url': '',
+
+    //     // Estos campos así tal qual
+    //     'className': 'calendar-event',
+    //     'display': 'block',
+    //     'color': 'var(--primary)'
+    //   },
+
     events: {
       url: '/ajax/program_calendar/',
       error: function() {
           alert("No s'han pogut carregar les reserves. Recarrega la pàgina i si d'aquí uns minuts segueix fallant, si us plau avisa'ns.");
       }
     },
-    eventClick: function(info) {
-      var eventObj = info.event;
-      if (eventObj.url) {
-        window.open(eventObj.url);
-        info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
-      }
-    },
+    // eventClick: function(info) {
+    //   var eventObj = info.event;
+    //   if (eventObj.url) {
+    //     window.open(eventObj.url);
+    //     info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
+    //   }
+    // },
 
     eventDidMount: function(info) {
       let pill = document.createElement("div");
       let session_num = info.event._def.extendedProps['session_num'];
       let session_total = info.event._def.extendedProps['session_total'];
-      let color = info.event._def.extendedProps['cercle'];
+      let color = info.event._def.extendedProps['color'];
 
       if (session_num && session_total) {
         pill.classList.add("calendar-event__top", "text-xsm")
@@ -191,10 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 
   <section class="courses-list__calendar">
-
-    {% for course in future_courses %}
-
     <div class="calendar-modals">
+      {% for course in future_courses %}
       <!-- FOR a modal for each session in the calendar -->
       <div class="courses-list__modal modal is-hidden" id="{{ course.id }}">
         <div class="modal__background" onclick=""></div>
