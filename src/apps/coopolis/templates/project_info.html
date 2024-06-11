@@ -134,10 +134,11 @@
 				<p>Integrants del projecte</p>
 			</div>
 			<!-- FOREACH participant -->
+			{{ project.users }}
 			<div class="project__people-item">
 				<div class="image">
 					<!-- Falta imatge participant -->
-					<img src="" alt="" srcset="">
+					<!-- <img src="" alt="" srcset=""> -->
 				</div>
 				<div class="text-md is-bold">
 					<!-- FALTA nom participant -->
@@ -159,17 +160,39 @@
 						<polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"	points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "	id="polygon2"	style="opacity:0.975;fill:#fff;fill-opacity:1" />
 					</svg>
 				</div>
-				<div class="text-btn">
-					<form action="" method="post">
-						{% csrf_token %}
-						<input type="text" name="email" style="background: white"/>
-						<button type="submit" name="add" value="{{ project.pk }}">Afegir un nou integrant</button>
-					</form>
+				<div class="text-btn" onclick="openAddModal(this)">
+					<p>Afegir un nou integrant</p>
 				</div>
 			</div>
 		</div>
 	</section>
-
+	<div class="project__modal-add modal-overlay is-hidden">
+		<div class="modal-overlay__background"></div>
+		<div class="modal-overlay__card card">
+			<div class="card__title text-md is-bold">
+				<h1>Afegeix un nou integrant</h1>
+			</div>
+			<div class="card__subtitle text-sm">
+				<p>Escriu a continuació el correu electrònic de la persona que vols
+					afegir a aquest projecte.
+				</p>
+			</div>
+			<div class="modal-overlay__form form">
+				<form method="post" action="">
+					{% csrf_token %}
+					<li class="field {% if form.errors %}field-error{% endif %}">
+						<label for="id_email">Correu electrònic</label>
+						<input type="text" name="email" />
+						{% if form.errors %}
+							{{ form.email.errors }}
+						{% endif %}
+					</li>
+					<button type="submit" class="form__submit btn btn--second btn__text" name="add" value="{{ project.pk }}">Afegir un nou integrant</button>
+					<!-- <input type="hidden" name="next" value="{{ next }}" /> -->
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock %}

@@ -175,3 +175,11 @@ function deleteModalWaitingList(event) {
   const modal = card.querySelector(".delete-modal")
   modal.classList.remove("is-hidden")
 }
+
+function openAddModal(event) {
+  window.scrollTo(0,0)
+  const thisButton = event
+  const parent = thisButton.parentElement.parentElement.parentElement.parentElement
+  const modal = parent.querySelector(".modal-overlay")
+  modal.classList.remove("is-hidden")
+}
