@@ -19,6 +19,10 @@
   border-radius: var(--br);
   white-space: nowrap;
   cursor: pointer;
+  
+  &:hover {
+    filter: brightness(1.3);
+  }
 
   &.btn--second {
     background-color: var(--second);

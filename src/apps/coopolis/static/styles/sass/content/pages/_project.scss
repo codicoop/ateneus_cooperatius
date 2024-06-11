@@ -342,6 +342,10 @@
       background-color: var(--primary);
       cursor: pointer;
 
+      &:hover {
+        filter: brightness(0.7);
+      }
+
       svg {
         width: var(--pad3);
         height: var(--pad3);

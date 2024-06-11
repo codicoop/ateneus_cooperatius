@@ -486,6 +486,9 @@ body {
   white-space: nowrap;
   cursor: pointer;
 }
+.btn:hover {
+  filter: brightness(1.3);
+}
 .btn.btn--second {
   background-color: var(--second);
   color: var(--white);
@@ -4380,6 +4383,9 @@ a {
   border-radius: 50%;
   background-color: var(--primary);
   cursor: pointer;
+}
+.project__people-add .icon:hover {
+  filter: brightness(0.7);
 }
 .project__people-add .icon svg {
   width: var(--pad3);
