@@ -177,9 +177,12 @@ function deleteModalWaitingList(event) {
 }
 
 function openAddModal(event) {
-  window.scrollTo(0,0)
   const thisButton = event
   const parent = thisButton.parentElement.parentElement.parentElement.parentElement
   const modal = parent.querySelector(".modal-overlay")
   modal.classList.remove("is-hidden")
+}
+function closeAddModal() {
+  const modal = document.querySelector(".modal-overlay")
+  modal.classList.add("is-hidden")
 }

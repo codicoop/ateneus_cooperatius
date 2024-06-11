@@ -63,7 +63,12 @@
     top: var(--pad1);
     right: var(--pad1);
     padding: var(--pad1);
+    border-radius: 50%;
     cursor: pointer;
+
+    &:hover {
+      background-color: var(--second-3);
+    }
   
     svg {
       pointer-events: none;

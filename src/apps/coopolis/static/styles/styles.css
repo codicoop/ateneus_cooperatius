@@ -755,7 +755,11 @@ a {
   top: var(--pad1);
   right: var(--pad1);
   padding: var(--pad1);
+  border-radius: 50%;
   cursor: pointer;
+}
+.card__close:hover {
+  background-color: var(--second-3);
 }
 .card__close svg {
   pointer-events: none;
@@ -4375,18 +4379,25 @@ a {
   height: var(--pad5);
   border-radius: 50%;
   background-color: var(--primary);
+  cursor: pointer;
 }
 .project__people-add .icon svg {
   width: var(--pad3);
   height: var(--pad3);
 }
-.project__people-add .text-btn {
-  width: 60%;
+.project__people-btn {
   margin-top: var(--pad-2);
+  width: 70%;
+  padding: var(--pad-2) var(--pad1);
+  border-radius: var(--br);
   text-transform: uppercase;
   color: var(--second);
   text-align: center;
   font-weight: 500;
+  cursor: pointer;
+}
+.project__people-btn:hover {
+  background-color: var(--second-2);
 }
 
 .profile {
