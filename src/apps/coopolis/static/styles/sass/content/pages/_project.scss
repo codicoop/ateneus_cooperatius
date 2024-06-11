@@ -343,7 +343,7 @@
       cursor: pointer;
 
       &:hover {
-        filter: brightness(0.7);
+        filter: brightness(1.3);
       }
 
       svg {
@@ -362,6 +362,10 @@
     text-align: center;
     font-weight: 500;
     cursor: pointer;
+
+    p {
+      pointer-events: none;
+    }
 
     &:hover {
       background-color: var(--second-2);

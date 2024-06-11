@@ -179,10 +179,20 @@ function deleteModalWaitingList(event) {
 function openAddModal(event) {
   const thisButton = event
   const parent = thisButton.parentElement.parentElement.parentElement.parentElement
-  const modal = parent.querySelector(".modal-overlay")
+  const modal = parent.querySelector("#addParticipantModal")
   modal.classList.remove("is-hidden")
 }
 function closeAddModal() {
-  const modal = document.querySelector(".modal-overlay")
+  const modal = document.querySelector("#addParticipantModal")
+  modal.classList.add("is-hidden")
+}
+function openDeleteModal(event) {
+  const thisButton = event
+  const parent = thisButton.parentElement.parentElement.parentElement.parentElement
+  const modal = parent.querySelector("#deleteParticipantModal")
+  modal.classList.remove("is-hidden")
+}
+function closeDeleteModal() {
+  const modal = document.querySelector("#deleteParticipantModal")
   modal.classList.add("is-hidden")
 }
