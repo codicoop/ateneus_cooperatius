@@ -80,6 +80,9 @@
     color: var(--primary);
     padding: 0 0 var(--pad1) 0;
   }
+  &__options {
+    margin-bottom: var(--pad3);
+  }
   &__view {
     padding-bottom: var(--pad-2);
     grid-column: 5 / span 2;
@@ -124,9 +127,7 @@
     grid-column: 1;
     grid-row: 1;
   }
-  &__calendar {
-    margin-top: var(--pad3);
-  }
+  // &__calendar { }
 }
 
 // Diferències per llistat my courses

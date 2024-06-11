@@ -4749,6 +4749,9 @@ a {
   color: var(--primary);
   padding: 0 0 var(--pad1) 0;
 }
+.courses-list__options {
+  margin-bottom: var(--pad3);
+}
 .courses-list__view {
   padding-bottom: var(--pad-2);
   grid-column: 5/span 2;
@@ -4787,9 +4790,6 @@ a {
 .courses-list .filter__btn {
   grid-column: 1;
   grid-row: 1;
-}
-.courses-list__calendar {
-  margin-top: var(--pad3);
 }
 
 .my-courses-list.courses-list .courses-list__grid {
