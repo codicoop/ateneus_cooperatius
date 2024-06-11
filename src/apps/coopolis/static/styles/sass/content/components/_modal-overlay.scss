@@ -41,3 +41,18 @@
   }
 }
 
+.modal-overlay2 {
+  position: fixed;
+  bottom: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  &__card {
+    position: auto;
+    top: auto;
+    margin: 0;
+  }
+}
+

@@ -3560,6 +3560,20 @@ a {
   margin-bottom: 0;
 }
 
+.modal-overlay2 {
+  position: fixed;
+  bottom: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.modal-overlay2__card {
+  position: auto;
+  top: auto;
+  margin: 0;
+}
+
 .home .welcome__content {
   --flex-direction: column;
   --justify-content: flex-start;

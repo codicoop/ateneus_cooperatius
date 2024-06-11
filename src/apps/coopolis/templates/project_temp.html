@@ -149,40 +149,6 @@
 					<p>Eliminar</p>
 				</div>
 			</div>
-			<div class="project__modal-add modal-overlay modal-overlay2 is-hidden" id="deleteParticipantModal">
-				<div class="modal-overlay__background" onclick="closeDeleteModal2(this)"></div>
-				<div class="modal-overlay__card card">
-					<div class="card__title text-md is-bold">
-						<h1>Eliminar aquest integrant</h1>
-					</div>
-					<div class="card__subtitle text-sm">
-						<p>Segur que vols eliminar
-							<span class="is-bold">{{ partner.full_name }}</span>
-							del teu projecte? El compte de la persona 
-							no s'esborrarà, només la vinculació amb aquest projecte.
-						</p>
-					</div>
-					<div class="card__close" onclick="closeDeleteModal(this)">
-						<svg
-							class="icon-pathfill-primary"
-							xmlns="http://www.w3.org/2000/svg"
-							viewbox="0 0 9.46 9.46">
-							<path
-								d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
-						</svg>
-					</div>
-					<div class="modal-overlay__form form">
-						<form method="post" action="">
-							{% csrf_token %}
-							<button type="submit" class="form__submit btn btn--second btn__text" 
-								name="delete_partner" value="{{ project.pk }}">
-								Eliminar integrant
-							</button>
-							<input type="hidden" name="partner_id" value="{{ partner.id }}">
-						</form>
-					</div>
-				</div>
-			</div>
 			{% endfor %}
 			<div class="project__people-add">
 				<div class="icon" onclick="openAddModal(this)">
@@ -230,6 +196,38 @@
             name="add_partner" value="{{ project.pk }}">
             Afegir un nou integrant
           </button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="project__modal-add modal-overlay is-hidden" id="deleteParticipantModal">
+		<div class="modal-overlay__background" onclick="closeDeleteModal()"></div>
+		<div class="modal-overlay__card card">
+			<div class="card__title text-md is-bold">
+				<h1>Eliminar aquest integrant</h1>
+			</div>
+			<div class="card__subtitle text-sm">
+				<p>Segur que vols eliminar aquest integrant del teu projecte? El compte de la persona 
+					no s'esborrarà, només la vinculació amb aquest projecte.
+				</p>
+			</div>
+			<div class="card__close" onclick="closeDeleteModal()">
+				<svg
+					class="icon-pathfill-primary"
+					xmlns="http://www.w3.org/2000/svg"
+					viewbox="0 0 9.46 9.46">
+					<path
+						d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+				</svg>
+			</div>
+			<div class="modal-overlay__form form">
+				<form method="post" action="">
+					{% csrf_token %}
+          <button type="submit" class="form__submit btn btn--second btn__text" 
+            name="delete_partner" value="{{ project.pk }}">
+            Eliminar integrant
+          </button>
+          <input type="hidden" name="partner_id" value="{{ partner.id }}">
 				</form>
 			</div>
 		</div>
