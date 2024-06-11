@@ -36,7 +36,7 @@ class AjaxProgramCalendarFeed(View):
             return JsonResponse(data, safe=False)
 
         sessions_dict = dict()
-        activities = Activity.objects.filter(date_start__gte=start, date_start__lte=end)
+        activities = Activity.objects.filter(date_start__gte=start, date_start__lte=end, publish=True)
         for activity in activities:
             if activity.course.id not in sessions_dict.keys():
                 sessions_dict[activity.course.id] = 1
@@ -50,7 +50,7 @@ class AjaxProgramCalendarFeed(View):
                     make_aware(datetime.combine(activity.date_start, activity.ending_time))),
                 'session_num': sessions_dict[activity.course.id],
                 'session_total': Activity.objects.filter(
-                    date_start__gte=start, date_start__lte=end, course=activity.course.id).count(),
+                    date_start__gte=start, date_start__lte=end, publish=True, course=activity.course.id).count(),
                 'url': activity.absolute_url,
                 'className': 'calendar-event',
                 'display': 'block',
