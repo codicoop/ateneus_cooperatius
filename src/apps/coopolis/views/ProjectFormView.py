@@ -40,20 +40,20 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
                 "Dades del acompanyament borrades correctament.",
             )
             return HttpResponseRedirect(urls.reverse("edit_project"))
-        if "add" in request.POST:
+        if "add_partner" in request.POST:
             try:
-                is_user = User.objects.filter(email=request.POST.get("email")).first()
-                project = Project.objects.get(pk=request.POST.get("add"))
+                user = User.objects.filter(email=request.POST.get("email")).first()
+                project = Project.objects.get(pk=request.POST.get("add_partner"))
                 current_partners = project.partners.all()
                 current_partners_list = set()
                 for partner in current_partners:
                     current_partners_list.add(partner.pk)
-                current_partners_list.add(is_user.id)
+                current_partners_list.add(user.id)
                 project.partners.set(sorted(current_partners_list))
                 project.save()
                 messages.success(
                     request,
-                    "Invitació realitzada amb èxit.\n"
+                    f"Invitació realitzada amb èxit a {user.full_name}."
                     "Se li ha enviat a l'usuari un correu per a la seva acceptació.",
                 )
             except:
@@ -61,6 +61,20 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
                     request,
                     "L'usuari no existeix.",
                 )
+        if "delete_partner" in request.POST:
+            user = User.objects.filter(id=request.POST.get("partner_id")).first()
+            project = Project.objects.get(pk=request.POST.get("delete_partner"))
+            current_partners = project.partners.all().exclude(id=user.id)
+            current_partners_list = set()
+            for partner in current_partners:
+                current_partners_list.add(partner.pk)
+            project.partners.set(sorted(current_partners_list))
+            project.save()
+            messages.success(
+                request,
+                f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.",
+            )
+
         return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -75,6 +89,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
         context["is_draft"] = project.is_draft
         context["is_pending"] = pending_project_stages
         context["is_open"] = open_project_stages
+        context["partners"] = User.objects.filter(projects=project.id)
         return context
 
 

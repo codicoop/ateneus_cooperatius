@@ -132,60 +132,27 @@
 		<div class="project__people-title is-bold">
 			<p>Integrants del projecte</p>
 		</div>
-		FOREACH participant
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
+		{% for partner in partners %}
+			<div class="project__people-item">
+				<div class="image">
+					{{ partner.photo }}
+					<img src="" alt="" srcset="">
+				</div>
+				<div class="text-md is-bold">
+					<p>{{ partner.full_name }}</p>
+				</div>
+				<div class="text-md">
+					<p>{{ partner.email }}</p>
+				</div>
+				<div class="text-btn">
+					<form action="" method="post">
+						{% csrf_token %}
+						<button type="submit" name="delete_partner" value="{{ project.pk }}">Eliminar integrant</button>
+						<input type="hidden" name="partner_id" value="{{ partner.id }}">
+					</form>
+				</div>
 			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			FALTA Què passa quan s'activa?
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		END FOREACH
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
-			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
-			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
+		{% endfor %}
 		<div class="project__people-add">
 			<div class="icon">
 				<svg xmlns="http://www.w3.org/2000/svg"	viewbox="0 0 24 24"	width="24"	height="24">
@@ -196,7 +163,7 @@
 				<form action="" method="post">
 					{% csrf_token %}
 					<input type="text" name="email" style="background: white"/>
-					<button type="submit" name="add" value="{{ project.pk }}">Afegir un nou integrant</button>
+					<button type="submit" name="add_partner" value="{{ project.pk }}">Afegir un nou integrant</button>
 				</form>
 			</div>
 		</div>
