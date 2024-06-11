@@ -1,4 +1,3 @@
-from constance import config
 from django import urls
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -7,9 +6,8 @@ from django.views import generic
 
 from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.coopolis.forms import ProjectForm
-from apps.coopolis.models import Project, ProjectStage
+from apps.coopolis.models import Project, ProjectStage, User
 from apps.coopolis.views import LoginSignupContainerView
-from conf.custom_mail_manager import MyMailTemplate
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
@@ -42,6 +40,27 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
                 "Dades del acompanyament borrades correctament.",
             )
             return HttpResponseRedirect(urls.reverse("edit_project"))
+        if "add" in request.POST:
+            try:
+                is_user = User.objects.filter(email=request.POST.get("email")).first()
+                project = Project.objects.get(pk=request.POST.get("add"))
+                current_partners = project.partners.all()
+                current_partners_list = set()
+                for partner in current_partners:
+                    current_partners_list.add(partner.pk)
+                current_partners_list.add(is_user.id)
+                project.partners.set(sorted(current_partners_list))
+                project.save()
+                messages.success(
+                    request,
+                    "Invitació realitzada amb èxit.\n"
+                    "Se li ha enviat a l'usuari un correu per a la seva acceptació.",
+                )
+            except:
+                messages.error(
+                    request,
+                    "L'usuari no existeix.",
+                )
         return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

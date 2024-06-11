@@ -128,7 +128,7 @@
 			<input type="hidden" name="next" value="{{ next }}" />
 		</form>
 	</section>
-	<!-- <section class="project__people-grid">
+	<section class="project__people-grid">
 		<div class="project__people-title is-bold">
 			<p>Integrants del projecte</p>
 		</div>
@@ -192,12 +192,15 @@
 					<polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"	points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "	id="polygon2"	style="opacity:0.975;fill:#fff;fill-opacity:1" />
 				</svg>
 			</div>
-			FALTA Què passa quan s'activa?
 			<div class="text-btn">
-				<p>Afegir un nou integrant</p>
+				<form action="" method="post">
+					{% csrf_token %}
+					<input type="text" name="email" style="background: white"/>
+					<button type="submit" name="add" value="{{ project.pk }}">Afegir un nou integrant</button>
+				</form>
 			</div>
 		</div>
-	</section> -->
+	</section>
 
 </div>
 
