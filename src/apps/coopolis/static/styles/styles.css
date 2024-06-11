@@ -486,6 +486,9 @@ body {
   white-space: nowrap;
   cursor: pointer;
 }
+.btn:hover {
+  filter: brightness(1.3);
+}
 .btn.btn--second {
   background-color: var(--second);
   color: var(--white);
@@ -755,7 +758,11 @@ a {
   top: var(--pad1);
   right: var(--pad1);
   padding: var(--pad1);
+  border-radius: 50%;
   cursor: pointer;
+}
+.card__close:hover {
+  background-color: var(--second-3);
 }
 .card__close svg {
   pointer-events: none;
@@ -3516,6 +3523,43 @@ a {
   grid-column: 4/span 3;
 }
 
+.modal-overlay {
+  --margin-card: var(--pad3) var(--pad2);
+  --top: 91px;
+  --left: 0;
+}
+
+@media (min-width: 900px) {
+  .modal-overlay {
+    --margin-card: var(--pad3) var(--pad2);
+    --top: 0;
+    --left: 128px;
+  }
+}
+.modal-overlay__background {
+  position: fixed;
+  top: var(--top);
+  bottom: 0;
+  left: var(--left);
+  right: 0;
+  background-color: var(--violet);
+  opacity: 0.75;
+  z-index: 100;
+}
+.modal-overlay__card {
+  position: fixed;
+  top: 100px;
+  max-width: 400px;
+  margin: var(--margin-card);
+  z-index: 110;
+}
+.modal-overlay .card__subtitle {
+  padding-bottom: var(--pad2);
+}
+.modal-overlay__form .form__submit {
+  margin-bottom: 0;
+}
+
 .home .welcome__content {
   --flex-direction: column;
   --justify-content: flex-start;
@@ -4338,18 +4382,31 @@ a {
   height: var(--pad5);
   border-radius: 50%;
   background-color: var(--primary);
+  cursor: pointer;
+}
+.project__people-add .icon:hover {
+  filter: brightness(1.3);
 }
 .project__people-add .icon svg {
   width: var(--pad3);
   height: var(--pad3);
 }
-.project__people-add .text-btn {
-  width: 60%;
+.project__people-btn {
   margin-top: var(--pad-2);
+  width: 70%;
+  padding: var(--pad-2) var(--pad1);
+  border-radius: var(--br);
   text-transform: uppercase;
   color: var(--second);
   text-align: center;
   font-weight: 500;
+  cursor: pointer;
+}
+.project__people-btn p {
+  pointer-events: none;
+}
+.project__people-btn:hover {
+  background-color: var(--second-2);
 }
 
 .profile {
