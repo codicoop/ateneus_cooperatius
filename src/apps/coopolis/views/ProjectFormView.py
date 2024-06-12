@@ -1,9 +1,7 @@
 from apps.coopolis.models.invitation import Invitation
-from apps.coopolis.services import send_mail_invitation
 from conf import settings
 from conf.custom_mail_manager import MyMailTemplate
 from django import urls
-from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.messages.views import SuccessMessageMixin
