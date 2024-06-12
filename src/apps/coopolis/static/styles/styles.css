@@ -865,6 +865,9 @@ a {
   font-size: var(--font-size);
   line-height: var(--line-height);
 }
+.submenu .submenu__item:hover {
+  filter: brightness(1.4);
+}
 .submenu .submenu__item.is-active {
   position: relative;
   color: var(--primary);
@@ -2737,6 +2740,13 @@ a {
   align-items: center;
   width: 100%;
 }
+.sidebar__topbar .topbar__home {
+  margin-left: var(--pad1);
+}
+.sidebar__topbar .topbar__home:hover {
+  background-color: var(--second-light);
+  border-radius: var(--br);
+}
 .sidebar__topbar .topbar__middle {
   display: flex;
   flex-direction: column;
@@ -2749,6 +2759,10 @@ a {
 }
 .sidebar__topbar .topbar__action {
   margin: var(--pad1);
+}
+.sidebar__topbar .topbar__action:hover {
+  background-color: var(--second-light);
+  border-radius: var(--br);
 }
 .sidebar__topbar .topbar__action .close {
   display: var(--display);
@@ -3529,12 +3543,25 @@ a {
   --left: 0;
 }
 
+.modal-overlay2 {
+  --left-margin: 0;
+}
+
 @media (min-width: 900px) {
   .modal-overlay {
     --margin-card: var(--pad3) var(--pad2);
     --top: 0;
     --left: 128px;
   }
+
+  .modal-overlay2 {
+    --left-margin: 125px;
+  }
+}
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .modal-overlay__background {
   position: fixed;
@@ -3556,8 +3583,24 @@ a {
 .modal-overlay .card__subtitle {
   padding-bottom: var(--pad2);
 }
+.modal-overlay__form.form {
+  grid-template-columns: 1fr;
+}
 .modal-overlay__form .form__submit {
   margin-bottom: 0;
+}
+
+.modal-overlay2 {
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: var(--left-margin);
+  right: 0;
+}
+.modal-overlay2__card {
+  position: auto;
+  top: auto;
+  margin: 0;
 }
 
 .home .welcome__content {

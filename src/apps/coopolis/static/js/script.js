@@ -188,11 +188,15 @@ function closeAddModal() {
 }
 function openDeleteModal(event) {
   const thisButton = event
-  const parent = thisButton.parentElement.parentElement.parentElement.parentElement
-  const modal = parent.querySelector("#deleteParticipantModal")
+  const parent = thisButton.parentElement
+  const modal = parent.nextElementSibling
   modal.classList.remove("is-hidden")
 }
-function closeDeleteModal() {
-  const modal = document.querySelector("#deleteParticipantModal")
+function closeDeleteModal(event) {
+  const modal = event.parentElement.parentElement
+  modal.classList.add("is-hidden")
+}
+function closeDeleteModal2(event) {
+  const modal = event.parentElement
   modal.classList.add("is-hidden")
 }

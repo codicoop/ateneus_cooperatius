@@ -25,6 +25,10 @@
     font-size: var(--font-size);
     line-height: var(--line-height);
 
+    &:hover {
+      filter: brightness(1.4);
+    }
+
     &.is-active {
       position: relative;
       color: var(--primary);
