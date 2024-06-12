@@ -139,7 +139,14 @@
     align-items: center;
     width: 100%;
 
-    // .topbar__home {}
+    .topbar__home {
+      margin-left: var(--pad1);
+      
+      &:hover {
+        background-color: var(--second-light);
+        border-radius: var(--br);
+      }
+    }
     .topbar__middle {
       display: flex;
       flex-direction: column;
@@ -155,6 +162,11 @@
     }
     .topbar__action {
       margin: var(--pad1);
+
+      &:hover {
+        background-color: var(--second-light);
+        border-radius: var(--br);
+      }
       
       .close {
         display: var(--display);
