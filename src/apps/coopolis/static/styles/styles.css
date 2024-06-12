@@ -4451,6 +4451,9 @@ a {
 .project__people-btn:hover {
   background-color: var(--second-2);
 }
+.project__invited {
+  margin-top: var(--pad2);
+}
 
 .profile {
   --padding-profile: var(--pad1);
