@@ -28,6 +28,7 @@ from .views import (
     project_stage_view,
     db_backup_download_view,
 )
+from .views.ProjectFormView import project_partner_manage, invitation_partner
 
 urlpatterns = [
     url(
@@ -68,6 +69,18 @@ urlpatterns += [
     path("summernote/", include("django_summernote.urls")),
     path(
         "project/edit/", login_required(ProjectFormView.as_view()), name="edit_project"
+    ),
+    path(
+        "project/edit/add-partner/", login_required(project_partner_manage), name="add-partner"
+    ),
+    path(
+        "project/edit/delete-partner/", login_required(project_partner_manage), name="delete_partner"
+    ),
+    path(
+        "project/edit/delete-invitation/", login_required(project_partner_manage), name="delete_invitation"
+    ),
+    path(
+        "project/invitation/<pk>", login_required(invitation_partner), name="invitation_project"
     ),
     path(
         "project/new/",

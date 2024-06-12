@@ -1,5 +1,11 @@
+from apps.coopolis.models.invitation import Invitation
+from apps.coopolis.services import send_mail_invitation
+from conf import settings
+from conf.custom_mail_manager import MyMailTemplate
 from django import urls
+from django.urls import reverse
 from django.contrib import messages
+from django.shortcuts import redirect, render
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.views import generic
@@ -40,42 +46,6 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
                 "Dades del acompanyament borrades correctament.",
             )
             return HttpResponseRedirect(urls.reverse("edit_project"))
-        if "add_partner" in request.POST:
-            try:
-                user = User.objects.filter(email=request.POST.get("email")).first()
-                project = Project.objects.get(pk=request.POST.get("add_partner"))
-                current_partners = project.partners.all()
-                current_partners_list = set()
-                for partner in current_partners:
-                    current_partners_list.add(partner.pk)
-                current_partners_list.add(user.id)
-                project.partners.set(sorted(current_partners_list))
-                project.save()
-                messages.success(
-                    request,
-                    f"Invitació realitzada amb èxit a {user.full_name}."
-                    "Se li ha enviat a l'usuari un correu per a la seva acceptació.",
-                )
-            except:
-                messages.error(
-                    request,
-                    "L'usuari no existeix.",
-                )
-        if "delete_partner" in request.POST:
-            user = User.objects.filter(id=request.POST.get("partner_id")).first()
-            project = Project.objects.get(pk=request.POST.get("delete_partner"))
-            current_partners = project.partners.all().exclude(id=user.id)
-            current_partners_list = set()
-            for partner in current_partners:
-                current_partners_list.add(partner.pk)
-            project.partners.set(sorted(current_partners_list))
-            project.save()
-            messages.success(
-                request,
-                f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.",
-            )
-
-        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,7 +60,98 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
         context["is_pending"] = pending_project_stages
         context["is_open"] = open_project_stages
         context["partners"] = User.objects.filter(projects=project.id)
+        invited_users = Invitation.objects.filter(project=project).values("user")
+        users = set()
+        if invited_users:
+            for user in invited_users:
+                users.add(User.objects.filter(id=user['user']).first())
+        context["invited_partners"] = users
         return context
+
+
+def project_partner_manage(request):
+    if request.method == "POST":
+        if "add_partner" in request.POST:
+            try:
+                if not request.POST.get("email"):
+                    messages.error(
+                        request,
+                        "Ha d'indicar un correu electrònic vàlid.",
+                    )
+                    return redirect("edit_project")
+                user = User.objects.filter(email=request.POST.get("email")).first()
+                project = Project.objects.filter(id=request.POST.get("add_partner")).first()
+                invitation = Invitation.objects.create(
+                    user=user,
+                    project=project,
+                    is_invited=True,
+                )
+
+                messages.success(
+                    request,
+                    f"Invitació realitzada amb èxit a {user.full_name}."
+                    "Se li ha enviat a l'usuari un correu per a la seva acceptació.",
+                )
+            except:
+                messages.error(
+                    request,
+                    "L'usuari no existeix.", )
+        if "delete_partner" in request.POST:
+            user = User.objects.filter(id=request.POST.get("partner_id")).first()
+            if user == request.user:
+                messages.error(
+                    request,
+                    "No es pot eliminar l'usuari actualment autenticat.",
+                )
+                return redirect("edit_project")
+            project = Project.objects.get(pk=request.POST.get("delete_partner"))
+            current_partners = project.partners.all().exclude(id=user.id)
+            current_partners_list = set()
+            for partner in current_partners:
+                current_partners_list.add(partner.pk)
+            project.partners.set(sorted(current_partners_list))
+            project.save()
+            messages.success(
+                request,
+                f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.", )
+
+    if "delete_invitation" in request.POST:
+        user = User.objects.filter(id=request.POST.get("invited_id")).first()
+        invitation = Invitation.objects.filter(user=user, project=request.POST.get("delete_invitation")).first()
+        invitation.delete()
+        messages.success(
+            request,
+            f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.",
+        )
+
+    return redirect("edit_project")
+
+
+def invitation_partner(request, uuid):
+    if request.method == "GET":
+        context = {
+            "project": Project.objects.get(uuid=uuid)
+        }
+        return render(request, "project_invitation.html", context=context)
+    if request.method == "POST":
+        if "accept" in request.POST:
+            project = Project.objects.get(pk=request.POST.get("project"))
+            current_partners = project.partners.all()
+            current_partners_list = set()
+            for partner in current_partners:
+                current_partners_list.add(partner.pk)
+            current_partners_list.add(request.user.id)
+            project.partners.set(sorted(current_partners_list))
+            project.save()
+        if "deny" in request.POST:
+            pass
+
+        return render(request, "project_invitation.html")
+
+
+
+
+
 
 
 class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):

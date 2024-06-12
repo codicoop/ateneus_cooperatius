@@ -145,7 +145,7 @@
 					<p>{{ partner.email }}</p>
 				</div>
 				<div class="text-btn">
-					<form action="" method="post">
+					<form action="delete-partner/" method="post">
 						{% csrf_token %}
 						<button type="submit" name="delete_partner" value="{{ project.pk }}">Eliminar integrant</button>
 						<input type="hidden" name="partner_id" value="{{ partner.id }}">
@@ -153,6 +153,32 @@
 				</div>
 			</div>
 		{% endfor %}
+		{% if invited_partners %}
+			<div class="project__people-title is-bold">
+				<p>Usuaris convidats al projecte pendents d'incorporació</p>
+			</div>
+			{% for invited in invited_partners %}
+				<div class="project__people-item">
+					<div class="image">
+						{{ invited.photo }}
+						<img src="" alt="" srcset="">
+					</div>
+					<div class="text-md is-bold">
+						<p>{{ invited.full_name }}</p>
+					</div>
+					<div class="text-md">
+						<p>{{ invited.email }}</p>
+					</div>
+					<div class="text-btn">
+						<form action="delete-invitation/" method="post">
+							{% csrf_token %}
+							<button type="submit" name="delete_invitation" value="{{ project.pk }}">Eliminar invitació</button>
+							<input type="hidden" name="invited_id" value="{{ invited.id }}">
+						</form>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
 		<div class="project__people-add">
 			<div class="icon">
 				<svg xmlns="http://www.w3.org/2000/svg"	viewbox="0 0 24 24"	width="24"	height="24">
@@ -160,10 +186,10 @@
 				</svg>
 			</div>
 			<div class="modal-overlay__form form">
-				<form method="post" action="">
+				<form action="add-partner/" method="post">
 					{% csrf_token %}
-					<input type="text" name="email" style="background: white"/>
 					<button type="submit" name="add_partner" value="{{ project.pk }}">Afegir un nou integrant</button>
+					<input type="text" name="email" style="background: white"/>
 				</form>
 			</div>
 		</div>

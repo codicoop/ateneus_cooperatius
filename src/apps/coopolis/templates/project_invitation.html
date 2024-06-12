@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block home_is_active %}{% endblock %}
+{% block enrollments_is_active %}{% endblock %}
+{% block projects_is_active %}is-active{% endblock %}
+
+{% block content %}
+
+{{ project.name }}
+{{ project.sector }}
+{{ project.email }}
+{{ project.phone }}
+{{ project.viability }}
+{{ project.town }}
+{{ project.district }}
+{{ project.web }}
+{{ project.estatuts }}
+{{ project.sostenibility }}
+
+<div class="text-btn">
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" name="accept" value="accept">Acceptar invitació</button>
+        <button type="submit" name="deny" value="deny">Denegar invitació</button>
+        <input type="hidden" name="project" value="{{ project.pk }}">
+    </form>
+</div>
+{% endblock %}
