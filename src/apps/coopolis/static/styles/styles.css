@@ -3529,12 +3529,25 @@ a {
   --left: 0;
 }
 
+.modal-overlay2 {
+  --left-margin: 0;
+}
+
 @media (min-width: 900px) {
   .modal-overlay {
     --margin-card: var(--pad3) var(--pad2);
     --top: 0;
     --left: 128px;
   }
+
+  .modal-overlay2 {
+    --left-margin: 125px;
+  }
+}
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .modal-overlay__background {
   position: fixed;
@@ -3556,17 +3569,19 @@ a {
 .modal-overlay .card__subtitle {
   padding-bottom: var(--pad2);
 }
+.modal-overlay__form.form {
+  grid-template-columns: 1fr;
+}
 .modal-overlay__form .form__submit {
   margin-bottom: 0;
 }
 
 .modal-overlay2 {
   position: fixed;
-  bottom: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  bottom: 0;
+  top: 0;
+  left: var(--left-margin);
+  right: 0;
 }
 .modal-overlay2__card {
   position: auto;

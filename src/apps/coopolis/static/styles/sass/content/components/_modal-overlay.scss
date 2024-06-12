@@ -3,6 +3,9 @@
   --top: 91px;
   --left: 0;
 }
+.modal-overlay2 {
+  --left-margin: 0;
+}
 
 @media (min-width: 900px) {
   .modal-overlay {
@@ -10,9 +13,16 @@
     --top: 0;
     --left: 128px;
   }
+    .modal-overlay2 {
+    --left-margin: 125px;
+  }
 }
 
 .modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   &__background {
     position: fixed;
     top: var(--top);
@@ -34,6 +44,9 @@
     padding-bottom: var(--pad2);
   }
   &__form {
+    &.form {
+      grid-template-columns: 1fr;
+    }
 
     .form__submit {
       margin-bottom: 0;
@@ -43,11 +56,10 @@
 
 .modal-overlay2 {
   position: fixed;
-  bottom: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  bottom: 0;
+  top: 0;
+  left: var(--left-margin);
+  right: 0;
 
   &__card {
     position: auto;
