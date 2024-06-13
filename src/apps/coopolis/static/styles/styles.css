@@ -4394,11 +4394,15 @@ a {
   margin-top: var(--margin-top);
 }
 .project__people-item .image {
+  display: flex;
+  align-items: center;
   width: var(--pad5);
   height: var(--pad5);
   margin-bottom: var(--pad-2);
   border-radius: 50%;
   background-color: var(--yellow);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .project__people-item .image img {
   object-fit: cover;
@@ -4414,6 +4418,9 @@ a {
   text-transform: uppercase;
   color: var(--second);
   font-weight: 500;
+}
+.project__people-item .text-md {
+  text-align: center;
 }
 .project__people-add {
   display: flex;
@@ -5605,6 +5612,19 @@ a {
 }
 .modal-page__form .form__submit {
   margin-bottom: 0;
+}
+
+.project-invitation__title {
+  --padding-bottom: var(--pad2);
+}
+
+@media (min-width: 900px) {
+  .project-invitation__title {
+    --padding-bottom: var(--pad4);
+  }
+}
+.project-invitation__title {
+  padding-bottom: var(--padding-bottom);
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -7,14 +7,14 @@
 
 {% block content %}
 {% include './components/header_topbar.html' %}
-<div class="project">
+<div class="project project-invitation">
 	<section class="project__intro grid-content">
-		<div class="grid-item-wide project__intro-title title-2">
+		<div class="grid-item-wide project-invitation__title title-2">
 			<p>Invitació al projecte {{ project.name }}</p>
 		</div>
 		<div class="grid-item-wide project__intro-text">
 			<p>
-				Has rebut una invitació per formar part d'aquest projecte.
+				{{ user.full_name }}: Has rebut una invitació al correu {{ user.email }} per formar part d'aquest projecte.
 				Comprova les dades del projecte a continuació i indica si acceptes o no la invitació.
 				Un cop acceptada, passarà a ser el teu projecte i podràs veure els altres integrants.
 				Actualment només pots formar part d'un sol projecte.
@@ -92,10 +92,5 @@
 		</form>
 	</section>
 </div>
-
-<!-- USER FIELDS -->
-
-{{ user.full_name }}
-{{ user.email }}
 
 {% endblock %}

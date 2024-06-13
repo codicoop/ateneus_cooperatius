@@ -307,11 +307,15 @@
     margin-top: var(--margin-top);
 
     .image {
+      display: flex;
+      align-items: center;
       width: var(--pad5);
       height: var(--pad5);
       margin-bottom: var(--pad-2);
       border-radius: 50%;
       background-color: var(--yellow);
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       img {
         object-fit: cover;
@@ -328,6 +332,9 @@
       text-transform: uppercase;
       color: var(--second);
       font-weight: 500;
+    }
+    .text-md {
+      text-align: center;
     }
   }
   &__people-add {

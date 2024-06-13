@@ -1,0 +1,21 @@
+// Dynamic variables
+.project-invitation {
+  &__title {
+    --padding-bottom: var(--pad2);
+  }
+}
+
+@media (min-width: 900px) {
+  .project-invitation {
+    &__title {
+      --padding-bottom: var(--pad4);
+    }
+  }
+}
+
+// Layout
+.project-invitation {
+  &__title {
+    padding-bottom: var(--padding-bottom);
+  }
+}
