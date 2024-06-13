@@ -16,7 +16,6 @@ class Invitation(models.Model):
         on_delete=models.CASCADE,
         related_name="invitations",
     )
-    is_invited = models.BooleanField(default=False)
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
     updated = models.DateTimeField(verbose_name="actualització", auto_now=True)
 

@@ -1,6 +1,7 @@
 from apps.coopolis.models.invitation import Invitation
 from conf import settings
 from conf.custom_mail_manager import MyMailTemplate
+from constance import config
 from django import urls
 from django.contrib import messages
 from django.shortcuts import redirect, render
@@ -79,12 +80,18 @@ def project_partner_manage(request):
                     return redirect("edit_project")
                 user = User.objects.filter(email=request.POST.get("email")).first()
                 project = Project.objects.filter(id=request.POST.get("add_partner")).first()
-                invitation = Invitation.objects.create(
-                    user=user,
-                    project=project,
-                    is_invited=True,
-                )
-
+                invitation = Invitation.objects.create(user=user, project=project)
+                mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
+                mail.to = user.email
+                mail.subject_strings = {"project": project.name}
+                mail.body_strings = {
+                    "persona_fullname": user.full_name,
+                    "persona_email": user.email,
+                    "project": project.name,
+                    "absolute_url": settings.ABSOLUTE_URL,
+                    "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
+                    }
+                mail.send(now=True)
                 messages.success(
                     request,
                     f"Invitació realitzada amb èxit a {user.full_name}."
@@ -109,6 +116,15 @@ def project_partner_manage(request):
                 current_partners_list.add(partner.pk)
             project.partners.set(sorted(current_partners_list))
             project.save()
+            mail = MyMailTemplate("EMAIL_PARTNER_ELIMINATION")
+            mail.to = config.EMAIL_FROM_PROJECTS.split(",")
+            mail.subject_strings = {"project": project.name}
+            mail.body_strings = {
+                "persona_fullname": user.full_name,
+                "persona_email": user.email,
+                "project": project.name,
+            }
+            mail.send(now=True)
             messages.success(
                 request,
                 f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.", )
@@ -121,35 +137,31 @@ def project_partner_manage(request):
             request,
             f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.",
         )
-
     return redirect("edit_project")
 
 
 def invitation_partner(request, uuid):
     if request.method == "GET":
+        invitation = Invitation.objects.get(uuid=uuid)
         context = {
-            "project": Project.objects.get(uuid=uuid)
+            "project": invitation.project,
+            "user": invitation.user
         }
         return render(request, "project_invitation.html", context=context)
     if request.method == "POST":
+        invitation = Invitation.objects.filter(uuid=uuid).first()
+        user = User.objects.filter(id=invitation.user.id).first()
         if "accept" in request.POST:
             project = Project.objects.get(pk=request.POST.get("project"))
             current_partners = project.partners.all()
             current_partners_list = set()
             for partner in current_partners:
                 current_partners_list.add(partner.pk)
-            current_partners_list.add(request.user.id)
+            current_partners_list.add(user.id)
             project.partners.set(sorted(current_partners_list))
             project.save()
-        if "deny" in request.POST:
-            pass
-
-        return render(request, "project_invitation.html")
-
-
-
-
-
+        invitation.delete()
+        return redirect("edit_project")
 
 
 class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
