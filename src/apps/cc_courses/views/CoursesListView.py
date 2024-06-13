@@ -36,7 +36,9 @@ class AjaxProgramCalendarFeed(View):
             return JsonResponse(data, safe=False)
 
         sessions_dict = dict()
-        activities = Activity.objects.filter(date_start__gte=start, date_start__lte=end, publish=True)
+        activities = Activity.objects.filter(
+            date_start__gte=start, date_start__lte=end, publish=True
+        ).order_by('date_start')
         for activity in activities:
             if activity.course.id not in sessions_dict.keys():
                 sessions_dict[activity.course.id] = 1
