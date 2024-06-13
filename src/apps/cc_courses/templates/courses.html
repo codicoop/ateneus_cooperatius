@@ -15,8 +15,6 @@
 <script src="{% static '/fullcalendar/index.global.min.js' %}"></script>
 <script src="{% static '/fullcalendar/locales/ca.js' %}"></script>
 
-<!-- <script src="{% static 'js/fullcalendar.js' %}"></script> -->
-
 {% endblock %}
 
 {% block content %}
@@ -215,8 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
       </form>
     </section> -->
   </div>
-  <section class="courses-list__calendar">
-    <div id="calendar" class="my-calendar"></div>
+  <section class="courses-list__calendar grid-content">
+    <div id="calendar" class="my-calendar grid-item-full"></div>
   </section>
     <section class="courses-list__grid is-hidden">
     {% for course in future_courses %}
