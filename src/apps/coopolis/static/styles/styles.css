@@ -3458,6 +3458,9 @@ a {
 .my-calendar.fc.fc-theme-standard table.fc-scrollgrid {
   border: none;
 }
+.my-calendar.fc .fc-scroller.fc-scroller-liquid-absolute {
+  border-bottom: 1px solid var(--primary-lighter);
+}
 
 .dropdown__topbar {
   --margin: var(--pad2) 0;

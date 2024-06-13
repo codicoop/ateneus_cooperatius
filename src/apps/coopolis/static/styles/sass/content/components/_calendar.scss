@@ -94,5 +94,9 @@
   &.fc-theme-standard table.fc-scrollgrid {
     border: none;
   }
+  // Afegint un border al final per marcar
+  .fc-scroller.fc-scroller-liquid-absolute {
+    border-bottom: 1px solid var(--primary-lighter);
+  }
 }
 
