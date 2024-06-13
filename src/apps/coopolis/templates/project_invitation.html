@@ -43,7 +43,7 @@
 					<p>Sector</p>
 				</div>
 				<div class="info-list__data">
-					<p>{{ project.sector }}</p>
+					<p>{{ project.get_sector_display }}</p>
 				</div>
 			{% endif %}
 			{% if project.email %}
@@ -83,7 +83,7 @@
 					<p>Districte</p>
 				</div>
 				<div class="info-list__data">
-					<p>{{ project.district }}</p>
+					<p>{{ project.get_district_display }}</p>
 				</div>
 			{% endif %}
 		</div>
