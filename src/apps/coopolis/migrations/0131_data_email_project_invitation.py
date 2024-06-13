@@ -12,11 +12,10 @@ def populate_mail_templates(apps, schema_editor):
             'subject': "Invitació per a formar part del projecte {project}",
             'body': """
                 <p>Hola {persona_fullname}!</p>
-                <p>T'enviem aquest correu perquè avui
-                has estat convidat a formar part del projecte {project}.</p>
+                <p>T'enviem aquest correu perquè t'han afegit com a soci del
+                 projecte {project}, acompanyat per l'ateneu cooperatiu.</p>
                 
-                <p>Per a confirmar la teva adhesió deus visitant el següent enllaç 
-                i acceptar la invitació:
+                <p>Per a confirmar la teva adhesió visita el següent enllaç: 
                 <a href="{invitation_url}">{invitation_url}</a>
                 </p>
                 
