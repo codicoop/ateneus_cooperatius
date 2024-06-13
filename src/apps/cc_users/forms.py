@@ -49,9 +49,9 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             "employment_situation",
             "project_involved",
         )
-        widgets = {
-            "gender": forms.RadioSelect,
-        }
+        # widgets = {
+        #     "gender": forms.RadioSelect,
+        # }
 
     fieldsets = [
         (
@@ -89,6 +89,21 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             },
         ),
     ]
+
+    def as_fieldsets(self):
+        output = []
+        for name, fieldset in self.fieldsets:
+            output.append('<fieldset>')
+            if name:
+                output.append(f'<legend>{name}</legend>')
+            for field_name in fieldset['fields']:
+                field = self[field_name]
+                output.append(f'<p>{field.label_tag()}{field}</p>')
+                if field.errors:
+                    for error in field.errors:
+                        output.append(f'<p class="error">{error}</p>')
+            output.append('</fieldset>')
+        return ''.join(output)
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)

@@ -130,7 +130,7 @@
       enctype="multipart/form-data"
       >
       {% csrf_token %}
-      {{ form.as_ul }}
+      {{ form.as_fieldsets|safe }}
       {% if form.errors %}
       <div class="form__error text-sm">
           <p>Hi ha hagut un error: {{ form.error }}</p>
