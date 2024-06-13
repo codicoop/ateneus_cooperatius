@@ -2474,10 +2474,22 @@ a {
   padding-top: var(--pad-2);
 }
 
+.view-selector__title {
+  --font-size: 8px;
+  --line-height: 12px;
+}
+@media (min-width: 900px) {
+  .view-selector__title {
+    --font-size: 12px;
+    --line-height: 16px;
+  }
+}
 .view-selector {
   padding-bottom: var(--pad-2);
 }
 .view-selector__title {
+  font-size: var(--font-size);
+  line-height: var(--line-height);
   padding-bottom: var(--pad-2);
   color: var(--primary-light);
   text-transform: uppercase;
@@ -2493,6 +2505,7 @@ a {
 }
 .view-selector .selector-btn {
   display: flex;
+  align-items: center;
   gap: var(--pad1);
   padding: var(--pad1);
   background-color: var(--primary-lightest);
@@ -2510,8 +2523,9 @@ a {
   text-transform: uppercase;
 }
 .view-selector .selector-btn svg {
-  height: var(--pad1);
-  width: var(--pad1);
+  margin-left: 8px;
+  height: 20px;
+  width: 20px;
   fill: none;
 }
 .view-selector .selector-btn svg path {
@@ -4757,9 +4771,11 @@ a {
   margin-bottom: var(--pad3);
 }
 .courses-list__view {
-  padding-bottom: var(--pad-2);
   grid-column: 5/span 2;
   grid-row: 1;
+  justify-self: end;
+  width: fit-content;
+  padding-bottom: var(--pad-2);
 }
 .courses-list__sorting {
   grid-row: 1;

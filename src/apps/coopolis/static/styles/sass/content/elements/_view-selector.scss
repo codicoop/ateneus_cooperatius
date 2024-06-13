@@ -1,6 +1,8 @@
 // Dynamic variables
 .view-selector {
   &__title {
+    --font-size: 8px;
+    --line-height: 12px;
   }
   &__btns {
   }
@@ -11,6 +13,8 @@
 @media (min-width: 900px) {
   .view-selector {
     &__title {
+      --font-size: 12px;
+      --line-height: 16px;
     }
     &__btns {
     }
@@ -23,6 +27,8 @@
   padding-bottom: var(--pad-2);
   
   &__title {
+    font-size: var(--font-size);
+    line-height: var(--line-height);
     padding-bottom: var(--pad-2);
     color: var(--primary-light);
     text-transform: uppercase;
@@ -38,6 +44,7 @@
   }
   .selector-btn {
     display: flex;
+    align-items: center;
     gap: var(--pad1);
     padding: var(--pad1);
     background-color: var(--primary-lightest);
@@ -58,8 +65,9 @@
       text-transform: uppercase;
     }
     svg {
-      height: var(--pad1);
-      width: var(--pad1);
+      margin-left: 8px;
+      height: 20px;
+      width: 20px;
       fill: none;
 
       path {
