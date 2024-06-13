@@ -47,7 +47,7 @@
 						<div class="modal__background" onclick="hideMessageModal(event)"></div>
 						<div class="modal__card">
 							<div class="modal__title title-1">
-								<p>Confirmació</p>
+								<p>Atenció!</p>
 							</div>
 							<div class="modal__close" onclick="hideMessageModal(event)">
 								<svg
@@ -58,9 +58,8 @@
 										d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
 								</svg>
 							</div>
-							<div class="modal__form">
+							<div class="modal__message">
 								{% for message in messages %}
-
 								<div class="modal__intro text-md">
 									<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
 										<p>{{ message }}</p>

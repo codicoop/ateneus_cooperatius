@@ -2369,6 +2369,11 @@ a {
   padding: var(--pad1);
   cursor: pointer;
 }
+.modal__close:hover,
+.delete-modal__close:hover {
+  background-color: hsla(208deg, 87%, 88%, 0.25);
+  border-radius: 50%;
+}
 .modal__close svg,
 .delete-modal__close svg {
   width: 12px;
@@ -2422,6 +2427,15 @@ a {
 .delete-modal__form textarea,
 .delete-modal .form textarea {
   height: 100%;
+}
+.modal__message,
+.delete-modal__message {
+  grid-column: 1/span 2;
+}
+.modal__message .modal__intro,
+.delete-modal__message .modal__intro {
+  padding-top: var(--pad2);
+  background-color: hsla(208deg, 87%, 88%, 0.25);
 }
 .modal__submit,
 .delete-modal__submit {
