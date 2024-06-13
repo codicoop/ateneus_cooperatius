@@ -192,6 +192,7 @@ img {
   --yellow: #F6BF00;
   --violet: #c4b6c3;
   --violet-dark: #af62a0;
+  --primary-2: #efe7f2;
   --primary-1: #F0E8F3;
   --primary-lightest: #d3bfc6;
   --primary-lighter: #FFC5D9;
@@ -4452,59 +4453,8 @@ a {
 .profile__links .profile__link {
   --padding: var(--pad2);
 }
-.profile__form .form form {
-  --display-form: flex;
-}
-.profile__form .form form li:nth-child(3) {
-  order: 1;
-}
-.profile__form .form form li:nth-child(4) {
-  order: 7;
-}
-.profile__form .form form li:nth-child(5) {
-  order: 2;
-}
-.profile__form .form form li:nth-child(6) {
-  order: 8;
-}
-.profile__form .form form li:nth-child(7) {
-  order: 3;
-}
-.profile__form .form form li:nth-child(8) {
-  order: 9;
-}
-.profile__form .form form li:nth-child(9) {
-  order: 4;
-}
-.profile__form .form form li:nth-child(10) {
-  order: 10;
-}
-.profile__form .form form li:nth-child(11) {
-  order: 5;
-}
-.profile__form .form form li:nth-child(12) {
-  order: 11;
-}
-.profile__form .form form li:nth-child(13) {
-  order: 12;
-}
-.profile__form .form form li:nth-child(14) {
-  order: 6;
-}
-.profile__form .form form li:nth-child(15) {
-  order: 13;
-}
-.profile__form .form form li:nth-child(16) {
-  order: 14;
-}
-.profile__form .form form li:nth-child(17) {
-  order: 16;
-}
-.profile__form .form form li:nth-child(18) {
-  order: 15;
-}
-.profile__form .form form li:nth-child(19) {
-  order: 17;
+.profile__form fieldset {
+  --display-fieldset: flex;
 }
 
 @media (min-width: 900px) {
@@ -4539,59 +4489,8 @@ a {
   .profile__links .profile__link {
     --padding: var(--pad2) var(--pad2) var(--pad2) 0;
   }
-  .profile__form .form form {
-    --display-form: grid;
-  }
-  .profile__form .form form li:nth-child(3) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(4) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(5) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(6) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(7) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(8) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(9) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(10) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(11) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(12) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(13) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(14) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(15) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(16) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(17) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(18) {
-    order: initial;
-  }
-  .profile__form .form form li:nth-child(19) {
-    order: initial;
+  .profile__form fieldset {
+    --display-fieldset: grid;
   }
 }
 .profile {
@@ -4638,6 +4537,10 @@ a {
   display: var(--display);
   text-transform: uppercase;
   color: var(--second);
+  cursor: pointer;
+}
+.profile__image .profile__image-link:hover {
+  filter: brightness(1.5);
 }
 .profile__image input {
   display: none;
@@ -4672,26 +4575,48 @@ a {
   text-transform: uppercase;
   cursor: pointer;
 }
+.profile__links .profile__link:hover {
+  filter: brightness(1.5);
+}
 .profile__links .profile__image-link {
   display: var(--display);
   text-transform: uppercase;
   color: var(--second);
 }
-.profile__form .form {
+.profile__form.form {
+  display: block;
+}
+.profile__form form.grid-content {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0 var(--pad1);
+}
+.profile__form form fieldset:nth-child(2) {
+  display: none;
+}
+.profile__form form fieldset:nth-child(3) {
+  grid-column: 2/span 4;
+  display: var(--display-fieldset);
+  flex-direction: column;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--pad1);
+}
+.profile__form form fieldset:nth-child(4) {
+  grid-column: 1/span 6;
+  display: var(--display-fieldset);
+  flex-direction: column;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--pad1);
+  background-color: var(--primary-2);
+  padding: var(--pad6) var(--pad4);
+  margin: var(--pad4) var(--pad8) var(--pad6) var(--pad8);
+}
+.profile__form .form__submit .grid-item-wide {
   display: flex;
   flex-direction: column;
 }
-.profile__form .form form {
-  display: var(--display-form);
-  flex-direction: column;
-  grid-template-columns: repeat(2, 1fr);
-}
-.profile__form .form li:nth-child(2).field-file {
-  display: none;
-}
-.profile__form .form__submit {
+.profile__form .form__submit button {
   align-self: center;
-  margin: var(--pad3) 0;
 }
 
 .courses-list {

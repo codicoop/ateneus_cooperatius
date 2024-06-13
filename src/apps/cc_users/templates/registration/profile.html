@@ -3,7 +3,7 @@
 
 {% block content %}
 {% include '../components/header_topbar.html' %}
-<div class="profile {% if not user.is_authenticated %}not-logged{% endif %}">
+<div class="profile{% if not user.is_authenticated %} not-logged{% endif %}">
 	{% if messages %}
   <div class="modal">
     <div class="modal__background" onclick="hideModal(event)"></div>
@@ -121,37 +121,38 @@
       </div>
     </div>
   </section>
-	<section class="profile__form grid-content">
-    <div class="form grid-item-wide">
-      <form 
-      method="post"
-      action=""
-      id="profile_form"
-      enctype="multipart/form-data"
-      >
-      {% csrf_token %}
-      {{ form.as_fieldsets|safe }}
-      {% if form.errors %}
-      <div class="form__error text-sm">
-          <p>Hi ha hagut un error: {{ form.error }}</p>
-          <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
+	<section class="profile__form form">
+    <form class="grid-content"
+    method="post"
+    action=""
+    id="profile_form"
+    enctype="multipart/form-data"
+    >
+    {% csrf_token %}
+    {{ form.as_fieldsets|safe }}
+    {% if form.errors %}
+    <div class="form__error text-sm">
+        <p>Hi ha hagut un error: {{ form.error }}</p>
+        <ul>
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ field.label }}: {{ error }}</li>
             {% endfor %}
-        </ul>
+          {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    </form>
+    <div class="form__submit grid-content">
+      <div class="grid-item-wide">
+        <button form="profile_form" type="submit"
+        class="btn btn--second">
+          <p class="btn__text">
+            Guardar canvis
+          </p>
+        </button>
       </div>
-      {% endif %}
-			</form>
-			<div class="form__submit">
-				<button form="profile_form" type="submit" class="btn btn--second">
-					<p class="btn__text">
-						Guardar canvis
-					</p>
-				</button>
-			</div>
-		</div>
+    </div>
 	</section>
 </div>
 {% endblock %}
