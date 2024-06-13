@@ -6,30 +6,96 @@
 {% block projects_is_active %}is-active{% endblock %}
 
 {% block content %}
-
-<!-- PROJECT FIELDS -->
-{{ project.name }}
-{{ project.sector }}
-{{ project.email }}
-{{ project.phone }}
-{{ project.viability }}
-{{ project.town }}
-{{ project.district }}
-{{ project.web }}
-{{ project.estatuts }}
-{{ project.sostenibility }}
+{% include './components/header_topbar.html' %}
+<div class="project">
+	<section class="project__intro grid-content">
+		<div class="grid-item-wide project__intro-title title-2">
+			<p>Invitació al projecte {{ project.name }}</p>
+		</div>
+		<div class="grid-item-wide project__intro-text">
+			<p>
+				Has rebut una invitació per formar part d'aquest projecte.
+				Comprova les dades del projecte a continuació i indica si acceptes o no la invitació.
+				Un cop acceptada, passarà a ser el teu projecte i podràs veure els altres integrants.
+				Actualment només pots formar part d'un sol projecte.
+			</p>
+		</div>
+	</section>
+	<section class="project__info grid-content">
+		<div class="project__info-list grid-item-3-4">
+			{% if project.name %}
+				<div class="info-list__label">
+					<p>Nom</p>
+				</div>
+				<div class="info-list__data">
+					<p>{{ project.name }}</p>
+				</div>
+			{% endif %}
+			{% if project.sector %}
+				<div class="info-list__label">
+					<p>Sector</p>
+				</div>
+				<div class="info-list__data">
+					<p>{{ project.sector }}</p>
+				</div>
+			{% endif %}
+			{% if project.email %}
+				<div class="info-list__label">
+					<p>Correu electrònic</p>
+				</div>
+				<div class="info-list__data">
+					<p>{{ project.email }}</p>
+				</div>
+			{% endif %}
+			{% if project.phone %}
+				<div class="info-list__label">
+					<p>Telèfon</p>
+				</div>
+				<div class="info-list__data">
+					<p>{{ project.phone }}</p>
+				</div>
+			{% endif %}
+			{% if project.web %}
+				<div class="info-list__label">
+					<p>Web</p>
+				</div>
+				<div class="info-list__data">
+					<p>{{ project.web }}</p>
+				</div>
+			{% endif %}
+			{% if project.town %}
+				<div class="info-list__label">
+					<p>Població</p>
+				</div>
+				<div class="info-list__data">
+					<p>{{ project.town }}</p>
+				</div>
+			{% endif %}
+			{% if project.district %}
+				<div class="info-list__label">
+					<p>Districte</p>
+				</div>
+				<div class="info-list__data">
+					<p>{{ project.district }}</p>
+				</div>
+			{% endif %}
+		</div>
+	</section>
+	<section class="project__actions grid-content">
+		<form class="project__action-form grid-item-full" action="" method="post">
+			{% csrf_token %}
+			<button  class="form__submit btn btn--second btn__text"
+				type="submit" name="accept" value="accept">Acceptar invitació</button>
+			<button  class="form__submit btn btn--second btn__text"
+			type="submit" name="deny" value="deny">Denegar invitació</button>
+			<input type="hidden" name="project" value="{{ project.pk }}">
+		</form>
+	</section>
+</div>
 
 <!-- USER FIELDS -->
 
 {{ user.full_name }}
 {{ user.email }}
 
-<div class="text-btn">
-    <form action="" method="post">
-        {% csrf_token %}
-        <button type="submit" name="accept" value="accept">Acceptar invitació</button>
-        <button type="submit" name="deny" value="deny">Denegar invitació</button>
-        <input type="hidden" name="project" value="{{ project.pk }}">
-    </form>
-</div>
 {% endblock %}

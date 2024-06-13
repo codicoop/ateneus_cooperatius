@@ -4202,6 +4202,9 @@ a {
 .project__form form li:nth-child(12) {
   order: 10;
 }
+.project__info {
+  --padding-info: 0 0 var(--pad2) 0;
+}
 
 @media (min-width: 900px) {
   .project {
@@ -4271,6 +4274,9 @@ a {
   }
   .project__form form li:nth-child(12) {
     order: initial;
+  }
+  .project__info {
+    --padding-info: 0 0 var(--pad3) 0;
   }
 }
 .project {
@@ -4450,6 +4456,33 @@ a {
 }
 .project__people-btn:hover {
   background-color: var(--second-2);
+}
+.project__invited {
+  margin-top: var(--pad2);
+}
+.project__info {
+  padding: var(--padding-info);
+}
+.project__info-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pad1);
+}
+.project .info-list__label {
+  grid-column: 1;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 12px;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.project .info-list__data {
+  grid-column: 2;
+}
+.project__action-form {
+  display: flex;
+  justify-content: center;
+  gap: 0 var(--pad3);
 }
 
 .profile {
