@@ -108,7 +108,7 @@ def project_partner_manage(request):
                 messages.success(
                     request,
                     f"Invitació realitzada amb èxit a {user.full_name}."
-                    "Se li ha enviat a l'usuari un correu per a la seva acceptació.",
+                    " Se li ha enviat un correu per a la seva acceptació.",
                 )
             except:
                 messages.error(
