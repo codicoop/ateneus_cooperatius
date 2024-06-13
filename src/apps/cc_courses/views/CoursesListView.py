@@ -46,9 +46,9 @@ class AjaxProgramCalendarFeed(View):
                 sessions_dict[activity.course.id] += 1
             activity_data = {
                 'title': activity.name,
-                'start': date_to_tull_calendar_format(
+                'start': date_to_full_calendar_format(
                     make_aware(datetime.combine(activity.date_start, activity.starting_time))),
-                'end': date_to_tull_calendar_format(
+                'end': date_to_full_calendar_format(
                     make_aware(datetime.combine(activity.date_start, activity.ending_time))),
                 'session_num': sessions_dict[activity.course.id],
                 'session_total': Activity.objects.filter(
@@ -62,7 +62,7 @@ class AjaxProgramCalendarFeed(View):
         return JsonResponse(data, safe=False)
 
 
-def date_to_tull_calendar_format(date_obj):
+def date_to_full_calendar_format(date_obj):
     aware_date = timezone.localtime(date_obj)
     return aware_date.strftime("%Y-%m-%dT%H:%M:%S")
 
