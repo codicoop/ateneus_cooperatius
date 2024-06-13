@@ -9,14 +9,14 @@ def populate_mail_templates(apps, schema_editor):
         text_identifier='EMAIL_PARTNER_ELIMINATION',
         defaults={
             'text_identifier': 'EMAIL_PARTNER_ELIMINATION',
-            'subject': "Eliminació de soci en el projecte {project}",
+            'subject': "Eliminació de soci/a en el projecte {project}",
             'body': """
                 <p>Hola!</p>
-                <p>Els enviem aquest correu per a comunicar-los que en el dia d'avui 
-                s'ha eliminat del projecte {project} al soci {persona_fullname} 
-                amb correu electrònic {persona_email}</p>
+                <p>T'enviem aquest correu per a comunicar-te que en el dia d'avui 
+                s'ha eliminat del projecte {project} al soci o sòcia 
+                {persona_fullname} amb correu electrònic {persona_email}</p>
 
-                <p>Salutacions cordials</p>
+                <p>Salutacions</p>
     """,
             'default_template_path': 'emails/front_generic.html'
         },
