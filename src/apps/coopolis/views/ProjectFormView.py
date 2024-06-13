@@ -79,6 +79,19 @@ def project_partner_manage(request):
                     )
                     return redirect("edit_project")
                 user = User.objects.filter(email=request.POST.get("email")).first()
+                user_is_invited = Invitation.objects.filter(user=user).values("user__id").first()
+                if user_is_invited:
+                    messages.error(
+                        request,
+                        f"L'usuari {user.full_name} ja està invitat.",
+                    )
+                    return redirect("edit_project")
+                if user.project:
+                    messages.error(
+                        request,
+                        f"L'usuari {user.full_name} ja forma part d'aquest projecte.",
+                    )
+                    return redirect("edit_project")
                 project = Project.objects.filter(id=request.POST.get("add_partner")).first()
                 invitation = Invitation.objects.create(user=user, project=project)
                 mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
