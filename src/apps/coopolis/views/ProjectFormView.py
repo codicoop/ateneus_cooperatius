@@ -3,6 +3,7 @@ from conf import settings
 from conf.custom_mail_manager import MyMailTemplate
 from constance import config
 from django import urls
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.messages.views import SuccessMessageMixin
@@ -68,6 +69,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
         return context
 
 
+@login_required(login_url="/users/login/")
 def project_partner_manage(request):
     if request.method == "POST":
         if "add_partner" in request.POST:
@@ -103,7 +105,7 @@ def project_partner_manage(request):
                     "project": project.name,
                     "absolute_url": settings.ABSOLUTE_URL,
                     "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
-                    }
+                }
                 mail.send(now=True)
                 messages.success(
                     request,
@@ -153,9 +155,25 @@ def project_partner_manage(request):
     return redirect("edit_project")
 
 
+@login_required(login_url="/users/login/")
 def invitation_partner(request, uuid):
     if request.method == "GET":
+        if not Invitation.objects.filter(uuid=uuid).exists():
+            messages.error(
+                request,
+                "La teva invitació a aquest projecte ha caducat, "
+                "si us plau contacta amb la seva administració.",
+            )
+            return redirect("edit_project")
+
         invitation = Invitation.objects.get(uuid=uuid)
+        if request.user.id is not invitation.user.id:
+            messages.error(
+                request,
+                "Estàs intentat accedir a un espai restringit a un altre usuari."
+                " Si consideres que existeix un error contacta amb l'administració.",
+            )
+            return redirect("edit_project")
         context = {
             "project": invitation.project,
             "user": invitation.user
