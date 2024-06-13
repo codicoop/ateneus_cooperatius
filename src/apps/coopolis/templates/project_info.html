@@ -144,9 +144,11 @@
 				<div class="text-md">
 					<p>{{ partner.email }}</p>
 				</div>
-				<div class="project__people-btn text-btn" onclick="openDeleteModal(this)">
-					<p>Eliminar</p>
-				</div>
+				{% if partner.id != request.user.id %}
+					<div class="project__people-btn text-btn" onclick="openDeleteModal(this)">
+						<p>Eliminar</p>
+					</div>
+				{% endif %}
 			</div>
 			<div class="project__modal-add modal-overlay modal-overlay2 is-hidden" id="deleteParticipantModal">
 				<div class="modal-overlay__background" onclick="closeDeleteModal2(this)"></div>
