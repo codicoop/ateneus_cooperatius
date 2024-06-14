@@ -168,16 +168,6 @@ class ProjectsFollowUpAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin)
                     subsidy_period=filtered_subsidy_period
                 )
             )
-            ctxt['rows'][key]['constituted'] = 0
-            project_subsidy = ctxt['rows'][key]['project'].subsidy_period
-            if project_subsidy:
-                project_subsidy = project_subsidy.id
-                if (
-                    ctxt['rows'][key]['project'].constitution_date
-                    and project_subsidy == filtered_subsidy_period
-                    and ctxt['rows'][key]['project'].cif
-                ):
-                    ctxt['rows'][key]['constituted'] = 1
 
         ctxt["rows"] = self.sort_rows(ctxt["rows"])
 
@@ -230,7 +220,6 @@ class ProjectsFollowUpAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin)
             totals['total_employment_insertions'] += row[
                 'employment_insertions'
             ]
-            totals['total_constitutions'] += row['constituted']
 
         if (totals['total_incubation_certificat'] > 0
                 or totals['total_incubation_hores'] > 0):
