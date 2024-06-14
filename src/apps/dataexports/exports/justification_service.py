@@ -508,32 +508,44 @@ class ExportJustificationService:
                 stage = group['obj']
                 if not hasattr(stage, "created_entity"):
                     continue
+                # Important: fixa't que aquí estem omplint les dades d'entitats
+                # creades, però no hi ha referències al model
+                # CreatedEntity.
+                # El registre de l'entitat creada seria aquest:
+                #
+                # created_entity = stage.created_entity
+                #
+                # Però no el necessitem, ja que l'única dada rellevant que fem
+                # servir és CreatedEntity.project_stage, que la tenim a la
+                # variable stage.
+                # A partir de tenir el project_stage, totes les dades de
+                # l'entitat creada ja les treiem d'aquí.
+
                 stage_reference_number = group['row_number']
-                created_entity = stage.created_entity
-                circle = (
-                    CirclesChoices(created_entity.circle).label
-                    if created_entity.circle else ("", True)
-                )
-                contact_details = (
-                    created_entity.project.partners.all()[0].full_name
-                    if created_entity.project.partners.all() else ("", True)
-                )
+
+                contact_details = ("", True)
+                if stage.project.partners.all():
+                    contact_details = stage.project.partners.all()[0].full_name
+                entities = stage.entities_str
+                circle = CirclesChoices(stage.circle).label
+                sub_service = stage.sub_service
+
                 row = [
                     self.get_formatted_reference(
                         stage_reference_number,
-                        created_entity.sub_service,
-                        created_entity.entity,
-                        created_entity.circle,
+                        sub_service,
+                        entities,
+                        stage.circle,
                     ),  # Referència
                     "",  # Nom actuació
-                    created_entity.project.name,  # Nom del projecte
-                    created_entity.project.cif or ("", True),  # NIF del projecte
+                    stage.project.name,  # Nom del projecte
+                    stage.project.cif or ("", True),  # NIF del projecte
                     contact_details,  # Nom i cognoms persona de contacte
-                    created_entity.project.mail or ("", True),  # Correu electrònic
-                    created_entity.project.phone or ("", True),  # Telèfon
+                    stage.project.mail or ("", True),  # Correu electrònic
+                    stage.project.phone or ("", True),  # Telèfon
                     "Sí",  # Economia solidària
                     circle,  # Ateneu / Cercle
-                    created_entity.project.stages_list,  # Acompanyaments
+                    stage.project.stages_list,  # Acompanyaments
                 ]
                 self.export_manager.fill_row_data(row)
 
