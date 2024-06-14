@@ -1,5 +1,12 @@
 from datetime import datetime
 
+from apps.cc_courses.choices import ProjectStageStatesChoices
+from apps.cc_courses.models import Activity, ActivityEnrolled
+from apps.coopolis.mixins import FormDistrictValidationMixin
+from apps.coopolis.models import ActivityPoll, EmploymentInsertion, Project, User
+from apps.coopolis.models.projects import CreatedEntity
+from apps.coopolis.widgets import XDSoftDatePickerInput
+from apps.facilities_reservations.models import Reservation, ReservationEquipment
 from constance import config
 from django import forms
 from django.conf import settings
@@ -9,14 +16,9 @@ from django.db.models import BLANK_CHOICE_DASH
 from django.forms import models
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
-
-from apps.cc_courses.choices import ProjectStageStatesChoices
-from apps.cc_courses.models import Activity, ActivityEnrolled
-from apps.coopolis.mixins import FormDistrictValidationMixin
-from apps.coopolis.models import ActivityPoll, EmploymentInsertion, Project, User
-from apps.coopolis.models.projects import CreatedEntity
 from apps.coopolis.widgets import XDSoftDatePickerInput
-from apps.facilities_reservations.models import Reservation, ReservationEquipment
+from apps.facilities_reservations.models import (Reservation,
+                                                 ReservationEquipment)
 
 
 class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
@@ -251,9 +253,9 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             "password2",
             "authorize_communications",
         )
-        widgets = {
-            "gender": forms.RadioSelect,
-        }
+        # widgets = {
+        #     "gender": forms.RadioSelect,
+        # }
 
     fieldsets = [
         (
@@ -294,10 +296,33 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                     "password1",
                     "password2",
                     "authorize_communications",
+                    "accept_conditions",
+                    "accept_conditions2"
                 )
             },
         ),
     ]
+
+    def as_fieldsets(self):
+        output = []
+        for name, fieldset in self.fieldsets:
+            output.append('<fieldset>')
+            if name:
+                output.append(f'<legend>{name}</legend>')
+            for field_name in fieldset['fields']:
+                field = self[field_name]
+                if isinstance(field.field.widget, forms.CheckboxInput): 
+                    print(name, field.field.widget)
+                    output.append(f'<ul>{field}</ul>')
+                else:
+                    output.append(f'<p>{field.label_tag()}{field}</p>')
+                if field.errors:
+                    for error in field.errors:
+                        output.append(f'<p class="error">{error}</p>')
+                if field.help_text:
+                    output.append(f'<p class="help">{field.help_text}</p>')
+            output.append('</fieldset>')
+        return ''.join(output)
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)

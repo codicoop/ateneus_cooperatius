@@ -14,13 +14,14 @@
 		</div>
 	</section>
 	<section class="signup__form grid-content">
-		<form 
+		<form
 				class="form grid-item-wide"
-				method="post" 
+				method="post"
 				action="{% url 'signup_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
 		>
 			{% csrf_token %}
-			{{ signup_form.as_ul }}
+			<!-- {{ signup_form.as_ul }} -->
+			{{ signup_form.as_fieldsets|safe }}
 			<div class="form__submit">
 				<input type="submit" class="btn btn--second btn__text" value="Crear compte" />
 			</div>
