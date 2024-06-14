@@ -251,9 +251,9 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             "password2",
             "authorize_communications",
         )
-        # widgets = {
-        #     "gender": forms.RadioSelect,
-        # }
+        widgets = {
+            "gender": forms.RadioSelect,
+        }
 
     fieldsets = [
         (
@@ -313,6 +313,8 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                 if field.errors:
                     for error in field.errors:
                         output.append(f'<p class="error">{error}</p>')
+                if field.help_text:
+                        output.append(f'<p class="help">{field.help_text}</p>')
             output.append("</fieldset>")
         return "".join(output)
 
