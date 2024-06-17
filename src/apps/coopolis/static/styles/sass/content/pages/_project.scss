@@ -36,51 +36,11 @@
   }
   &__form {
     form {
-      --display-form: flex;
+      --display-form-project: flex;
+      --display-fieldset: flex;
 
-      // Photo
-      & li:nth-child(2) {
-        display: none!important;
-      }
-      // Nom
-      & li:nth-child(3) {
-        order: 1;
-      }
-      // Poblacio
-      & li:nth-child(4) {
-        order: 6;
-      }
-      // Sector
-      & li:nth-child(5) {
-        order: 2;
-      }
-      // Districte
-      & li:nth-child(6) {
-        order: 7;
-      }
-      // Email
-      & li:nth-child(7) {
-        order: 3;
-      }
-      // web
-      & li:nth-child(8) {
-        order: 5;
-      }
-      // phone
-      & li:nth-child(9) {
-        order: 4;
-      }
-      // file 1 - estatuts
-      & li:nth-child(10) {
-        order: 8;
-      }
-      // file 2 - viabilitat
-      & li:nth-child(11) {
-        order: 9;
-      }
-      // file 3 - sostenibilitat
-      & li:nth-child(12) {
-        order: 10;
+      & fieldset:nth-child(4){
+        --padding-top-fieldset: 0;
       }
     }
   }
@@ -98,7 +58,6 @@
         --display: grid;
       }
     }
-
     &__intro-title {
       --max-width: none;
       --text-align: left;
@@ -124,51 +83,11 @@
     }
     &__form {
       form {
-        --display-form: grid;
-  
-        // Photo
-        & li:nth-child(2) {
-          display: none;
-        }
-        // Nom
-        & li:nth-child(3) {
-          order: initial;
-        }
-        // Poblacio
-        & li:nth-child(4) {
-          order: initial;
-        }
-        // Sector
-        & li:nth-child(5) {
-          order: initial;
-        }
-        // Districte
-        & li:nth-child(6) {
-          order: initial;
-        }
-        // Email
-        & li:nth-child(7) {
-          order: initial;
-        }
-        // web
-        & li:nth-child(8) {
-          order: initial;
-        }
-        // phone
-        & li:nth-child(9) {
-          order: initial;
-        }
-        // file 1 - estatuts
-        & li:nth-child(10) {
-          order: initial;
-        }
-        // file 2 - viabilitat
-        & li:nth-child(11) {
-          order: initial;
-        }
-        // file 3 - sostenibilitat
-        & li:nth-child(12) {
-          order: initial;
+        --display-form-project: grid;
+        --display-fieldset: grid;
+
+        & fieldset:nth-child(4){
+          --padding-top-fieldset: var(--pad4);
         }
       }
     }
@@ -266,14 +185,36 @@
     width: var(--width);
   }
   &__form {
+    &.form {
+      display: block;
+    }
     form {
-      display: var(--display-form);
-      flex-direction: column;
-
+      &.grid-content {
+        display: var(--display-form-project);
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0 var(--pad1);
+      }
+      // Fieldset fotografia amagat
+      & fieldset:nth-child(2){
+        display: none;
+      }
+      & fieldset:nth-child(3){
+        grid-column: 2 / span 4;
+        display: var(--display-fieldset);
+        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--pad1);
+      }
+      & fieldset:nth-child(4){
+        grid-column: 2 / span 4;
+        display: var(--display-fieldset);
+        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--pad1);
+        padding-top: var(--padding-top-fieldset);
+      }
       .form__submit {
-        order: 11;
-        grid-row: 10;
-        grid-column: 1 / span 2;
+        grid-column: 3 / span 2;
         justify-self: center;
       }
     }
