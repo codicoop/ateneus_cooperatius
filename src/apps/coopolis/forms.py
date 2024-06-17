@@ -66,13 +66,28 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
             None,
             {
                 "fields": (
-                    "estatus",
+                    "estatuts",
                     "viability",
                     "sostenibility",
                 )
             },
         ),
     ]
+
+    def as_fieldsets(self):
+        output = []
+        for name, fieldset in self.fieldsets:
+            output.append('<fieldset>')
+            if name:
+                output.append(f'<legend>{name}</legend>')
+            for field_name in fieldset['fields']:
+                field = self[field_name]
+                output.append(f'<p>{field.label_tag()}{field}</p>')
+                if field.errors:
+                    for error in field.errors:
+                        output.append(f'<p class="error">{error}</p>')
+            output.append('</fieldset>')
+        return ''.join(output)
 
 
 class ProjectStageStartForm(forms.ModelForm):

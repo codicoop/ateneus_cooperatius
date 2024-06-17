@@ -80,53 +80,60 @@
 		</div>
 		{% endif %}
 	</section>
-	<section class="project__form grid-content">
-		<form class="form grid-item-wide" method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
-			enctype="multipart/form-data" id="project-form">
-			{% csrf_token %}
-			{{ form.as_ul }}
-			{% if form.errors %}
-			<div class="form__error text-sm">
-					<p>Hi ha hagut un error: {{ form.error }}</p>
-          <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
+	<section class="profile__form form">
+    <form
+		class="grid-content"
+		method="post"
+		action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+		enctype="multipart/form-data"
+		id="project-form"
+    >
+    {% csrf_token %}
+    {{ form.as_fieldsets|safe }}
+    {% if form.errors %}
+    <div class="form__error text-sm">
+        <p>Hi ha hagut un error: {{ form.error }}</p>
+        <ul>
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ field.label }}: {{ error }}</li>
             {% endfor %}
-        </ul>
+          {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+	{% if messages %}
+	<div class="modal">
+		<div class="modal__background" onclick="hideMessageModal(event)"></div>
+		<div class="modal__card">
+			<div class="modal__title title-1">
+				<p>Confirmació</p>
 			</div>
-			{% endif %}
-			{% if messages %}
-			<div class="modal">
-				<div class="modal__background" onclick="hideMessageModal(event)"></div>
-				<div class="modal__card">
-					<div class="modal__title title-1">
-						<p>Confirmació</p>
-					</div>
-					<div class="modal__close" onclick="hideMessageModal(event)">
-						<svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 9.46 9.46">
-							<path d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
-						</svg>
-					</div>
-					<div class="modal__form">
-						{% for message in messages %}
+			<div class="modal__close" onclick="hideMessageModal(event)">
+				<svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 9.46 9.46">
+					<path d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+				</svg>
+			</div>
+			<div class="modal__form">
+				{% for message in messages %}
 
-						<div class="modal__intro text-md">
-							<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
-								<p>{{ message }}</p>
-							</div>
-						</div>
-						{% endfor %}
+				<div class="modal__intro text-md">
+					<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
+						<p>{{ message }}</p>
 					</div>
 				</div>
+				{% endfor %}
 			</div>
-			{% endif %}
-			<div class="form__submit">
-				<input type="submit" class="btn btn--primary btn__text" value="Actualitzar dades" />
-			</div>
-			<input type="hidden" name="next" value="{{ next }}" />
-		</form>
+		</div>
+	</div>
+	{% endif %}
+	<div class="form__submit grid-content">
+		<div class="form__submit">
+			<input type="submit" class="btn btn--primary btn__text" value="Actualitzar dades" />
+		</div>
+		<input type="hidden" name="next" value="{{ next }}" />
+	</div>
+	</form>
 	</section>
 	<!-- <section class="project__people-grid">
 		<div class="project__people-title is-bold">
