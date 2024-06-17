@@ -4423,7 +4423,7 @@ a {
 }
 
 .profile {
-  --padding-profile: var(--pad1);
+  --padding-profile: var(--pad-2);
 }
 .profile__intro {
   --display: flex;
@@ -4453,8 +4453,21 @@ a {
 .profile__links .profile__link {
   --padding: var(--pad2);
 }
+.profile__form {
+  --display-form-profile: flex;
+}
 .profile__form fieldset {
   --display-fieldset: flex;
+}
+.profile__form form fieldset:nth-child(3) {
+  --padding: 0 var(--pad-2);
+}
+.profile__form form fieldset:nth-child(4) {
+  --padding: var(--pad2) var(--pad-2);
+  --margin: var(--pad1-5) 0 0 0;
+}
+.profile__form .form__submit {
+  --padding: 0 var(--pad-2);
 }
 
 @media (min-width: 900px) {
@@ -4489,8 +4502,21 @@ a {
   .profile__links .profile__link {
     --padding: var(--pad2) var(--pad2) var(--pad2) 0;
   }
+  .profile__form {
+    --display-form-profile: grid;
+  }
   .profile__form fieldset {
     --display-fieldset: grid;
+  }
+  .profile__form form fieldset:nth-child(3) {
+    --padding: 0;
+  }
+  .profile__form form fieldset:nth-child(4) {
+    --padding: var(--pad6) var(--pad4);
+    --margin: var(--pad4) var(--pad8) var(--pad6) var(--pad8);
+  }
+  .profile__form .form__submit {
+    --padding: 0;
   }
 }
 .profile {
@@ -4587,7 +4613,7 @@ a {
   display: block;
 }
 .profile__form form.grid-content {
-  display: grid;
+  display: var(--display-form-profile);
   grid-template-columns: repeat(6, 1fr);
   gap: 0 var(--pad1);
 }
@@ -4600,6 +4626,7 @@ a {
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--pad1);
+  padding: var(--padding);
 }
 .profile__form form fieldset:nth-child(4) {
   grid-column: 1/span 6;
@@ -4607,9 +4634,13 @@ a {
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--pad1);
+  padding: var(--padding);
+  margin: var(--margin);
   background-color: var(--primary-2);
-  padding: var(--pad6) var(--pad4);
-  margin: var(--pad4) var(--pad8) var(--pad6) var(--pad8);
+  border-radius: var(--br);
+}
+.profile__form .form__submit {
+  padding: var(--padding);
 }
 .profile__form .form__submit .grid-item-wide {
   display: flex;

@@ -1,6 +1,6 @@
 // Dynamic variables
 .profile {
-  --padding-profile: var(--pad1);
+  --padding-profile: var(--pad-2);
 
   &__intro {
     --display: flex;
@@ -35,8 +35,20 @@
     }
   }
   &__form {
+    --display-form-profile: flex;
+
     fieldset {
       --display-fieldset: flex;
+    }
+    form fieldset:nth-child(3){
+      --padding: 0 var(--pad-2);
+    }
+    form fieldset:nth-child(4){
+      --padding: var(--pad2) var(--pad-2);
+      --margin: var(--pad1-5) 0 0 0;
+    }
+    .form__submit {
+      --padding: 0 var(--pad-2);
     }
   }
 }
@@ -79,8 +91,20 @@
       }
     }
     &__form {
+      --display-form-profile: grid;
+
       fieldset {
         --display-fieldset: grid;
+      }
+      form fieldset:nth-child(3){
+        --padding: 0;
+      }
+      form fieldset:nth-child(4){
+        --padding: var(--pad6) var(--pad4);
+        --margin: var(--pad4) var(--pad8) var(--pad6) var(--pad8);
+        }
+      .form__submit {
+        --padding: 0;
       }
     }
   }
@@ -189,7 +213,7 @@
     }
     form {
       &.grid-content {
-        display: grid;
+        display: var(--display-form-profile);
         grid-template-columns: repeat(6, 1fr);
         gap: 0 var(--pad1);
       }
@@ -203,6 +227,7 @@
         flex-direction: column;
         grid-template-columns: repeat(2, 1fr);
         gap: var(--pad1);
+        padding: var(--padding);
       }
       & fieldset:nth-child(4){
         grid-column: 1 / span 6;
@@ -210,12 +235,14 @@
         flex-direction: column;
         grid-template-columns: repeat(2, 1fr);
         gap: var(--pad1);
+        padding: var(--padding);
+        margin: var(--margin);
         background-color: var(--primary-2);
-        padding: var(--pad6) var(--pad4);
-        margin: var(--pad4) var(--pad8) var(--pad6) var(--pad8);
+        border-radius: var(--br);
       }
     }
     .form__submit {
+      padding: var(--padding);
       .grid-item-wide {
         display: flex;
         flex-direction: column;
