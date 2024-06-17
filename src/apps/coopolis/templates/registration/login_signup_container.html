@@ -13,26 +13,38 @@
 			<p>Per a inscriure't a les activitats o sol·licitar acompanyament per al teu projecte, crea un compte amb els formularis que hi ha a continuació.</p>
 		</div>
 	</section>
-	<section class="signup__form grid-content">
+	<section class="signup__form form">
 		<form
-				class="form grid-item-wide"
+				class="grid-content"
 				method="post"
+				id="signup_form"
 				action="{% url 'signup_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
 		>
 			{% csrf_token %}
-			<!-- {{ signup_form.as_ul }} -->
 			{{ signup_form.as_fieldsets|safe }}
-			<div class="form__submit">
-				<input type="submit" class="btn btn--second btn__text" value="Crear compte" />
+			{% if form.errors %}
+			<div class="form__error text-sm">
+					<p>Hi ha hagut un error: {{ form.error }}</p>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label }}: {{ error }}</li>
+							{% endfor %}
+						{% endfor %}
+				</ul>
 			</div>
-			<div class="form__text">
-				<p>Consulta el
-					<a href="{{ config.PROJECT_LEGAL_URL }}" target="_blank" class="is-bold">text complet</a>
-					de l'avís legal i de protecció de dades.
-				</p>
+			{% endif %}
+			</form>
+			<div class="form__submit grid-content">
+				<div class="form__text grid-item-3-4">
+					<p>Consulta el
+						<a href="{{ config.PROJECT_LEGAL_URL }}" target="_blank" class="is-bold">text complet</a>
+						de l'avís legal i de protecció de dades.
+					</p>
+				</div>
+				<input form="signup_form" type="submit" class="btn btn--second btn__text grid-item-3-4" value="Crear compte" />
+				<input type="hidden" name="next" value="{{ next }}" />
 			</div>
-			<input type="hidden" name="next" value="{{ next }}" />
-		</form>
 	</section>
 </div>
 {% endblock %}
