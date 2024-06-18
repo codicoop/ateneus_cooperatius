@@ -20,10 +20,10 @@
             d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
         </svg>
       </div>
-      <div class="modal__form form">
+      <div class="modal__messages">
         <div class="modal__intro text-md">
           {% for message in messages %}
-          <div class="text-md">
+          <div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
             <p>{{ message }}</p>
           </div>
           {% endfor %}

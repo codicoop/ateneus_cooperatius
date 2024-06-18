@@ -144,11 +144,9 @@
 				<div class="text-md">
 					<p>{{ partner.email }}</p>
 				</div>
-				{% if partner.id != request.user.id %}
-					<div class="project__people-btn text-btn" onclick="openDeleteModal(this)">
-						<p>Eliminar</p>
-					</div>
-				{% endif %}
+				<div class="project__people-btn text-btn" onclick="openDeleteModal(this)">
+					<p>Eliminar</p>
+				</div>
 			</div>
 			<div class="project__modal-add modal-overlay modal-overlay2 is-hidden" id="deleteParticipantModal">
 				<div class="modal-overlay__background" onclick="closeDeleteModal2(this)"></div>
@@ -159,12 +157,8 @@
 					<div class="card__subtitle text-sm">
 						<p>Segur que vols eliminar
 							<span class="is-bold">{{ partner.full_name }}</span>
-							del projecte?
-						</p>
-						<p>
-							El compte de la persona
-							no s'esborrarà, només la seva vinculació amb aquest
-							projecte.
+							del teu projecte? El compte de la persona 
+							no s'esborrarà, només la vinculació amb aquest projecte.
 						</p>
 					</div>
 					<div class="card__close" onclick="closeDeleteModal(this)">
