@@ -49,9 +49,9 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             "employment_situation",
             "project_involved",
         )
-        # widgets = {
-        #     "gender": forms.RadioSelect,
-        # }
+        widgets = {
+            "gender": forms.RadioSelect,
+        }
 
     fieldsets = [
         (
