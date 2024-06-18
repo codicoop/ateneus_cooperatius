@@ -69,7 +69,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
         return context
 
 
-@login_required(login_url="/users/login/")
+@login_required
 def project_partner_manage(request):
     if request.method == "POST":
         if "add_partner" in request.POST:
@@ -155,23 +155,23 @@ def project_partner_manage(request):
     return redirect("edit_project")
 
 
-@login_required(login_url="/users/login/")
+@login_required
 def invitation_partner(request, uuid):
     if request.method == "GET":
-        if not Invitation.objects.filter(uuid=uuid).exists():
+        try:
+            invitation = Invitation.objects.get(uuid=uuid)
+        except Invitation.DoesNotExist:
             messages.error(
                 request,
-                "La teva invitació a aquest projecte ha caducat, "
-                "si us plau contacta amb la seva administració.",
+                "Aquest enllaç d'invitació no existeix.",
             )
             return redirect("edit_project")
 
-        invitation = Invitation.objects.get(uuid=uuid)
         if request.user.id is not invitation.user.id:
             messages.error(
                 request,
-                "Estàs intentat accedir a un espai restringit a un altre usuari."
-                " Si consideres que existeix un error contacta amb l'administració.",
+                "Estàs accedint a un enllaç d'invitació a un projecte que correspon a un altre usuari. "
+                "Assegura't d'obrir l'enllaç des del compte a la qual t'han enviat la invitació.",
             )
             return redirect("edit_project")
         context = {
