@@ -1,3 +1,5 @@
+<!-- Aquesta és una còpia de quan es va avançar amb la maquetació del calendari -->
+<!-- Però com falta la part de back, doncs de moment es va esborrar de la release -->
 {% extends "base.html" %}
 {% load thumbnail static %}
 
@@ -5,8 +7,81 @@
 {% block enrollments_is_active %}is-active{% endblock %}
 {% block projects_is_active %}{% endblock %}
 
+{% block extra_head %}
+
+<link href='https://fonts.googleapis.com/css?family=Comfortaa|Lato:400,700' rel='stylesheet' type='text/css'/>
+<link href="{% static '/fullcalendar/main.min.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'styles/calendar.css' %}" type="text/css"/>
+<script src="{% static '/fullcalendar/index.global.min.js' %}"></script>
+<script src="{% static '/fullcalendar/locales/ca.js' %}"></script>
+
+{% endblock %}
+
 {% block content %}
 {% include './components/header_topbar.html' %}
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'ca',
+    firstDay: '1',
+    dayHeaders: false,
+    headerToolbar: {
+      left: 'prev',
+      center: 'title',
+      right: 'next'
+    },
+    titleFormat: { year: 'numeric', month: 'long' },
+    weekends: true,
+    views: {
+      dayGridMonth: {
+        // Date Clicking & Selecting:
+        selectable: true,
+        selectMirror: false,
+        // Time Grid:
+        allDaySlot: false,
+        expandRows: true,
+      },
+    },
+    events: {
+      url: '/ajax/program_calendar/',
+      error: function() {
+          alert("No s'han pogut carregar les activitats. Recarrega la pàgina i si d'aquí uns minuts segueix fallant, si us plau avisa'ns.");
+      }
+    },
+
+    eventDidMount: function(info) {
+      let pill = document.createElement("div");
+      let session_num = info.event._def.extendedProps['session_num'];
+      let session_total = info.event._def.extendedProps['session_total'];
+      let color = info.event._def.extendedProps['color'];
+
+      if (session_num && session_total) {
+        pill.classList.add("calendar-event__top", "text-xsm")
+        pill.innerText = `${session_num}/${session_total}`;
+        let fctitle = info.el.querySelector('.fc-event-title-container');
+        fctitle.append(pill)
+      }
+    },
+    eventClick: function(info) {
+      if (info.event._def.publicId) {
+        let thisModal = document.getElementById(`${info.event._def.publicId}`)
+        thisModal.classList.remove("is-hidden")
+
+        window.scrollTo(0,0)
+      }
+    },
+  });
+
+  calendar.render();
+});
+
+</script>
+
 <div class="courses-list">
   <section class="courses-list__submenu grid-content">
 		<div class="grid-item-full">
@@ -24,25 +99,87 @@
 			</div>
 		</div>
 	</section>
-  <section class="courses-list__grid">
+  <div class="courses-list__options grid-content">
+    <section class="courses-list__view view-selector">
+      <div class="view-selector__title">
+        <p>Vista</p>
+      </div>
+      <div class="view-selector__btns">
+        <div class="selector-btn list-view-btn"
+          onclick="showListView()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 16 16">
+            <path d="m 10.008475,16.008475 v -6 h 6 v 6 z m -10.00000041,0 v -6 H 6.0084746 v 6 z M 10.008475,6.0084746 V 0.00847459 h 6 V 6.0084746 Z m -10.00000041,0 V 0.00847459 H 6.0084746 V 6.0084746 Z" />
+          </svg>
+          <p>Galeria</p>
+        </div>
+        <div class="selector-btn calendar-view-btn is-active"
+          onclick="showCalendarView()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewbox="0 0 20.000001 20">
+            <path d="m 10.186441,12 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4,4 c -0.5400003,0 -0.9700003,-0.46 -0.9600003,-1 0,-0.54 0.46,-0.97 1.0000003,-0.96 0.54,0.01 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m -4.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z m 8.0000003,0 c -0.54,0 -0.97,-0.46 -0.96,-1 0,-0.54 0.46,-0.97 1,-0.96 0.54,0 0.97,0.46 0.96,1 0,0.25 -0.11,0.5 -0.29,0.68 -0.19,0.19 -0.45,0.29 -0.71,0.29 z M 2.6864407,20 c -0.82,-0.02 -1.48,-0.68 -1.5,-1.5 V 3 c 0.02,-0.82 0.68,-1.48 1.5,-1.5 h 1.62 V 0 h 1.62 V 1.5 H 14.426441 V 0 h 1.62 v 1.5 h 1.62 c 0.82,0.02 1.48,0.68 1.5,1.5 v 15.5 c -0.02,0.82 -0.68,1.48 -1.5,1.5 z m 0,-1.5 H 17.686441 V 7.75 H 2.6864407 Z" />
+          </svg>
+          <p>Sessions</p>
+        </div>
+      </div>
+    </section>
+    <!-- <section class="courses-list__sorting sorting">
+      <form class="form" method="post">
+        <div class="sorting__title text-xxsm">
+          <p>Ordenar per</p>
+        </div>
+        {% csrf_token %}
+        <div class="sorting__field field field-select field--primary text-xsm">
+          <select name="{{ field.sort_by }}" id="id_{{ field.sort_by }}">
+            <option value="start_date" selected="">Data inici</option>
+            <option value="cercle">Cercle</option>
+            <option value="whatever">Whatever</option>
+          </select>
+        </div>
+      </form>
+    </section> -->
+  </div>
+  <section class="courses-list__calendar grid-content">
+    <div id="calendar" class="my-calendar grid-item-full"></div>
+  </section>
+    <section class="courses-list__grid is-hidden">
     {% for course in future_courses %}
       <div class="course-card">
+        <!-- Nou: sector o cercle, potser? -->
+        <!-- Cadascun ha de tenir el seu color propi -->
         <!-- <div class="course-card__pretitle text-xsm">
-          Nou: sector o cercle, potser?
-          Cadascun ha de tenir el seu color propi
-          <h2>XXXXXXXXXXX</h2>
+          <h2>Ecofeminismes</h2>
         </div> -->
         <div class="course-card__title text-md">
           <h2>{{ course.title }}</h2>
         </div>
-        <!-- Nou: llistat de tags
-        <div class="couse-card__tags tags">
-          FOR cada tag
+        <!-- Nou: llistat de tags -->
+        <!-- <div class="couse-card__tags tags">
           <div class="tag text-xsm">
-            <p>XXXXX</p>
+            <p>Presencial</p>
           </div>
-          endfor
+          <div class="tag text-xsm">
+            <p>Tag una mica llarga</p>
+          </div>
+          <div class="tag text-xsm">
+            <p>Tag super llarga que no vegis</p>
+          </div>
+          <div class="tag text-xsm">
+            <p>Presencial</p>
+          </div>
         </div> -->
+        <div class="course-card__bloc">          
+          <div class="course-card__subtitle text-menu">
+            <p>Descripció</p>
+          </div>
+          <div class="course-card__text richtext">
+            <p>{{ course.description|safe }}</p>
+          </div>
+        </div>
         {% if course.aimed_at != "" %}
         <div class="course-card__bloc">
           <div class="course-card__subtitle text-menu">
@@ -62,11 +199,12 @@
             <div class="subbloc__title text-sm">
               <p>{{ session.date_start|date:"d/m/y" }}</p>
             </div>
+            <!-- format HH:mm - HH:mm -->
             <div class="subbloc__subtitle text-sm">
               <p>{{ session.starting_time }} - {{ session.ending_time }}</p>
             </div>
             <div class="subbloc__text text-sm richtext">
-              {{ session.name|safe }}
+              <p>{{ session.name|safe }}</p>
             </div>
           </div>
           {% endfor %}
@@ -80,7 +218,6 @@
         </div>
       </div>
     {% endfor %}
-
     {% if not future_courses %}
       <p class="margin-block">En aquests moments no hi ha cap formació programada.</p>
     {% endif %}
