@@ -209,7 +209,9 @@
         display: var(--display-fieldset);
         flex-direction: column;
         grid-template-columns: repeat(2, 1fr);
-        gap: var(--pad1);
+        grid-template-rows: repeat(4, auto);
+        grid-auto-flow: column;
+        gap: var(--pad-2);
       }
       & fieldset:nth-child(4){
         grid-column: 2 / span 4;

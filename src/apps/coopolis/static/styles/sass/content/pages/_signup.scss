@@ -16,6 +16,11 @@
     }
     form fieldset:nth-child(2){
       --padding: 0 var(--pad-2);
+
+      ul:nth-child(7) {
+        --margin-top: 0;
+      }
+
     }
     form fieldset:nth-child(3){
       --padding: var(--pad2) var(--pad-2);
@@ -58,6 +63,10 @@
       }
       form fieldset:nth-child(2){
         --padding: 0;
+
+        ul:nth-child(7) {
+          --margin-top: var(--pad2);
+        }
       }
       form fieldset:nth-child(3){
         --padding: var(--pad6) var(--pad4);
@@ -118,15 +127,35 @@
         display: var(--display-fieldset);
         flex-direction: column;
         grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(7, auto);
+        grid-auto-flow: column;
         gap: var(--pad1);
         padding: var(--padding);
         margin: var(--margin);
+        max-width: 100%;
+
+        // Camp radio genere
+        p:nth-child(7) {
+          grid-column: 1;
+          grid-row: 7;
+        }
+        ul:nth-child(8) {
+          grid-column: 1;
+          grid-row: 7;
+          margin-top: var(--margin-top);
+        }
+        // p buida rara
+        p:nth-child(9) {
+          display: none;
+        }
       }
       & fieldset:nth-child(3){
         grid-column: 1 / span 6;
         display: var(--display-fieldset);
         flex-direction: column;
         grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+        grid-auto-flow: column;
         gap: var(--pad1);
         padding: var(--padding);
         margin: var(--margin);

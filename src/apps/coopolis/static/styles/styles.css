@@ -4032,6 +4032,9 @@ a {
 .signup__form form fieldset:nth-child(2) {
   --padding: 0 var(--pad-2);
 }
+.signup__form form fieldset:nth-child(2) ul:nth-child(7) {
+  --margin-top: 0;
+}
 .signup__form form fieldset:nth-child(3) {
   --padding: var(--pad2) var(--pad-2);
   --margin: var(--pad1-5) 0 var(--pad4) 0;
@@ -4070,6 +4073,9 @@ a {
   }
   .signup__form form fieldset:nth-child(2) {
     --padding: 0;
+  }
+  .signup__form form fieldset:nth-child(2) ul:nth-child(7) {
+    --margin-top: var(--pad2);
   }
   .signup__form form fieldset:nth-child(3) {
     --padding: var(--pad6) var(--pad4);
@@ -4123,15 +4129,32 @@ a {
   display: var(--display-fieldset);
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(7, auto);
+  grid-auto-flow: column;
   gap: var(--pad1);
   padding: var(--padding);
   margin: var(--margin);
+  max-width: 100%;
+}
+.signup__form form fieldset:nth-child(2) p:nth-child(7) {
+  grid-column: 1;
+  grid-row: 7;
+}
+.signup__form form fieldset:nth-child(2) ul:nth-child(8) {
+  grid-column: 1;
+  grid-row: 7;
+  margin-top: var(--margin-top);
+}
+.signup__form form fieldset:nth-child(2) p:nth-child(9) {
+  display: none;
 }
 .signup__form form fieldset:nth-child(3) {
   grid-column: 1/span 6;
   display: var(--display-fieldset);
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  grid-auto-flow: column;
   gap: var(--pad1);
   padding: var(--padding);
   margin: var(--margin);
@@ -4356,7 +4379,9 @@ a {
   display: var(--display-fieldset);
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--pad1);
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
+  gap: var(--pad-2);
 }
 .project__form form fieldset:nth-child(4) {
   grid-column: 2/span 4;
@@ -4531,6 +4556,9 @@ a {
 .profile__form form fieldset:nth-child(3) {
   --padding: 0 var(--pad-2);
 }
+.profile__form form fieldset:nth-child(3) ul:nth-child(7) {
+  --margin-top: 0;
+}
 .profile__form form fieldset:nth-child(4) {
   --padding: var(--pad2) var(--pad-2);
   --margin: var(--pad1-5) 0 0 0;
@@ -4579,6 +4607,9 @@ a {
   }
   .profile__form form fieldset:nth-child(3) {
     --padding: 0;
+  }
+  .profile__form form fieldset:nth-child(3) ul:nth-child(7) {
+    --margin-top: var(--pad2);
   }
   .profile__form form fieldset:nth-child(4) {
     --padding: var(--pad6) var(--pad4);
@@ -4693,15 +4724,31 @@ a {
   grid-column: 2/span 4;
   display: var(--display-fieldset);
   flex-direction: column;
+  grid-template-rows: repeat(6, auto);
+  grid-auto-flow: column;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--pad1);
+  gap: var(--pad-2);
   padding: var(--padding);
+}
+.profile__form form fieldset:nth-child(3) p:nth-child(6) {
+  grid-column: 1;
+  grid-row: 6;
+}
+.profile__form form fieldset:nth-child(3) ul:nth-child(7) {
+  grid-column: 1;
+  grid-row: 6;
+  margin-top: var(--margin-top);
+}
+.profile__form form fieldset:nth-child(3) p:nth-child(8) {
+  display: none;
 }
 .profile__form form fieldset:nth-child(4) {
   grid-column: 1/span 6;
   display: var(--display-fieldset);
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  grid-auto-flow: column;
   gap: var(--pad1);
   padding: var(--padding);
   margin: var(--margin);
