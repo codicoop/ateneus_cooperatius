@@ -897,6 +897,11 @@ a {
     --align-items: center;
   }
 }
+label.required::after {
+  content: "*";
+  color: var(--primary);
+}
+
 .form p.field,
 .form .field {
   position: relative;

@@ -8,6 +8,10 @@
   }
 }
 
+label.required::after {
+  content: "*";
+  color: var(--primary);
+}
 .form {
   // Estils pels camps automàtics de django
   p.field,
