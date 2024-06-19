@@ -14,8 +14,10 @@ function onLoadFunction(){
       checkboxParent.classList.add("field-checkbox")
     }
     if (el.type === "radio") {
-      let radioParent = el.parentElement.parentElement.parentElement.parentElement
+      let radioParent = el.parentElement.parentElement.parentElement
+      let labelGeneralRadio = radioParent.previousElementSibling
       radioParent.classList.add("field", "field-radio")
+      labelGeneralRadio.classList.add("label-radio")
     }
     if (el.type === "number") {
       let numberParent = el.parentElement

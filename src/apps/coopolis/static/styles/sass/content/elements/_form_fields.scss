@@ -10,20 +10,13 @@
 
 .form {
   // Estils pels camps automàtics de django
-  li.field,
+  p.field,
   .field {
     position: relative;
     list-style: none;
     padding-bottom: var(--pad-2);
     display: flex;
     flex-direction: column;
-
-    &.required {
-      label::after {
-        content: "*";
-        color: var(--primary);
-      }
-    }
     label {
       order: 1;
       display: block;
@@ -34,6 +27,11 @@
       line-height: 12px;
       text-transform: uppercase;
       color: var(--primary);
+
+      &.required::after {
+        content: "*";
+        color: var(--primary);
+      }
     }
     // Variació rosa del camp
     &.field--primary {
@@ -65,7 +63,6 @@
         cursor: not-allowed;
       }
     }
-    
     // Errors
     .errorlist {
       order: 2;
@@ -74,7 +71,6 @@
       font-size: 12px;
       line-height: 16px;
     }
-
     // Camp upload file
     input[type=file] {
       & ~ .field-file-custom {
@@ -96,7 +92,8 @@
   }
 }
 
-.form li.field-checkbox {
+.form li.field-checkbox,
+.form p.field-checkbox {
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
@@ -226,7 +223,7 @@
   }
 }
 
-.form li.field-file {
+.form p.field-file {
   position: relative;
 
   .upload-icon::after {
@@ -314,6 +311,7 @@
       grid-column: 2;
       grid-row: 5;
       display: inline;
+      padding-top: 4px;
       padding-bottom: 0;
       padding-left: var(--pad-2);
       width: 80%;
@@ -331,18 +329,22 @@
   }
 }
 
-.form li.field-radio {
-  display: flex;
-  flex-direction: column-reverse;
+// La label general del radio
+.label-radio {
+  display: block;
+  padding-top: var(--pad-3);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 12px;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.form ul.field-radio {
+  // display: flex;
+  // flex-direction: column-reverse;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 
-  label {
-    grid-row: 1;
-    grid-column: 1 / span 3;
-  }
-  ul {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
   li {
     input {
       width: 16px;
