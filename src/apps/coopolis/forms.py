@@ -12,14 +12,14 @@ from django.utils.timezone import make_aware
 
 from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.cc_courses.models import Activity, ActivityEnrolled
-from apps.coopolis.mixins import FormDistrictValidationMixin
+from apps.coopolis.mixins import FormDistrictValidationMixin, FieldsetsMixin
 from apps.coopolis.models import ActivityPoll, EmploymentInsertion, Project, User
 from apps.coopolis.models.projects import CreatedEntity
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from apps.facilities_reservations.models import Reservation, ReservationEquipment
 
 
-class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
+class ProjectForm(FieldsetsMixin, FormDistrictValidationMixin, forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
@@ -73,21 +73,6 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
             },
         ),
     ]
-
-    def as_fieldsets(self):
-        output = []
-        for name, fieldset in self.fieldsets:
-            output.append('<fieldset>')
-            if name:
-                output.append(f'<legend>{name}</legend>')
-            for field_name in fieldset['fields']:
-                field = self[field_name]
-                output.append(f'<p>{field.label_tag()}{field}</p>')
-                if field.errors:
-                    for error in field.errors:
-                        output.append(f'<p class="error">{error}</p>')
-            output.append('</fieldset>')
-        return ''.join(output)
 
 
 class ProjectStageStartForm(forms.ModelForm):
@@ -241,7 +226,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         return self.cleaned_data
 
 
-class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
+class MySignUpForm(FieldsetsMixin, FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
         fields = (
@@ -315,23 +300,6 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             },
         ),
     ]
-
-    def as_fieldsets(self):
-        output = []
-        for name, fieldset in self.fieldsets:
-            output.append("<fieldset>")
-            if name:
-                output.append(f"<legend>{name}</legend>")
-            for field_name in fieldset["fields"]:
-                field = self[field_name]
-                output.append(f"<p>{field.label_tag()}{field}</p>")
-                if field.errors:
-                    for error in field.errors:
-                        output.append(f'<p class="error">{error}</p>')
-                if field.help_text:
-                        output.append(f'<p class="help">{field.help_text}</p>')
-            output.append("</fieldset>")
-        return "".join(output)
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)

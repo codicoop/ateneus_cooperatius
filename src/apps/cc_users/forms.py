@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserChangeForm
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
-from apps.coopolis.mixins import FormDistrictValidationMixin
+from apps.coopolis.mixins import FormDistrictValidationMixin, FieldsetsMixin
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -26,7 +26,7 @@ class LogInForm(AuthenticationForm):
         return self.cleaned_data
 
 
-class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
+class MyAccountForm(FieldsetsMixin, FormDistrictValidationMixin, UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = (
@@ -89,21 +89,6 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
             },
         ),
     ]
-
-    def as_fieldsets(self):
-        output = []
-        for name, fieldset in self.fieldsets:
-            output.append('<fieldset>')
-            if name:
-                output.append(f'<legend>{name}</legend>')
-            for field_name in fieldset['fields']:
-                field = self[field_name]
-                output.append(f'<p>{field.label_tag()}{field}</p>')
-                if field.errors:
-                    for error in field.errors:
-                        output.append(f'<p class="error">{error}</p>')
-            output.append('</fieldset>')
-        return ''.join(output)
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)

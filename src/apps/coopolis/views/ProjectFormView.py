@@ -73,64 +73,75 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
 def project_partner_manage(request):
     if request.method == "POST":
         if "add_partner" in request.POST:
-            try:
-                if not request.POST.get("email"):
-                    messages.error(
-                        request,
-                        "Ha d'indicar un correu electrònic vàlid.",
-                    )
-                    return redirect("edit_project")
-                user = User.objects.filter(email=request.POST.get("email")).first()
-                user_is_invited = Invitation.objects.filter(user=user).values("user__id").first()
-                if user_is_invited:
-                    messages.error(
-                        request,
-                        f"L'usuari {user.full_name} ja està invitat.",
-                    )
-                    return redirect("edit_project")
-                if user.project:
-                    messages.error(
-                        request,
-                        f"L'usuari {user.full_name} ja forma part d'aquest projecte.",
-                    )
-                    return redirect("edit_project")
-                project = Project.objects.filter(id=request.POST.get("add_partner")).first()
-                invitation = Invitation.objects.create(user=user, project=project)
-                mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
-                mail.to = user.email
-                mail.subject_strings = {"project": project.name}
-                mail.body_strings = {
-                    "persona_fullname": user.full_name,
-                    "persona_email": user.email,
-                    "project": project.name,
-                    "absolute_url": settings.ABSOLUTE_URL,
-                    "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
-                }
-                mail.send(now=True)
-                messages.success(
+            if not request.POST.get("email"):
+                messages.error(
                     request,
-                    f"Invitació realitzada amb èxit a {user.full_name}."
-                    " Se li ha enviat un correu per a la seva acceptació.",
+                    "Ha d'indicar un correu electrònic vàlid.",
                 )
-            except:
+                return redirect("edit_project")
+            try:
+                user = User.objects.get(email=request.POST.get("email"))
+            except User.DoesNotExist:
                 messages.error(
                     request,
                     "L'usuari no existeix.", )
+                return redirect("edit_project")
+            user_is_invited = Invitation.objects.filter(user=user).values("user__id").first()
+            if user_is_invited:
+                messages.error(
+                    request,
+                    f"L'usuari {user.full_name} ja està invitat.",
+                )
+                return redirect("edit_project")
+            if user.project:
+                messages.error(
+                    request,
+                    f"L'usuari {user.full_name} ja forma part d'aquest projecte.",
+                )
+                return redirect("edit_project")
+            project = Project.objects.get(id=request.POST.get("add_partner"))
+            invitation = Invitation.objects.create(user=user, project=project)
+            mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
+            mail.to = user.email
+            mail.subject_strings = {"project": project.name}
+            mail.body_strings = {
+                "persona_fullname": user.full_name,
+                "persona_email": user.email,
+                "project": project.name,
+                "absolute_url": settings.ABSOLUTE_URL,
+                "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
+            }
+            mail.send(now=True)
+            messages.success(
+                request,
+                f"Invitació realitzada amb èxit a {user.full_name}."
+                " Se li ha enviat un correu per a la seva acceptació.",
+            )
         if "delete_partner" in request.POST:
-            user = User.objects.filter(id=request.POST.get("partner_id")).first()
+            try:
+                user = User.objects.get(id=request.POST.get("partner_id"))
+            except User.DoesNotExist:
+                messages.error(
+                    request,
+                    "Aquest usuari no existeix.",
+                )
+                return redirect("edit_project")
             if user == request.user:
                 messages.error(
                     request,
                     "No es pot eliminar l'usuari actualment autenticat.",
                 )
                 return redirect("edit_project")
-            project = Project.objects.get(pk=request.POST.get("delete_partner"))
-            current_partners = project.partners.all().exclude(id=user.id)
-            current_partners_list = set()
-            for partner in current_partners:
-                current_partners_list.add(partner.pk)
-            project.partners.set(sorted(current_partners_list))
-            project.save()
+            try:
+                project = Project.objects.get(pk=request.POST.get("delete_partner"))
+            except Project.DoesNotExist:
+                messages.error(
+                    request,
+                    "Aquest projecte no existeix.",
+                )
+                return redirect("edit_project")
+            project.partners.remove(user)
+
             mail = MyMailTemplate("EMAIL_PARTNER_ELIMINATION")
             mail.to = config.EMAIL_FROM_PROJECTS.split(",")
             mail.subject_strings = {"project": project.name}
@@ -145,7 +156,14 @@ def project_partner_manage(request):
                 f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.", )
 
     if "delete_invitation" in request.POST:
-        user = User.objects.filter(id=request.POST.get("invited_id")).first()
+        try:
+            user = User.objects.get(id=request.POST.get("invited_id"))
+        except User.DoesNotExist:
+            messages.error(
+                request,
+                "Aquest usuari no existeix.",
+            )
+            return redirect("edit_project")
         invitation = Invitation.objects.filter(user=user, project=request.POST.get("delete_invitation")).first()
         invitation.delete()
         messages.success(
@@ -179,17 +197,32 @@ def invitation_partner(request, uuid):
         }
         return render(request, "project_invitation.html", context=context)
     if request.method == "POST":
-        invitation = Invitation.objects.filter(uuid=uuid).first()
-        user = User.objects.filter(id=invitation.user.id).first()
+        try:
+            invitation = Invitation.objects.get(uuid=uuid)
+        except Invitation.DoesNotExist:
+            messages.error(
+                request,
+                "Aquest enllaç d'invitació no existeix.",
+            )
+            return redirect("edit_project")
+        try:
+            user = User.objects.get(id=invitation.user.id)
+        except User.DoesNotExist:
+            messages.error(
+                request,
+                "Aquest usuari no existeix.",
+            )
+            return redirect("edit_project")
         if "accept" in request.POST:
-            project = Project.objects.get(pk=request.POST.get("project"))
-            current_partners = project.partners.all()
-            current_partners_list = set()
-            for partner in current_partners:
-                current_partners_list.add(partner.pk)
-            current_partners_list.add(user.id)
-            project.partners.set(sorted(current_partners_list))
-            project.save()
+            try:
+                project = Project.objects.get(pk=request.POST.get("project"))
+            except Project.DoesNotExist:
+                messages.error(
+                    request,
+                    "Aquest projecte no existeix.",
+                )
+                return redirect("edit_project")
+            project.partners.add(user)
         invitation.delete()
         return redirect("edit_project")
 
