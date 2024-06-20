@@ -54,8 +54,8 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
                 "fields": (
                     "name",
                     "town",
-                    "sector",
                     "district",
+                    "sector",
                     "mail",
                     "web",
                     "phone",
