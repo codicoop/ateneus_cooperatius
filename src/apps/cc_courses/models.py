@@ -107,7 +107,7 @@ class StrategicLine(models.Model):
         return self.name
 
 
-class Course(models.Model):
+class Course(models.Model):  # --> ACCIONS
     class Meta:
         verbose_name = "acció"
         verbose_name_plural = "accions"
@@ -169,7 +169,7 @@ class Course(models.Model):
         return f"{self.title} ({self.date_start})"
 
 
-class Activity(models.Model):
+class Activity(models.Model):  # --> SESSIONS
     """
     READ BEFORE ADDING FIELDS
 

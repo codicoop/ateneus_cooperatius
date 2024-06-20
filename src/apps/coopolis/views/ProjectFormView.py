@@ -166,8 +166,7 @@ def invitation_partner(request, uuid):
                 "Aquest enllaç d'invitació no existeix.",
             )
             return redirect("edit_project")
-
-        if request.user.id is not invitation.user.id:
+        if request.user.id != invitation.user.id:
             messages.error(
                 request,
                 "Estàs accedint a un enllaç d'invitació a un projecte que correspon a un altre usuari. "
