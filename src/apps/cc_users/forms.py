@@ -73,6 +73,7 @@ class MyAccountForm(FieldsetsMixin, FormDistrictValidationMixin, UserChangeForm)
                     "birthdate",
                     "birth_place",
                     "town",
+                    "district",
                     "address",
                 )
             },

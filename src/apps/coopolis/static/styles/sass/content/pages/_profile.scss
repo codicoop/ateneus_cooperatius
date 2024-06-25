@@ -233,7 +233,7 @@
         grid-column: 2 / span 4;
         display: var(--display-fieldset);
         flex-direction: column;
-        grid-template-rows: repeat(6, auto);
+        grid-template-rows: repeat(8, auto);
         grid-auto-flow: column;
         grid-template-columns: repeat(2, 1fr);
         gap: var(--pad-2);
