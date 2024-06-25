@@ -22,11 +22,11 @@
 		>
 			{% csrf_token %}
 			{{ signup_form.as_fieldsets|safe }}
-			{% if form.errors %}
+			<!-- {# if form.errors #}
 			<div class="form__error text-sm">
 				<p>Si us plau revisa els errors del formulari.</p>
 			</div>
-			{% endif %}
+			{# endif #} -->
 			</form>
 			<div class="form__submit grid-content">
 				<div class="form__text grid-item-3-4">

@@ -972,7 +972,9 @@ label.required::after {
   cursor: not-allowed;
 }
 .form p.field .errorlist,
-.form .field .errorlist {
+.form p.field .error,
+.form .field .errorlist,
+.form .field .error {
   order: 2;
   padding-bottom: var(--pad-3);
   color: var(--error);
@@ -995,14 +997,17 @@ label.required::after {
 }
 
 .form li.field-checkbox,
-.form p.field-checkbox {
+.form p.field-checkbox,
+.form div.field-checkbox {
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
+  align-items: flex-start;
   margin: 13px 0 0 0;
 }
 .form li.field-checkbox label,
-.form p.field-checkbox label {
+.form p.field-checkbox label,
+.form div.field-checkbox label {
   display: flex;
   flex-direction: row-reverse;
   gap: var(--pad1);
@@ -1010,6 +1015,7 @@ label.required::after {
   justify-content: flex-end;
   padding-bottom: var(--pad1);
   padding-left: var(--pad-2);
+  padding-top: 0;
   font-weight: 500;
   font-size: 12px;
   line-height: 16px;
@@ -1018,7 +1024,8 @@ label.required::after {
   cursor: pointer;
 }
 .form li.field-checkbox input,
-.form p.field-checkbox input {
+.form p.field-checkbox input,
+.form div.field-checkbox input {
   position: relative;
   width: 16px;
   height: 16px;
@@ -1028,7 +1035,8 @@ label.required::after {
   border-radius: 3px;
 }
 .form li.field-checkbox input::after,
-.form p.field-checkbox input::after {
+.form p.field-checkbox input::after,
+.form div.field-checkbox input::after {
   content: "";
   display: block;
   position: absolute;
@@ -1040,31 +1048,36 @@ label.required::after {
   background-color: var(--white);
 }
 .form li.field-checkbox input:checked::after,
-.form p.field-checkbox input:checked::after {
+.form p.field-checkbox input:checked::after,
+.form div.field-checkbox input:checked::after {
   background-color: var(--second);
 }
 .form li.field-checkbox.field-checkbox--long,
-.form p.field-checkbox.field-checkbox--long {
+.form p.field-checkbox.field-checkbox--long,
+.form div.field-checkbox.field-checkbox--long {
   display: grid;
   grid-template-columns: 25px 1fr;
   align-items: start;
   margin-bottom: var(--pad1);
 }
 .form li.field-checkbox.field-checkbox--long input,
-.form p.field-checkbox.field-checkbox--long input {
+.form p.field-checkbox.field-checkbox--long input,
+.form div.field-checkbox.field-checkbox--long input {
   grid-column: 1;
   grid-row: 1;
   margin: 0;
 }
 .form li.field-checkbox.field-checkbox--long label,
-.form p.field-checkbox.field-checkbox--long label {
+.form p.field-checkbox.field-checkbox--long label,
+.form div.field-checkbox.field-checkbox--long label {
   grid-column: 2;
   grid-row: 1;
   font-weight: bold;
   padding: 0 0 var(--pad-2) 0;
 }
 .form li.field-checkbox.field-checkbox--long .helptext,
-.form p.field-checkbox.field-checkbox--long .helptext {
+.form p.field-checkbox.field-checkbox--long .helptext,
+.form div.field-checkbox.field-checkbox--long .helptext {
   grid-column: 2;
   grid-row: 2;
   color: var(--primary-dark);
@@ -1072,7 +1085,8 @@ label.required::after {
   font-weight: 500;
 }
 .form li.field-checkbox #id_authorize_communications,
-.form p.field-checkbox #id_authorize_communications {
+.form p.field-checkbox #id_authorize_communications,
+.form div.field-checkbox #id_authorize_communications {
   margin-top: 0;
 }
 
@@ -1097,10 +1111,11 @@ label.required::after {
   content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 13.1 7.8400002' width='13.1' height='7.8400002'%3E%3Cpolygon points='12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 ' id='polygon2' transform='translate(-10.95,-13.58)' style='fill:%23af62a0' /%3E%3C/svg%3E");
   position: absolute;
   right: 14px;
-  top: 37px;
+  bottom: 20px;
 }
 
-.helptext {
+.helptext,
+.help {
   order: 4;
   display: inline-block;
   padding-left: var(--pad-2);
@@ -1122,10 +1137,12 @@ label.required::after {
   opacity: 1;
 }
 
-.form p.field-file {
+.form p.field-file,
+.form div.field-file {
   position: relative;
 }
-.form p.field-file .upload-icon::after {
+.form p.field-file .upload-icon::after,
+.form div.field-file .upload-icon::after {
   content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16.000002 15.99'%3E%3Cpath d='m 16.000001,14.66 c -0.02,0.730001 -0.6,1.32 -1.33,1.33 H 1.3299999 C 0.5999999,15.97 0.0099999,15.39 0,14.66 L 6e-7,8.1900007 h 1.33 L 1.3299999,14.66 14.66,14.660001 V 8.1900007 h 1.33 V 14.660001 Z M 11.89,3.8600007 l -0.96,0.96 -2.27,-2.27 V 10.330001 H 7.33 V 2.5999997 l -2.27,2.27 -0.96,-0.96 L 8.01,0 11.880001,3.8700007 Z' style='fill:%23d91d69;' /%3E%3C/svg%3E");
   position: absolute;
   right: 3px;
@@ -1137,18 +1154,21 @@ label.required::after {
   border-bottom-right-radius: 5px;
   pointer-events: none;
 }
-.form p.field-file.full {
+.form p.field-file.full,
+.form div.field-file.full {
   grid-row: span 2;
   display: grid;
   grid-template-columns: 24px 1fr;
   align-items: var(--align-items);
   gap: var(--pad-2);
 }
-.form p.field-file.full label:nth-child(1) {
+.form p.field-file.full label:nth-child(1),
+.form div.field-file.full label:nth-child(1) {
   grid-column: span 2;
   order: unset;
 }
-.form p.field-file.full a {
+.form p.field-file.full a,
+.form div.field-file.full a {
   grid-column: span 2;
   order: unset;
   position: relative;
@@ -1161,14 +1181,16 @@ label.required::after {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.form p.field-file.full a::before {
+.form p.field-file.full a::before,
+.form div.field-file.full a::before {
   content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewbox='0 0 15.54 19.43'%3E%3Cpath d='M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z' style='fill:%2398066b;fill-opacity:1' /%3E%3C/svg%3E");
   position: absolute;
   left: 19px;
   top: 10px;
   pointer-events: none;
 }
-.form p.field-file.full input:nth-child(3) {
+.form p.field-file.full input:nth-child(3),
+.form div.field-file.full input:nth-child(3) {
   order: unset;
   grid-column: 1;
   grid-row: 5;
@@ -1179,7 +1201,8 @@ label.required::after {
   border: 2px solid var(--second-2);
   border-radius: 50px;
 }
-.form p.field-file.full input:nth-child(3)::after {
+.form p.field-file.full input:nth-child(3)::after,
+.form div.field-file.full input:nth-child(3)::after {
   content: "";
   display: block;
   position: absolute;
@@ -1190,13 +1213,16 @@ label.required::after {
   border-radius: 20px;
   background-color: var(--white);
 }
-.form p.field-file.full input:nth-child(3):checked {
+.form p.field-file.full input:nth-child(3):checked,
+.form div.field-file.full input:nth-child(3):checked {
   background-color: var(--second-lighter);
 }
-.form p.field-file.full input:nth-child(3):checked::after {
+.form p.field-file.full input:nth-child(3):checked::after,
+.form div.field-file.full input:nth-child(3):checked::after {
   background-color: var(--second);
 }
-.form p.field-file.full label:nth-child(4) {
+.form p.field-file.full label:nth-child(4),
+.form div.field-file.full label:nth-child(4) {
   order: unset;
   grid-column: 2;
   grid-row: 5;
@@ -1212,7 +1238,8 @@ label.required::after {
   color: var(--primary-dark);
   cursor: pointer;
 }
-.form p.field-file.full input:nth-child(6) {
+.form p.field-file.full input:nth-child(6),
+.form div.field-file.full input:nth-child(6) {
   order: unset;
   grid-column: span 2;
 }
@@ -1220,6 +1247,7 @@ label.required::after {
 .label-radio {
   display: block;
   padding-top: var(--pad-3);
+  padding-bottom: var(--pad-2);
   font-weight: 700;
   font-size: 10px;
   line-height: 12px;
@@ -4151,6 +4179,7 @@ label.required::after {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(7, auto);
   grid-auto-flow: column;
+  align-items: start;
   gap: var(--pad1);
   padding: var(--padding);
   margin: var(--margin);
@@ -4211,6 +4240,9 @@ label.required::after {
 }
 .signup__form .form__text {
   margin-bottom: var(--margin-bottom);
+}
+.signup .field.field-checkbox.field-checkbox--long label::after {
+  left: 107px;
 }
 
 .project {
@@ -4747,6 +4779,7 @@ label.required::after {
   grid-template-rows: repeat(8, auto);
   grid-auto-flow: column;
   grid-template-columns: repeat(2, 1fr);
+  align-items: start;
   gap: var(--pad-2);
   padding: var(--padding);
 }

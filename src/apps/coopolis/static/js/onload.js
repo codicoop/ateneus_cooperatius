@@ -5,10 +5,6 @@ function onLoadFunction(){
   const allInputs = document.querySelectorAll("input")
   // Afegint clases pels diferents tipus de inputs
   allInputs.forEach(el => {
-    if (el.type === "text" || el.type === "email" || el.type === "password") {
-      let checkboxParent = el.parentElement
-      checkboxParent.classList.add("field")
-    }
     if (el.type === "checkbox") {
       let checkboxParent = el.parentElement
       checkboxParent.classList.add("field-checkbox")
@@ -16,17 +12,19 @@ function onLoadFunction(){
     if (el.type === "radio") {
       let radioParent = el.parentElement.parentElement.parentElement
       let labelGeneralRadio = radioParent.previousElementSibling
-      radioParent.classList.add("field", "field-radio")
+      let superParent = radioParent.parentElement
+      superParent.classList.remove("field")
+      radioParent.classList.add("field-radio")
       labelGeneralRadio.classList.add("label-radio")
     }
     if (el.type === "number") {
       let numberParent = el.parentElement
-      numberParent.classList.add("field", "field-number")
+      numberParent.classList.add("field-number")
     }
     if (el.type === "file") {
       let fileParent = el.parentElement
       let label = el.previousElementSibling
-      fileParent.classList.add("field","field-file")
+      fileParent.classList.add("field-file")
       label.classList.add("upload-icon")
 
       if (fileParent.classList.contains("field-checkbox")) {
@@ -39,7 +37,6 @@ function onLoadFunction(){
   const allSelects = document.querySelectorAll("select")
   allSelects.forEach(el => {
     let selectParent = el.parentElement
-    selectParent.classList.add("field")
     selectParent.classList.add("field-select")
   })
 
@@ -47,7 +44,6 @@ function onLoadFunction(){
   const allTeextareas = document.querySelectorAll("textarea")
   allTeextareas.forEach(el => {
     let textareaParent = el.parentElement
-    textareaParent.classList.add("field")
     textareaParent.classList.add("field-textarea")
   })
 

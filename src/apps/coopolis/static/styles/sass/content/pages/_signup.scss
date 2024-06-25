@@ -129,6 +129,7 @@
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(7, auto);
         grid-auto-flow: column;
+        align-items: start;
         gap: var(--pad1);
         padding: var(--padding);
         margin: var(--margin);
@@ -195,6 +196,11 @@
     }
     .form__text {
       margin-bottom: var(--margin-bottom);
+    }
+  }
+  .field.field-checkbox.field-checkbox--long {
+    label::after {
+      left: 107px;
     }
   }
 }
