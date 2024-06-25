@@ -165,7 +165,7 @@ def project_partner_manage(request):
             )
             return redirect("edit_project")
         try:
-            invitation = Invitation.objects.filter(user=user, project=request.POST.get("delete_invitation")).first()
+            invitation = Invitation.objects.get(user=user, project=request.POST.get("delete_invitation"))
         except Invitation.DoesNotExist:
             messages.error(
                 request,
