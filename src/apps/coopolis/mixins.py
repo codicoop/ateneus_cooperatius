@@ -81,11 +81,12 @@ class FieldsetsMixin:
                 output.append(f"<legend>{name}</legend>")
             for field_name in fieldset["fields"]:
                 field = self[field_name]
-                output.append(f"<p>{field.label_tag()}{field}</p>")
+                output.append(f"<div><p>{field.label_tag()}{field}</p>")
                 if field.errors:
                     for error in field.errors:
                         output.append(f'<p class="error">{error}</p>')
                 if field.help_text:
                     output.append(f'<p class="help">{field.help_text}</p>')
+                output.append("</div>")
             output.append("</fieldset>")
         return "".join(output)
