@@ -12,14 +12,14 @@ from django.utils.timezone import make_aware
 
 from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.cc_courses.models import Activity, ActivityEnrolled
-from apps.coopolis.mixins import FormDistrictValidationMixin
+from apps.coopolis.mixins import FormDistrictValidationMixin, FieldsetsMixin
 from apps.coopolis.models import ActivityPoll, EmploymentInsertion, Project, User
 from apps.coopolis.models.projects import CreatedEntity
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from apps.facilities_reservations.models import Reservation, ReservationEquipment
 
 
-class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
+class ProjectForm(FieldsetsMixin, FormDistrictValidationMixin, forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
@@ -27,12 +27,12 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
         fields = (
             "logo",
             "name",
-            "town",
             "sector",
-            "district",
             "mail",
-            "web",
             "phone",
+            "town",
+            "district",
+            "web",
             "estatuts",
             "viability",
             "sostenibility",
@@ -54,8 +54,8 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
                 "fields": (
                     "name",
                     "town",
-                    "sector",
                     "district",
+                    "sector",
                     "mail",
                     "web",
                     "phone",
@@ -66,7 +66,7 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
             None,
             {
                 "fields": (
-                    "estatus",
+                    "estatuts",
                     "viability",
                     "sostenibility",
                 )
@@ -226,7 +226,7 @@ class EmploymentInsertionAdminForm(models.ModelForm):
         return self.cleaned_data
 
 
-class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
+class MySignUpForm(FieldsetsMixin, FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
         fields = (
@@ -263,26 +263,26 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                     "first_name",
                     "last_name",
                     "surname2",
-                    "email",
                     "id_number_type",
                     "id_number",
+                    "gender",
+                    "email",
                     "phone_number",
                     "birthdate",
                     "birth_place",
                     "town",
                     "district",
                     "address",
-                    "gender",
                 )
             },
         ),
         (
-            "Explican'ns més de tu",
+            "Explica'ns més coses de tu",
             {
                 "fields": (
                     "educational_level",
-                    "discovered_us",
                     "employment_situation",
+                    "discovered_us",
                     "project_involved",
                 )
             },
@@ -294,6 +294,8 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
                     "password1",
                     "password2",
                     "authorize_communications",
+                    "accept_conditions",
+                    "accept_conditions2",
                 )
             },
         ),

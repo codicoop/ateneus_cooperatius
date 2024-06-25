@@ -4,121 +4,44 @@
   --margin-top: var(--pad1);
   --align-self: auto;
   
-  .form {
-    --display: flex;
-    // Nom
-    & li:nth-child(2) {
-      order: 1;
+  &__form {
+    --display-form-profile: flex;
+
+    legend {
+      --font-size: 20px;
+      --line-height: 24px;
     }
-    // Email
-    & li:nth-child(3) {
-      order: 7;
+    fieldset {
+      --display-fieldset: flex;
     }
-    // Cognom
-    & li:nth-child(4) {
-      order: 2;
-    }
-    // Phone
-    & li:nth-child(5) {
-      order: 8;
-    }
-    // Segon cognom
-    & li:nth-child(6) {
-      order: 3;
-    }
-    // dob
-    & li:nth-child(7) {
-      order: 9;
-    }
-    // dni
-    & li:nth-child(8) {
-      order: 4;
-    }
-    // lloc naixement
-    & li:nth-child(9) {
-      order: 10;
-    }
-    // NO dni
-    & li:nth-child(10) {
-      order: 5;
-      input {
-        width: 22px;
+    form fieldset:nth-child(2){
+      --padding: 0 var(--pad-2);
+
+      ul:nth-child(7) {
+        --margin-top: 0;
       }
+
     }
-    // poblacio
-    & li:nth-child(11) {
-      order: 11;
+    form fieldset:nth-child(3){
+      --padding: var(--pad2) var(--pad-2);
+      --margin: var(--pad1-5) 0 var(--pad4) 0;
     }
-    // districte
-    & li:nth-child(12) {
-      order: 12;
+    form fieldset:nth-child(4){
+      --margin: 0 var(--pad-2);
+      --padding-top: 0;
+      --display: block;
+      --border-top: none;
     }
-    // genere ***
-    & li:nth-child(13) {
-      order: 6;
-    }
-    // adreça
-    & li:nth-child(14) {
-      order: 13;
-    }
-    // estudis
-    & li:nth-child(15) {
-      order: 14;
-    }
-    // conegut
-    & li:nth-child(16) {
-      order: 16;
-    }
-    // laboral
-    & li:nth-child(17) {
-      order: 15;
-    }
-    // ess
-    & li:nth-child(18) {
-      order: 17;
-    }
-    // contrasenya
-    & li:nth-child(19) {
-      order: 18;
-    }
-    // contrasenya 2 - Acepto rebre info
-    & li:nth-child(20) {
-      order: 19;
-    }
-    // accepto 1
-    & li:nth-child(21) {
-      order: 20;
-      margin-top: var(--pad2);
+    .form__submit {
+      --padding: 0 var(--pad-2);
 
       input {
-        width: 15px;
+        --width: 100%;
       }
     }
-    // accepto 2
-    & li:nth-child(22) {
-      order: 21;
-      
-      input {
-        width: 15px;
-      }
-    }
-    // accepto 3
-    & li:nth-child(23) {
-      order: 22;
-
-      input {
-        width: 15px;
-      }
-    }
-    // submit
-    & div:nth-child(24) {
-      order: 24;
-    }
-    // text info
-    & div:nth-child(25) {
-      order: 23;
-      margin-top: var(--pad2);
-    }
+    .form__text {
+      --margin-bottom: var(--pad4);
+  }
   }
 }
 
@@ -128,127 +51,43 @@
     --margin-top: var(--pad2);
     --align-self: flex-end;
     
-    .form {
-      --display: grid;
-    // Nom
-    & li:nth-child(2) {
-      order: initial;
-    }
-    // Email
-    & li:nth-child(3) {
-      order: initial;
-    }
-    // Cognom
-    & li:nth-child(4) {
-      order: initial;
-    }
-    // Phone
-    & li:nth-child(5) {
-      order: initial;
-    }
-    // Segon cognom
-    & li:nth-child(6) {
-      order: initial;
-    }
-    // dni
-    & li:nth-child(7) {
-      order: initial;
-    }
-    // dob
-    & li:nth-child(8) {
-      order: initial;
-    }
-    // lloc naixement
-    & li:nth-child(9) {
-      order: initial;
-    }
-    // NO dni
-    & li:nth-child(10) {
-      order: initial;
-    }
-    // poblacio
-    & li:nth-child(11) {
-      order: initial;
-    }
-    // districte
-    & li:nth-child(12) {
-      order: initial;
-    }
-    // genere
-    & li:nth-child(13) {
-      order: initial;
-    }
-    // adreça
-    & li:nth-child(14) {
-      order: initial;
-    }
-    // estudis
-    & li:nth-child(15) {
-      order: initial;
-    }
-    // conegut
-    & li:nth-child(16) {
-      order: initial;
-    }
-    // laboral
-    & li:nth-child(17) {
-      order: initial;
-    }
-    // ess
-    & li:nth-child(18) {
-      order: initial;
-    }
-    // contrasenya
-    & li:nth-child(19) {
-      order: initial;
-      grid-column: 1 / span 2;
-      justify-self: center;
-      width: 50%;
-      margin-top: var(--pad7);
-    }
-    // contrasenya 2 - Acepto rebre info
-    & li:nth-child(20) {
-      order: initial;
-      grid-column: 1 / span 2;
-      width: 50%;
-      justify-self: center;
-    }
-    // accepto 1
-    & li:nth-child(21) {
-      order: initial;
-      grid-column: 1 / span 2;
-      width: 50%;
-      justify-self: center;
-    }
-    // accepto 2
-    & li:nth-child(22) {
-      order: initial;
-      grid-column: 1 / span 2;
-      width: 50%;
-      justify-self: center;
-    }
-    // accepto 3
-    & li:nth-child(23) {
-      order: initial;
-      grid-column: 1 / span 2;
-      width: 50%;
-      justify-self: center;
-    }
-    // submit
-    & div:nth-child(24) {
-      order: 23;
-      grid-column: 1 / span 2;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-    // text info
-    & div:nth-child(25) {
-      order: 22;
-      grid-column: 1 / span 2;
-      width: 50%;
-      justify-self: center;
-    }
+    &__form {
+      --display-form-profile: grid;
+
+      legend {
+        --font-size: 28px;
+        --line-height: 32px;
+      }
+      fieldset {
+        --display-fieldset: grid;
+      }
+      form fieldset:nth-child(2){
+        --padding: 0;
+
+        ul:nth-child(7) {
+          --margin-top: var(--pad2);
+        }
+      }
+      form fieldset:nth-child(3){
+        --padding: var(--pad6) var(--pad4);
+        --margin: var(--pad4) var(--pad8) var(--pad8) var(--pad8);
+      }
+      form fieldset:nth-child(4){
+        --margin: 0;
+        --padding-top: var(--pad8);
+        --display: grid;
+        --border-top: 2px solid var(--primary-lighter);
+      }
+      .form__submit {
+        --padding: 0;
+        
+        input {
+          --width: fit-content;
+        }
+      }
+      .form__text {
+          --margin-bottom: var(--pad6);
+      }
     }
   }
 }
@@ -266,9 +105,96 @@
     }
   }
   &__form {
-    .form {
-      display: var(--display);
-      flex-direction: column;
+    &.form {
+      display: block;
+    }
+    form {
+      &.grid-content {
+        display: var(--display-form-profile);
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0 var(--pad1);
+      }
+      legend {
+        margin-top: -25px;
+        padding-top: var(--pad6);
+        font-weight: 300;
+        font-size: var(--font-size);
+        line-height: var(--line-height);
+        color: var(--primary);
+      }
+      & fieldset:nth-child(2){
+        grid-column: 2 / span 4;
+        display: var(--display-fieldset);
+        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(7, auto);
+        grid-auto-flow: column;
+        gap: var(--pad1);
+        padding: var(--padding);
+        margin: var(--margin);
+        max-width: 100%;
+
+        // Camp radio genere
+        p:nth-child(7) {
+          grid-column: 1;
+          grid-row: 7;
+        }
+        ul:nth-child(8) {
+          grid-column: 1;
+          grid-row: 7;
+          margin-top: var(--margin-top);
+        }
+        // p buida rara
+        p:nth-child(9) {
+          display: none;
+        }
+      }
+      & fieldset:nth-child(3){
+        grid-column: 1 / span 6;
+        display: var(--display-fieldset);
+        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+        grid-auto-flow: column;
+        gap: var(--pad1);
+        padding: var(--padding);
+        margin: var(--margin);
+        background-color: var(--primary-2);
+        border-radius: var(--br);
+        }
+      & fieldset:nth-child(4){
+        grid-column: 1 / span 6;
+        display: var(--display);
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0 var(--pad1);
+        margin: var(--margin);
+        padding-top: var(--padding-top);
+        border-top: var(--border-top);
+
+        &>* {
+          grid-column: 3 / span 2;
+        }
+        .field,
+        .field-checkbox {
+          margin-top: var(--pad1);
+        }
+      }
+    }
+    .form__submit {
+      padding: var(--padding);
+      margin-top: var(--margin-top);
+      
+      .grid-item-wide {
+        display: flex;
+        flex-direction: column;
+      }
+      input {
+        justify-self: center;
+        width: var(--width);
+      }
+    }
+    .form__text {
+      margin-bottom: var(--margin-bottom);
     }
   }
 }

@@ -80,125 +80,228 @@
 		</div>
 		{% endif %}
 	</section>
-	<section class="project__form grid-content">
-		<form class="form grid-item-wide" method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
-			enctype="multipart/form-data" id="project-form">
-			{% csrf_token %}
-			{{ form.as_ul }}
-			{% if form.errors %}
-			<div class="form__error text-sm">
-					<p>Hi ha hagut un error: {{ form.error }}</p>
-          <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
+	<section class="project__form form">
+    <form
+		class="grid-content"
+		method="post"
+		action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+		enctype="multipart/form-data"
+		id="project-form"
+    >
+    {% csrf_token %}
+    {{ form.as_fieldsets|safe }}
+    {% if form.errors %}
+    <div class="form__error text-sm">
+        <p>Hi ha hagut un error: {{ form.error }}</p>
+        <ul>
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ field.label }}: {{ error }}</li>
             {% endfor %}
-        </ul>
+          {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+	{% if messages %}
+	<div class="modal">
+		<div class="modal__background" onclick="hideMessageModal(event)"></div>
+		<div class="modal__card">
+			<div class="modal__title title-1">
+				<p>Confirmació</p>
 			</div>
-			{% endif %}
-			{% if messages %}
-			<div class="modal">
-				<div class="modal__background" onclick="hideMessageModal(event)"></div>
-				<div class="modal__card">
-					<div class="modal__title title-1">
-						<p>Confirmació</p>
+			<div class="modal__close" onclick="hideMessageModal(event)">
+				<svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 9.46 9.46">
+					<path d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+				</svg>
+			</div>
+			<div class="modal__form">
+				{% for message in messages %}
+
+				<div class="modal__intro text-md">
+					<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
+						<p>{{ message }}</p>
 					</div>
-					<div class="modal__close" onclick="hideMessageModal(event)">
-						<svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 9.46 9.46">
-							<path d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	<div class="form__submit">
+		<input type="submit" class="btn btn--primary btn__text" value="Actualitzar dades" />
+		<input type="hidden" name="next" value="{{ next }}" />
+	</div>
+	</form>
+	</section>
+	<section class="project__people grid-content">
+		<div class="project__people-grid grid-item-full">
+			<div class="project__people-title is-bold">
+				<p>Integrants del projecte</p>
+			</div>
+      {% for partner in partners %}
+			<div class="project__people-item">
+				<div class="image">
+					{{ partner.photo }}
+					<!-- <img src="" alt="" srcset=""> -->
+				</div>
+				<div class="text-md is-bold">
+					<p>{{ partner.full_name }}</p>
+				</div>
+				<div class="text-md">
+					<p>{{ partner.email }}</p>
+				</div>
+				{% if partner.id != request.user.id %}
+					<div class="project__people-btn text-btn" onclick="openDeleteModal(this)">
+						<p>Eliminar</p>
+					</div>
+				{% endif %}
+			</div>
+			<div class="project__modal-add modal-overlay modal-overlay2 is-hidden" id="deleteParticipantModal">
+				<div class="modal-overlay__background" onclick="closeDeleteModal2(this)"></div>
+				<div class="modal-overlay__card card">
+					<div class="card__title text-md is-bold">
+						<h1>Eliminar aquest integrant</h1>
+					</div>
+					<div class="card__subtitle text-sm">
+						<p>Segur que vols eliminar
+							<span class="is-bold">{{ partner.full_name }}</span>
+							del projecte?
+						</p>
+						<p>
+							El compte de la persona
+							no s'esborrarà, només la seva vinculació amb aquest
+							projecte.
+						</p>
+					</div>
+					<div class="card__close" onclick="closeDeleteModal(this)">
+						<svg
+							class="icon-pathfill-primary"
+							xmlns="http://www.w3.org/2000/svg"
+							viewbox="0 0 9.46 9.46">
+							<path
+								d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
 						</svg>
 					</div>
-					<div class="modal__form">
-						{% for message in messages %}
-
-						<div class="modal__intro text-md">
-							<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
-								<p>{{ message }}</p>
-							</div>
-						</div>
-						{% endfor %}
+					<div class="modal-overlay__form form">
+						<form method="post" action="delete-partner/">
+							{% csrf_token %}
+							<button type="submit" class="form__submit btn btn--second btn__text"
+								name="delete_partner" value="{{ project.pk }}">
+								Eliminar integrant
+							</button>
+							<input type="hidden" name="partner_id" value="{{ partner.id }}">
+						</form>
 					</div>
 				</div>
 			</div>
-			{% endif %}
-			<div class="form__submit">
-				<input type="submit" class="btn btn--primary btn__text" value="Actualitzar dades" />
+			{% endfor %}
+			<div class="project__people-add">
+				<div class="icon" onclick="openAddModal(this)">
+					<svg xmlns="http://www.w3.org/2000/svg"	viewbox="0 0 24 24"	width="24"	height="24">
+						<polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"	points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "	id="polygon2"	style="opacity:0.975;fill:#fff;fill-opacity:1" />
+					</svg>
+				</div>
+				<div class="project__people-btn text-btn" onclick="openAddModal(this)">
+					<p>Afegir un nou integrant</p>
+				</div>
 			</div>
-			<input type="hidden" name="next" value="{{ next }}" />
-		</form>
+		</div>
+		<div class="project__people-grid grid-item-full project__invited">
+			{% if invited_partners %}
+			<div class="project__people-title is-bold">
+				<p>Usuaris convidats pendents de confirmació</p>
+			</div>
+			{% for invited in invited_partners %}
+				<div class="project__people-item">
+					<div class="image">
+						{{ invited.photo }}
+						<!-- <img src="" alt="" srcset=""> -->
+					</div>
+					<div class="text-md is-bold">
+						<p>{{ invited.full_name }}</p>
+					</div>
+					<div class="text-md">
+						<p>{{ invited.email }}</p>
+					</div>
+					<div class="project__people-btn text-btn" onclick="openDeleteModal(this)">
+						<p>Eliminar</p>
+					</div>
+				</div>
+				<div class="project__modal-add modal-overlay modal-overlay2 is-hidden" id="deleteInvitationModal">
+					<div class="modal-overlay__background" onclick="closeDeleteModal2(this)"></div>
+					<div class="modal-overlay__card card">
+						<div class="card__title text-md is-bold">
+							<h1>Eliminar aquesta invitació</h1>
+						</div>
+						<div class="card__subtitle text-sm">
+							<p>Segur que vols eliminar la invitació de
+								<span class="is-bold">{{ invited.full_name }}</span>
+								al teu projecte?
+							</p>
+						</div>
+						<div class="card__close" onclick="closeDeleteModal(this)">
+							<svg
+								class="icon-pathfill-primary"
+								xmlns="http://www.w3.org/2000/svg"
+								viewbox="0 0 9.46 9.46">
+								<path
+									d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+							</svg>
+						</div>
+						<div class="modal-overlay__form form">
+							<form method="post" action="delete-invitation/">
+								{% csrf_token %}
+								<button type="submit" class="form__submit btn btn--second btn__text"
+									name="delete_invitation" value="{{ project.pk }}">
+									Eliminar invitació
+								</button>
+								<input type="hidden" name="invited_id" value="{{ invited.id }}">
+							</form>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+		</div>
 	</section>
-	<!-- <section class="project__people-grid">
-		<div class="project__people-title is-bold">
-			<p>Integrants del projecte</p>
-		</div>
-		FOREACH participant
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
+	<div class="project__modal-add modal-overlay is-hidden" id="addParticipantModal">
+		<div class="modal-overlay__background" onclick="closeAddModal()"></div>
+		<div class="modal-overlay__card card">
+			<div class="card__title text-md is-bold">
+				<h1>Afegeix un nou integrant</h1>
 			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
+			<div class="card__subtitle text-sm">
+				<p>Escriu a continuació el correu electrònic de la persona que vols
+					afegir a aquest projecte.
+				</p>
 			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			FALTA Què passa quan s'activa?
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		END FOREACH
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
-			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
-			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		<div class="project__people-add">
-			<div class="icon">
-				<svg xmlns="http://www.w3.org/2000/svg"	viewbox="0 0 24 24"	width="24"	height="24">
-					<polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"	points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "	id="polygon2"	style="opacity:0.975;fill:#fff;fill-opacity:1" />
+			<div class="card__close" onclick="closeAddModal()">
+				<svg
+					class="icon-pathfill-primary"
+					xmlns="http://www.w3.org/2000/svg"
+					viewbox="0 0 9.46 9.46">
+					<path
+						d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
 				</svg>
 			</div>
-			FALTA Què passa quan s'activa?
-			<div class="text-btn">
-				<p>Afegir un nou integrant</p>
+			<div class="modal-overlay__form form">
+				<form method="post" action="add-partner/">
+					{% csrf_token %}
+					<li class="field {% if form.errors %}field-error{% endif %}">
+						<label for="id_email">Correu electrònic</label>
+						<input type="text" name="email" />
+						{% if form.errors %}
+							{{ form.email.errors }}
+						{% endif %}
+					</li>
+					<button type="submit" class="form__submit btn btn--second btn__text"
+            name="add_partner" value="{{ project.pk }}">
+            Afegir un nou integrant
+          </button>
+				</form>
 			</div>
 		</div>
-	</section> -->
-
+	</div>
 </div>
 
 {% endblock %}

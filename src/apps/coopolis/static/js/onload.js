@@ -14,8 +14,10 @@ function onLoadFunction(){
       checkboxParent.classList.add("field-checkbox")
     }
     if (el.type === "radio") {
-      let radioParent = el.parentElement.parentElement.parentElement.parentElement
+      let radioParent = el.parentElement.parentElement.parentElement
+      let labelGeneralRadio = radioParent.previousElementSibling
       radioParent.classList.add("field", "field-radio")
+      labelGeneralRadio.classList.add("label-radio")
     }
     if (el.type === "number") {
       let numberParent = el.parentElement
@@ -59,10 +61,6 @@ function onLoadFunction(){
   
     readAcceptedOne.classList.add("field-checkbox--long")
     readAcceptedTwo.classList.add("field-checkbox--long")
-    // Afegint funcionalitat per deshabilitar el camp DNI
-    const IdType = document.getElementById("id_id_number_type")
-    IdType.setAttribute("onchange", "blockIdNumber()")
-    blockIdNumber()
   }
 
   // Pàgina de projectes
@@ -75,6 +73,7 @@ function onLoadFunction(){
     // Mostrant districte només si Barcelona
     const townInput = document.querySelector("#id_town")
     const districtField = document.querySelector("#id_district").parentElement
+    districtField.classList.add("is-hidden")
     townInput.onchange = toggleDistrict
     
     if (townInput.value === "90") {
