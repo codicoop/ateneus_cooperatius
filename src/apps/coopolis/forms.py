@@ -277,7 +277,7 @@ class MySignUpForm(FieldsetsMixin, FormDistrictValidationMixin, UserCreationForm
             },
         ),
         (
-            "Explican'ns més de tu",
+            "Explica'ns més coses de tu",
             {
                 "fields": (
                     "educational_level",
