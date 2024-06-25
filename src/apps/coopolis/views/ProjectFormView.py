@@ -164,7 +164,14 @@ def project_partner_manage(request):
                 "Aquest usuari no existeix.",
             )
             return redirect("edit_project")
-        invitation = Invitation.objects.filter(user=user, project=request.POST.get("delete_invitation")).first()
+        try:
+            invitation = Invitation.objects.filter(user=user, project=request.POST.get("delete_invitation")).first()
+        except Invitation.DoesNotExist:
+            messages.error(
+                request,
+                "Aquesta invitació no existeix.",
+            )
+            return redirect("edit_project")
         invitation.delete()
         messages.success(
             request,
