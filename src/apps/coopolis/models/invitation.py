@@ -23,3 +23,4 @@ class Invitation(models.Model):
         verbose_name = "invitació"
         verbose_name_plural = "invitacions"
         ordering = ["created", ]
+        unique_together = ("user", "project")
