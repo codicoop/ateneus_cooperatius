@@ -3491,6 +3491,9 @@ label.required::after {
   line-height: var(--line-height);
   margin-bottom: var(--pad2);
 }
+.my-calendar.fc .fc-toolbar-title:first-letter {
+  text-transform: capitalize;
+}
 .my-calendar.fc .fc-daygrid-day {
   padding: 0 5px;
 }
