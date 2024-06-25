@@ -134,21 +134,6 @@
         padding: var(--padding);
         margin: var(--margin);
         max-width: 100%;
-
-        // Camp radio genere
-        p:nth-child(7) {
-          grid-column: 1;
-          grid-row: 7;
-        }
-        ul:nth-child(8) {
-          grid-column: 1;
-          grid-row: 7;
-          margin-top: var(--margin-top);
-        }
-        // p buida rara
-        p:nth-child(9) {
-          display: none;
-        }
       }
       & fieldset:nth-child(3){
         grid-column: 1 / span 6;

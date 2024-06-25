@@ -4185,18 +4185,6 @@ label.required::after {
   margin: var(--margin);
   max-width: 100%;
 }
-.signup__form form fieldset:nth-child(2) p:nth-child(7) {
-  grid-column: 1;
-  grid-row: 7;
-}
-.signup__form form fieldset:nth-child(2) ul:nth-child(8) {
-  grid-column: 1;
-  grid-row: 7;
-  margin-top: var(--margin-top);
-}
-.signup__form form fieldset:nth-child(2) p:nth-child(9) {
-  display: none;
-}
 .signup__form form fieldset:nth-child(3) {
   grid-column: 1/span 6;
   display: var(--display-fieldset);
@@ -4782,18 +4770,6 @@ label.required::after {
   align-items: start;
   gap: var(--pad-2);
   padding: var(--padding);
-}
-.profile__form form fieldset:nth-child(3) p:nth-child(7) {
-  grid-column: 2;
-  grid-row: 1;
-}
-.profile__form form fieldset:nth-child(3) ul:nth-child(8) {
-  grid-column: 2;
-  grid-row: 1;
-  margin-top: var(--margin-top);
-}
-.profile__form form fieldset:nth-child(3) p:nth-child(9) {
-  display: none;
 }
 .profile__form form fieldset:nth-child(4) {
   grid-column: 1/span 6;
