@@ -129,7 +129,7 @@ def project_partner_manage(request):
             if user == request.user:
                 messages.error(
                     request,
-                    "No es pot eliminar l'usuari actualment autenticat.",
+                    "No et pots eliminar a tu mateix/a del projecte.",
                 )
                 return redirect("edit_project")
             try:
