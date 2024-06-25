@@ -3464,6 +3464,10 @@ label.required::after {
   --line-height: 24px;
 }
 
+.fc-toolbar-title:first-letter {
+  text-transform: capitalize;
+}
+
 @media (min-width: 900px) {
   .my-calendar .fc-toolbar-title {
     --font-size: 28px;
