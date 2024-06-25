@@ -47,7 +47,7 @@ def populate_mail_templates(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('coopolis', '0130_auto_20240613_0903'),
+        ('coopolis', '0131_auto_20240625_1600'),
     ]
 
     operations = [
