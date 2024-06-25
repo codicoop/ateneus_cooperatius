@@ -97,7 +97,6 @@ class MyAccountForm(FieldsetsMixin, FormDistrictValidationMixin, UserChangeForm)
     email = forms.EmailField(
         label="Correu electrònic",
         max_length=254,
-        help_text="Requerit, ha de ser una adreça vàlida.",
     )
     birthdate = forms.DateField(
         label="Data de naixement", required=True, widget=XDSoftDatePickerInput()

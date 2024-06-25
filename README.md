@@ -53,20 +53,7 @@ python3 manage.py generatefakedata
 
 ### Editing stylesheets
 
-They're located at apps/coopolis/static/styles
-
-Use sass to compile them.
-So first of all [install sass](https://sass-lang.com/install) in your computer.
-
-Edit the files inside styles/scss, don't touch styles/stylesheet.css.
-
-To compile, go to styles/scss folder and do:
-
-    sass main.scss ../stylesheet.css
-    
-There's an option to keep the service running so it detects changes and auto-compiles them, but I had
-problems running this and editing the files with PyCharm, I guess because PyCharm keeps the changes
-saved all the time and that messes up with the changes detection.
+TO DO (la info que hi havia era errònia)
 
 ### Adding or modifying permissions assigned to user groups
 
