@@ -90,18 +90,6 @@
     >
     {% csrf_token %}
     {{ form.as_fieldsets|safe }}
-    {% if form.errors %}
-    <div class="form__error text-sm">
-        <p>Hi ha hagut un error: {{ form.error }}</p>
-        <ul>
-          {% for field in form %}
-            {% for error in field.errors %}
-              <li>{{ field.label }}: {{ error }}</li>
-            {% endfor %}
-          {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
 	{% if messages %}
 	<div class="modal">
 		<div class="modal__background" onclick="hideMessageModal(event)"></div>
@@ -141,8 +129,7 @@
       {% for partner in partners %}
 			<div class="project__people-item">
 				<div class="image">
-					{{ partner.photo }}
-					<!-- <img src="" alt="" srcset=""> -->
+					<img src="{{ partner.photo.url }}" alt="" srcset="">
 				</div>
 				<div class="text-md is-bold">
 					<p>{{ partner.full_name }}</p>
@@ -214,8 +201,7 @@
 			{% for invited in invited_partners %}
 				<div class="project__people-item">
 					<div class="image">
-						{{ invited.photo }}
-						<!-- <img src="" alt="" srcset=""> -->
+						{{ invited.photo.url }}
 					</div>
 					<div class="text-md is-bold">
 						<p>{{ invited.full_name }}</p>
