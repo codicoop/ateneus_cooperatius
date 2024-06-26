@@ -22,6 +22,7 @@
 		>
 			{% csrf_token %}
 			{{ signup_form.as_fieldsets|safe }}
+			<!-- Ho deixo comentat per quan pensem en el disseny d'això -->
 			<!-- {# if form.errors #}
 			<div class="form__error text-sm">
 				<p>Si us plau revisa els errors del formulari.</p>

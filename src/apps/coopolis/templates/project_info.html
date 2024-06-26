@@ -129,7 +129,9 @@
       {% for partner in partners %}
 			<div class="project__people-item">
 				<div class="image">
+					{% if partner.photo %}
 					<img src="{{ partner.photo.url }}" alt="" srcset="">
+					{% endif %}
 				</div>
 				<div class="text-md is-bold">
 					<p>{{ partner.full_name }}</p>
@@ -201,7 +203,9 @@
 			{% for invited in invited_partners %}
 				<div class="project__people-item">
 					<div class="image">
-						{{ invited.photo.url }}
+						{% if invited.photo %}
+						<img src="{{ invited.photo.url }}" alt="" srcset="">
+						{% endif %}
 					</div>
 					<div class="text-md is-bold">
 						<p>{{ invited.full_name }}</p>
