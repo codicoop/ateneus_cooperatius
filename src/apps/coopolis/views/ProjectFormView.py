@@ -46,6 +46,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
                 "Dades del acompanyament borrades correctament.",
             )
             return HttpResponseRedirect(urls.reverse("edit_project"))
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
