@@ -16,11 +16,12 @@
     }
     form fieldset:nth-child(2){
       --padding: 0 var(--pad-2);
-
+      --align-items: auto;
+      
       ul:nth-child(7) {
         --margin-top: 0;
       }
-
+      
     }
     form fieldset:nth-child(3){
       --padding: var(--pad2) var(--pad-2);
@@ -63,6 +64,7 @@
       }
       form fieldset:nth-child(2){
         --padding: 0;
+      --align-items: start;
 
         ul:nth-child(7) {
           --margin-top: var(--pad2);
@@ -129,7 +131,7 @@
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(7, auto);
         grid-auto-flow: column;
-        align-items: start;
+        align-items: var(--align-items);
         gap: var(--pad1);
         padding: var(--padding);
         margin: var(--margin);
