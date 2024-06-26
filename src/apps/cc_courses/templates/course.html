@@ -122,7 +122,7 @@
 									placeholder="Hi ha res que vulguis que tinguem en compte? Explica'ns-ho aquí."
 								></textarea>
 							</li>
-							<input type="hidden" id="hidden_{{ activity.id }}" name="{{ activity.id }}" value="{{ activity.id }}">
+							<input type="hidden" id="hidden_{{ activity.id }}" name="activity_id" value="{{ activity.id }}">
 						</form>
 					</div>
 						<button 
@@ -160,7 +160,7 @@
 						</div>
 						<form method="post" action="{% url 'activity_optout' id=activity.id %}" id="delete_{{ activity.id }}">
 							{% csrf_token %}
-							<input type="hidden" id="hidden2_{{ activity.id }}" name="{{ activity.id }}" value="{{ activity.id }}">
+							<input type="hidden" id="hidden2_{{ activity.id }}" name="activity_id" value="{{ activity.id }}">
 						</form>
 					</div>
 					<button form="delete_{{ activity.id }}" class="modal__submit modal__submit1 btn btn--second btn__text" type="submit">
