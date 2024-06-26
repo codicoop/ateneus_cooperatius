@@ -237,7 +237,8 @@ label.required::after {
 }
 
 .form p.field-file,
-.form div.field-file {
+.form div.field-file,
+.form li.field-file {
   position: relative;
 
   .upload-icon::after {
