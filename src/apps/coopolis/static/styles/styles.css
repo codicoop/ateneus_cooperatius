@@ -2708,7 +2708,7 @@ label.required::after {
   align-items: center;
   flex-wrap: wrap;
   width: fit-content;
-  padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad-2);
+  padding: var(--pad-2) var(--pad1);
   margin-bottom: var(--pad2);
   background-color: var(--primary-1);
   border-radius: 35px;
@@ -4780,7 +4780,7 @@ label.required::after {
   grid-column: 2/span 4;
   display: var(--display-fieldset);
   flex-direction: column;
-  grid-template-rows: repeat(8, auto);
+  grid-template-rows: repeat(7, auto);
   grid-auto-flow: column;
   grid-template-columns: repeat(2, 1fr);
   align-items: var(--align-items);
@@ -5432,6 +5432,9 @@ label.required::after {
 .support-1 form li:nth-child(8) {
   order: 7;
 }
+.support-1 .field-select::after {
+  --bottom: 20px;
+}
 
 @media (min-width: 900px) {
   .support {
@@ -5474,6 +5477,9 @@ label.required::after {
   }
   .support-1 form li:nth-child(9) {
     order: initial;
+  }
+  .support-1 .field-select::after {
+    --bottom: 26px;
   }
 }
 .support {
@@ -5569,6 +5575,9 @@ label.required::after {
 .support-1 .field-textarea {
   grid-row: 1/span 3;
   grid-column: 3;
+}
+.support-1 .field-select::after {
+  bottom: var(--bottom);
 }
 
 .support-3 .field {

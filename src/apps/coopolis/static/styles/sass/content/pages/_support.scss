@@ -51,6 +51,9 @@
       order: 7;
     }
   }
+  .field-select::after {
+    --bottom: 20px;
+  }
 }
 
 @media (min-width: 900px) {
@@ -105,6 +108,9 @@
       & li:nth-child(9) {
         order: initial;
       }
+    }
+    .field-select::after {
+      --bottom: 26px;
     }
   }
 }
@@ -235,6 +241,9 @@
   .field-textarea {
     grid-row: 1 / span 3;
     grid-column: 3;
+  }
+  .field-select::after {
+    bottom: var(--bottom);
   }
 }
 // .support-2 {}
