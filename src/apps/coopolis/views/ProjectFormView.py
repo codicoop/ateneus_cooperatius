@@ -43,7 +43,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
             project.save()
             messages.success(
                 request,
-                "Dades del acompanyament borrades correctament.",
+                "Dades de l'acompanyament esborrades correctament.",
             )
             return HttpResponseRedirect(urls.reverse("edit_project"))
         return super().post(request, *args, **kwargs)
