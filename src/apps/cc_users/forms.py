@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserChangeForm
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
-from apps.coopolis.mixins import FormDistrictValidationMixin
+from apps.coopolis.mixins import FormDistrictValidationMixin, FieldsetsMixin
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from conf.custom_mail_manager import MyMailTemplate
 
@@ -26,7 +26,7 @@ class LogInForm(AuthenticationForm):
         return self.cleaned_data
 
 
-class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
+class MyAccountForm(FieldsetsMixin, FormDistrictValidationMixin, UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = (
@@ -73,6 +73,7 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
                     "birthdate",
                     "birth_place",
                     "town",
+                    "district",
                     "address",
                 )
             },
@@ -96,7 +97,6 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
     email = forms.EmailField(
         label="Correu electrònic",
         max_length=254,
-        help_text="Requerit, ha de ser una adreça vàlida.",
     )
     birthdate = forms.DateField(
         label="Data de naixement", required=True, widget=XDSoftDatePickerInput()

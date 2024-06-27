@@ -11,7 +11,10 @@ class EnrollActivityView(generic.RedirectView):
         if request.user.is_anonymous or not request.POST:
             self.url = reverse('loginsignup')
         else:
-            activity = Activity.objects.get(id=request.POST['activity_id'])
+            try:
+                activity = Activity.objects.get(id=request.POST['activity_id'])
+            except Activity.DoesNotExist:
+                self.url = reverse("my_activities")
             enrollment = ActivityEnrolled(
                 user=request.user,
                 activity=activity,

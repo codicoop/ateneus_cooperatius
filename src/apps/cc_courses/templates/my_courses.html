@@ -41,10 +41,10 @@
             d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
         </svg>
       </div>
-      <div class="modal__form form">
+      <div class="modal__message">
         <div class="modal__intro text-md">
           {% for message in messages %}
-          <div class="text-md">
+          <div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
             <p>{{ message }}</p>
           </div>
           {% endfor %}
@@ -114,7 +114,7 @@
             <a class="my-course-card__link text-xsm" href="{% url 'course' slug=enrollment.activity.course.slug %}">
               <p>Pàgina de l'activitat</p>
               <svg
-                class="icon-pathfill-second icon-7"
+                class="icon-pathfill-second"
                 xmlns="http://www.w3.org/2000/svg"
                 viewbox="0 0 10.7 10.7">
                 <path d="M 5.35,10.7 4.65,9.98 8.78,5.85 H 0 v -1 H 8.78 L 4.65,0.72 5.35,0 10.7,5.35 Z" />

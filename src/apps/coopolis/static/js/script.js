@@ -67,25 +67,6 @@ function hideModal(event) {
   }
 }
 
-function blockIdNumber() {
-  const idInput = document.getElementById("id_id_number")
-  const idInputType = document.getElementById("id_id_number_type")
-  const newValue = idInputType.value
-  const helptext = idInput.parentElement.querySelector(".helptext")
-
-  if (newValue === "NO_DNI") {
-    // Bloquejar el camp del número
-    idInput.value = ""
-    idInput.disabled = true
-    // Ensenyar el camp helptext
-    helptext.style.display = "block"
-  } else {
-    // Habilitar el camp del número
-    idInput.disabled = false
-    // Amagar el camp helptext
-    helptext.style.display = "none"
-  }
-}
 function showFilters(event) {
   const parent = event.target.parentElement
   const overlay = parent.querySelector(".overlay")
@@ -174,4 +155,29 @@ function deleteModalWaitingList(event) {
   const card = event.parentElement.parentElement.parentElement.parentElement.parentElement
   const modal = card.querySelector(".delete-modal")
   modal.classList.remove("is-hidden")
+}
+
+function openAddModal(event) {
+  const thisButton = event
+  const parent = thisButton.parentElement.parentElement.parentElement.parentElement
+  const modal = parent.querySelector("#addParticipantModal")
+  modal.classList.remove("is-hidden")
+}
+function closeAddModal() {
+  const modal = document.querySelector("#addParticipantModal")
+  modal.classList.add("is-hidden")
+}
+function openDeleteModal(event) {
+  const thisButton = event
+  const parent = thisButton.parentElement
+  const modal = parent.nextElementSibling
+  modal.classList.remove("is-hidden")
+}
+function closeDeleteModal(event) {
+  const modal = event.parentElement.parentElement
+  modal.classList.add("is-hidden")
+}
+function closeDeleteModal2(event) {
+  const modal = event.parentElement
+  modal.classList.add("is-hidden")
 }

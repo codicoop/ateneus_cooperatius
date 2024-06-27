@@ -3,28 +3,35 @@
 function onLoadFunction(){
   // Trobar els inputs de la pàgina
   const allInputs = document.querySelectorAll("input")
-  // Afegint clases pels diferents tipus de inputs
   allInputs.forEach(el => {
+    // Afegint clases pels diferents tipus de inputs
     if (el.type === "text" || el.type === "email" || el.type === "password") {
-      let checkboxParent = el.parentElement
-      checkboxParent.classList.add("field")
+      let parent = el.parentElement
+      parent.classList.add("field")
     }
     if (el.type === "checkbox") {
       let checkboxParent = el.parentElement
       checkboxParent.classList.add("field-checkbox")
     }
     if (el.type === "radio") {
-      let radioParent = el.parentElement.parentElement.parentElement.parentElement
-      radioParent.classList.add("field", "field-radio")
+      let radioParent = el.parentElement.parentElement.parentElement
+      let labelGeneralRadio = radioParent.previousElementSibling
+      let superParent = radioParent.parentElement
+      superParent.classList.remove("field")
+      radioParent.classList.add("field")
+      radioParent.classList.add("field-radio")
+      labelGeneralRadio.classList.add("label-radio")
     }
     if (el.type === "number") {
       let numberParent = el.parentElement
-      numberParent.classList.add("field", "field-number")
+      numberParent.classList.add("field-number")
+      numberParent.classList.add("field")
     }
     if (el.type === "file") {
       let fileParent = el.parentElement
       let label = el.previousElementSibling
-      fileParent.classList.add("field","field-file")
+      fileParent.classList.add("field-file")
+      fileParent.classList.add("field")
       label.classList.add("upload-icon")
 
       if (fileParent.classList.contains("field-checkbox")) {
@@ -37,8 +44,8 @@ function onLoadFunction(){
   const allSelects = document.querySelectorAll("select")
   allSelects.forEach(el => {
     let selectParent = el.parentElement
-    selectParent.classList.add("field")
     selectParent.classList.add("field-select")
+    selectParent.classList.add("field")
   })
 
   // Afegint clases per les textareas
@@ -59,10 +66,6 @@ function onLoadFunction(){
   
     readAcceptedOne.classList.add("field-checkbox--long")
     readAcceptedTwo.classList.add("field-checkbox--long")
-    // Afegint funcionalitat per deshabilitar el camp DNI
-    const IdType = document.getElementById("id_id_number_type")
-    IdType.setAttribute("onchange", "blockIdNumber()")
-    blockIdNumber()
   }
 
   // Pàgina de projectes
@@ -74,16 +77,19 @@ function onLoadFunction(){
   if (projectPage || registerPage || profilePage || supportPage || signupPage) {
     // Mostrant districte només si Barcelona
     const townInput = document.querySelector("#id_town")
-    const districtField = document.querySelector("#id_district").parentElement
-    townInput.onchange = toggleDistrict
-    
-    if (townInput.value === "90") {
-      districtField.classList.remove("is-hidden")
-    } else {
+    const districtInput = document.querySelector("#id_district")
+    if (districtInput) {
+      const districtField = districtInput.parentElement
       districtField.classList.add("is-hidden")
-      districtField.value = ""
+      townInput.onchange = toggleDistrict
+      
+      if (townInput.value === "90") {
+        districtField.classList.remove("is-hidden")
+      } else {
+        districtField.classList.add("is-hidden")
+        districtField.value = ""
+      }
     }
-    
   }
 
   // // Pàgina de perfil

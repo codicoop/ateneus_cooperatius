@@ -105,6 +105,7 @@
       position: relative;
       display: flex;
       flex-direction: column;
+      grid-column: 1 / span 3;
 
       &::before {
         content: "Llista d'espera";
@@ -114,6 +115,22 @@
         color: var(--primary-light);
         text-transform: uppercase;
       }
+    }
+    .course-session-card__time {
+      grid-row: 1;
+      grid-column: 4 / span 3;
+      justify-self: end;
+      margin-right: var(--pad3);
+    }
+    .course-session-card__btn {
+      grid-row: 2;
+      grid-column: 4 / span 3;
+      justify-self: end;
+      margin-right: var(--pad3);
+    }
+    .course-session-card__bloc,
+    .course-session-card__bloc2 {
+      grid-row: 3;
     }
   }
   // Si ja estas inscrit

@@ -70,3 +70,24 @@ class FilterByCurrentSubsidyPeriodMixin:
             value = f"&{value}"
         query_string = query_string + value
         return HttpResponseRedirect(f"{request.path_info}?{query_string}")
+
+
+class FieldsetsMixin:
+    def as_fieldsets(self):
+        output = []
+        for name, fieldset in self.fieldsets:
+            output.append("<fieldset>")
+            if name:
+                output.append(f"<legend>{name}</legend>")
+            for field_name in fieldset["fields"]:
+                field = self[field_name]
+                output.append(f'<div class="field">')
+                output.append(f"{field.label_tag()}{field}")
+                if field.errors:
+                    for error in field.errors:
+                        output.append(f'<p class="error">{error}</p>')
+                if field.help_text:
+                    output.append(f'<p class="helptext">{field.help_text}</p>')
+                output.append("</div>")
+            output.append("</fieldset>")
+        return "".join(output)

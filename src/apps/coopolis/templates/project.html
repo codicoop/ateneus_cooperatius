@@ -32,130 +32,31 @@
 			<p>Omple les dades del teu projecte. En qualsevol moment les podràs modificar.</p>
 		</div>
 	</section>
-	<section class="project-create__form grid-content">
-			<form 
-					class="form grid-item-wide"
-					method="post" 
-					action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
-					enctype="multipart/form-data" 
-					id="project-form"
-			>
-        {% csrf_token %}
-				{{ form.as_ul }}
-				{% if messages %}
-					<div class="modal">
-						<div class="modal__background" onclick="hideMessageModal(event)"></div>
-						<div class="modal__card">
-							<div class="modal__title title-1">
-								<p>Confirmació</p>
-							</div>
-							<div class="modal__close" onclick="hideMessageModal(event)">
-								<svg
-									class="icon-pathfill-primary"
-									xmlns="http://www.w3.org/2000/svg"
-									viewbox="0 0 9.46 9.46">
-									<path
-										d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
-								</svg>
-							</div>
-							<div class="modal__form">
-								{% for message in messages %}
 
-								<div class="modal__intro text-md">
-									<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
-										<p>{{ message }}</p>
-									</div>
-								</div>
-								{% endfor %}
-							</div>
-						</div>
-					</div>
-        {% endif %}
-				{% if form.errors %}
-				<div class="form__error">
-					<p class="form__error-item">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
-					</p>
-					{% for error in form.non_field_errors %}
-					<p class="form__error-item">{{ error }}</p>
-					{% endfor %}
-				</div>
-				{% endif %}
-				<div class="form__submit">
-					<input type="submit" class="btn btn--second btn__text" value="Guardar projecte" />
-				</div>
-        <input type="hidden" name="next" value="{{ next }}" />
-		</form>
+	<section class="project__form form">
+    <form
+		class="grid-content"
+		method="post"
+		action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
+		enctype="multipart/form-data"
+		id="project-form"
+    >
+    {% csrf_token %}
+    {{ form.as_fieldsets|safe }}
+		{% if form.errors %}
+			<div class="form__error">
+				<p class="form__error-item">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
+				</p>
+				{% for error in form.non_field_errors %}
+				<p class="form__error-item">{{ error }}</p>
+				{% endfor %}
+			</div>
+		{% endif %}
+	<div class="form__submit">
+		<input type="submit" class="btn btn--second btn__text" value="Guardar projecte" />
+	</div>
+	</form>
 	</section>
-	<!-- <section class="project__people grid-content">
-		<div class="project__people-title is-bold">
-			<p>Integrants del projecte</p>
-		</div>
-		FOREACH participant
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
-			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			FALTA Què passa quan s'activa?
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		END FOREACH
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
-			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		<div class="project__people-item">
-			<div class="image">
-				Falta imatge participant
-				<img src="" alt="" srcset="">
-			</div>
-			<div class="text-md is-bold">
-				FALTA nom participant
-				<p>Andrea Simon</p>
-			</div>
-			<div class="text-md">
-				FALTA correu participant
-				<p>andrea@codi.coop</p>
-			</div>
-			<div class="text-btn">
-				<p>Eliminar</p>
-			</div>
-		</div>
-		<div class="project__people-add">
-			<div class="icon">
-				<svg xmlns="http://www.w3.org/2000/svg"	viewbox="0 0 24 24"	width="24"	height="24">
-					<polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"	points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "	id="polygon2"	style="opacity:0.975;fill:#fff;fill-opacity:1" />
-				</svg>
-			</div>
-			FALTA Què passa quan s'activa?
-			<div class="text-btn">
-				<p>Afegir un nou integrant</p>
-			</div>
-		</div>
-	</section> -->
 </div>
 
 {% endblock %}

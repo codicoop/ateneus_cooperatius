@@ -65,7 +65,7 @@ class User(BaseUser):
         null=True,
         max_length=11,
         help_text="Si degut a la teva situació legal et suposa un inconvenient"
-        " indicar el DNI, deixa'l en blanc.",
+        " indicar el DNI, selecciona 'No puc donar el DNI' a Tipus de Document.",
     )
     # Per eliminar: aquest camp s'ha creat per conservar els valors dels DNIs
     # originals abans del procés que els valida i actualitza tots, a 25/4/23.

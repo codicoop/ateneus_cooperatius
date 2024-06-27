@@ -46,6 +46,15 @@
   &__title {
     padding-bottom: var(--padding-bottom);
   }
+  &__text {
+    max-height: 50px;
+    
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space:nowrap
+    }
+  }
   &__bloc {
     padding: var(--pad1) 0;
     border-top: 1px solid #d3bfc6;
