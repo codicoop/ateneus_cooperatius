@@ -1340,11 +1340,16 @@ label.required::after {
 }
 .course-card__text {
   max-height: 50px;
-}
-.course-card__text p {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.course-card__text > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: anywhere;
+  word-break: break-word;
 }
 .course-card__bloc {
   padding: var(--pad1) 0;
@@ -1981,6 +1986,10 @@ label.required::after {
 .my-course-card__subtitle {
   color: var(--primary);
   padding: var(--pad1) 0 var(--pad-2) 0;
+}
+.my-course-card__text > * {
+  word-wrap: anywhere;
+  word-break: break-word;
 }
 .my-course-card__text.has-accent {
   color: var(--second);

@@ -342,6 +342,10 @@
     padding: var(--pad1) 0 var(--pad-2) 0;
   }
   &__text {
+    &>* {
+      word-wrap: anywhere;
+      word-break: break-word;
+    }
     &.has-accent {
       color: var(--second);
     }
