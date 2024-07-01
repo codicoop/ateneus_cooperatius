@@ -1340,8 +1340,11 @@ label.required::after {
 }
 .course-card__text {
   max-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.course-card__text p {
+.course-card__text > * {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
