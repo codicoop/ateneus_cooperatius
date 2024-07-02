@@ -8,7 +8,7 @@ authors = ["Codi Cooperatiu <hola@codi.coop>"]
 python = "^3.9.2"
 Django = "^3.2"
 psycopg2-binary = "^2.9.3"
-weasyprint = "59.0"
+weasyprint = "52"
 django-constance = {extras = ["database"], version = "^2.9.0"}
 boto3 = "^1.24.22"
 easy-thumbnails = "^2.8.1"
