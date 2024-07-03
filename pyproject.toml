@@ -8,6 +8,7 @@ authors = ["Codi Cooperatiu <hola@codi.coop>"]
 python = "^3.9.2"
 Django = "^3.2"
 psycopg2-binary = "^2.9.3"
+# Mantenir weasyprint a v52 degut a: https://github.com/Kozea/WeasyPrint/issues/1384
 weasyprint = "52"
 django-constance = {extras = ["database"], version = "^2.9.0"}
 boto3 = "^1.24.22"
