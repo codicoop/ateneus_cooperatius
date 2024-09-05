@@ -503,9 +503,12 @@ class Activity(models.Model):  # --> SESSIONS
         model = apps.get_model("dataexports", "SubsidyPeriod")
         # Using date start as the reference one, if an activity last for more
         # than 1 day it should not matter here.
-        obj = model.objects.get(
-            date_start__lte=self.date_start, date_end__gte=self.date_start
-        )
+        try:
+            obj = model.objects.get(
+                date_start__lte=self.date_start, date_end__gte=self.date_start
+            )
+        except model.DoesNotExist:
+            return None
         return obj
 
     def poll_access_allowed(self):
