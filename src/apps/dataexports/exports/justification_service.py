@@ -547,6 +547,8 @@ class ExportJustificationService:
                     circle,  # Ateneu / Cercle
                     stage.project.stages_list,  # Acompanyaments
                 ]
+
+                self.export_manager.row_number += 1
                 self.export_manager.fill_row_data(row)
 
     def export_participants(self):
