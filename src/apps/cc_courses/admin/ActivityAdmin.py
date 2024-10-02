@@ -1,6 +1,6 @@
 import base64
 from io import BytesIO
-
+import math
 import qrcode
 from django.conf import settings
 from django.contrib import admin
@@ -365,10 +365,23 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         qr_poll_uri = f"data:image/png;base64,{qr_poll_base64}"
         customization = get_customization_context()
         footer_img = customization["customization"]["signatures_pdf_footer"]
+        assistants_per_page = 9
+        assistants = Activity.objects.get(uuid=uuid).enrolled.filter(
+                enrollments__waiting_list=False
+            )
+
+        total_assistants = assistants.count()
+        number_of_pages = math.ceil(total_assistants / assistants_per_page)
+        pages = []
+        for page in range(number_of_pages):
+            start_index = page * assistants_per_page
+            end_index = start_index + assistants_per_page
+            pages.append(assistants[start_index:end_index])
         content = temp.render(
             {
-                "assistants": Activity.objects.get(uuid=uuid).enrolled.filter(
-                    enrollments__waiting_list=False),
+                "assistants": assistants,
+                "pages": pages,
+                "assistants_per_page": assistants_per_page,
                 "activity": Activity.objects.get(uuid=uuid),
                 "footer_image": footer_img,
                 "qr_poll": qr_poll_uri,

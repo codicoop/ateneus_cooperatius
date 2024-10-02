@@ -67,9 +67,10 @@ td {
 
  }
 
-    </style>
+</style>
   </head>
   <body>
+  {% for assistants in pages %}
   <table cellspacing="0" cellpadding="0">
     <tbody>
       <tr>
@@ -118,23 +119,12 @@ td {
         <td></td>
       </tr>
       {% endfor %}
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
     </tbody>
   </table>
   </div>
+  {% if not forloop.last %}
+  <div style="break-before: page;"></div>
+  {% endif %}
+  {% endfor %}
   </body>
 </html>
