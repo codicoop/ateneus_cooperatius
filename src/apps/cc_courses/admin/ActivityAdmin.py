@@ -368,7 +368,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         assistants_per_page = 9
         assistants = Activity.objects.get(uuid=uuid).enrolled.filter(
                 enrollments__waiting_list=False
-            )
+            ).order_by('last_name')
         total_assistants = assistants.count()
         number_of_pages = math.ceil(total_assistants / assistants_per_page)
         pages = []
