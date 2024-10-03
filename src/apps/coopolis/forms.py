@@ -302,7 +302,11 @@ class MySignUpForm(FieldsetsMixin, FormDistrictValidationMixin, UserCreationForm
     ]
 
     required_css_class = "required"
-    first_name = forms.CharField(label="Nom", max_length=30)
+    first_name = forms.CharField(
+        label="Nom", 
+        max_length=30,
+        widget=forms.TextInput(attrs={'autofocus': 'autofocus'})
+    )
     last_name = forms.CharField(label="Cognom", max_length=30, required=True)
     email = forms.EmailField(label="Correu electrònic", max_length=254)
     birthdate = forms.DateField(
