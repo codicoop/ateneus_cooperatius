@@ -502,7 +502,6 @@ class ExportJustificationService:
         this stages_obj stored row number.
         """
 
-        self.export_manager.row_number += 1
         for project_id, project in self.stages_obj.items():
             for group_name, group in project.items():
                 stage = group['obj']
