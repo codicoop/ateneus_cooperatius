@@ -21,7 +21,9 @@ class ExportJustificationCofundedService(ExportJustificationService):
     def get_sessions_obj(self, for_minors=False):
         obj = Activity.objects.filter(
             date_start__range=self.export_manager.subsidy_period.range,
-            cofunded__isnull=False
+            cofunded__isnull=False,
+            for_minors=for_minors,
+            exclude_from_justification=False
         )
         return obj
 
@@ -29,4 +31,5 @@ class ExportJustificationCofundedService(ExportJustificationService):
         return ProjectStage.objects.order_by('date_start').filter(
             subsidy_period=self.export_manager.subsidy_period,
             cofunded__isnull=False,
+            exclude_from_justification=False,
         )

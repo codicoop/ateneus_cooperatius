@@ -470,6 +470,13 @@ class Activity(models.Model):  # --> SESSIONS
         return self.course.absolute_url
 
     @property
+    def absolute_url_admin(self):
+        return settings.ABSOLUTE_URL + reverse(
+            "admin:cc_courses_activity_change",
+            kwargs={"object_id": self.id},
+        )
+
+    @property
     def is_past_due(self):
         return date.today() > self.date_start
 
