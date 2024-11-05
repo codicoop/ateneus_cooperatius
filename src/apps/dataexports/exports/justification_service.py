@@ -4,7 +4,6 @@ from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.coopolis.choices import CirclesChoices, SubServicesChoices
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
-from apps.coopolis.models.projects import CreatedEntity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
@@ -104,6 +103,7 @@ class ExportJustificationService:
             ("[Cofinançat amb AACC]", 20),
             ("[Ateneu/Cercle]", 20),
             ("[Línia estratègica]", 20),
+            ("[Link]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -165,6 +165,7 @@ class ExportJustificationService:
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 item.get_circle_display(),
                 item.strategic_line.name if item.strategic_line else "",
+                item.absolute_url_admin,
             ]
             self.export_manager.fill_row_data(row)
 
