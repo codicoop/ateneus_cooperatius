@@ -46,11 +46,10 @@ class ExportJustificationService:
         self.stages_obj = None
         self.sessions_obj = None
 
-    def get_sessions_obj(self, for_minors=False):
+    def get_sessions_obj(self):
         return Activity.objects.filter(
             Q(
                 date_start__range=self.export_manager.subsidy_period.range,
-                for_minors=for_minors
             ) & (
                 Q(cofunded__isnull=True) | (
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
@@ -59,7 +58,7 @@ class ExportJustificationService:
                 exclude_from_justification=False
             )
         )
-    
+
     """
     
     Exportació Ateneu
@@ -108,7 +107,6 @@ class ExportJustificationService:
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
         self.actuacions_rows_stages()
-        self.actuacions_rows_nouniversitaris()
         # Abans hi havia un últim bloc on apareixien els projectes creats
         # a banda. S'ha canviat de manera que els projectes creats han d'anar
         # vinculats a un acompanyament i, per tant, els projectes creats
@@ -145,6 +143,7 @@ class ExportJustificationService:
                  if item.circle is not None
                  else ("", True)
             )
+            participants = item.enrolled.count() + item.minors_participants_number
 
             row = [
                 service,
@@ -155,7 +154,7 @@ class ExportJustificationService:
                 str(item.entity) if item.entity else '',  # Entitat
                 circle,
                 town,
-                item.enrolled.count(),
+                participants,
                 material_difusio,
                 document_acreditatiu,
                 "",
@@ -340,60 +339,6 @@ class ExportJustificationService:
                     item.strategic_line.name if item.strategic_line else "",
                 ]
                 self.export_manager.fill_row_data(row)
-
-    def actuacions_rows_nouniversitaris(self):
-        obj = self.get_sessions_obj(for_minors=True)
-        self.number_of_nouniversitaris = len(obj)
-        for item in obj:
-            self.export_manager.row_number += 1
-
-            service = (
-                item.get_service_display()
-                if item.service
-                else ("", True)
-            )
-            sub_service = (
-                item.get_sub_service_display()
-                if item.sub_service
-                else ("", True)
-            )
-            town = ("", True)
-            if item.place and item.place.town:
-                town = self.export_manager.get_correlation(
-                    "towns", item.place.town.name,
-                )
-            material_difusio = "No"
-            if item.file1.name:
-                material_difusio = "Sí"
-            document_acreditatiu = "No"
-            if item.photo2.name:
-                document_acreditatiu = "Sí"
-            circle = (
-                 CirclesChoices(item.circle).label
-                 if item.circle is not None
-                 else ("", True)
-            )
-
-            row = [
-                service,
-                sub_service,
-                item.name,
-                item.date_start,
-                "",
-                str(item.entity) if item.entity else '',  # Entitat
-                circle,
-                town,
-                item.minors_participants_number,
-                material_difusio,
-                document_acreditatiu,
-                "",
-                str(item.place) if item.place else '',  # Lloc
-                str(item.course),  # Acció
-                str(item.cofunded or "No"),  # Cofinançat
-                "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
-                item.get_circle_display(),
-            ]
-            self.export_manager.fill_row_data(row)
 
     def export_stages(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
@@ -626,7 +571,18 @@ class ExportJustificationService:
 
     def participants_rows(self):
         activity_reference_number = 0
-        obj = self.get_sessions_obj(for_minors=False)
+        obj = self.get_sessions_obj()
+        # Fins ara, les sessions amb inscripcions individuals anàven per una
+        # banda i les per menors, per l'altra, és a dir, a Actuacions apareixien
+        # en 2 blocs diferents, i cada una té la seva pestanya.
+        # Ara una sessió pot tenir les dues coses a la vegada, per tant el
+        # checkbox for_minors ja no serveix per saber si ha d'aparèixer o no
+        # al llistat de sessions amb inscripcions individuals.
+        # Per això aquí filtrem per excloure les que no tinguin inscripcions.
+        # Això vol dir que si una activitat no és per menors i tampoc té cap
+        # inscripció individual no apareixerà aquí, però entenem que en aquest
+        # cas tampoc hi hauria cap raó per incloure-la a l'excel.
+        obj.exclude(enrollments__isnull=False)
         for activity in obj:
             # We know that activities where generated first, so it starts at 1.
             activity_reference_number += 1
@@ -692,7 +648,8 @@ class ExportJustificationService:
         nouniversitari_reference_number = \
             self.number_of_stages \
             + self.number_of_activities
-        obj = self.get_sessions_obj(for_minors=True)
+        obj = self.get_sessions_obj()
+        obj.exclude(for_minors=False)
         for activity in obj:
             self.export_manager.row_number += 1
             nouniversitari_reference_number += 1
