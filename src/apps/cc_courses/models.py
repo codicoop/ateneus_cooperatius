@@ -342,7 +342,10 @@ class Activity(models.Model):  # --> SESSIONS
         choices=MINORS_GRADE_OPTIONS,
     )
     minors_participants_number = models.IntegerField(
-        "número d'alumnes participants", blank=True, null=True
+        "número d'alumnes participants",
+        blank=True,
+        null=False,
+        default=0,
     )
     minors_teacher = models.ForeignKey(
         "coopolis.User",
