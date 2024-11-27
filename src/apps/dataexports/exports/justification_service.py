@@ -668,7 +668,7 @@ class ExportJustificationService:
             self.number_of_stages \
             + self.number_of_activities
         obj = self.get_sessions_obj()
-        obj.exclude(for_minors=False)
+        obj = obj.exclude(for_minors=False)
         for activity in obj:
             self.export_manager.row_number += 1
             nouniversitari_reference_number += 1
