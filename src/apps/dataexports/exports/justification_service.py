@@ -320,21 +320,33 @@ class ExportJustificationService:
 
                 row = [
                     service,
-                    sub_service,  # Subservei, pendent.
+                    # Subservei, pendent.
+                    sub_service,
                     item.project.name,
-                    item.date_start if not None else '',
+                    # Data d'inici
+                    item.earliest_session.date if item.earliest_session else (
+                        "",
+                        True,
+                    ),
                     "",
-                    item.entities_str,  # Entitat/s
+                    # Entitat/s
+                    item.entities_str,
                     circle,
                     town,
-                    len(group['participants']),  # Nombre de participants
+                    # Nombre de participants
+                    len(group['participants']),
                     "No",
                     "",
-                    "",  # Incidències
-                    '(no aplicable)',  # Lloc
-                    '(no aplicable)',  # Acció
-                    str(item.cofunded or "No"),  # Cofinançat
-                    "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                    # Incidències
+                    "",
+                    # Lloc
+                    '(no aplicable)',
+                    # Acció
+                    '(no aplicable)',
+                    # Cofinançat
+                    str(item.cofunded or "No"),
+                    # Cofinançat amb AACC
+                    "Sí" if item.cofunded_ateneu else "No",
                     item.get_circle_display(),
                     item.strategic_line.name if item.strategic_line else "",
                 ]
@@ -390,19 +402,26 @@ class ExportJustificationService:
                         item.entities_str,
                         item.circle,
                     ),
-                    item.project.name,
                     # Camp no editable, l'ha d'omplir l'excel automàticament.
-                    "Entitat",
+                    item.project.name,
                     # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
-                    item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
+                    "Entitat",
+                    # "En cas d'entitat (Nom de l'entitat)"
+                    item.project.name,
                     self.export_manager.get_correlation(
                         "project_status", item.project.project_status),
-                    crea_consolida or ("", True),
                     # "Creació/consolidació".
-                    item.date_start or ("", True),
+                    crea_consolida or ("", True),
+                    # Data d'inici
+                    item.earliest_session.date if item.earliest_session else (
+                        "",
+                        True,
+                    ),
                     town,
-                    item.project.description or ("", True),  # Breu descripció.
-                    hours or ("0", True),  # Total hores d'acompanyament.
+                    # Breu descripció.
+                    item.project.description or ("", True),
+                    # Total hores d'acompanyament.
+                    hours or ("0", True),
                     item.latest_session.date if item.latest_session else '',
                     item.justification_documents_total,
                 ]
