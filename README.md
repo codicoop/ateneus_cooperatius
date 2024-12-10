@@ -4,6 +4,8 @@ Aplicació online per gestionar les formacions que fa Coòpolis durant l'any, ai
 
 ## Prepare the develop environment
 
+Detailed intructions here: [Onboarding Ateneus](https://www.notion.so/codicoop/Onboarding-Ateneus-Cooperatius-c03c65ab80a54c198f7fa51835ffda7b)
+
 *⚠ For the file and image uploads to work, set a `DJANGO_SETTINGS_MODULE` environment variable pointing to a config
 module that sets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` values.*
 
