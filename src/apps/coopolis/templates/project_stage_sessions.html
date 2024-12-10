@@ -25,14 +25,25 @@
 		</div>
 	</section>
 	<section class="support-list__intro">
-		<div class="support-list__intro-title title-1">
-			<div class="logo" onclick="clickProjectLogoInput()">
-				{% if project.logo %}
-				<img src="{{ project.logo.url }}"  alt="Logo de {{ project.name }}">
-				{% endif %}
-			</div>
-			<p>{{ project.name }}</p>
-		</div>
+    <div class="support-list__left">
+      <div class="support-list__intro-title title-1">
+        <div class="logo" onclick="clickProjectLogoInput()">
+          {% if project.logo %}
+          <img src="{{ project.logo.url }}"  alt="Logo de {{ project.name }}">
+          {% endif %}
+        </div>
+        <p>{{ project.name }}</p>
+      </div>
+      <div class="support-list__intro-btn title-2">
+        <a href="{% url 'project_stage_start' pk=project.id %}">
+          <div class="btn btn--second">
+            <div class="btn__text">
+              <p>Sol·licitar nou acompanyament</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
 		{% if is_draft %}
 		<div class="grid-item-wide project__intro-banner">
 			<div class="text-md is-bold">
@@ -62,17 +73,7 @@
 				<p>Tens una demanda d'acompanyament pendent d'atendre. Properament ens posarem en contacte amb tu.</p>
 			</div>
 		</div>
-		{% elif not is_open %}
-		<div class="support-list__intro-btn title-2">
-			<a href="{% url 'project_stage_start' pk=project.id %}">
-				<div class="btn btn--second">
-					<div class="btn__text">
-						<p>Sol·licitar acompanyament</p>
-					</div>
-				</div>
-			</a>
-		</div>
-		{% endif %}
+    {% endif %}
 	</section>
   {% for project_stage in project.stages.all %}
     {% if project_stage.stage_state != "PENDING" %}
@@ -290,6 +291,218 @@
     </section>
     {% endif %}
   {% endfor %}
+  <section class="support-list__item dropdown">
+    <div class="dropdown__topbar grid-content" onclick="openThisDropdown(this)">
+      <div class="pretitle">
+        <p>{{ project_stage.date_start }}</p>
+      </div>
+      <div class="title text-md">
+        {% if project.motivation == "COOPERATIVISM_EDUCATION" %}
+        <p>Formació en cooperativisme</p>
+        {% elif project.motivation == "COOPERATIVE_CREATION" %}
+        <p>Constitució d'una cooperativa</p>
+        {% elif project.motivation == "TRANSFORM_FROM_ASSOCIATION" %}
+        <p>Transformació d'associació a cooperativa</p>
+        {% elif project.motivation == "TRANSFORM_FROM_SCP" %}
+        <p>Transformació de SCP a cooperativa</p>
+        {% elif project.motivation == "CONSOLIDATION" %}
+        <p>Consolidació</p>
+        {% elif project.motivation == "OTHER" %}
+        <p>Altres</p>
+        {% endif %}
+      </div>
+      {% if project_stage.stage_sessions.count %}
+      <div class="subtitle">
+        <p>{{ project_stage.stage_sessions.count }} sessions</p>
+      </div>
+      {% endif %}
+      <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 13.1 7.8400002" width="13.1" height="7.8400002">
+          <polygon points="12.24,13.58 17.5,18.84 22.76,13.58 24.05,14.87 17.5,21.42 10.95,14.87 " id="polygon2"
+            transform="translate(-10.95,-13.58)" />
+        </svg>
+      </div>
+    </div>
+    <div class="dropdown__bottom grid-content is-hidden">
+      <div class="info">
+        <div class="pretitle">
+          <p>{{ project_stage.date_start }}</p>
+        </div>
+        <div class="title title-1" onclick="closeThisDropdown(this)">
+          {% if project.motivation == "COOPERATIVISM_EDUCATION" %}
+          <p>Formació en cooperativisme</p>
+          {% elif project.motivation == "COOPERATIVE_CREATION" %}
+          <p>Constitució d'una cooperativa</p>
+          {% elif project.motivation == "TRANSFORM_FROM_ASSOCIATION" %}
+          <p>Transformació d'associació a cooperativa</p>
+          {% elif project.motivation == "TRANSFORM_FROM_SCP" %}
+          <p>Transformació de SCP a cooperativa</p>
+          {% elif project.motivation == "CONSOLIDATION" %}
+          <p>Consolidació</p>
+          {% elif project.motivation == "OTHER" %}
+          <p>Altres</p>
+          {% endif %}
+        </div>
+        <div class="info__title text-xsm text-xsm">
+          <p>Estat del projecte</p>
+        </div>
+        <div class="info__text">
+          <p>{{ project.get_project_status_display }}</p>
+        </div>
+        <div class="info__title text-xsm">
+          <p>Orígens del projecte</p>
+        </div>
+        <div class="info__text">
+          <p>{{ project.project_origins }}</p>
+        </div>
+        <div class="info__title text-xsm">
+          <p>Quines necessitats resol el vostre projecte?</p>
+        </div>
+        <div class="info__text">
+          <p>{{ project.solves_necessities }}</p>
+        </div>
+        <div class="info__title text-xsm">
+          <p>Compta el vostre projecte amb una base social?</p>
+        </div>
+        <div class="info__text">
+          <p>{{ project.social_base }}</p>
+        </div>
+      </div>
+      <div class="sessions">
+        {% if project_stage.stage_sessions.count == 0 %}
+        <div class="session-empty">
+          <p class="title-1">Encara no heu fet cap sessió. Tan aviat com se us assigni una, apareixerà aquí i podràs consultar-ne la informació.</p>
+        </div>
+        {% endif %}
+        {% for stage_session in project_stage.stage_sessions.all %}
+        <div class="session-card">
+          <div class="session-card__top">
+            <div class="title text-md">
+              <p>Sessió {{ forloop.counter }}</p>
+            </div>
+            <div class="date text-xsm">
+              <p>{{ stage_session.date|date:"F Y" }}</p>
+            </div>
+          </div>
+          <div class="session-card__blocs">
+            <div class="session-card__bloc session-card__bloc1">
+              <div class="info">
+                <div class="info__title text-xsm">
+                  <p>Objectiu de la sessió</p>
+                </div>
+                {% if stage_session.objective %}
+                <div class="info__text">
+                  <p>{{ stage_session.objective }}</p>
+                </div>
+                {% else %}
+                <div class="info__text">
+                  <p>No hi ha cap objectiu definit per aquesta sessió.</p>
+                  {% if user.is_superuser or user.is_staff %}
+                  <p>Si vols pots afegir-ne un al 
+                    <a href="{% url 'admin:index'%}">
+                      panell d'administració.
+                    </a>
+                  </p>
+                  {% endif %}
+                </div>
+                {% endif %}
+              </div>
+              <div class="info">
+                <div class="info__title text-xsm">
+                  <p>Data</p>
+                </div>
+                <div class="info__text">
+                  <p>{{ stage_session.date|date:"d/m/Y" }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="session-card__bloc session-card__bloc2">
+              <div class="info">
+                <div class="info__title text-xsm">
+                  <p>Retorn</p>
+                </div>
+                {% if stage_session.result %}
+                <div class="info__text">
+                  <p>{{ stage_session.result }}</p>
+                </div>
+                {% else %}
+                <div class="info__text">
+                  <p>No hi ha cap resultat definit per aquesta sessió.</p>
+                  {% if user.is_superuser or user.is_staff %}
+                  <p>Si vols pots afegir-ne un al 
+                    <a href="{% url 'admin:index'%}">
+                      panell d'administració.
+                    </a>
+                  </p>
+                  {% endif %}
+                </div>
+                {% endif %}
+              </div>
+              
+              <div class="info">
+                <div class="info__title text-xsm">
+                  <p>Material adjunt</p>
+                </div>
+                {% if stage_session.file1 or stage_session.file2 %}
+                  {% if stage_session.file1 %}
+                    <div class="info__doc">
+                      <a href="{{ stage_session.file1.url }}" target="_blank" rel="noopener noreferrer">
+                        <div>
+                          <svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 15.54 19.43">
+                            <path
+                              d="M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z" />
+                          </svg>
+                          <p>{{ stage_session.file1 }}</p>
+                        </div>
+                      </a>
+                    </div>
+                  {% endif %}
+                  {% if stage_session.file2 %}
+                    <div class="info__doc">
+                      <a href="{{ stage_session.file2.url }}" target="_blank" rel="noopener noreferrer">
+                        <div>
+                          <svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 15.54 19.43">
+                            <path
+                              d="M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z" />
+                          </svg>
+                          <p>{{ stage_session.file2 }}</p>
+                        </div>
+                      </a>
+                    </div>
+                  {% endif %}
+                  {% if stage_session.file3 %}
+                    <div class="info__doc">
+                      <a href="{{ stage_session.file3.url }}" target="_blank" rel="noopener noreferrer">
+                        <div>
+                          <svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 15.54 19.43">
+                            <path
+                              d="M 1.46,19.42 C 0.66,19.4 0.02,18.76 0,17.96 V 1.46 C 0.02,0.66 0.66,0.02 1.46,0 h 8.76 l 5.32,5.32 v 12.65 c -0.02,0.8 -0.66,1.44 -1.46,1.46 H 1.46 Z M 9.49,5.97 h 4.59 L 9.49,1.45 Z m -5.64,5.2 h 7.82 V 9.71 H 3.86 v 1.46 z m 0,4.13 h 7.82 V 13.84 H 3.86 v 1.46 z" />
+                          </svg>
+                          <p>{{ stage_session.file3 }}</p>
+                        </div>
+                      </a>
+                    </div>
+                  {% endif %}
+                {% else %}
+                  <div class="info__text">
+                    <p>No hi ha cap material adjunt per aquesta sessió.</p>
+                    {% if user.is_superuser or user.is_staff %}
+                      <p>Si vols pots afegir-ne un al 
+                        <a href="{% url 'admin:index'%}">
+                          panell d'administració.
+                        </a>
+                      </p>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 </div>
 
 {% endblock %}

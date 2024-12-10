@@ -1,24 +1,36 @@
 // Dynamic variables
 .support-list {
   &__intro {
-    --padding: var(--pad2) 0 0 0;
+    --padding-intro: var(--pad2) 0 0 0;
     --flex-direction: column;
   }
-  &__intro-title .logo{
-    --width: var(--pad2);
-    --height: var(--pad2);
+  &__intro-title {
+    .logo {
+      --width: var(--pad2);
+      --height: var(--pad2);
+    }
+  }
+  &__left {
+    --padding-left: 0;
+    --width-left: 100%;
   }
 }
 
 @media (min-width: 900px) {
   .support-list {
     &__intro {
-      --padding: var(--pad4) var(--pad4-5) var(--pad8)  var(--pad4-5);
+      --padding-intro: var(--pad1) var(--pad4-5) var(--pad1)  var(--pad4-5);
       --flex-direction: row;
     }
-    &__intro-title .logo{
-      --width: var(--pad3);
-      --height: var(--pad3);
+    &__intro-title {
+      .logo {
+        --width: var(--pad3);
+        --height: var(--pad3);
+      }
+    }
+    &__left {
+      --padding-left: var(--pad2) 0;
+      --width-left: fit-content;
     }
   }
 }
@@ -27,15 +39,20 @@
 .support-list {
   &__intro {
     display: flex;
+    align-items: center;
     flex-direction: var(--flex-direction);
     justify-content: space-between;
-    padding: var(--padding);
+    padding: var(--padding-intro);
+  }
+  &__left {
+    width: var(--width-left);
+    padding: var(--padding-left);
   }
   &__intro-title {
     display: flex;
     gap: var(--pad1);
     align-items: center;
-    padding-bottom: var(--pad2);
+    padding: 0 0 var(--pad1-5) 0;
 
     .logo {
       width: var(--width);
@@ -57,7 +74,7 @@
     }
   }
   &__intro-btn {
-    margin: 0 var(--pad1);
+    padding: var(--padding);
   }
   .sessions {
     .session-card:last-child {

@@ -3595,12 +3595,12 @@ label.required::after {
   border-bottom: 1px solid var(--primary-lighter);
 }
 
-.dropdown__topbar {
+.dropdown__topbar, .dropdown__bottom {
   --margin: var(--pad2) 0;
 }
 
 @media (min-width: 900px) {
-  .dropdown__topbar {
+  .dropdown__topbar, .dropdown__bottom {
     --margin: 0 var(--pad4-5);
   }
   .dropdown .info__doc {
@@ -3651,7 +3651,9 @@ label.required::after {
   fill: var(--primary);
 }
 .dropdown__bottom {
-  margin-top: var(--pad2);
+  margin: var(--margin);
+  padding: var(--pad2) 0;
+  border-top: 1px solid var(--primary-lighter);
 }
 .dropdown__bottom .info {
   grid-column: 1/span 3;
@@ -4272,7 +4274,7 @@ label.required::after {
   --text-align: center;
 }
 .project__intro-banner {
-  --margin-top: var(--pad4);
+  --margin-top: var(--pad2);
 }
 .project__intro-btn {
   --width: 100%;
@@ -5594,35 +5596,48 @@ label.required::after {
 }
 
 .support-list__intro {
-  --padding: var(--pad2) 0 0 0;
+  --padding-intro: var(--pad2) 0 0 0;
   --flex-direction: column;
 }
 .support-list__intro-title .logo {
   --width: var(--pad2);
   --height: var(--pad2);
 }
+.support-list__left {
+  --padding-left: 0;
+  --width-left: 100%;
+}
 
 @media (min-width: 900px) {
   .support-list__intro {
-    --padding: var(--pad4) var(--pad4-5) var(--pad8) var(--pad4-5);
+    --padding-intro: var(--pad1) var(--pad4-5) var(--pad1) var(--pad4-5);
     --flex-direction: row;
   }
   .support-list__intro-title .logo {
     --width: var(--pad3);
     --height: var(--pad3);
   }
+  .support-list__left {
+    --padding-left: var(--pad2) 0;
+    --width-left: fit-content;
+  }
 }
 .support-list__intro {
   display: flex;
+  align-items: center;
   flex-direction: var(--flex-direction);
   justify-content: space-between;
-  padding: var(--padding);
+  padding: var(--padding-intro);
+}
+.support-list__left {
+  width: var(--width-left);
+  padding: var(--padding-left);
 }
 .support-list__intro-title {
   display: flex;
   gap: var(--pad1);
   align-items: center;
-  padding-bottom: var(--pad2);
+  padding: 0 0 var(--pad1-5) 0;
 }
 .support-list__intro-title .logo {
   width: var(--width);
@@ -5642,7 +5657,7 @@ label.required::after {
   text-align: center;
 }
 .support-list__intro-btn {
-  margin: 0 var(--pad1);
+  padding: var(--padding);
 }
 .support-list .sessions .session-card:last-child {
   border: none;
