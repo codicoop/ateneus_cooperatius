@@ -10,8 +10,10 @@ function closeMenu() {
 // Mostrar el formulari de login
 function showLoginFloat() {
   const login = document.querySelector(".login")
+  const loginInput = document.getElementById("id_username")
   login.classList.remove("is-hidden")
   window.scrollTo(0,0)
+  loginInput.focus()
 }
 function hideLoginFloat() {
   const login = document.querySelector(".login")
