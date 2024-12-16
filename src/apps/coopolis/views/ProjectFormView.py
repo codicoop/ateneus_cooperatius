@@ -45,7 +45,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
                 request,
                 "Dades de l'acompanyament esborrades correctament.",
             )
-            return HttpResponseRedirect(urls.reverse("edit_project"))
+            return HttpResponseRedirect(urls.reverse("edit_project", kwargs={"pk": project.pk}))
         return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
