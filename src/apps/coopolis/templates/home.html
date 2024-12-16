@@ -168,7 +168,7 @@
 					<div class="supercard__title text-md">
 						<p>{{ open_project.name }}</p>
 					</div>
-					<a class="supercard__edit text-menu" href="{% url 'edit_project' %}">
+					<a class="supercard__edit text-menu" href="{% url 'edit_project' pk=project.pk %}">
 						<p>Editar dades</p>
 					</a>
 					<div class="card card-link">

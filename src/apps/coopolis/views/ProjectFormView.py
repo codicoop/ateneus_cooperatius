@@ -1,4 +1,3 @@
-from apps.coopolis.models.invitation import Invitation
 from conf import settings
 from conf.custom_mail_manager import MyMailTemplate
 from constance import config
@@ -9,10 +8,12 @@ from django.shortcuts import redirect, render
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.views import generic
+from django.shortcuts import get_object_or_404
 
 from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.coopolis.forms import ProjectForm
 from apps.coopolis.models import Project, ProjectStage, User
+from apps.coopolis.models.invitation import Invitation
 from apps.coopolis.views import LoginSignupContainerView
 
 
@@ -23,15 +24,14 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     success_message = "Dades del projecte actualitzades correctament."
 
     def get_success_url(self):
-        return urls.reverse("edit_project")
+        return urls.reverse("edit_project", kwargs={"pk": self.object.pk})
 
     def get_object(self, queryset=None):
-        return self.request.user.project
-
-    def get(self, request):
-        if self.request.user.project is None:
-            return HttpResponseRedirect(urls.reverse("new_project"))
-        return super().get(self, request)
+        return get_object_or_404(
+            Project, 
+            pk=self.kwargs['pk'], 
+            partners__id=self.request.user.id
+        )
 
     def post(self, request, *args, **kwargs):
         if "delete" in request.POST:
@@ -242,18 +242,14 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     extra_context = {"show_new_project_info": True}
 
     def get_success_url(self):
-        return urls.reverse("edit_project")
+        return urls.reverse("edit_project", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
         newproject = form.save()
         newproject.partners.add(self.request.user)
         messages.success(self.request, "Dades del projecte guardades correctament.")
+        self.object = newproject
         return HttpResponseRedirect(self.get_success_url())
-
-    def get(self, request):
-        if self.request.user.project is not None:
-            return HttpResponseRedirect(urls.reverse("edit_project"))
-        return super().get(self, request)
 
 
 class ProjectInfoView(LoginSignupContainerView):
