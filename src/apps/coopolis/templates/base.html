@@ -176,7 +176,7 @@
               <div class="text-menu">
                 <p>Projectes</p>
                 {% for project in user_projects %}
-                    <a href="{% url 'edit_project' pk=project.pk %}""> 
+                    <a href="{% url 'edit_project' pk=project.pk %}"> 
                     {% if project.logo %}
                       <img src="{{ project.logo.url }}" alt="{{ project.name }}" width="10">
                     {% endif %}
