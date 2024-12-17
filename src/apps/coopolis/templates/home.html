@@ -162,11 +162,7 @@
 				<a href="{% url 'new_project' %}">
 					<div class="btn btn--primary">
 						<div class="btn__text">
-							{% if request.user.projects.all %}
-								Crea un nou projecte
-							{% else %}
-								Sol·licitar acompanyament
-							{% endif %}
+							Sol·licitar acompanyament
 						</div>
 					</div>
 				</a>
