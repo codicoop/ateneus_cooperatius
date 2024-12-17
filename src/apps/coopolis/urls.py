@@ -82,7 +82,7 @@ urlpatterns += [
         "project/edit/delete-invitation/", login_required(project_partner_manage), name="delete_invitation"
     ),
     path(
-        "project/invitation/<uuid>/", login_required(invitation_partner), name="invitation_project"
+        "project/invitation/<uuid:uuid>/", login_required(invitation_partner), name="invitation_project"
     ),
     path(
         "project/new/",
