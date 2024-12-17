@@ -34,16 +34,6 @@
         </div>
         <p>{{ project.name }}</p>
       </div>
-      <div class="support-list__intro-btn title-2">
-        <a href="{% url 'project_stage_start' pk=project.id %}">
-          <div class="btn btn--second">
-            <div class="btn__text">
-              <p>Sol·licitar nou acompanyament</p>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
 		{% if is_draft %}
 		<div class="grid-item-wide project__intro-banner">
 			<div class="text-md is-bold">
@@ -73,6 +63,17 @@
 				<p>Tens una demanda d'acompanyament pendent d'atendre. Properament ens posarem en contacte amb tu.</p>
 			</div>
 		</div>
+		{% elif not is_open %}
+    <div class="support-list__intro-btn title-2">
+      <a href="{% url 'project_stage_start' pk=project.id %}">
+        <div class="btn btn--second">
+          <div class="btn__text">
+            <p>Sol·licitar nou acompanyament</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
     {% endif %}
 	</section>
   {% for project_stage in project.stages.all %}
