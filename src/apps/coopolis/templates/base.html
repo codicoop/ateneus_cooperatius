@@ -160,6 +160,7 @@
               </div>
             </a>
           </li>
+          {% if request.user.is_authenticated %}
           <li>
             <div class="menu__item {% block projects_is_active %}{% endblock %}">
               <div class="menu__icon">
@@ -186,6 +187,7 @@
               </div>
             </div>
           </li>
+          {% endif %}
           <li class="mobile-only">
             <a href="{{ config.PROJECT_WEBSITE_URL }}">
               <div class="menu__item menu__item--narrow">
