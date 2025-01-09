@@ -1,6 +1,5 @@
 from apps.coopolis.models.invitation import Invitation
 from conf import settings
-from conf.custom_mail_manager import MyMailTemplate
 from constance import config
 from django import urls
 from django.contrib.auth.decorators import login_required
@@ -102,17 +101,18 @@ def project_partner_manage(request):
                 return redirect("edit_project")
             project = Project.objects.get(id=request.POST.get("add_partner"))
             invitation = Invitation.objects.create(user=user, project=project)
-            mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
-            mail.to = user.email
-            mail.subject_strings = {"project": project.name}
-            mail.body_strings = {
-                "persona_fullname": user.full_name,
-                "persona_email": user.email,
-                "project": project.name,
-                "absolute_url": settings.ABSOLUTE_URL,
-                "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
-            }
-            mail.send(now=True)
+            # to post-office
+            # mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
+            # mail.to = user.email
+            # mail.subject_strings = {"project": project.name}
+            # mail.body_strings = {
+            #     "persona_fullname": user.full_name,
+            #     "persona_email": user.email,
+            #     "project": project.name,
+            #     "absolute_url": settings.ABSOLUTE_URL,
+            #     "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
+            # }
+            # mail.send(now=True)
             messages.success(
                 request,
                 f"Invitació realitzada amb èxit a {user.full_name}."
@@ -143,15 +143,16 @@ def project_partner_manage(request):
                 return redirect("edit_project")
             project.partners.remove(user)
 
-            mail = MyMailTemplate("EMAIL_PARTNER_ELIMINATION")
-            mail.to = config.EMAIL_FROM_PROJECTS.split(",")
-            mail.subject_strings = {"project": project.name}
-            mail.body_strings = {
-                "persona_fullname": user.full_name,
-                "persona_email": user.email,
-                "project": project.name,
-            }
-            mail.send(now=True)
+            # to post-office
+            # mail = MyMailTemplate("EMAIL_PARTNER_ELIMINATION")
+            # mail.to = config.EMAIL_FROM_PROJECTS.split(",")
+            # mail.subject_strings = {"project": project.name}
+            # mail.body_strings = {
+            #     "persona_fullname": user.full_name,
+            #     "persona_email": user.email,
+            #     "project": project.name,
+            # }
+            # mail.send(now=True)
             messages.success(
                 request,
                 f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.", )

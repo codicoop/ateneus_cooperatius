@@ -23,7 +23,6 @@ from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.managers import Published
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
-from conf.custom_mail_manager import MyMailTemplate
 
 
 class CoursePlace(models.Model):
@@ -629,34 +628,36 @@ class Activity(models.Model):  # --> SESSIONS
         self.save()
 
     def get_poll_email(self, user):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_POLL")
-        mail.subject_strings = {"activitat_nom": self.name}
-        absolute_url_activity = ""
-        if self.resources.exists():
-            absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
-            absolute_url_activity = (
-                "Descàrrega del material formatiu: <a "
-                f'href="{absolute_url_activity}">Fitxa de la sessió</a>.'
-            )
-        absolute_url_poll = settings.ABSOLUTE_URL + reverse(
-            "activity_poll", kwargs={"uuid": self.uuid}
-        )
-        poll_reminder_body = self.poll_reminder_body or ""
-        poll_reminder_body = poll_reminder_body.replace("\n", "<br />")
-        mail.body_strings = {
-            "activitat_nom": self.name,
-            "ateneu_nom": config.PROJECT_FULL_NAME,
-            "persona_nom": user.first_name,
-            "activitat_data_inici": self.date_start.strftime("%d-%m-%Y"),
-            "activitat_hora_inici": self.starting_time.strftime("%H:%M"),
-            "activitat_lloc": self.place,
-            "absolute_url_activity": absolute_url_activity,
-            "absolute_url_poll": absolute_url_poll,
-            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
-            "poll_reminder_body": poll_reminder_body,
-        }
-        return mail
+        # to post-office
+        # mail = MyMailTemplate("EMAIL_ENROLLMENT_POLL")
+        # mail.subject_strings = {"activitat_nom": self.name}
+        # absolute_url_activity = ""
+        # if self.resources.exists():
+        #     absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
+        #     absolute_url_activity = (
+        #         "Descàrrega del material formatiu: <a "
+        #         f'href="{absolute_url_activity}">Fitxa de la sessió</a>.'
+        #     )
+        # absolute_url_poll = settings.ABSOLUTE_URL + reverse(
+        #     "activity_poll", kwargs={"uuid": self.uuid}
+        # )
+        # poll_reminder_body = self.poll_reminder_body or ""
+        # poll_reminder_body = poll_reminder_body.replace("\n", "<br />")
+        # mail.body_strings = {
+        #     "activitat_nom": self.name,
+        #     "ateneu_nom": config.PROJECT_FULL_NAME,
+        #     "persona_nom": user.first_name,
+        #     "activitat_data_inici": self.date_start.strftime("%d-%m-%Y"),
+        #     "activitat_hora_inici": self.starting_time.strftime("%H:%M"),
+        #     "activitat_lloc": self.place,
+        #     "absolute_url_activity": absolute_url_activity,
+        #     "absolute_url_poll": absolute_url_poll,
+        #     "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+        #     "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+        #     "poll_reminder_body": poll_reminder_body,
+        # }
+        # return mail
+        pass
 
     def send_poll_email(self):
         enrollments = self.confirmed_enrollments
@@ -669,19 +670,21 @@ class Activity(models.Model):  # --> SESSIONS
         self.save()
 
     def get_reminder_to_responsible_email(self):
-        mail = MyMailTemplate("EMAIL_ACTIVITY_RESPONSIBLE_REMINDER")
-        mail.subject_strings = {
-            "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
-            "activity_name": self.name,
-        }
-        absolute_url_admin_activity = settings.ABSOLUTE_URL + reverse(
-            "admin:cc_courses_activity_change",
-            kwargs={"object_id": self.id},
-        )
-        mail.body_strings = {
-            "absolute_url_admin_activity": absolute_url_admin_activity,
-        }
-        return mail
+        # to post-office
+        # mail = MyMailTemplate("EMAIL_ACTIVITY_RESPONSIBLE_REMINDER")
+        # mail.subject_strings = {
+        #     "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
+        #     "activity_name": self.name,
+        # }
+        # absolute_url_admin_activity = settings.ABSOLUTE_URL + reverse(
+        #     "admin:cc_courses_activity_change",
+        #     kwargs={"object_id": self.id},
+        # )
+        # mail.body_strings = {
+        #     "absolute_url_admin_activity": absolute_url_admin_activity,
+        # }
+        # return mail
+        pass
 
     def send_reminder_to_responsible(self):
         mail = self.get_reminder_to_responsible_email()
@@ -849,51 +852,57 @@ class ActivityEnrolled(models.Model):
             raise e
 
     def send_confirmation_email(self):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_CONFIRMATION")
-        mail.subject_strings = {"activitat_nom": self.activity.name}
-        mail.body_strings = {
-            "activitat_nom": self.activity.name,
-            "ateneu_nom": config.PROJECT_FULL_NAME,
-            "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
-            "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
-            "activitat_lloc": self.activity.place,
-            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
-        }
-        mail.send_to_user(self.user)
+        # to post-office
+        # mail = MyMailTemplate("EMAIL_ENROLLMENT_CONFIRMATION")
+        # mail.subject_strings = {"activitat_nom": self.activity.name}
+        # mail.body_strings = {
+        #     "activitat_nom": self.activity.name,
+        #     "ateneu_nom": config.PROJECT_FULL_NAME,
+        #     "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
+        #     "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
+        #     "activitat_lloc": self.activity.place,
+        #     "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+        #     "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+        # }
+        # mail.send_to_user(self.user)
+        pass
 
     def send_waiting_list_email(self):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_WAITING_LIST")
-        mail.subject_strings = {"activitat_nom": self.activity.name}
-        mail.body_strings = {
-            "activitat_nom": self.activity.name,
-            "ateneu_nom": config.PROJECT_FULL_NAME,
-            "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
-            "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
-            "activitat_lloc": self.activity.place,
-            "url_els_meus_cursos": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            "url_ateneu": settings.ABSOLUTE_URL,
-        }
-        mail.send_to_user(self.user)
+        # to post-office
+        # mail = MyMailTemplate("EMAIL_ENROLLMENT_WAITING_LIST")
+        # mail.subject_strings = {"activitat_nom": self.activity.name}
+        # mail.body_strings = {
+        #     "activitat_nom": self.activity.name,
+        #     "ateneu_nom": config.PROJECT_FULL_NAME,
+        #     "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
+        #     "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
+        #     "activitat_lloc": self.activity.place,
+        #     "url_els_meus_cursos": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+        #     "url_ateneu": settings.ABSOLUTE_URL,
+        # }
+        # mail.send_to_user(self.user)
+        pass
 
     @staticmethod
     def get_reminder_email(user, activity):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_REMINDER")
-        mail.subject_strings = {"activitat_nom": activity.name}
-        absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
-        mail.body_strings = {
-            "activitat_nom": activity.name,
-            "ateneu_nom": config.PROJECT_FULL_NAME,
-            "persona_nom": user.first_name,
-            "activitat_data_inici": activity.date_start.strftime("%d-%m-%Y"),
-            "activitat_hora_inici": activity.starting_time.strftime("%H:%M"),
-            "activitat_lloc": activity.place,
-            "activitat_instruccions": activity.instructions,
-            "absolute_url_activity": absolute_url_activity,
-            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
-        }
-        return mail
+        # to post-office
+        # mail = MyMailTemplate("EMAIL_ENROLLMENT_REMINDER")
+        # mail.subject_strings = {"activitat_nom": activity.name}
+        # absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
+        # mail.body_strings = {
+        #     "activitat_nom": activity.name,
+        #     "ateneu_nom": config.PROJECT_FULL_NAME,
+        #     "persona_nom": user.first_name,
+        #     "activitat_data_inici": activity.date_start.strftime("%d-%m-%Y"),
+        #     "activitat_hora_inici": activity.starting_time.strftime("%H:%M"),
+        #     "activitat_lloc": activity.place,
+        #     "activitat_instruccions": activity.instructions,
+        #     "absolute_url_activity": absolute_url_activity,
+        #     "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+        #     "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+        # }
+        # return mail
+        pass
 
     def send_reminder_email(self):
         mail = self.get_reminder_email(self.user, self.activity)

@@ -187,9 +187,9 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('coopolis', '0051_user_project_involved'),
-        ('mailing_manager', '0001_initial'),
+        # ('mailing_manager', '0001_initial'),
     ]
 
     operations = [
-        migrations.RunPython(populate_mail_templates),
+        # migrations.RunPython(populate_mail_templates),
     ]

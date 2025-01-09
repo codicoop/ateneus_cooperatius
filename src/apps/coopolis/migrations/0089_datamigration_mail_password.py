@@ -55,5 +55,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_mail_templates),
+        # migrations.RunPython(populate_mail_templates),
     ]

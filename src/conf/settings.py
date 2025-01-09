@@ -133,7 +133,6 @@ INSTALLED_APPS = [
     'modelclone',
     'apps.coopolis.templatetags.my_tag_library',
     'mailqueue',
-    'mailing_manager',
     'django.contrib.humanize',
     'localflavor',
 ]

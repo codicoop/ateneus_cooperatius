@@ -102,14 +102,6 @@ class MyDashboard(Dashboard):
         if context['request'].user.is_superuser:
             group_children.append(
                 modules.ModelList(
-                    title="Configuració dels correus electrònics",
-                    column=1,
-                    collapsible=False,
-                    models=('mailing_manager.models.Mail',),
-                )
-            )
-            group_children.append(
-                modules.ModelList(
                     title="Personalització de les imatges",
                     column=1,
                     collapsible=False,

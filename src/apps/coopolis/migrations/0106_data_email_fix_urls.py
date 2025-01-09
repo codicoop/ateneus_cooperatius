@@ -71,5 +71,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(fix_mail_urls),
+        # migrations.RunPython(fix_mail_urls),
     ]

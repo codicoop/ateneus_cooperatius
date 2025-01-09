@@ -10,7 +10,6 @@ from apps.cc_users.views import LoginView
 from apps.coopolis.models import User
 from apps.coopolis.forms import MySignUpForm
 from apps.cc_users.forms import LogInForm
-from conf.custom_mail_manager import MyMailTemplate
 
 
 class LoginSignupContainerView(TemplateView):
@@ -59,18 +58,20 @@ class CoopolisSignUpView(CreateView):
         return HttpResponseRedirect(urls.reverse('loginsignup'))
 
     def send_welcome_email(self, mail_to):
-        mail = MyMailTemplate('EMAIL_SIGNUP_WELCOME')
-        mail.to = mail_to
-        mail.subject_strings = {
-            'ateneu_nom': config.PROJECT_FULL_NAME
-        }
-        mail.body_strings = {
-            'ateneu_nom': config.PROJECT_FULL_NAME,
-            'url_backoffice': settings.ABSOLUTE_URL,
-            'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
-            'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
-        }
-        mail.send()
+        # to post-office
+        # mail = MyMailTemplate('EMAIL_SIGNUP_WELCOME')
+        # mail.to = mail_to
+        # mail.subject_strings = {
+        #     'ateneu_nom': config.PROJECT_FULL_NAME
+        # }
+        # mail.body_strings = {
+        #     'ateneu_nom': config.PROJECT_FULL_NAME,
+        #     'url_backoffice': settings.ABSOLUTE_URL,
+        #     'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
+        #     'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
+        # }
+        # mail.send()
+        pass
 
 
 class CoopolisLoginView(LoginView):
