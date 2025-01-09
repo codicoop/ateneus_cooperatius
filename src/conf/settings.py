@@ -435,13 +435,6 @@ CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE = '#808080'
 GRAPPELLI_SWITCH_USER = False
 GRAPPELLI_INDEX_DASHBOARD = 'apps.coopolis.dashboard.MyDashboard'
 
-THUMBNAIL_ALIASES = {
-    '': {
-        'course_list': {'size': (150, 200), 'scale-crop': True},
-    },
-}
-THUMBNAIL_DEFAULT_STORAGE = 'apps.cc_lib.storages.MediaStorage'
-
 # Celery
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
 CELERY_TIMEZONE = TIME_ZONE
