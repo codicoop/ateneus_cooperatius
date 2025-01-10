@@ -52,21 +52,21 @@ EMAIL_BACKEND = env.str(
     "EMAIL_BACKEND",
     default="django.core.mail.backends.console.EmailBackend",
 )
-MAILING_MANAGER_DEFAULT_FROM = env.str(
-    'MAILING_MANAGER_DEFAULT_FROM',
-    default=None,
-)
+# MAILING_MANAGER_DEFAULT_FROM = env.str(
+#     'MAILING_MANAGER_DEFAULT_FROM',
+#     default=None,
+# )
 # Mails will be queued instead of sent immediately:
-MAILQUEUE_QUEUE_UP = env.bool("MAILQUEUE_QUEUE_UP", default=False)
+# MAILQUEUE_QUEUE_UP = env.bool("MAILQUEUE_QUEUE_UP", default=False)
 # MAIL-QUEUE SETTINGS
-MAILQUEUE_CELERY = False
+# MAILQUEUE_CELERY = False
 # Maximum amount of emails to send during each queue run
-MAILQUEUE_LIMIT = 10
+# MAILQUEUE_LIMIT = 10
 # If MAILQUEUE_STORAGE is set to True, will ignore your default storage
 # settings and use Django's filesystem storage instead (stores them in
 # MAILQUEUE_ATTACHMENT_DIR)
-MAILQUEUE_STORAGE = False
-MAILQUEUE_ATTACHMENT_DIR = 'mailqueue-attachments'
+# MAILQUEUE_STORAGE = False
+# MAILQUEUE_ATTACHMENT_DIR = 'mailqueue-attachments'
 
 # Wasabi cloud storage configuration
 AWS_ACCESS_KEY_ID = env.str('AWS_ACCESS_KEY_ID', default="")
@@ -130,9 +130,8 @@ INSTALLED_APPS = [
     'django_summernote',
     'storages',
     'easy_thumbnails',
-    'modelclone',
+    'apps.modelclone',
     'apps.coopolis.templatetags.my_tag_library',
-    'mailqueue',
     'django.contrib.humanize',
     'localflavor',
 ]

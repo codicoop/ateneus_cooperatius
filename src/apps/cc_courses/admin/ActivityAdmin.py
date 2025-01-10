@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django_summernote.admin import SummernoteModelAdminMixin
 from datetime import datetime
-import modelclone
+from apps import modelclone
 import weasyprint
 import django.template.loader as loader
 
