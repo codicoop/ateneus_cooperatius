@@ -2,7 +2,7 @@ from functools import update_wrapper
 
 from constance import config
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.urls import reverse, reverse_lazy
 from django.utils import formats
@@ -602,7 +602,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
 
         my_urls = [
-            url(r"(?P<id>\d+)/print/$", wrap(self.print), name="%s_%s_print" % info),
+            re_path(r"(?P<id>\d+)/print/$", wrap(self.print), name="%s_%s_print" % info),
         ]
 
         return my_urls + urls
