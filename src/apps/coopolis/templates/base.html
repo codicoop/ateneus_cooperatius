@@ -75,11 +75,14 @@
             <p>Anar al backoffice</p>
           </a>
           {% endif %}
-          <a href="{% url 'logout' %}">
-            <div class="text-menu">
-              <p>Tancar sessió</p>
-            </div>
-          </a>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">
+              <div class="text-menu">
+                <p>Tancar sessió</p>
+              </div>
+            </button>
+          </form>
         </div>
         {% endif %}
       <div class="topbar__action">
@@ -207,21 +210,24 @@
         <p>{{ user.email }}</p>
       </div>
       <div class="sidebar__logout">
-        <a href="{% url 'logout' %}">
-          <div class="menu__item">
-            <div class="menu__icon menu__icon--out">
-              <svg
-                class="icon-pathfill-white"
-                xmlns="http://www.w3.org/2000/svg"
-                viewbox="0 0 14 14">
-                <path d="M 6.34,10.65 V 2.54 L 3.72,5.16 2.78,4.22 7,0 11.22,4.22 10.28,5.16 7.66,2.54 v 8.12 H 6.35 Z M 1.31,14 C 0.59,13.98 0.01,13.41 0,12.69 V 9.56 h 1.31 v 3.13 H 12.69 V 9.56 H 14 v 3.13 c -0.02,0.72 -0.59,1.3 -1.31,1.31 z"/>
-              </svg>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit">
+            <div class="menu__item">
+              <div class="menu__icon menu__icon--out">
+                <svg
+                  class="icon-pathfill-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewbox="0 0 14 14">
+                  <path d="M 6.34,10.65 V 2.54 L 3.72,5.16 2.78,4.22 7,0 11.22,4.22 10.28,5.16 7.66,2.54 v 8.12 H 6.35 Z M 1.31,14 C 0.59,13.98 0.01,13.41 0,12.69 V 9.56 h 1.31 v 3.13 H 12.69 V 9.56 H 14 v 3.13 c -0.02,0.72 -0.59,1.3 -1.31,1.31 z"/>
+                </svg>
+              </div>
+              <div class="text-menu">
+                <p>Tancar sessió</p>
+              </div>
             </div>
-            <div class="text-menu">
-              <p>Tancar sessió</p>
-            </div>
-          </div>
-        </a>
+          </button>
+        </form>
       </div>
     {% endif %}
     </sidebar>
