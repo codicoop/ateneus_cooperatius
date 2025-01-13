@@ -32,6 +32,7 @@ qrcode = "^8.0"
 loggly-python-handler = "^1.0.1"
 icecream = "^2.1.4"
 django-localflavor = "^4.0"
+django-post-office = "^3.9.1"
 
 [tool.poetry.dev-dependencies]
 

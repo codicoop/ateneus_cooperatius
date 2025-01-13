@@ -66,6 +66,7 @@ files = [
 ]
 
 [package.dependencies]
+tinycss2 = {version = ">=1.1.0,<1.5", optional = true, markers = "extra == \"css\""}
 webencodings = "*"
 
 [package.extras]
@@ -771,6 +772,25 @@ Django = ">=3.2"
 
 [package.extras]
 tests = ["tox"]
+
+[[package]]
+name = "django-post-office"
+version = "3.9.1"
+description = "A Django app to monitor and send mail asynchronously, complete with template support."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "django-post_office-3.9.1.tar.gz", hash = "sha256:3d8f502f7829e4cf83e830d9efd6909bb44690af6bc41c7e4fc5a85d7b04df10"},
+    {file = "django_post_office-3.9.1-py3-none-any.whl", hash = "sha256:0082c4dd17854f66077ef457cf868c9bc5b6247de99d5755c45ddea1c518ed6f"},
+]
+
+[package.dependencies]
+bleach = {version = "*", extras = ["css"]}
+django = ">=4.2"
+
+[package.extras]
+prevent-xss = ["bleach"]
+test = ["tox (>=2.3)"]
 
 [[package]]
 name = "django-sendgrid-v5"
@@ -1733,4 +1753,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.1"
-content-hash = "d6d53d4e4970d988d0909a499ee1c8c705b29cd98d5af75aadf3539479b54414"
+content-hash = "f719ee84a1fe6746a9bcc6eb49cc9bc398fea7a5dfcd257df8e6b862c4480c3b"

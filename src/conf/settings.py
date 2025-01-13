@@ -4,12 +4,17 @@ import os
 from django.core.management.utils import get_random_secret_key
 
 env = environ.Env()
-# False if not in os.environ
+
 DEBUG = env.bool('DEBUG', False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+
+# https://docs.djangoproject.com/en/4.2/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+
 # Instance's absolute URL (given we're not using Sites framework)
 ABSOLUTE_URL = env.str('ABSOLUTE_URL', default="")
+
 # Necessari per tal que al recuperar password faci servir el mateix host que
 # la URL que s'està visitant. Si això fos False, caldria activar el Sites
 # Framework i configurar el nom del host.
@@ -32,41 +37,6 @@ DATABASES = {
 }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Sendgrid
-SENDGRID_API_KEY = env("SENDGRID_API_KEY", default="")
-SENDGRID_SANDBOX_MODE_IN_DEBUG = env(
-    "SENDGRID_SANDBOX_MODE_IN_DEBUG", bool, default=False
-)
-SENDGRID_TRACK_EMAIL_OPENS = env("SENDGRID_TRACK_EMAIL_OPENS", bool, default=False)
-SENDGRID_TRACK_CLICKS_HTML = env("SENDGRID_TRACK_CLICKS_HTML", bool, default=False)
-SENDGRID_TRACK_CLICKS_PLAIN = env("SENDGRID_TRACK_CLICKS_PLAIN", bool, default=False)
-
-# SMTP
-EMAIL_HOST = env.str('EMAIL_HOST', default="")
-EMAIL_PORT = env.int('EMAIL_PORT', default="")
-EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default="")
-EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default="")
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=False)
-EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
-EMAIL_BACKEND = env.str(
-    "EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",
-)
-# MAILING_MANAGER_DEFAULT_FROM = env.str(
-#     'MAILING_MANAGER_DEFAULT_FROM',
-#     default=None,
-# )
-# Mails will be queued instead of sent immediately:
-# MAILQUEUE_QUEUE_UP = env.bool("MAILQUEUE_QUEUE_UP", default=False)
-# MAIL-QUEUE SETTINGS
-# MAILQUEUE_CELERY = False
-# Maximum amount of emails to send during each queue run
-# MAILQUEUE_LIMIT = 10
-# If MAILQUEUE_STORAGE is set to True, will ignore your default storage
-# settings and use Django's filesystem storage instead (stores them in
-# MAILQUEUE_ATTACHMENT_DIR)
-# MAILQUEUE_STORAGE = False
-# MAILQUEUE_ATTACHMENT_DIR = 'mailqueue-attachments'
 
 # Wasabi cloud storage configuration
 AWS_ACCESS_KEY_ID = env.str('AWS_ACCESS_KEY_ID', default="")
@@ -105,35 +75,36 @@ CIRCLE_NAMES = [
 
 # Application definition
 INSTALLED_APPS = [
-    'django_extensions',
-    'maintenance_mode',
-    'django.contrib.postgres',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'apps.dataexports',
-    'apps.cc_users',
-    'apps.cc_courses',
-    'apps.facilities_reservations',
-    'apps.coopolis',
-    'apps.celery',
-    'grappelli.dashboard',
-    'grappelli',
-    'tagulous',
-    'logentry_admin',
-    'constance.backends.database',
-    'constance',
-    'django_object_actions',
-    'django.contrib.admin',
-    'django_summernote',
-    'storages',
-    'easy_thumbnails',
-    'apps.modelclone',
-    'apps.coopolis.templatetags.my_tag_library',
-    'django.contrib.humanize',
-    'localflavor',
+    "django_extensions",
+    "maintenance_mode",
+    "django.contrib.postgres",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "post_office",
+    "apps.dataexports",
+    "apps.cc_users",
+    "apps.cc_courses",
+    "apps.facilities_reservations",
+    "apps.coopolis",
+    "apps.celery",
+    "grappelli.dashboard",
+    "grappelli",
+    "tagulous",
+    "logentry_admin",
+    "constance.backends.database",
+    "constance",
+    "django_object_actions",
+    "django.contrib.admin",
+    "django_summernote",
+    "storages",
+    "easy_thumbnails",
+    "apps.modelclone",
+    "apps.coopolis.templatetags.my_tag_library",
+    "django.contrib.humanize",
+    "localflavor",
 ]
 
 MIDDLEWARE = [
@@ -535,3 +506,61 @@ if LOGGLY_TOKEN:
             },
         },
     }
+
+################################################################################
+#                                  Email                                       #
+################################################################################
+
+# Post Office
+# https://github.com/ui/django-post_office#settings
+POST_OFFICE = {
+    "BACKENDS": {
+        "default": env(
+            "POST_OFFICE_DEFAULT_BACKEND",
+            default="django.core.mail.backends.console.EmailBackend",
+        ),
+    },
+    "DEFAULT_PRIORITY": env("POST_OFFICE_DEFAULT_PRIORITY", default="now"),
+    "MESSAGE_ID_ENABLED": True,
+    "MESSAGE_ID_FQDN": env("POST_OFFICE_MESSAGE_ID_FQDN", default="example.com"),
+    "CELERY_ENABLED": env("POST_OFFICE_CELERY_ENABLED", bool, default=False),
+}
+
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-from-email
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=None)
+
+# Sendgrid
+# https://github.com/sklarsa/django-sendgrid-v5#other-settings
+SENDGRID_API_KEY = env("SENDGRID_API_KEY", default="")
+SENDGRID_SANDBOX_MODE_IN_DEBUG = env(
+    "SENDGRID_SANDBOX_MODE_IN_DEBUG", bool, default=False
+)
+
+# SMTP
+# These are set to false as default given that Sendgrid's Web API is the default
+# https://docs.djangoproject.com/en/4.2/ref/settings/#email
+EMAIL_HOST = env.str("EMAIL_HOST", default="")
+EMAIL_PORT = env.int("EMAIL_PORT", default="")
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=False)
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)
+EMAIL_BACKEND = env.str(
+    "EMAIL_BACKEND",
+    default="django.core.mail.backends.console.EmailBackend",
+)
+# MAILING_MANAGER_DEFAULT_FROM = env.str(
+#     'MAILING_MANAGER_DEFAULT_FROM',
+#     default=None,
+# )
+# Mails will be queued instead of sent immediately:
+# MAILQUEUE_QUEUE_UP = env.bool("MAILQUEUE_QUEUE_UP", default=False)
+# MAIL-QUEUE SETTINGS
+# MAILQUEUE_CELERY = False
+# Maximum amount of emails to send during each queue run
+# MAILQUEUE_LIMIT = 10
+# If MAILQUEUE_STORAGE is set to True, will ignore your default storage
+# settings and use Django's filesystem storage instead (stores them in
+# MAILQUEUE_ATTACHMENT_DIR)
+# MAILQUEUE_STORAGE = False
+# MAILQUEUE_ATTACHMENT_DIR = 'mailqueue-attachments'
