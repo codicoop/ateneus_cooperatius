@@ -4,6 +4,9 @@ from django.db import migrations
 
 
 def populate_mail_templates(apps, schema_editor):
+    # Migration disabled because it references the deprecated package
+    # mailing_manager.
+
     mail_model = apps.get_model('mailing_manager', 'Mail')
     mail_model.objects.bulk_create([
         mail_model(
@@ -191,5 +194,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # Migration disabled because it references the deprecated package
+        # mailing_manager.
         # migrations.RunPython(populate_mail_templates),
     ]
