@@ -150,23 +150,60 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'conf.urls'
 
+# https://docs.djangoproject.com/en/4.2/ref/settings/#templates
+develop_loaders = [
+    "django.template.loaders.filesystem.Loader",
+    "django.template.loaders.app_directories.Loader",
+]
+production_loaders = [
+    (
+        "django.template.loaders.cached.Loader",
+        [
+            "django.template.loaders.filesystem.Loader",
+            "django.template.loaders.app_directories.Loader",
+        ],
+    )
+]
+
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            "templates",
+        ],
+        "OPTIONS": {
+            "context_processors": [
                 'constance.context_processors.config',
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                "maintenance_mode.context_processors.maintenance_mode",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 'apps.coopolis.context_processors.global_context',
             ],
+            "loaders": develop_loaders if DEBUG else production_loaders,
         },
     },
 ]
+
+
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'constance.context_processors.config',
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#                 'apps.coopolis.context_processors.global_context',
+#             ],
+#         },
+#     },
+# ]
 
 WSGI_APPLICATION = 'conf.wsgi.application'
 
