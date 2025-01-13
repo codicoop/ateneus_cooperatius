@@ -217,7 +217,15 @@ STATIC_URL = "/static/"
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "assets"),
 # ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "apps.coopolis.storage_backends.PublicMediaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 LOGIN_URL = 'loginsignup'
 LOGIN_REDIRECT_URL = '/'
