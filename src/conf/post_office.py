@@ -1,12 +1,11 @@
 import re
 
 from constance import config
-from django.template.loader import render_to_string
+from django.apps import apps
+from django.template.loader import get_template
 from django.utils.html import strip_tags
 from django.utils.translation import get_language
 from post_office import mail as base_mail
-
-from apps.coopolis.models.general import Customization
 
 
 def send(
@@ -32,6 +31,13 @@ def send(
 ):
     if not language:
         language = get_language()
+    customization_model = apps.get_model("coopolis", "Customization")
+    context = {
+        **(context or {}),
+        "config": config,
+        "customization": customization_model.objects.first(),
+    }
+
     return base_mail.send(
         recipients=recipients,
         sender=sender,
@@ -76,12 +82,6 @@ def get_default_email_template(mail_content):
     email templates in the database, so the entire html template is rendered and
     included there.
     """
-    html = render_to_string(
-        "emails/front_generic.html",
-        context={
-            "mail_content": mail_content,
-            "config": config,
-            "customization": Customization.objects.first(),
-        },
-    )
-    return html
+    template_obj = get_template("emails/front_base.html")
+    template = template_obj.template.source.replace("[mail_content]", mail_content)
+    return template

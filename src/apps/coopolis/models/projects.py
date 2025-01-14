@@ -320,7 +320,6 @@ class Project(models.Model):
             "projecte_email": self.mail,
             "usuari_email": self.partners.all()[0].email,
         }
-        print(config.EMAIL_FROM_PROJECTS.split(","))
         send(
             recipients=config.EMAIL_FROM_PROJECTS.split(","),
             template="EMAIL_NEW_PROJECT",
