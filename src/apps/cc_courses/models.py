@@ -23,6 +23,7 @@ from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.managers import Published
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
+from conf.post_office import send_to_user
 
 
 class CoursePlace(models.Model):
@@ -885,28 +886,32 @@ class ActivityEnrolled(models.Model):
 
     @staticmethod
     def get_reminder_email(user, activity):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_ENROLLMENT_REMINDER")
-        # mail.subject_strings = {"activitat_nom": activity.name}
-        # absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
-        # mail.body_strings = {
-        #     "activitat_nom": activity.name,
-        #     "ateneu_nom": config.PROJECT_FULL_NAME,
-        #     "persona_nom": user.first_name,
-        #     "activitat_data_inici": activity.date_start.strftime("%d-%m-%Y"),
-        #     "activitat_hora_inici": activity.starting_time.strftime("%H:%M"),
-        #     "activitat_lloc": activity.place,
-        #     "activitat_instruccions": activity.instructions,
-        #     "absolute_url_activity": absolute_url_activity,
-        #     "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-        #     "url_web_ateneu": config.PROJECT_WEBSITE_URL,
-        # }
-        # return mail
-        pass
+        absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
+        context = {
+            "activitat_nom": activity.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "persona_nom": user.first_name,
+            "activitat_data_inici": activity.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": activity.starting_time.strftime("%H:%M"),
+            "activitat_lloc": activity.place,
+            "activitat_instruccions": activity.instructions,
+            "absolute_url_activity": absolute_url_activity,
+            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+        }
+        parameters = {
+            "context": context,
+            "template": "EMAIL_ENROLLMENT_REMINDER",
+        }
+        return parameters
+
 
     def send_reminder_email(self):
-        mail = self.get_reminder_email(self.user, self.activity)
-        mail.send_to_user(self.user)
+        parameters = self.get_reminder_email(self.user, self.activity)
+        send_to_user(
+            user_obj=self.user,
+            **parameters,
+        )
         self.reminder_sent = datetime.now()
         self.save()
 

@@ -60,6 +60,20 @@ def send(
         backend=backend,
     )
 
+def send_to_user(
+    user_obj,
+    **kwargs,
+):
+    """
+    Beware that this function calls the above function, not the original from
+    the post-office library.
+    """
+    if user_obj.fake_email:
+        return False
+    kwargs["recipients"] = user_obj.email
+    return send(
+        **kwargs
+    )
 
 def textify(html):
     # Remove html tags and continuous whitespaces
