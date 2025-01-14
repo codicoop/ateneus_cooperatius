@@ -524,6 +524,7 @@ POST_OFFICE = {
     "MESSAGE_ID_ENABLED": True,
     "MESSAGE_ID_FQDN": env("POST_OFFICE_MESSAGE_ID_FQDN", default="example.com"),
     "CELERY_ENABLED": env("POST_OFFICE_CELERY_ENABLED", bool, default=False),
+    "OVERRIDE_RECIPIENTS": env.list("POST_OFFICE_OVERRIDE_RECIPIENTS", default=None)
 }
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-from-email
