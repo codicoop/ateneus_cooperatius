@@ -108,6 +108,18 @@ class MyDashboard(Dashboard):
                     models=('apps.coopolis.models.general.Customization',),
                 )
             )
+            group_children.append(
+                modules.ModelList(
+                    title="Correus electrònics",
+                    column=1,
+                    collapsible=False,
+                    models=(
+                        'post_office.models.Email',
+                        'post_office.models.Log',
+                        'post_office.models.EmailTemplate',
+                    ),
+                )
+            )
 
         self.children.append(modules.Group(
             title="Backoffice",
