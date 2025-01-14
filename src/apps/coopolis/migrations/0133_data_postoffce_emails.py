@@ -23,17 +23,39 @@ def populate_mail_templates(apps, schema_editor):
   </td>
 </tr>
 <tr>
-  <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
-</tr>
-<tr>
-  <td height="25" class="em_h20" style="font-size:0px; line-height:0px; height:25px;">&nbsp;</td>
-</tr>
-<tr>
   <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
     <p style="margin-left: 60px"><strong>Nom del projecte:</strong> {{projecte_nom}}</p>
     <p style="margin-left: 60px"><strong>Telèfon de contacte:</strong> {{projecte_telefon}}</p>
     <p style="margin-left: 60px"><strong>Correu electrònic de contacte del projecte:</strong> {{projecte_email}}</p>
     <p style="margin-left: 60px"><strong>Correu electrònic de l'usuari que l'ha creat:</strong> {{usuari_email}}</p>
+  </td>
+</tr>
+</table>
+"""
+                    ),
+                },
+            },
+        ),
+        dict(
+            id="EMAIL_PROJECT_REQUEST_CONFIRMATION",
+            translated_templates={
+                "ca": {
+                    "subject": "Nova sol·licitud d'acompanyament: {{projecte_nom}}",
+                    "body": get_default_email_template(
+                        """
+<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
+<tr>
+  <td align="center" valign="top" class="em_text1 pad10">
+    <p>Confirmació de sol·licitud d'acompanyament pel projecte {{projecte_nom}}</p>
+  </td>
+</tr>
+<tr>
+  <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+  <p style="padding-top: 20px">En els propers dies una persona de l'equip de 
+    l'ateneu cooperatiu es posarà en contacte amb tu per parlar dels propers 
+    passos.</p>
+    <p style="padding-top: 20px">Per consultar i modificar la fitxa del projecte 
+    accedeix a <a href="{{url_backoffice}}">l'aplicació dels serveis de l'ateneu</a>.</p>
   </td>
 </tr>
 </table>

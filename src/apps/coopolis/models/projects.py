@@ -327,15 +327,15 @@ class Project(models.Model):
         )
 
     def notify_request_confirmation(self):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_PROJECT_REQUEST_CONFIRMATION")
-        # mail.subject_strings = {"projecte_nom": self.name}
-        # mail.body_strings = {
-        #     "projecte_nom": self.name,
-        #     "url_backoffice": settings.ABSOLUTE_URL,
-        # }
-        # mail.send_to_user(self.partners.all()[0])
-        pass
+        context = {
+            "projecte_nom": self.name,
+            "url_backoffice": settings.ABSOLUTE_URL,
+        }
+        send(
+            recipients=self.partners.all()[0].email,
+            template="EMAIL_PROJECT_REQUEST_CONFIRMATION",
+            context=context,
+        )
 
     def __str__(self):
         return self.name
