@@ -629,44 +629,45 @@ class Activity(models.Model):  # --> SESSIONS
         self.save()
 
     def get_poll_email(self, user):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_ENROLLMENT_POLL")
-        # mail.subject_strings = {"activitat_nom": self.name}
-        # absolute_url_activity = ""
-        # if self.resources.exists():
-        #     absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
-        #     absolute_url_activity = (
-        #         "Descàrrega del material formatiu: <a "
-        #         f'href="{absolute_url_activity}">Fitxa de la sessió</a>.'
-        #     )
-        # absolute_url_poll = settings.ABSOLUTE_URL + reverse(
-        #     "activity_poll", kwargs={"uuid": self.uuid}
-        # )
-        # poll_reminder_body = self.poll_reminder_body or ""
-        # poll_reminder_body = poll_reminder_body.replace("\n", "<br />")
-        # mail.body_strings = {
-        #     "activitat_nom": self.name,
-        #     "ateneu_nom": config.PROJECT_FULL_NAME,
-        #     "persona_nom": user.first_name,
-        #     "activitat_data_inici": self.date_start.strftime("%d-%m-%Y"),
-        #     "activitat_hora_inici": self.starting_time.strftime("%H:%M"),
-        #     "activitat_lloc": self.place,
-        #     "absolute_url_activity": absolute_url_activity,
-        #     "absolute_url_poll": absolute_url_poll,
-        #     "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-        #     "url_web_ateneu": config.PROJECT_WEBSITE_URL,
-        #     "poll_reminder_body": poll_reminder_body,
-        # }
-        # return mail
-        pass
+        absolute_url_activity = ""
+        if self.resources.exists():
+            absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
+            absolute_url_activity = (
+                "Descàrrega del material formatiu: <a "
+                f'href="{absolute_url_activity}">Fitxa de la sessió</a>.'
+            )
+        absolute_url_poll = settings.ABSOLUTE_URL + reverse(
+            "activity_poll", kwargs={"uuid": self.uuid}
+        )
+        poll_reminder_body = self.poll_reminder_body or ""
+        poll_reminder_body = poll_reminder_body.replace("\n", "<br />")
+        context = {
+            "activitat_nom": self.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "persona_nom": user.first_name,
+            "activitat_data_inici": self.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": self.starting_time.strftime("%H:%M"),
+            "activitat_lloc": self.place,
+            "absolute_url_activity": absolute_url_activity,
+            "absolute_url_poll": absolute_url_poll,
+            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+            "poll_reminder_body": poll_reminder_body,
+        }
+        parameters = {
+            "context": context,
+            "template": "EMAIL_ENROLLMENT_POLL",
+        }
+        return parameters
 
     def send_poll_email(self):
         enrollments = self.confirmed_enrollments
         for enrollment in enrollments:
-            if enrollment.user.fake_email:
-                continue
-            mail = self.get_poll_email(enrollment.user)
-            mail.send_to_user(enrollment.user)
+            parameters = self.get_poll_email(enrollment.user)
+            send_to_user(
+                user_obj=enrollment.user,
+                **parameters,
+            )
         self.poll_sent = datetime.now()
         self.save()
 
