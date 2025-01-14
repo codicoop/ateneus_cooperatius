@@ -10,6 +10,7 @@ from django.urls import reverse
 
 from apps.coopolis.mixins import FormDistrictValidationMixin, FieldsetsMixin
 from apps.coopolis.widgets import XDSoftDatePickerInput
+from conf.post_office import send
 
 
 class LogInForm(AuthenticationForm):
@@ -135,25 +136,23 @@ class PasswordResetForm(BasePasswordResetForm):
         to_email,
         html_email_template_name=None,
     ):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_PASSWORD_RESET")
-        # mail.to = to_email
-        # mail.subject_strings = {
-        #     "ateneu_nom": config.PROJECT_FULL_NAME,
-        # }
-        # password_reset_url = settings.ABSOLUTE_URL + reverse(
-        #     "password_reset_confirm",
-        #     kwargs={
-        #         "uidb64": context["uid"],
-        #         "token": context["token"],
-        #     },
-        # )
-        # mail.body_strings = {
-        #     "persona_nom": context["user"].first_name,
-        #     "persona_email": context["email"],
-        #     "absolute_url": settings.ABSOLUTE_URL,
-        #     "password_reset_url": password_reset_url,
-        #     "url_web_ateneu": config.PROJECT_WEBSITE_URL,
-        # }
-        # mail.send()
-        pass
+        password_reset_url = settings.ABSOLUTE_URL + reverse(
+            "password_reset_confirm",
+            kwargs={
+                "uidb64": context["uid"],
+                "token": context["token"],
+            },
+        )
+        context = {
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "persona_nom": context["user"].first_name,
+            "persona_email": context["email"],
+            "absolute_url": settings.ABSOLUTE_URL,
+            "password_reset_url": password_reset_url,
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+        }
+        send(
+            recipients=to_email,
+            template="EMAIL_PASSWORD_RESET",
+            context=context,
+        )
