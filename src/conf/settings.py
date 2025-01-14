@@ -536,6 +536,9 @@ SENDGRID_API_KEY = env("SENDGRID_API_KEY", default="")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = env(
     "SENDGRID_SANDBOX_MODE_IN_DEBUG", bool, default=False
 )
+SENDGRID_ECHO_TO_STDOUT = env(
+    "SENDGRID_ECHO_TO_STDOUT", bool, default=False
+)
 
 # SMTP
 # These are set to false as default given that Sendgrid's Web API is the default
