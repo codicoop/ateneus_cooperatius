@@ -338,6 +338,53 @@ def populate_mail_templates(apps, schema_editor):
                 },
             },
         ),
+        dict(
+            id="EMAIL_ENROLLMENT_WAITING_LIST",
+            translated_templates={
+                "ca": {
+                    "subject": "Ets en llista d'espera per l'activitat: {{activitat_nom}}",
+                    "body": get_default_email_template(
+                        """
+<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
+<tr>
+  <td align="center" valign="top" class="em_text1 pad10">
+    <p>Has entrat en llista d'espera per participar a la formació</p>
+  </td>
+</tr>
+<tr>
+  <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center" valign="top" style="font-family:'Open Sans', Arial, sans-serif; font-size:22px;
+  line-height:22px; color:#000; letter-spacing:2px; padding-bottom:12px;" class="pad10">
+    <strong>{{activitat_nom}}</strong> de {{ateneu_nom}}
+  </td>
+</tr>
+<tr>
+  <td height="25" class="em_h20" style="font-size:0px; line-height:0px; height:25px;">&nbsp;</td>
+</tr>
+<tr>
+  <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+    <p style="margin-left: 60px"><strong>Data:</strong> {{activitat_data_inici}}</p>
+    <p style="margin-left: 60px"><strong>Hora:</strong> {{activitat_hora_inici}}</p>
+    <p style="margin-left: 60px"><strong>Lloc:</strong> {{activitat_lloc}}</p>
+    <p style="padding-top: 20px">Si queda una plaça disponible, automàticament s'assignarà a la següent persona de la 
+    llista d'espera. De donar-se el cas, rebràs un correu electrònic informant-te que la teva inscripció ha estat 
+    confirmada. Sempre pots comprovar l'estat de la teva inscripció accedint a l'aplicació amb el teu compte i anant a 
+    l'apartat <a href="{{url_els_meus_cursos}}">Perfil -> Els Meus Cursos</a>.</p>
+  </td>
+</tr>
+<tr>
+  <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
+    <a href="{{url_ateneu}}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+  </td>
+</tr>
+</table>
+                    """,
+                    ),
+                },
+            },
+        ),
     ]
 
     for template in templates:

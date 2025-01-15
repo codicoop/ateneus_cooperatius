@@ -872,20 +872,20 @@ class ActivityEnrolled(models.Model):
         )
 
     def send_waiting_list_email(self):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_ENROLLMENT_WAITING_LIST")
-        # mail.subject_strings = {"activitat_nom": self.activity.name}
-        # mail.body_strings = {
-        #     "activitat_nom": self.activity.name,
-        #     "ateneu_nom": config.PROJECT_FULL_NAME,
-        #     "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
-        #     "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
-        #     "activitat_lloc": self.activity.place,
-        #     "url_els_meus_cursos": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-        #     "url_ateneu": settings.ABSOLUTE_URL,
-        # }
-        # mail.send_to_user(self.user)
-        pass
+        context = {
+            "activitat_nom": self.activity.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
+            "activitat_lloc": self.activity.place,
+            "url_els_meus_cursos": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_ateneu": settings.ABSOLUTE_URL,
+        }
+        send_to_user(
+            user_obj=self.user,
+            context=context,
+            template="EMAIL_ENROLLMENT_WAITING_LIST",
+        )
 
     @staticmethod
     def get_reminder_email(user, activity):
