@@ -1,3 +1,5 @@
+from constance import config
+
 from apps.coopolis.models.invitation import Invitation
 from conf import settings
 from django import urls
@@ -144,16 +146,16 @@ def project_partner_manage(request):
                 return redirect("edit_project")
             project.partners.remove(user)
 
-            # to post-office
-            # mail = MyMailTemplate("EMAIL_PARTNER_ELIMINATION")
-            # mail.to = config.EMAIL_FROM_PROJECTS.split(",")
-            # mail.subject_strings = {"project": project.name}
-            # mail.body_strings = {
-            #     "persona_fullname": user.full_name,
-            #     "persona_email": user.email,
-            #     "project": project.name,
-            # }
-            # mail.send(now=True)
+            context = {
+                "persona_fullname": user.full_name,
+                "persona_email": user.email,
+                "project": project.name,
+            }
+            send(
+                recipients=config.EMAIL_FROM_PROJECTS.split(","),
+                template="EMAIL_PARTNER_ELIMINATION",
+                context=context,
+            )
             messages.success(
                 request,
                 f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.", )
