@@ -423,6 +423,54 @@ def populate_mail_templates(apps, schema_editor):
                 },
             },
         ),
+        dict(
+            id="EMAIL_SIGNUP_WELCOME",
+            translated_templates={
+                "ca": {
+                    "subject": "Nou compte creat a {{ateneu_nom}}",
+                    "body": get_default_email_template(
+                        """
+<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
+  <tr>
+    <td align="center" valign="top" class="em_text1 pad10">
+      <p><strong>
+        Benvingut/da a {{ateneu_nom}}!
+      </strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+      <p style="padding-top: 20px">
+        <em>Estàs rebent aquest correu perquè s'ha completat un registre a la 
+        plataforma <a href="{{url_backoffice}}">{{url_backoffice}}.<br />
+        Si aquest registre no l'has fet tu o cap altra persona amb qui 
+        comparteixis aquest compte, ignora aquest correu o 
+        avisa'ns per tal que l'eliminem de la base de dades.</em>
+      </p>
+      <p style="padding-top: 20px">
+        Amb el teu compte pots:
+      </p>
+      <ul>
+        <li>Inscriure't a les sessions formatives, que trobaràs 
+          <a href="{{url_accions}}">aquí</a>.</li>
+        <li>Si esteu iniciant o teniu en marxa un projecte cooperatiu, podeu 
+          <a href="{{url_projecte}}">sol·licitar un acompanyament</a>.</li>
+        <li>Consultar o editar les dades del teu perfil i recuperar la contrassenya.</li>
+      </ul>
+      <p style="padding-top: 20px">
+        Més informació a <a href="{{url_backoffice}}">{{url_backoffice}}</a>.
+      </p>
+    </td>
+  </tr>
+</table>
+                    """,
+                    ),
+                },
+            },
+        ),
     ]
 
     for template in templates:
