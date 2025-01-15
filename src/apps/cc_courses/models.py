@@ -856,20 +856,20 @@ class ActivityEnrolled(models.Model):
             raise e
 
     def send_confirmation_email(self):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_ENROLLMENT_CONFIRMATION")
-        # mail.subject_strings = {"activitat_nom": self.activity.name}
-        # mail.body_strings = {
-        #     "activitat_nom": self.activity.name,
-        #     "ateneu_nom": config.PROJECT_FULL_NAME,
-        #     "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
-        #     "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
-        #     "activitat_lloc": self.activity.place,
-        #     "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-        #     "url_web_ateneu": config.PROJECT_WEBSITE_URL,
-        # }
-        # mail.send_to_user(self.user)
-        pass
+        context = {
+            "activitat_nom": self.activity.name,
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
+            "activitat_hora_inici": self.activity.starting_time.strftime("%H:%M"),
+            "activitat_lloc": self.activity.place,
+            "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+        }
+        send_to_user(
+            user_obj=self.user,
+            context=context,
+            template="EMAIL_ENROLLMENT_CONFIRMATION",
+        )
 
     def send_waiting_list_email(self):
         # to post-office
