@@ -672,25 +672,27 @@ class Activity(models.Model):  # --> SESSIONS
         self.save()
 
     def get_reminder_to_responsible_email(self):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_ACTIVITY_RESPONSIBLE_REMINDER")
-        # mail.subject_strings = {
-        #     "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
-        #     "activity_name": self.name,
-        # }
-        # absolute_url_admin_activity = settings.ABSOLUTE_URL + reverse(
-        #     "admin:cc_courses_activity_change",
-        #     kwargs={"object_id": self.id},
-        # )
-        # mail.body_strings = {
-        #     "absolute_url_admin_activity": absolute_url_admin_activity,
-        # }
-        # return mail
-        pass
+        absolute_url_admin_activity = settings.ABSOLUTE_URL + reverse(
+            "admin:cc_courses_activity_change",
+            kwargs={"object_id": self.id},
+        )
+        context = {
+            "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
+            "activity_name": self.name,
+            "absolute_url_admin_activity": absolute_url_admin_activity,
+        }
+        parameters = {
+            "context": context,
+            "template": "EMAIL_ACTIVITY_RESPONSIBLE_REMINDER",
+        }
+        return parameters
 
     def send_reminder_to_responsible(self):
-        mail = self.get_reminder_to_responsible_email()
-        mail.send_to_user(self.responsible)
+        parameters = self.get_reminder_to_responsible_email()
+        send_to_user(
+            user_obj=self.responsible,
+            **parameters,
+        )
         self.organizer_reminded = datetime.now()
         self.save()
 

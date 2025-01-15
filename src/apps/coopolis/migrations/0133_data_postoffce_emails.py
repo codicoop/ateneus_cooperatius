@@ -162,35 +162,35 @@ def populate_mail_templates(apps, schema_editor):
                     "body": get_default_email_template(
                         """
 <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
-    <tr>
-      <td align="center" valign="top" class="em_text1 pad10">
-        <p>Instruccions per reiniciar la contrasenya</p>
-      </td>
-    </tr>
-    <tr>
-      <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
-    </tr>
-    <tr>
-      <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
-        <p style="padding-top: 20px">Hola {{persona_nom}}!</p>
-        <p style="padding-top: 20px">T'enviem aquest correu perquè algú ha 
-            sol·licitat el reinici de la contrasenya del compte {{persona_email}}
-            a {{absolute_url}}</p>
-        <p style="margin-left: 60px">Si no has estat tu qui ho ha demanat, 
-            ignora aquest correu. Si segueixes rebent aquest correu repetidament,
-            podria voler dir que algú està intentant obtenir accés al teu 
-            compte, et recomanem que posis una contrasenya el més llarga 
-            possible i que avisis a les administradores de l'Ateneu.</p>
-        <p style="margin-left: 60px">Per establir una nova contrasenya fes
-            servir aquest enllaç: <a href=\"{{password_reset_url}}\">{{password_reset_url}}</a></p>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
-        <a href="{{url_web_ateneu}}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
-      </td>
-    </tr>
-    </table>
+  <tr>
+    <td align="center" valign="top" class="em_text1 pad10">
+      <p>Instruccions per reiniciar la contrasenya</p>
+    </td>
+  </tr>
+  <tr>
+    <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+      <p style="padding-top: 20px">Hola {{persona_nom}}!</p>
+      <p style="padding-top: 20px">T'enviem aquest correu perquè algú ha 
+          sol·licitat el reinici de la contrasenya del compte {{persona_email}}
+          a {{absolute_url}}</p>
+      <p style="margin-left: 60px">Si no has estat tu qui ho ha demanat, 
+          ignora aquest correu. Si segueixes rebent aquest correu repetidament,
+          podria voler dir que algú està intentant obtenir accés al teu 
+          compte, et recomanem que posis una contrasenya el més llarga 
+          possible i que avisis a les administradores de l'Ateneu.</p>
+      <p style="margin-left: 60px">Per establir una nova contrasenya fes
+          servir aquest enllaç: <a href=\"{{password_reset_url}}\">{{password_reset_url}}</a></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
+      <a href="{{url_web_ateneu}}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+    </td>
+  </tr>
+</table>
                     """,
                     ),
                 },
@@ -204,50 +204,88 @@ def populate_mail_templates(apps, schema_editor):
                     "body": get_default_email_template(
                         """
 <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
-    <tr>
-      <td align="center" valign="top" class="em_text1 pad10">
-        <p>Enquesta de valoració</p>
-      </td>
-    </tr>
-    <tr>
-      <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" style="font-family:'Open Sans', Arial, sans-serif; font-size:22px;
-      line-height:22px; color:#000; letter-spacing:2px; padding-bottom:12px;" class="pad10">
-        <strong>{{activitat_nom}}</strong> de {{ateneu_nom}}
-      </td>
-    </tr>
-    <tr>
-      <td height="25" class="em_h20" style="font-size:0px; line-height:0px; height:25px;">&nbsp;</td>
-    </tr>
-    <tr>
-      <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
-        <p style="padding-top: 20px">Hola {{persona_nom}}!</p>
-        <p style="padding-top: 20px">T'enviem aquest correu perquè has participat a aquesta sessió:</p>
-        <p style="margin-left: 60px"><strong>Data:</strong> {{activitat_data_inici}}</p>
-        <p style="margin-left: 60px"><strong>Hora:</strong> {{activitat_hora_inici}}</p>
-        <p style="margin-left: 60px"><strong>Lloc:</strong> {{activitat_lloc}}</p>
-        <p style="padding-top: 20px">{{poll_reminder_body}}</p>
-        <p style="padding-top: 20px">Els resultats de les enquestes de valoració 
-        son una eina imprescindible pel funcionament d'aquesta formació 
-        gratuïta subvencionada.</p>
-        <p style="padding-top: 20px">Si us plau, omple <a href="{{absolute_url_poll}}">l'enquesta de valoració</a>.
-        </p> 
-        <p style="padding-top: 20px">
-            <a href=\"{{absolute_url_activity}}\">{{absolute_url_activity}}</a>
-        </p>
-        <p>
-          Pots gestionar les teves dades i inscripcions accedint a l'aplicació amb el teu compte i anant a 
-        l'apartat <a href="{{absolute_url_my_activities}}">Perfil -> Els Meus Cursos</a>.</p>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
-        <a href="{{url_web_ateneu}}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
-      </td>
-    </tr>
-    </table>
+  <tr>
+    <td align="center" valign="top" class="em_text1 pad10">
+      <p>Enquesta de valoració</p>
+    </td>
+  </tr>
+  <tr>
+    <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" style="font-family:'Open Sans', Arial, sans-serif; font-size:22px;
+    line-height:22px; color:#000; letter-spacing:2px; padding-bottom:12px;" class="pad10">
+      <strong>{{activitat_nom}}</strong> de {{ateneu_nom}}
+    </td>
+  </tr>
+  <tr>
+    <td height="25" class="em_h20" style="font-size:0px; line-height:0px; height:25px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+      <p style="padding-top: 20px">Hola {{persona_nom}}!</p>
+      <p style="padding-top: 20px">T'enviem aquest correu perquè has participat a aquesta sessió:</p>
+      <p style="margin-left: 60px"><strong>Data:</strong> {{activitat_data_inici}}</p>
+      <p style="margin-left: 60px"><strong>Hora:</strong> {{activitat_hora_inici}}</p>
+      <p style="margin-left: 60px"><strong>Lloc:</strong> {{activitat_lloc}}</p>
+      <p style="padding-top: 20px">{{poll_reminder_body}}</p>
+      <p style="padding-top: 20px">Els resultats de les enquestes de valoració 
+      son una eina imprescindible pel funcionament d'aquesta formació 
+      gratuïta subvencionada.</p>
+      <p style="padding-top: 20px">Si us plau, omple <a href="{{absolute_url_poll}}">l'enquesta de valoració</a>.
+      </p> 
+      <p style="padding-top: 20px">
+          <a href=\"{{absolute_url_activity}}\">{{absolute_url_activity}}</a>
+      </p>
+      <p>
+        Pots gestionar les teves dades i inscripcions accedint a l'aplicació amb el teu compte i anant a 
+      l'apartat <a href="{{absolute_url_my_activities}}">Perfil -> Els Meus Cursos</a>.</p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
+      <a href="{{url_web_ateneu}}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+    </td>
+  </tr>
+</table>
+                    """,
+                    ),
+                },
+            },
+        ),
+        dict(
+            id="EMAIL_ACTIVITY_RESPONSIBLE_REMINDER",
+            translated_templates={
+                "ca": {
+                    "subject": "Recordatori: d'aquí {{number_days}} dies hi ha: {{activity_name}}",
+                    "body": get_default_email_template(
+                        """
+<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
+  <tr>
+    <td align="center" valign="top" class="em_text1 pad10">
+      <p><strong>
+        Reps aquest recordatori com a persona responsable de la formació.
+      </strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+      <p style="padding-top: 20px">
+        El backoffice té la funcionalitat d'enviar un recordatori a 
+        totes les persones inscrites, però cal executar aquest enviament de forma
+        manual ja que abans de fer-ho convé tenir les instruccions i material
+        configurats a la fitxa de la sessió, així com revisar les dades i el
+        llistat de persones inscrites.
+      </p>
+      <p style="padding-top: 20px">
+        <a href="{{absolute_url_admin_activity}}">Enllaç a l'activitat</a>
+      </p>
+    </td>
+  </tr>
+</table>
                     """,
                     ),
                 },
