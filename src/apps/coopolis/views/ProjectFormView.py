@@ -1,6 +1,5 @@
 from apps.coopolis.models.invitation import Invitation
 from conf import settings
-from constance import config
 from django import urls
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -13,6 +12,7 @@ from apps.cc_courses.choices import ProjectStageStatesChoices
 from apps.coopolis.forms import ProjectForm
 from apps.coopolis.models import Project, ProjectStage, User
 from apps.coopolis.views import LoginSignupContainerView
+from conf.post_office import send
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
@@ -90,29 +90,30 @@ def project_partner_manage(request):
             if user_is_invited:
                 messages.error(
                     request,
-                    f"L'usuari {user.full_name} ja està invitat.",
+                    f"L'usuari {user.full_name} ja està convidat.",
                 )
                 return redirect("edit_project")
-            if user.project:
+            project = Project.objects.get(id=request.POST.get("add_partner"))
+            user_is_partner = project.partners.filter(id=user.id).first()
+            if user_is_partner:
                 messages.error(
                     request,
                     f"L'usuari {user.full_name} ja forma part d'aquest projecte.",
                 )
                 return redirect("edit_project")
-            project = Project.objects.get(id=request.POST.get("add_partner"))
             invitation = Invitation.objects.create(user=user, project=project)
-            # to post-office
-            # mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
-            # mail.to = user.email
-            # mail.subject_strings = {"project": project.name}
-            # mail.body_strings = {
-            #     "persona_fullname": user.full_name,
-            #     "persona_email": user.email,
-            #     "project": project.name,
-            #     "absolute_url": settings.ABSOLUTE_URL,
-            #     "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
-            # }
-            # mail.send(now=True)
+            context = {
+                "persona_fullname": user.full_name,
+                "persona_email": user.email,
+                "project": project.name,
+                "absolute_url": settings.ABSOLUTE_URL,
+                "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}"
+            }
+            send(
+                recipients=user.email,
+                context=context,
+                template="EMAIL_PROJECT_INVITATION",
+            )
             messages.success(
                 request,
                 f"Invitació realitzada amb èxit a {user.full_name}."

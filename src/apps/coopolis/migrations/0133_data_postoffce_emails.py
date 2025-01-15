@@ -471,6 +471,45 @@ def populate_mail_templates(apps, schema_editor):
                 },
             },
         ),
+        dict(
+            id="EMAIL_PROJECT_INVITATION",
+            translated_templates={
+                "ca": {
+                    "subject": "Invitació per a formar part del projecte {{project}}",
+                    "body": get_default_email_template(
+                        """
+<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
+  <tr>
+    <td align="center" valign="top" class="em_text1 pad10">
+      <p><strong>
+        Hola {{persona_fullname}}!
+      </strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+      <p style="padding-top: 20px">
+        T'enviem aquest correu perquè t'han afegit com a soci del
+         projecte {{project}}, acompanyat per l'ateneu cooperatiu.
+      </p>
+      <p style="padding-top: 20px">
+        Per a confirmar la teva adhesió visita el següent enllaç: 
+        <a href="{{invitation_url}}">{{invitation_url}}</a>
+      </p>
+      <p style="padding-top: 20px">
+        Gràcies i una salutació
+      </p>
+    </td>
+  </tr>
+</table>
+                    """,
+                    ),
+                },
+            },
+        ),
     ]
 
     for template in templates:
