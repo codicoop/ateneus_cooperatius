@@ -385,6 +385,44 @@ def populate_mail_templates(apps, schema_editor):
                 },
             },
         ),
+        dict(
+            id="EMAIL_ADDED_TO_PROJECT",
+            translated_templates={
+                "ca": {
+                    "subject": "Has estat afegit com a participant del projecte {{projecte_nom}}",
+                    "body": get_default_email_template(
+                        """
+<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
+  <tr>
+    <td align="center" valign="top" class="em_text1 pad10">
+      <p><strong>
+        Has estat afegit com a participant al projecte acompanyat per {{ateneu_nom}}:
+      </strong></p>
+      <h3>{{projecte_nom}}</h3>
+    </td>
+  </tr>
+  <tr>
+    <td height="15" style="font-size:0px; line-height:0px; height:15px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
+      <p style="padding-top: 20px">
+        Per veure i modificar la fitxa del vostre projecte, accedeix a 
+        <a href="{{url_projectes}}">l'apartat Projectes</a> de la 
+        plataforma de {{ateneu_nom}} amb el teu e-mail i contrasenya.
+      </p>
+      <p style="padding-top: 20px">
+        Si necessites la contrasenya, trobaràs l'opció per fer-ho a 
+        <a href="{{url_backoffice}}">{{url_backoffice}}</a>.
+      </p>
+    </td>
+  </tr>
+</table>
+                    """,
+                    ),
+                },
+            },
+        ),
     ]
 
     for template in templates:

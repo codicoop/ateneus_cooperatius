@@ -25,6 +25,7 @@ from apps.coopolis.models.projects import (
     ProjectStageSession,
 )
 from apps.dataexports.models import SubsidyPeriod
+from conf.post_office import send_to_user
 
 
 class FilterByFounded(admin.SimpleListFilter):
@@ -666,17 +667,17 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def send_added_to_project_email(self, user_obj, project_name):
-        # to post-office
-        # mail = MyMailTemplate("EMAIL_ADDED_TO_PROJECT")
-        # mail.subject_strings = {"projecte_nom": project_name}
-        # mail.body_strings = {
-        #     "ateneu_nom": config.PROJECT_FULL_NAME,
-        #     "projecte_nom": project_name,
-        #     "url_projectes": settings.ABSOLUTE_URL + reverse("project_info"),
-        #     "url_backoffice": settings.ABSOLUTE_URL,
-        # }
-        # mail.send_to_user(user_obj)
-        pass
+        context = {
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "projecte_nom": project_name,
+            "url_projectes": settings.ABSOLUTE_URL + reverse("project_info"),
+            "url_backoffice": settings.ABSOLUTE_URL,
+        }
+        send_to_user(
+            user_obj=user_obj,
+            context=context,
+            template="EMAIL_ADDED_TO_PROJECT",
+        )
 
     def _insertions_count(self, obj):
         if obj.employment_insertions:
