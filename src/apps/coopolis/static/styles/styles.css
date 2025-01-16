@@ -439,6 +439,14 @@ body {
   grid-column: 5/span 2;
 }
 
+.grid-item-1-4 {
+  grid-column: 1/span 4;
+}
+
+.grid-row-span-2 {
+  grid-row: span 2;
+}
+
 .no-footer .grid-base__main {
   height: 100vh;
 }
@@ -5013,11 +5021,6 @@ label.required::after {
   color: var(--primary);
   padding-bottom: var(--pad-2);
 }
-.course .course-bloc__text {
-  max-height: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .course .course-bloc__image {
   width: var(--width);
   height: 100%;
@@ -5025,6 +5028,9 @@ label.required::after {
 .course .course-bloc__image img {
   border-radius: var(--br);
   object-fit: cover;
+}
+.course .course-bloc-2 {
+  padding-bottom: 0;
 }
 .course__grid {
   display: var(--display);

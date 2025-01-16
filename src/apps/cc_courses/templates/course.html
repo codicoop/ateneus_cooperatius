@@ -47,8 +47,16 @@
 		<div class="course__title title-2 grid-item-full">
 			<h1>{{ course.title }}</h1>
 		</div>
-		<div class="grid-item-span-2">
-			<div class="course-bloc">
+
+		{% if course.description %}
+		<div class="{% if course.aimed_at or course.banner %}
+				grid-item-1-4
+				grid-row-span-2
+			{% else %}
+				grid-item-full
+			{% endif %}"
+		>
+			<div class="course-bloc course-bloc-1">
 				<div class="course-bloc__title text-menu">
 					Descripció
 				</div>
@@ -57,10 +65,24 @@
 				</div>
 			</div>
 		</div>
+		{% endif %}
+
+		{% if course.aimed_at %}
+		<div class="grid-item-5-6">
+			<div class="course-bloc course-bloc-2">
+				<div class="course-bloc__title text-menu">
+					Adreçat a
+				</div>
+				<div class="course-bloc__text">
+					<p>{{ course.aimed_at }}</p>
+				</div>
+			</div>
+		</div>
+		{% endif %}
 
 		{% if course.banner %}
-		<div class="grid-item-span-2">
-			<div class="course-bloc">
+		<div class="grid-item-5-6">
+			<div class="course-bloc course-bloc-3">
 				<div class="course-bloc__title text-menu">
 					Cartell
 				</div>
