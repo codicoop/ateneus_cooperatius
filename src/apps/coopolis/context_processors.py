@@ -7,6 +7,7 @@ def global_context(request):
     context = {
         # **settings.GLOBAL_CONTEXT,
         **get_customization_context(),
+        **projects_menu_context(request),
     }
     return context
 
