@@ -245,7 +245,7 @@ label.required::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16.000002 15.99'%3E%3Cpath d='m 16.000001,14.66 c -0.02,0.730001 -0.6,1.32 -1.33,1.33 H 1.3299999 C 0.5999999,15.97 0.0099999,15.39 0,14.66 L 6e-7,8.1900007 h 1.33 L 1.3299999,14.66 14.66,14.660001 V 8.1900007 h 1.33 V 14.660001 Z M 11.89,3.8600007 l -0.96,0.96 -2.27,-2.27 V 10.330001 H 7.33 V 2.5999997 l -2.27,2.27 -0.96,-0.96 L 8.01,0 11.880001,3.8700007 Z' style='fill:%23d91d69;' /%3E%3C/svg%3E");
     position: absolute;
     right: 3px;
-    top: 28px;
+    top: 29px;
     padding: 11px;
     width: 37px;
     background-color: #fff0f5;
@@ -356,23 +356,11 @@ label.required::after {
   text-transform: uppercase;
   color: var(--primary);
 }
-.form ul.field-radio {
-  // display: flex;
-  // flex-direction: column-reverse;
+.form .field-radio {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 
-  li {
-    input {
-      width: 16px;
-      height: 16px;
-      padding: 0;
-      margin: 0;
-      border: 2px solid var(--second-2);
-      border-radius: 50px;
-      -webkit-appearance: auto;
-      -moz-appearance: auto;
-    }
+  div {
     label {
       display: flex;
       flex-direction: row-reverse;
@@ -387,8 +375,15 @@ label.required::after {
       text-transform: none;
       cursor: pointer;
 
-      &::after {
-        display: none;
+      input {
+        width: 16px;
+        height: 16px;
+        padding: 0;
+        margin: 0;
+        border: 2px solid var(--second-2);
+        border-radius: 50px;
+        -webkit-appearance: auto;
+        -moz-appearance: auto;
       }
     }
   }
