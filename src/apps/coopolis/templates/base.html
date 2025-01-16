@@ -163,25 +163,34 @@
               </div>
             </a>
           </li>
+          {% if request.user.is_authenticated %}
           <li>
-            <a href="{% url 'new_project' %}">
-              <div class="menu__item {% block projects_is_active %}{% endblock %}">
-                <div class="menu__icon">
-                  <svg
-                    class="icon-pathfill-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewbox="0 0 24.01 17.870682">
-                    <g transform="translate(-5.49,-8.57)">
-                      <path d="M 7.17,26.43 C 6.73,26.43 6.31,26.24 6.01,25.92 5.68,25.62 5.5,25.2 5.49,24.76 V 10.24 C 5.49,9.8 5.68,9.38 6,9.08 6.3,8.76 6.72,8.57 7.16,8.57 H 15 l 1.67,1.67 h 9.46 c 0.44,0 0.86,0.19 1.16,0.51 0.32,0.3 0.51,0.72 0.51,1.16 H 7.17 V 24.75 L 10.02,13.59 H 29.5 l -2.99,11.56 c -0.08,0.39 -0.29,0.74 -0.61,0.98 -0.34,0.22 -0.74,0.32 -1.14,0.31 H 7.17 Z" />
-                    </g>
-                  </svg>
-                </div>
-                <div class="text-menu">
-                  <p>Projectes</p>
-                </div>
+            <div class="menu__item {% block projects_is_active %}{% endblock %}">
+              <div class="menu__icon">
+                <svg
+                  class="icon-pathfill-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewbox="0 0 24.01 17.870682">
+                  <g transform="translate(-5.49,-8.57)">
+                    <path d="M 7.17,26.43 C 6.73,26.43 6.31,26.24 6.01,25.92 5.68,25.62 5.5,25.2 5.49,24.76 V 10.24 C 5.49,9.8 5.68,9.38 6,9.08 6.3,8.76 6.72,8.57 7.16,8.57 H 15 l 1.67,1.67 h 9.46 c 0.44,0 0.86,0.19 1.16,0.51 0.32,0.3 0.51,0.72 0.51,1.16 H 7.17 V 24.75 L 10.02,13.59 H 29.5 l -2.99,11.56 c -0.08,0.39 -0.29,0.74 -0.61,0.98 -0.34,0.22 -0.74,0.32 -1.14,0.31 H 7.17 Z" />
+                  </g>
+                </svg>
               </div>
-            </a>
+              <div class="text-menu">
+                <p>Projectes</p>
+                {% for project in user_projects %}
+                    <a href="{% url 'edit_project' pk=project.pk %}"> 
+                    {% if project.logo %}
+                      <img src="{{ project.logo.url }}" alt="{{ project.name }}" width="10">
+                    {% endif %}
+                    <p>{{ project.name }}</p>
+                  </a>
+                {% endfor %}
+                <p><a href="{% url 'new_project' %}">+ Afegir projecte</a></p>
+              </div>
+            </div>
           </li>
+          {% endif %}
           <li class="mobile-only">
             <a href="{{ config.PROJECT_WEBSITE_URL }}">
               <div class="menu__item menu__item--narrow">
