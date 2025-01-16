@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import include, path
@@ -31,7 +31,7 @@ from .views import (
 from .views.ProjectFormView import project_partner_manage, invitation_partner
 
 urlpatterns = [
-    url(
+    re_path(
         "admin/login",
         RedirectView.as_view(
             pattern_name=settings.LOGIN_URL, permanent=True, query_string=True

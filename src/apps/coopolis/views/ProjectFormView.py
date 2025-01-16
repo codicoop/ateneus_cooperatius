@@ -1,6 +1,7 @@
-from conf import settings
-from conf.custom_mail_manager import MyMailTemplate
 from constance import config
+
+from apps.coopolis.models.invitation import Invitation
+from conf import settings
 from django import urls
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -17,6 +18,7 @@ from apps.coopolis.forms import ProjectForm
 from apps.coopolis.models import Project, ProjectStage, User
 from apps.coopolis.models.invitation import Invitation
 from apps.coopolis.views import LoginSignupContainerView
+from conf.post_office import send
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
@@ -105,27 +107,29 @@ def project_partner_manage(request):
             if user_is_invited:
                 messages.error(
                     request,
-                    f"L'usuari {user.full_name} ja està invitat.",
+                    f"L'usuari {user.full_name} ja està convidat.",
                 )
                 return redirect("edit_project", pk=project_pk)
-            if project.partners.filter(pk=user.pk).exists():
+            user_is_partner = project.partners.filter(id=user.id).first()
+            if user_is_partner:
                 messages.error(
                     request,
                     f"L'usuari {user.full_name} ja forma part d'aquest projecte.",
                 )
                 return redirect("edit_project", pk=project_pk)
             invitation = Invitation.objects.create(user=user, project=project)
-            mail = MyMailTemplate("EMAIL_PROJECT_INVITATION")
-            mail.to = user.email
-            mail.subject_strings = {"project": project.name}
-            mail.body_strings = {
+            context = {
                 "persona_fullname": user.full_name,
                 "persona_email": user.email,
                 "project": project.name,
                 "absolute_url": settings.ABSOLUTE_URL,
                 "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}",
             }
-            mail.send(now=True)
+            send(
+                recipients=user.email,
+                context=context,
+                template="EMAIL_PROJECT_INVITATION",
+            )
             messages.success(
                 request,
                 f"Invitació realitzada amb èxit a {user.full_name}."
@@ -155,17 +159,26 @@ def project_partner_manage(request):
                     "No et pots eliminar a tu mateix/a del projecte.",
                 )
                 return redirect("edit_project", pk=project.pk)
+            try:
+                project = Project.objects.get(pk=request.POST.get("delete_partner"))
+            except Project.DoesNotExist:
+                messages.error(
+                    request,
+                    "Aquest projecte no existeix.",
+                )
+                return redirect("edit_project", pk=project.pk)
             project.partners.remove(user)
 
-            mail = MyMailTemplate("EMAIL_PARTNER_ELIMINATION")
-            mail.to = config.EMAIL_FROM_PROJECTS.split(",")
-            mail.subject_strings = {"project": project.name}
-            mail.body_strings = {
+            context = {
                 "persona_fullname": user.full_name,
                 "persona_email": user.email,
                 "project": project.name,
             }
-            mail.send(now=True)
+            send(
+                recipients=config.EMAIL_FROM_PROJECTS.split(","),
+                template="EMAIL_PARTNER_ELIMINATION",
+                context=context,
+            )
             messages.success(
                 request,
                 f"{user.full_name} ha estat eliminada amb èxit d'aquest projecte.",

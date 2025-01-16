@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load thumbnail static %}
+{% load static %}
 
 {% block home_is_active %}{% endblock %}
 {% block enrollments_is_active %}is-active{% endblock %}
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
         {% endif %}
-        <div class="course-card__bloc grid-bloc">          
+        <div class="course-card__bloc grid-bloc bloc3">          
           <div class="course-card__subtitle text-menu">
             <p>Sessions: {{ course.activities.count }}</p>
           </div>

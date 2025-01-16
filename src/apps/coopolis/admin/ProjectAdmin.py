@@ -2,7 +2,7 @@ from functools import update_wrapper
 
 from constance import config
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.urls import reverse, reverse_lazy
 from django.utils import formats
@@ -25,7 +25,7 @@ from apps.coopolis.models.projects import (
     ProjectStageSession,
 )
 from apps.dataexports.models import SubsidyPeriod
-from conf.custom_mail_manager import MyMailTemplate
+from conf.post_office import send_to_user
 
 
 class FilterByFounded(admin.SimpleListFilter):
@@ -603,7 +603,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
 
         my_urls = [
-            url(r"(?P<id>\d+)/print/$", wrap(self.print), name="%s_%s_print" % info),
+            re_path(r"(?P<id>\d+)/print/$", wrap(self.print), name="%s_%s_print" % info),
         ]
 
         return my_urls + urls
@@ -667,15 +667,17 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def send_added_to_project_email(self, user_obj, project_name):
-        mail = MyMailTemplate("EMAIL_ADDED_TO_PROJECT")
-        mail.subject_strings = {"projecte_nom": project_name}
-        mail.body_strings = {
+        context = {
             "ateneu_nom": config.PROJECT_FULL_NAME,
             "projecte_nom": project_name,
             "url_projectes": settings.ABSOLUTE_URL + reverse("project_info"),
             "url_backoffice": settings.ABSOLUTE_URL,
         }
-        mail.send_to_user(user_obj)
+        send_to_user(
+            user_obj=user_obj,
+            context=context,
+            template="EMAIL_ADDED_TO_PROJECT",
+        )
 
     def _insertions_count(self, obj):
         if obj.employment_insertions:

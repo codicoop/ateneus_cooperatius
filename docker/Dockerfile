@@ -1,4 +1,4 @@
-FROM python:3.9.19-bookworm as python-base
+FROM python:3.11.11-bookworm as python-base
 
     # ensures that the python output is sent straight to terminal
 ENV PYTHONUNBUFFERED=1 \

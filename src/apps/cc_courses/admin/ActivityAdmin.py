@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django_summernote.admin import SummernoteModelAdminMixin
 from datetime import datetime
-import modelclone
+from apps import modelclone
 import weasyprint
 import django.template.loader as loader
 
@@ -33,6 +33,7 @@ from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation, \
     ReservationEquipment
 from apps.coopolis.filters import SubserviceFilter
+from conf.post_office import send
 
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
@@ -422,9 +423,12 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
             if 'preview' in request.POST:
-                mail = ActivityEnrolled.get_reminder_email(request.user, obj)
-                mail.to = request.POST['preview_to']
-                mail.send()
+                parameters = ActivityEnrolled.get_reminder_email(request.user, obj)
+                send(
+                    recipients=request.POST['preview_to'],
+                    **parameters,
+                )
+
                 self.message_user(
                     request,
                     "Correu de prova enviat correctament."

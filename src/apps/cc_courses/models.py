@@ -23,7 +23,7 @@ from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.managers import Published
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
-from conf.custom_mail_manager import MyMailTemplate
+from conf.post_office import send_to_user
 
 
 class CoursePlace(models.Model):
@@ -629,8 +629,6 @@ class Activity(models.Model):  # --> SESSIONS
         self.save()
 
     def get_poll_email(self, user):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_POLL")
-        mail.subject_strings = {"activitat_nom": self.name}
         absolute_url_activity = ""
         if self.resources.exists():
             absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
@@ -643,7 +641,7 @@ class Activity(models.Model):  # --> SESSIONS
         )
         poll_reminder_body = self.poll_reminder_body or ""
         poll_reminder_body = poll_reminder_body.replace("\n", "<br />")
-        mail.body_strings = {
+        context = {
             "activitat_nom": self.name,
             "ateneu_nom": config.PROJECT_FULL_NAME,
             "persona_nom": user.first_name,
@@ -656,36 +654,45 @@ class Activity(models.Model):  # --> SESSIONS
             "url_web_ateneu": config.PROJECT_WEBSITE_URL,
             "poll_reminder_body": poll_reminder_body,
         }
-        return mail
+        parameters = {
+            "context": context,
+            "template": "EMAIL_ENROLLMENT_POLL",
+        }
+        return parameters
 
     def send_poll_email(self):
         enrollments = self.confirmed_enrollments
         for enrollment in enrollments:
-            if enrollment.user.fake_email:
-                continue
-            mail = self.get_poll_email(enrollment.user)
-            mail.send_to_user(enrollment.user)
+            parameters = self.get_poll_email(enrollment.user)
+            send_to_user(
+                user_obj=enrollment.user,
+                **parameters,
+            )
         self.poll_sent = datetime.now()
         self.save()
 
     def get_reminder_to_responsible_email(self):
-        mail = MyMailTemplate("EMAIL_ACTIVITY_RESPONSIBLE_REMINDER")
-        mail.subject_strings = {
-            "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
-            "activity_name": self.name,
-        }
         absolute_url_admin_activity = settings.ABSOLUTE_URL + reverse(
             "admin:cc_courses_activity_change",
             kwargs={"object_id": self.id},
         )
-        mail.body_strings = {
+        context = {
+            "number_days": settings.REMIND_SESSION_ORGANIZER_DAYS_BEFORE,
+            "activity_name": self.name,
             "absolute_url_admin_activity": absolute_url_admin_activity,
         }
-        return mail
+        parameters = {
+            "context": context,
+            "template": "EMAIL_ACTIVITY_RESPONSIBLE_REMINDER",
+        }
+        return parameters
 
     def send_reminder_to_responsible(self):
-        mail = self.get_reminder_to_responsible_email()
-        mail.send_to_user(self.responsible)
+        parameters = self.get_reminder_to_responsible_email()
+        send_to_user(
+            user_obj=self.responsible,
+            **parameters,
+        )
         self.organizer_reminded = datetime.now()
         self.save()
 
@@ -849,9 +856,7 @@ class ActivityEnrolled(models.Model):
             raise e
 
     def send_confirmation_email(self):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_CONFIRMATION")
-        mail.subject_strings = {"activitat_nom": self.activity.name}
-        mail.body_strings = {
+        context = {
             "activitat_nom": self.activity.name,
             "ateneu_nom": config.PROJECT_FULL_NAME,
             "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
@@ -860,12 +865,14 @@ class ActivityEnrolled(models.Model):
             "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             "url_web_ateneu": config.PROJECT_WEBSITE_URL,
         }
-        mail.send_to_user(self.user)
+        send_to_user(
+            user_obj=self.user,
+            context=context,
+            template="EMAIL_ENROLLMENT_CONFIRMATION",
+        )
 
     def send_waiting_list_email(self):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_WAITING_LIST")
-        mail.subject_strings = {"activitat_nom": self.activity.name}
-        mail.body_strings = {
+        context = {
             "activitat_nom": self.activity.name,
             "ateneu_nom": config.PROJECT_FULL_NAME,
             "activitat_data_inici": self.activity.date_start.strftime("%d-%m-%Y"),
@@ -874,14 +881,16 @@ class ActivityEnrolled(models.Model):
             "url_els_meus_cursos": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             "url_ateneu": settings.ABSOLUTE_URL,
         }
-        mail.send_to_user(self.user)
+        send_to_user(
+            user_obj=self.user,
+            context=context,
+            template="EMAIL_ENROLLMENT_WAITING_LIST",
+        )
 
     @staticmethod
     def get_reminder_email(user, activity):
-        mail = MyMailTemplate("EMAIL_ENROLLMENT_REMINDER")
-        mail.subject_strings = {"activitat_nom": activity.name}
         absolute_url_activity = settings.ABSOLUTE_URL + reverse("my_activities")
-        mail.body_strings = {
+        context = {
             "activitat_nom": activity.name,
             "ateneu_nom": config.PROJECT_FULL_NAME,
             "persona_nom": user.first_name,
@@ -893,11 +902,19 @@ class ActivityEnrolled(models.Model):
             "absolute_url_my_activities": f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             "url_web_ateneu": config.PROJECT_WEBSITE_URL,
         }
-        return mail
+        parameters = {
+            "context": context,
+            "template": "EMAIL_ENROLLMENT_REMINDER",
+        }
+        return parameters
+
 
     def send_reminder_email(self):
-        mail = self.get_reminder_email(self.user, self.activity)
-        mail.send_to_user(self.user)
+        parameters = self.get_reminder_email(self.user, self.activity)
+        send_to_user(
+            user_obj=self.user,
+            **parameters,
+        )
         self.reminder_sent = datetime.now()
         self.save()
 
