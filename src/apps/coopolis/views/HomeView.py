@@ -25,6 +25,6 @@ class HomeView(LoginSignupContainerView):
         )
         context["open_projects"] = Project.objects.filter(
             partners=self.request.user,
-            stages__stage_state=ProjectStageStatesChoices.OPEN,
+            # stages__stage_state=ProjectStageStatesChoices.OPEN,
         )
         return context

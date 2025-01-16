@@ -68,7 +68,9 @@ urlpatterns += [
     ),
     path("summernote/", include("django_summernote.urls")),
     path(
-        "project/edit/", login_required(ProjectFormView.as_view()), name="edit_project"
+        "project/edit/<int:pk>", 
+        login_required(ProjectFormView.as_view()),
+        name="edit_project"
     ),
     path(
         "project/edit/add-partner/", login_required(project_partner_manage), name="add-partner"
@@ -80,7 +82,7 @@ urlpatterns += [
         "project/edit/delete-invitation/", login_required(project_partner_manage), name="delete_invitation"
     ),
     path(
-        "project/invitation/<uuid>/", login_required(invitation_partner), name="invitation_project"
+        "project/invitation/<uuid:uuid>/", login_required(invitation_partner), name="invitation_project"
     ),
     path(
         "project/new/",
