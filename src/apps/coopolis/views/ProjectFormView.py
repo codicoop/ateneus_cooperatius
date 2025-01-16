@@ -1,5 +1,6 @@
 from constance import config
 
+from apps.coopolis.helpers import absolute_url
 from apps.coopolis.models.invitation import Invitation
 from conf import settings
 from django import urls
@@ -123,7 +124,12 @@ def project_partner_manage(request):
                 "persona_email": user.email,
                 "project": project.name,
                 "absolute_url": settings.ABSOLUTE_URL,
-                "invitation_url": f"{settings.ABSOLUTE_URL}/project/invitation/{str(invitation.uuid)}",
+                "invitation_url": absolute_url(
+                    urls.reverse(
+                        "invitation_project",
+                        kwargs={"uuid": invitation.uuid},
+                    ),
+                ),
             }
             send(
                 recipients=user.email,
