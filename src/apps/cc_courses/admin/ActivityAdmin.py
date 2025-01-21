@@ -32,7 +32,6 @@ from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation, \
     ReservationEquipment
-from apps.coopolis.filters import SubserviceFilter
 from conf.post_office import send
 
 
@@ -184,20 +183,19 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
 
     form = ActivityForm
     list_display = (
-        'date_start', 'spots', 'remaining_spots', 'name', 'service',
+        'date_start', 'spots', 'remaining_spots', 'name',
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field',
         'teacher', 'subsidy_period_field',
     )
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
         'activity_poll_field', 'organizer_reminded', 'subsidy_period_field',
-        "axis", "subaxis",
+        "axis", "subaxis", "service", "sub_service",
     )
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives', 'teacher', )
     list_filter = (
         FilterBySubsidyPeriod, FilterByJustificationFiles,
-        "service", SubserviceFilter,
         ("place__town", admin.RelatedOnlyFieldListFilter),
         'course', 'date_start', 'room', 'circle', 'entity',
         'place', 'for_minors', 'cofunded',
@@ -251,9 +249,9 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'classes': ('placeholder enrollments-group',),
             'fields': (),
         }),
-        ("Camps convocatòries < 2020", {
+        ("Camps obsolets de justificació de convocatòria", {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ["axis", "subaxis", ]
+            'fields': ["axis", "subaxis", "service", "sub_service"]
         }),
     ]
     # define the raw_id_fields

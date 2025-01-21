@@ -420,13 +420,13 @@ class ProjectStage(models.Model):
         "data creació acompanyament", null=False, blank=False, auto_now_add=True
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "(OBSOLET) Servei",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "(OBSOLET) Sub-servei",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,

@@ -258,13 +258,13 @@ class Activity(models.Model):  # --> SESSIONS
         default=False,
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "(OBSOLET) Servei",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "(OBSOLET) Sub-servei",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
