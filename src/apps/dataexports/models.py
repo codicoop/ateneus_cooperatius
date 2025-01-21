@@ -84,3 +84,68 @@ class DataExports(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Service(models.Model):
+    class Meta:
+        verbose_name = "servei"
+        verbose_name_plural = "serveis"
+        ordering = ["name"]
+
+    name = models.CharField(
+        "nom",
+        max_length=250,
+        blank=False,
+    )
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod,
+        verbose_name="convocatòria",
+        null=False,
+        on_delete=models.CASCADE,
+    )
+
+class SubService(models.Model):
+    """
+    Correspon a Eix.
+    Ho anomenem SubServei degut a que continuament van canviant la
+    nomenclatura de les categoritzacions.
+    """
+    class Meta:
+        verbose_name = "eix"
+        verbose_name_plural = "eixos"
+        ordering = ["name"]
+
+    name = models.CharField(
+        "nom",
+        max_length=250,
+        blank=False,
+    )
+    service = models.ForeignKey(
+        Service,
+        verbose_name="servei",
+        null=False,
+        on_delete=models.CASCADE,
+    )
+
+class SubSubService(models.Model):
+    """
+    Correspon a Actuació.
+    Ho anomenem SubSubService degut a que continuament van canviant la
+    nomenclatura de les categoritzacions.
+    """
+    class Meta:
+        verbose_name = "actuació"
+        verbose_name_plural = "actuacions"
+        ordering = ["name"]
+
+    name = models.CharField(
+        "nom",
+        max_length=250,
+        blank=False,
+    )
+    subservice = models.ForeignKey(
+        SubService,
+        verbose_name="eix",
+        null=False,
+        on_delete=models.CASCADE,
+    )
