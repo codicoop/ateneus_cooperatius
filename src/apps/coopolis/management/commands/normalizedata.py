@@ -146,7 +146,6 @@ class Command(BaseCommand):
             SubsidyPeriod.objects.get(name="2021-2022"),
             SubsidyPeriod.objects.get(name="2022-2023"),
             SubsidyPeriod.objects.get(name="2023-2024"),
-            SubsidyPeriod.objects.get(name="2024-2025"),
         ]
         for period in periods:
             exports.extend(
@@ -186,6 +185,53 @@ class Command(BaseCommand):
         for export in exports:
             print(f"Updating or creating {export['function_name']}")
             DataExports.objects.create(**export)
+
+        # For the 2024-25 season we create the models Service, SubService and
+        # SubSubService to replace the 'service' and 'subservice' dropdowns.
+        # The Exportació justificació is now different, and the other exports
+        # will need to be adapted too.
+        periods = [
+            SubsidyPeriod.objects.get(name="2024-2025"),
+        ]
+        for period in periods:
+            exports.extend(
+                [
+                    {
+                        'name': "Cofinançades",
+                        'subsidy_period': period,
+                        'function_name': 'export_cofunded_service',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Memòria dels acompanyaments en fitxer de text",
+                        'subsidy_period': period,
+                        'function_name': 'export_stages_descriptions',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Exportació justificació",
+                        'subsidy_period': period,
+                        'function_name': 'export_justification',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Detall dels acompanyaments",
+                        'subsidy_period': period,
+                        'function_name': 'export_stages_details_services',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Resultats enquestes de satisfacció",
+                        'subsidy_period': period,
+                        'function_name': 'export_polls_by_services',
+                        'ignore_errors': True
+                    },
+                ]
+            )
+        for export in exports:
+            print(f"Updating or creating {export['function_name']}")
+            DataExports.objects.create(**export)
+
         print("Done!")
 
     @staticmethod
