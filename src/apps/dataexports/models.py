@@ -104,6 +104,9 @@ class Service(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self):
+        return self.name
+
 class SubService(models.Model):
     """
     Correspon a Eix.
@@ -127,6 +130,10 @@ class SubService(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self):
+        return self.name
+
+
 class SubSubService(models.Model):
     """
     Correspon a Actuació.
@@ -149,3 +156,6 @@ class SubSubService(models.Model):
         null=False,
         on_delete=models.CASCADE,
     )
+
+    def __str__(self):
+        return self.name
