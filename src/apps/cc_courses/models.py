@@ -257,6 +257,13 @@ class Activity(models.Model):  # --> SESSIONS
         "No incloure a l'excel de justificació",
         default=False,
     )
+    subsubservice = models.ForeignKey(
+        "dataexports.SubSubService",
+        verbose_name="actuació",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     service = models.SmallIntegerField(
         "(OBSOLET) Servei",
         choices=ServicesChoices.choices,
