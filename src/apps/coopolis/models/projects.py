@@ -419,6 +419,13 @@ class ProjectStage(models.Model):
     date_start = models.DateField(
         "data creació acompanyament", null=False, blank=False, auto_now_add=True
     )
+    subsubservice = models.ForeignKey(
+        "dataexports.SubSubService",
+        verbose_name="actuació",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     service = models.SmallIntegerField(
         "(OBSOLET) Servei",
         choices=ServicesChoices.choices,
