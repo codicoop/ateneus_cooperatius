@@ -207,7 +207,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                        'date_start',
                        'date_end', 'subsidy_period_field', 'starting_time',
                        'ending_time', 'confirmed', 'equipments',
-                       'spots', 'service', 'sub_service', 'circle', 'entity',
+                       'spots', 'circle', 'entity',
                        'responsible', 'organizer_reminded', 'publish',
                        'exclude_from_justification', ]
         }),
