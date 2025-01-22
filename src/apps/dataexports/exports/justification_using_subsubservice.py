@@ -1,13 +1,46 @@
 from dataclasses import dataclass
+from enum import StrEnum
 
+from celery.utils.collections import OrderedDict
 from django.db.models import Q
+from icecream import ic
 
 from apps.cc_courses.choices import ProjectStageStatesChoices, StageTypeChoices
+from apps.coopolis.choices import CirclesChoices
 from apps.coopolis.models import ProjectStage, EmploymentInsertion
 from apps.cc_courses.models import Activity
 from apps.coopolis.models.projects import CreatedEntity
 from apps.dataexports.exports.manager import ExcelExportManager
 from apps.dataexports.exports.row_factories import BaseRow
+
+
+@dataclass
+class ActuacioRow(BaseRow):
+    service: str
+    subservice: str
+    actuacio_name: str
+    actuacio_date: str
+    actuacio_period: str
+    actuacio_entity: str
+    circle: str
+    town: str
+    participants_count: int
+    divulgation_material: str
+    value_if_empty: str = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.service or self.value_if_empty,
+            self.subservice or self.value_if_empty,
+            self.actuacio_name or self.value_if_empty,
+            self.actuacio_date or self.value_if_empty,
+            self.actuacio_period or self.value_if_empty,
+            self.actuacio_entity or self.value_if_empty,
+            self.circle or self.value_if_empty,
+            self.town or self.value_if_empty,
+            self.participants_count or self.value_if_empty,
+            self.divulgation_material or self.value_if_empty,
+        ]
 
 
 class ExportJustificationUsingSubSubService:
@@ -40,77 +73,206 @@ class ExportJustificationUsingSubSubService:
         self.acompanyaments_incubacio = self.stages_obj.filter(
             stage_type=StageTypeChoices.INCUBATION,
         )
+        self.actuacions_obj = Actuacions()
 
-        """
-        Fins aquí la idea és anar desant els querysets dels rows de totes les
-        sheets.
-        OJO: pendent d"afegir allò de que agafi les dades relacionades quan fa
-        el query inicial.
-        Segurament serà la cosa que accelerarà més el procés.
-        select_related, prefetch_related
-        
-        
-        D"aquestes dades, algunes han d"anar a Actuacions, i necessitem desar
-        el nº de row + el número de referència + la (ID item + tipus item) -per
-        poder-lo localitzar després-.
-        
-        Les que van a Actuacions son:
-        - Sessions
-        - Entitats creades (és a dir, l"acompanyament que tingui vinculat)
-        - Acompanyaments consolidació
-        - Acompanyaments incubació
-        
-        Llavors farem un bucle per cada un d"aquests 4 objs i en un altre objecte,
-        tipus ActuacionsRows, per cada un dels items hi guardem les dades
-        que deia abans:
-        - Número de row
-        - Referència
-        - ID item
-        - Group (Tipus item)
-        - row_data - Cada una de les dades d"Actuacions (AIXÒ PODRIEN SER OBJECTES ActuacioRow):
-            - Servei
-            - Subservei
-            - Nom de l"actuació
-            - Data inici d"actuació
-            - Període d"actuacions
-            - Entitat que realitza l"actuació
-            - Cercle / Ateneu
-            - Municipi
-            - Nombre de participants
-            - Material de difusió (S/N)
-        - El propi objecte???
-        
-        ActuacionsRows necessitarà tenir una cosa tipus
-        ActuacionsRows.get_session(id)
-        ActuacionsRows.get_acompanyament_consolidacio(id)
-        ActuacionsRows.get_acompanyament_incubació(id)
-        ActuacionsRows.get_acompanyament_creacio(id)
-        
-        I llavors o bé fer un bucle, o millor, que intenti buscar només per la ID,
-        i en cas que obtingui més d"un resultat, que faci un bucle pels obtinguts.
-        Així tots els que amb ActuacionsRows[12345] ja siguin el bo (la majoria
-        sinó tots) s"estalviaran qualsevol bucle.
-        O bé, que la KEY ja sigui un prefix+númeroID, tipus
-        session12345
-        consolidacio123345
-        I aquestes funcions s"ocupin de retornar.
-        MILLOR AIXÍ MÉS FÀCIL I EFICIENT.
-        
-        Llavors aniria bé tenir una funció set_csession, 
-        set_acompanyament_consolidacio, etc. que s"encarregui de desar la dada
-        amb la ID ben posada.
-        """
+        # 1. Omplim Actuacions amb Activities per adults (amb inscripcions)
+        self.fill_actuacions_with_session_obj()
 
+        # 2.1. Omplim Actuacions amb Acompanyaments de Creació
+        self.fill_actuacions_with_acompanyaments_creacio()
+
+        # 2.2. Omplim Actuacions amb Acompanyaments de Creació
+        self.fill_actuacions_with_acompanyaments_consolidacio()
+
+        # 2.3. Omplim Actuacions amb Acompanyaments d'Incubació
+        self.fill_actuacions_with_acompanyaments_incubacio()
+
+        # 3. Omplim Actuacions amb Activities per menors
+        self.fill_actuacions_with_sessions_menors()
+
+        ic(self.actuacions_obj.rows)
+
+    def fill_actuacions_with_session_obj(self):
+        for item in self.sessions_obj:
+            service = ""
+            subservice = ""
+            if item.subsubservice:
+                service = item.subsubservice.subservice.service.name
+                subservice = item.subsubservice.subservice.name
+            circle = (
+                CirclesChoices(item.circle).label
+                if item.circle is not None
+                else ""
+            )
+            town = ""
+            if item.place is not None and item.place.town:
+                town = item.place.town.name
+            divulgation_material = "No"
+            if item.photo2.name:
+                divulgation_material = "Sí"
+            row = ActuacioRow(
+                service=service,
+                subservice=subservice,
+                actuacio_name=item.name,
+                actuacio_date=item.date_start,
+                actuacio_period="",
+                actuacio_entity=str(item.entity) if item.entity else "",
+                circle=circle,
+                town=town,
+                participants_count=item.enrolled.count(),
+                divulgation_material=divulgation_material,
+            )
+            self.actuacions_obj.add_row(
+                group=Actuacions.GROUPS.ACTIVITY,
+                id=item.pk,
+                actuacio_row_obj=row,
+            )
+
+    def fill_actuacions_with_acompanyaments_creacio(self):
+        for item in self.acompanyaments_creacio:
+            if not getattr(item, "project_stage") or not item.project_stage:
+                # Si això passa són casos d'ateneus que no van fer bé la tasca
+                # d'assignar un acompanyament a tots els registres d'entitats
+                # creades.
+                continue
+            item = item.project_stage
+            service = ""
+            subservice = ""
+            if item.subsubservice:
+                service = item.subsubservice.subservice.service.name
+                subservice = item.subsubservice.subservice.name
+            circle = (
+                CirclesChoices(item.circle).label
+                if item.circle is not None
+                else ""
+            )
+            town = ""
+            if item.project.town:
+                town = item.project.town.name
+            row = ActuacioRow(
+                service=service,
+                subservice=subservice,
+                actuacio_name=item.project.name,
+                actuacio_date=item.earliest_session.date if item.earliest_session else "",
+                actuacio_period="",
+                actuacio_entity=item.entities_str,
+                circle=circle,
+                town=town,
+                participants_count=len(item.partners_involved_in_sessions),
+                divulgation_material="No",
+            )
+            self.actuacions_obj.add_row(
+                group=Actuacions.GROUPS.CREATION,
+                id=item.pk,
+                actuacio_row_obj=row,
+            )
+
+    def fill_actuacions_with_acompanyaments_consolidacio(self):
+        for item in self.acompanyaments_consolidacio:
+            service = ""
+            subservice = ""
+            if item.subsubservice:
+                service = item.subsubservice.subservice.service.name
+                subservice = item.subsubservice.subservice.name
+            circle = (
+                CirclesChoices(item.circle).label
+                if item.circle is not None
+                else ""
+            )
+            town = ""
+            if item.project.town:
+                town = item.project.town.name
+            row = ActuacioRow(
+                service=service,
+                subservice=subservice,
+                actuacio_name=item.project.name,
+                actuacio_date=item.earliest_session.date if item.earliest_session else "",
+                actuacio_period="",
+                actuacio_entity=item.entities_str,
+                circle=circle,
+                town=town,
+                participants_count=len(item.partners_involved_in_sessions),
+                divulgation_material="No",
+            )
+            self.actuacions_obj.add_row(
+                group=Actuacions.GROUPS.CONSOLIDATION,
+                id=item.pk,
+                actuacio_row_obj=row,
+            )
+
+    def fill_actuacions_with_acompanyaments_incubacio(self):
+        for item in self.acompanyaments_incubacio:
+            service = ""
+            subservice = ""
+            if item.subsubservice:
+                service = item.subsubservice.subservice.service.name
+                subservice = item.subsubservice.subservice.name
+            circle = (
+                CirclesChoices(item.circle).label
+                if item.circle is not None
+                else ""
+            )
+            town = ""
+            if item.project.town:
+                town = item.project.town.name
+            row = ActuacioRow(
+                service=service,
+                subservice=subservice,
+                actuacio_name=item.project.name,
+                actuacio_date=item.earliest_session.date if item.earliest_session else "",
+                actuacio_period="",
+                actuacio_entity=item.entities_str,
+                circle=circle,
+                town=town,
+                participants_count=len(item.partners_involved_in_sessions),
+                divulgation_material="No",
+            )
+            self.actuacions_obj.add_row(
+                group=Actuacions.GROUPS.INCUBATION,
+                id=item.pk,
+                actuacio_row_obj=row,
+            )
+
+    def fill_actuacions_with_sessions_menors(self):
+        for item in self.nouniversitaris_obj:
+                service = ""
+                subservice = ""
+                if item.subsubservice:
+                    service = item.subsubservice.subservice.service.name
+                    subservice = item.subsubservice.subservice.name
+                circle = (
+                    CirclesChoices(item.circle).label
+                    if item.circle is not None
+                    else ""
+                )
+                town = ""
+                if item.place is not None and item.place.town:
+                    town =item.place.town.name
+                divulgation_material = "No"
+                if item.photo2.name:
+                    divulgation_material = "Sí"
+                row = ActuacioRow(
+                    service=service,
+                    subservice=subservice,
+                    actuacio_name=item.name,
+                    actuacio_date=item.date_start,
+                    actuacio_period="",
+                    actuacio_entity=str(item.entity) if item.entity else "",
+                    circle=circle,
+                    town=town,
+                    participants_count=item.enrolled.count(),
+                    divulgation_material=divulgation_material,
+                )
+                self.actuacions_obj.add_row(
+                    group=Actuacions.GROUPS.ACTIVITY_MINORS,
+                    id=item.pk,
+                    actuacio_row_obj=row,
+                )
 
     def export(self):
         """ Each function here called handles the creation of one of the
         worksheets."""
-        self.export_actuacions()
-        self.export_participants()
-        self.export_nouniversitaris()
-        self.export_insercionslaborals()
-        self.export_founded_projects()
-        self.export_stages()
+        # self.export_actuacions()
 
         return self.export_manager.return_document("justificacio")
 
@@ -164,140 +326,74 @@ class ExportJustificationUsingSubSubService:
         )
 
 
-class Sessions:
-    """
-    Idea:
-    Tenir Sessions i ProjectStages, que seran classes que contindran un
-    diccionari o llista amb tots els items corresponents, però processats,
-    de manera que cada item contingui:
-    - El número de row absolut a la sheet Actuacions
-    - El número de referència
-    - Tots els camps que necessitem tant per la sheet Actuacions com per les
-      altres sheets a on aparegui.
-    - Un índex o key o manera de localitzar un item concret.
-    - Una manera d"obtenir-los tots ordenats pel número de row.
-
-    Fet això, omplir Actuacions i Projectes acompanyats és fàcil, tot i que
-    ajudaria tenir una altra classe a on li posem una llista de tots els
-    items de la sheet, és a dir els rows?
-    Ho dic pq Actuacions mostra rows amb items de tots dos objectes.
-    Però potser no cal i a la funció on els renderitzem, els posem uns
-    darrera dels altres.
-
-    Però què passa amb Insercions Laborals, Participants, Entitats Creades...?
-
-    Participants: actualment fem un bucle que passi per tots els obj de les
-    activitats, i per cada una fer un for per activity.confirmed_enrollments,
-    i de cada enrollment, en fem una row.
-    Ens serviria de la mateixa manera, mentre incloguem els confirmed_enrollments
-    a cada item de Session.items.
-    Al fer aquest foreach, pot omplir una llista d"objectes ParticipantRow.
-
-    Després fem:
-        for row in rows:
-            self.export_manager.fill_row_from_factory(row)
-
-    Insercions laborals, Entitats creades, Per menors: seria el mateix que lo
-    anterior.
-    És a dir enfocat així, cada sheet farà un bucle per les dades que realment
-    toquen allà, i disposarà de Session i de ProjectStages per consultar-hi
-    el registre que necessitin a cada moment, i així tenir el número de referència
-    i les dades que puguin necessitar d"allà.
-
-    """
-    pass
-
-
-@dataclass
-class ActuacioRow(BaseRow):
-    service: str
-    subservice: str
-    actuacio_name: str
-    actuacio_date: str
-    actuacio_period: str
-    actuacio_entity: str
-    circle: str
-    town: str
-    participants_count: int
-    divulgation_material: str
-    value_if_empty: str = "-"
-
-    def get_columns(self) -> list:
-        return [
-            self.service or self.value_if_empty,
-            self.subservice or self.value_if_empty,
-            self.actuacio_name or self.value_if_empty,
-            self.actuacio_date or self.value_if_empty,
-            self.actuacio_period or self.value_if_empty,
-            self.actuacio_entity or self.value_if_empty,
-            self.circle or self.value_if_empty,
-            self.town or self.value_if_empty,
-            self.participants_count or self.value_if_empty,
-            self.divulgation_material or self.value_if_empty,
-        ]
-
 @dataclass
 class Actuacio:
-    row_number: str
+    row_number: int
     reference: str
     id: str
     group: str
     row_data: str
 
+class Groups(StrEnum):
+    ACTIVITY = "activity"
+    ACTIVITY_MINORS = "activity_minors"
+    CONSOLIDATION = "consolidation"
+    INCUBATION = "incubation"
+    CREATION = "creation"
 
 class Actuacions:
-    last_row = 0
-    rows = {}
-    GROUPS = [
-        "session",
-        "consolidacio",
-        "incubacio",
-        "creacio",
-    ]
+    GROUPS = Groups
 
-    def validate_group(self, group):
-        if not group in self.GROUPS:
-            raise ValueError(
-                f"Group {group} should be one of: {', '.join(self.GROUPS)}"
-            )
+    def __init__(self):
+        # OrderedDict will remember the order that the items were added
+        self.rows = OrderedDict()
+        self.last_row = 0
 
     def get_row(self, group, id):
-        self.validate_group(group)
+        pass
 
     def add_row(self, group, id, actuacio_row_obj):
         """
         :param group: one of self.GROUPS
         :param id: The row's item database ID
         :param actuacio_row_obj: An ActuacioRow instance
-        :return: Nothing
+        :return: The newly created and added Actuacio object
         """
-        self.validate_group(group)
-        """
-        La funció haurà de fer:
-        - Validar el grup
-        - Comprovar que l'id no existeixi ja
-        - Afegir la nova fila a la llista de rows
-        - Generar nou número de row amb self.last_row += 1
-        - Generar la referència (falta copiar la funció per generar referències).
-          Ojo faran falta les dades de actuacio_row_obj.
-        - Omplir un nou objecte Actuacio amb les dades, incloent actuacio_row_obj
-        - Afegir-lo a self.rows[(group, id)]
-        
-        Dades:
-        - Número de row
-        - Referència
-        - ID item
-        - Group (Tipus item)
-        - row_data - Cada una de les dades d"Actuacions (AIXÒ PODRIEN SER OBJECTES ActuacioRow):
-            - Servei
-            - Subservei
-            - Nom de l"actuació
-            - Data inici d"actuació
-            - Període d"actuacions
-            - Entitat que realitza l"actuació
-            - Cercle / Ateneu
-            - Municipi
-            - Nombre de participants
-            - Material de difusió (S/N)
-        - El propi objecte??? millor no, per no acoplar tant
-        """
+        if (group, id) in self.rows:
+            raise ValueError(f"Row with ID {id} already exists in group "
+                             f"{group.value}")
+        self.last_row += 1
+        reference = self.get_formatted_reference(
+            row_number=self.last_row,
+            subservice=actuacio_row_obj.subservice,
+            actuacio_entity=actuacio_row_obj.actuacio_entity,
+            circle=actuacio_row_obj.circle,
+            actuacio_period=actuacio_row_obj.actuacio_period,
+        )
+        actuacio_obj = Actuacio(
+            row_number=self.last_row,
+            reference=reference,
+            id=id,
+            group=group,
+            row_data=actuacio_row_obj,
+        )
+        self.rows[(group, id)] = actuacio_obj
+
+    @staticmethod
+    def get_formatted_reference(
+        row_number,
+        subservice,
+        actuacio_entity,
+        circle,
+        actuacio_period,
+    ):
+        if (
+            not subservice 
+            or not actuacio_entity
+            or not circle 
+            or not actuacio_period 
+        ):
+            return ""
+        return (
+            f"{row_number} - {subservice} {actuacio_period} {actuacio_entity} - {circle}"
+        )
