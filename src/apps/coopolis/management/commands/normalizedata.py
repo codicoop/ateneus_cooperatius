@@ -182,9 +182,6 @@ class Command(BaseCommand):
                     },
                 ]
             )
-        for export in exports:
-            print(f"Updating or creating {export['function_name']}")
-            DataExports.objects.create(**export)
 
         # For the 2024-25 season we create the models Service, SubService and
         # SubSubService to replace the 'service' and 'subservice' dropdowns.
@@ -228,8 +225,9 @@ class Command(BaseCommand):
                     },
                 ]
             )
+
         for export in exports:
-            print(f"Updating or creating {export['function_name']}")
+            print(f"Creating {export['subsidy_period']} - {export['function_name']}")
             DataExports.objects.create(**export)
 
         print("Done!")
