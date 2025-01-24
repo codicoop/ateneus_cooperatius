@@ -70,9 +70,6 @@ class ExportJustificationUsingSubSubService:
         self.acompanyaments_consolidacio = self.stages_obj.filter(
             stage_type=StageTypeChoices.CONSOLIDATION,
         )
-        self.acompanyaments_incubacio = self.stages_obj.filter(
-            stage_type=StageTypeChoices.INCUBATION,
-        )
         self.actuacions_obj = Actuacions()
 
         # 1. Omplim Actuacions amb Activities per adults (amb inscripcions)
@@ -83,9 +80,6 @@ class ExportJustificationUsingSubSubService:
 
         # 2.2. Omplim Actuacions amb Acompanyaments de Creació
         self.fill_actuacions_with_acompanyaments_consolidacio()
-
-        # 2.3. Omplim Actuacions amb Acompanyaments d'Incubació
-        self.fill_actuacions_with_acompanyaments_incubacio()
 
         # 3. Omplim Actuacions amb Activities per menors
         self.fill_actuacions_with_sessions_menors()
@@ -200,39 +194,6 @@ class ExportJustificationUsingSubSubService:
                 actuacio_row_obj=row,
             )
 
-    def fill_actuacions_with_acompanyaments_incubacio(self):
-        for item in self.acompanyaments_incubacio:
-            service = ""
-            subservice = ""
-            if item.subsubservice:
-                service = item.subsubservice.subservice.service.name
-                subservice = item.subsubservice.subservice.name
-            circle = (
-                CirclesChoices(item.circle).label
-                if item.circle is not None
-                else ""
-            )
-            town = ""
-            if item.project.town:
-                town = item.project.town.name
-            row = ActuacioRow(
-                service=service,
-                subservice=subservice,
-                actuacio_name=item.project.name,
-                actuacio_date=item.earliest_session.date if item.earliest_session else "",
-                actuacio_period="",
-                actuacio_entity=item.entities_str,
-                circle=circle,
-                town=town,
-                participants_count=len(item.partners_involved_in_sessions),
-                divulgation_material="No",
-            )
-            self.actuacions_obj.add_row(
-                group=Actuacions.GROUPS.INCUBATION,
-                id=item.pk,
-                actuacio_row_obj=row,
-            )
-
     def fill_actuacions_with_sessions_menors(self):
         for item in self.nouniversitaris_obj:
                 service = ""
@@ -338,7 +299,6 @@ class Groups(StrEnum):
     ACTIVITY = "activity"
     ACTIVITY_MINORS = "activity_minors"
     CONSOLIDATION = "consolidation"
-    INCUBATION = "incubation"
     CREATION = "creation"
 
 class Actuacions:
