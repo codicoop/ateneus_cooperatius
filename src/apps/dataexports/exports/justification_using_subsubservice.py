@@ -84,7 +84,45 @@ class ExportJustificationUsingSubSubService:
         # 3. Omplim Actuacions amb Activities per menors
         self.fill_actuacions_with_sessions_menors()
 
-        ic(self.actuacions_obj.rows)
+    def export(self):
+        """ Each function here called handles the creation of one of the
+        worksheets."""
+        self.sheet_actuacions()
+
+        return self.export_manager.return_document("justificacio")
+
+    def sheet_actuacions(self):
+        # The first sheet is already created, just need to adjust name.
+        self.export_manager.worksheet.title = "Actuacions"
+        self.export_manager.row_number = 1
+
+        columns = [
+            ("Servei", 40),
+            ("Subservei", 70),
+            ("Nom de l'actuació", 70),
+            ("Data inici d'actuació", 16),
+            ("Període d'actuacions", 16),
+            ("Entitat que realitza l'actuació", 16),
+            ("Cercle / Ateneu", 16),
+            ("Municipi", 30),
+            ("Nombre de participants", 20),
+            ("Material de difusió (S/N)", 21),
+            ("[Document acreditatiu]", 21),
+            ("[Incidències]", 20),
+            ("[Lloc]", 20),
+            ("[Acció]", 20),
+            ("[Cofinançat]", 20),
+            ("[Cofinançat amb AACC]", 20),
+            ("[Ateneu/Cercle]", 20),
+            ("[Línia estratègica]", 20),
+            ("[Link]", 20),
+        ]
+        self.export_manager.create_columns(columns)
+        self.rows_actuacions()
+
+    def rows_actuacions(self):
+        for row in self.actuacions_obj.rows.values():
+            self.export_manager.fill_row_from_factory(row.row_data)
 
     def fill_actuacions_with_session_obj(self):
         for item in self.sessions_obj:
@@ -229,13 +267,6 @@ class ExportJustificationUsingSubSubService:
                     id=item.pk,
                     actuacio_row_obj=row,
                 )
-
-    def export(self):
-        """ Each function here called handles the creation of one of the
-        worksheets."""
-        # self.export_actuacions()
-
-        return self.export_manager.return_document("justificacio")
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
