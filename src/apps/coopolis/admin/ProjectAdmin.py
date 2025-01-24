@@ -221,12 +221,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "sub_service",
     )
     subsidy_period_filter_param = "subsidy_period"
-    raw_id_fields = (
-        "subsubservice",
-    )
-    autocomplete_lookup_fields = {
-        'fk': ["subsubservice", ],
-    }
+
 
     class Media:
         js = (
@@ -356,10 +351,9 @@ class ProjectStagesInline(admin.StackedInline):
                     "project",
                     "stage_state",
                     "stage_type",
+                    "subsubservice",
                     "subsidy_period",
                     "exclude_from_justification",
-                    "service",
-                    "sub_service",
                     "circle",
                     "stage_responsible",
                     "scanned_certificate",
@@ -389,6 +383,13 @@ class ProjectStagesInline(admin.StackedInline):
         "earliest_session_field",
         "justification_documents_total",
     )
+    raw_id_fields = (
+        "subsubservice",
+    )
+    autocomplete_lookup_fields = {
+        'fk': ["subsubservice", ],
+    }
+
 
     def stage_sessions_field(self, obj):
         count = obj.sessions_count()
