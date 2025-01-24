@@ -176,7 +176,7 @@ class ActivityFileInlineAdmin(admin.TabularInline):
 
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
-        js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
+        js = ('js/grappellihacks.js', )
         css = {
             'all': ('styles/grappellihacks.css',)
         }

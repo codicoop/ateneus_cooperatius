@@ -226,7 +226,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     class Media:
         js = (
             "js/grappellihacks.js",
-            "js/chained_dropdown.js",
         )
         css = {"all": ("styles/grappellihacks.css",)}
 
