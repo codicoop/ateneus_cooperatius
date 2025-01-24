@@ -161,6 +161,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                     "project",
                     "stage_state",
                     "stage_type",
+                    "subsubservice",
                     "subsidy_period",
                     "exclude_from_justification",
                     "circle",
@@ -220,6 +221,12 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "sub_service",
     )
     subsidy_period_filter_param = "subsidy_period"
+    raw_id_fields = (
+        "subsubservice",
+    )
+    autocomplete_lookup_fields = {
+        'fk': ["subsubservice", ],
+    }
 
     class Media:
         js = (
