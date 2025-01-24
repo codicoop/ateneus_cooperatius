@@ -102,6 +102,7 @@ class Service(models.Model):
         verbose_name="convocatòria",
         null=False,
         on_delete=models.CASCADE,
+        related_name="services",
     )
 
     def __str__(self):
@@ -128,6 +129,7 @@ class SubService(models.Model):
         verbose_name="servei",
         null=False,
         on_delete=models.CASCADE,
+        related_name="subservices",
     )
 
     def __str__(self):
@@ -155,7 +157,17 @@ class SubSubService(models.Model):
         verbose_name="eix",
         null=False,
         on_delete=models.CASCADE,
+        related_name="subsubservices",
     )
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def autocomplete_search_fields():
+        filter_by = (
+            "name__icontains",
+            "subservice__name__icontains",
+            "subservice__service__name__icontains",
+        )
+        return filter_by

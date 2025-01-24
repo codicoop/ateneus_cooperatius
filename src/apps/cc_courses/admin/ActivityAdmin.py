@@ -207,7 +207,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                        'date_start',
                        'date_end', 'subsidy_period_field', 'starting_time',
                        'ending_time', 'confirmed', 'equipments',
-                       'spots', 'circle', 'entity',
+                       'spots', 'subsubservice', 'circle', 'entity',
                        'responsible', 'organizer_reminded', 'publish',
                        'exclude_from_justification', ]
         }),
@@ -255,11 +255,16 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         }),
     ]
     # define the raw_id_fields
-    raw_id_fields = ('enrolled', 'course', 'equipments', )
+    raw_id_fields = (
+        "enrolled",
+        "course",
+        "equipments",
+        "subsubservice",
+    )
     # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
-        'm2m': ['enrolled', 'equipments', ],
-        'fk': ['course'],
+        'm2m': ["enrolled", "equipments", ],
+        'fk': ["course", "subsubservice", ],
     }
     date_hierarchy = 'date_start'
     """
