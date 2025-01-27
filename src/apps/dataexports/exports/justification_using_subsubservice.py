@@ -316,7 +316,7 @@ class ExportJustificationUsingSubSubService:
 
         self.fill_participants_from_sessions()
         self.fill_participants_from_acompanyaments_creacio()
-        # self.fill_participants_from_acompanyaments_consolidacio()
+        self.fill_participants_from_acompanyaments_consolidacio()
 
     def fill_participants_from_sessions(self):
         for activity in self.sessions_obj:
@@ -351,21 +351,41 @@ class ExportJustificationUsingSubSubService:
             actuacio_obj = self.actuacions_obj.rows[
                 (self.actuacions_obj.GROUPS.CREATION.value, project_stage.id)
             ]
-            for session in project_stage.stage_sessions.all():
-                for participant in session.involved_partners.all():
-                    town = ""
-                    if participant.town:
-                        town = participant.town.name
-                    row = ParticipantRow(
-                        actuacio_reference=actuacio_obj.reference,
-                        user_surname=participant.surname,
-                        user_name=participant.first_name,
-                        user_id_number=participant.id_number,
-                        user_gender=participant.get_gender_display() or "",
-                        user_birthdate=participant.birthdate or "",
-                        user_town=town,
-                    )
-                    self.export_manager.fill_row_from_factory(row)
+            for participant in project_stage.partners_involved_in_sessions:
+                town = ""
+                if participant.town:
+                    town = participant.town.name
+                row = ParticipantRow(
+                    actuacio_reference=actuacio_obj.reference,
+                    user_surname=participant.surname,
+                    user_name=participant.first_name,
+                    user_id_number=participant.id_number,
+                    user_gender=participant.get_gender_display() or "",
+                    user_birthdate=participant.birthdate or "",
+                    user_town=town,
+                )
+                self.export_manager.fill_row_from_factory(row)
+
+
+    def fill_participants_from_acompanyaments_consolidacio(self):
+        for project_stage in self.acompanyaments_consolidacio:
+            actuacio_obj = self.actuacions_obj.rows[
+                (self.actuacions_obj.GROUPS.CONSOLIDATION.value, project_stage.id)
+            ]
+            for participant in project_stage.partners_involved_in_sessions:
+                town = ""
+                if participant.town:
+                    town = participant.town.name
+                row = ParticipantRow(
+                    actuacio_reference=actuacio_obj.reference,
+                    user_surname=participant.surname,
+                    user_name=participant.first_name,
+                    user_id_number=participant.id_number,
+                    user_gender=participant.get_gender_display() or "",
+                    user_birthdate=participant.birthdate or "",
+                    user_town=town,
+                )
+                self.export_manager.fill_row_from_factory(row)
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
