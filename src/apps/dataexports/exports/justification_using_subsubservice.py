@@ -43,6 +43,30 @@ class ActuacioRow(BaseRow):
         ]
 
 
+@dataclass
+class ParticipantRow(BaseRow):
+    actuacio_reference: str
+    user_surname: str
+    user_name: str
+    user_id_number: str
+    user_gender: str
+    user_birthdate: str
+    user_town: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.user_surname or self.value_if_empty,
+            self.user_name or self.value_if_empty,
+            self.user_id_number or self.value_if_empty,
+            self.user_gender or self.value_if_empty,
+            self.user_birthdate or self.value_if_empty,
+            self.user_town or self.value_if_empty,
+        ]
+
+
 class ExportJustificationUsingSubSubService:
     """
     Aquesta classe NO fa servir cap funcionalitat relacionada amb els
@@ -88,6 +112,7 @@ class ExportJustificationUsingSubSubService:
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.sheet_actuacions()
+        self.sheet_participants()
 
         return self.export_manager.return_document("justificacio")
 
@@ -155,18 +180,13 @@ class ExportJustificationUsingSubSubService:
                 divulgation_material=divulgation_material,
             )
             self.actuacions_obj.add_row(
-                group=Actuacions.GROUPS.ACTIVITY,
+                group=Actuacions.GROUPS.ACTIVITY.value,
                 id=item.pk,
                 actuacio_row_obj=row,
             )
 
     def fill_actuacions_with_acompanyaments_creacio(self):
         for item in self.acompanyaments_creacio:
-            if not getattr(item, "project_stage") or not item.project_stage:
-                # Si això passa són casos d'ateneus que no van fer bé la tasca
-                # d'assignar un acompanyament a tots els registres d'entitats
-                # creades.
-                continue
             item = item.project_stage
             service = ""
             subservice = ""
@@ -194,7 +214,7 @@ class ExportJustificationUsingSubSubService:
                 divulgation_material="No",
             )
             self.actuacions_obj.add_row(
-                group=Actuacions.GROUPS.CREATION,
+                group=Actuacions.GROUPS.CREATION.value,
                 id=item.pk,
                 actuacio_row_obj=row,
             )
@@ -227,7 +247,7 @@ class ExportJustificationUsingSubSubService:
                 divulgation_material="No",
             )
             self.actuacions_obj.add_row(
-                group=Actuacions.GROUPS.CONSOLIDATION,
+                group=Actuacions.GROUPS.CONSOLIDATION.value,
                 id=item.pk,
                 actuacio_row_obj=row,
             )
@@ -263,10 +283,89 @@ class ExportJustificationUsingSubSubService:
                     divulgation_material=divulgation_material,
                 )
                 self.actuacions_obj.add_row(
-                    group=Actuacions.GROUPS.ACTIVITY_MINORS,
+                    group=Actuacions.GROUPS.ACTIVITY_MINORS.value,
                     id=item.pk,
                     actuacio_row_obj=row,
                 )
+
+    def sheet_participants(self):
+        self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+            "Participants",
+        )
+        self.export_manager.row_number = 1
+
+        columns = [
+            ("Referència", 40),
+            ("Nom actuació", 40),
+            ("Cognoms", 20),
+            ("Nom", 10),
+            ("Doc. identificatiu", 12),
+            ("Gènere", 10),
+            ("Data naixement", 10),
+            ("Municipi del participant", 20),
+            ("[Situació laboral]", 20),
+            ("[Procedència]", 20),
+            ("[Nivell d'estudis]", 20),
+            ("[Com ens has conegut]", 20),
+            ("[Email]", 30),
+            ("[Telèfon]", 30),
+            ("[Projecte]", 30),
+            ("[Acompanyaments]", 30),
+        ]
+        self.export_manager.create_columns(columns)
+
+        self.fill_participants_from_sessions()
+        self.fill_participants_from_acompanyaments_creacio()
+        # self.fill_participants_from_acompanyaments_consolidacio()
+
+    def fill_participants_from_sessions(self):
+        for activity in self.sessions_obj:
+            for enrollment in activity.enrollments.all():
+                # Originally we queried activity.confirmed_enrollments, but to
+                # optimize performance, we loop all activity.enrollments and
+                # ignore the ones in waiting list.
+                # That way we're not making a new DB query for each activity.
+                if enrollment.waiting_list:
+                    continue
+                participant = enrollment.user
+                actuacio_obj = self.actuacions_obj.rows[
+                    (self.actuacions_obj.GROUPS.ACTIVITY.value, activity.id)
+                ]
+                town = ""
+                if participant.town:
+                    town = participant.town.name
+                row = ParticipantRow(
+                    actuacio_reference=actuacio_obj.reference,
+                    user_surname=participant.surname,
+                    user_name=participant.first_name,
+                    user_id_number=participant.id_number,
+                    user_gender=participant.get_gender_display() or "",
+                    user_birthdate=participant.birthdate or "",
+                    user_town=town,
+                )
+                self.export_manager.fill_row_from_factory(row)
+
+    def fill_participants_from_acompanyaments_creacio(self):
+        for created_entity_obj in self.acompanyaments_creacio:
+            project_stage = created_entity_obj.project_stage
+            actuacio_obj = self.actuacions_obj.rows[
+                (self.actuacions_obj.GROUPS.CREATION.value, project_stage.id)
+            ]
+            for session in project_stage.stage_sessions.all():
+                for participant in session.involved_partners.all():
+                    town = ""
+                    if participant.town:
+                        town = participant.town.name
+                    row = ParticipantRow(
+                        actuacio_reference=actuacio_obj.reference,
+                        user_surname=participant.surname,
+                        user_name=participant.first_name,
+                        user_id_number=participant.id_number,
+                        user_gender=participant.get_gender_display() or "",
+                        user_birthdate=participant.birthdate or "",
+                        user_town=town,
+                    )
+                    self.export_manager.fill_row_from_factory(row)
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
@@ -315,6 +414,11 @@ class ExportJustificationUsingSubSubService:
                     )
                 )
             )
+        ).exclude(
+            # Pels casos d'ateneus que no van fer bé la tasca
+            # d'assignar un acompanyament a tots els registres d'entitats
+            # creades.
+            project_stage__isnull=True,
         )
 
 
