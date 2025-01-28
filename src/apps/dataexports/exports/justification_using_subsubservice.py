@@ -67,6 +67,24 @@ class ParticipantRow(BaseRow):
         ]
 
 
+@dataclass
+class SessionMinorRow(BaseRow):
+    actuacio_reference: str
+    grade: str
+    school_name: str
+    participants_number: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.grade or self.value_if_empty,
+            self.school_name or self.value_if_empty,
+            self.participants_number or self.value_if_empty,
+        ]
+
+
 class ExportJustificationUsingSubSubService:
     """
     Aquesta classe NO fa servir cap funcionalitat relacionada amb els
@@ -82,7 +100,7 @@ class ExportJustificationUsingSubSubService:
             export_obj.subsidy_period.range
         )
         self.sessions_obj = self.get_sessions_obj()
-        self.nouniversitaris_obj = self.get_sessions_obj(for_minors=True)
+        self.menors_obj = self.get_sessions_obj(for_minors=True)
         self.insercionslaborals_obj = EmploymentInsertion.objects.filter(
             subsidy_period__date_start__range=self.export_manager.subsidy_period_range,
         )
@@ -113,6 +131,7 @@ class ExportJustificationUsingSubSubService:
         worksheets."""
         self.sheet_actuacions()
         self.sheet_participants()
+        self.sheet_menors()
 
         return self.export_manager.return_document("justificacio")
 
@@ -253,7 +272,7 @@ class ExportJustificationUsingSubSubService:
             )
 
     def fill_actuacions_with_sessions_menors(self):
-        for item in self.nouniversitaris_obj:
+        for item in self.menors_obj:
                 service = ""
                 subservice = ""
                 if item.subsubservice:
@@ -386,6 +405,36 @@ class ExportJustificationUsingSubSubService:
                     user_town=town,
                 )
                 self.export_manager.fill_row_from_factory(row)
+
+    def sheet_menors(self):
+        self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+            "Menors",
+        )
+        self.export_manager.row_number = 1
+
+        columns = [
+            ("Referència", 40),
+            ("Nom actuació", 40),
+            ("Grau d'estudis", 20),
+            ("Nom centre educatiu", 20),
+            ("Nombre participants", 20),
+        ]
+        self.export_manager.create_columns(columns)
+
+        self.fill_menors()
+
+    def fill_menors(self):
+        for activity in self.menors_obj:
+            actuacio_obj = self.actuacions_obj.rows[
+                (self.actuacions_obj.GROUPS.ACTIVITY_MINORS.value, activity.id)
+            ]
+            row = SessionMinorRow(
+                actuacio_reference=actuacio_obj.reference,
+                grade=activity.get_minors_grade_display(),
+                school_name=activity.minors_school_name,
+                participants_number=activity.minors_participants_number,
+            )
+            self.export_manager.fill_row_from_factory(row)
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
