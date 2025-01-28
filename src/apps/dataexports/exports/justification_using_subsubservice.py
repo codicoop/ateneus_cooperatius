@@ -85,6 +85,42 @@ class SessionMinorRow(BaseRow):
         ]
 
 
+@dataclass
+class InsercioLaboralRow(BaseRow):
+    actuacio_reference: str
+    user_surname: str
+    user_name: str
+    user_id_number: str
+    insercio_data_alta: str
+    insercio_data_baixa: str
+    insercio_tipus_contracte: str
+    user_gender: str
+    user_birthdate: str
+    user_town: str
+    project_nif: str
+    project_name: str
+    insercio_cercle: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.user_surname or self.value_if_empty,
+            self.user_name or self.value_if_empty,
+            self.user_id_number or self.value_if_empty,
+            self.insercio_data_alta or self.value_if_empty,
+            self.insercio_data_baixa or self.value_if_empty,
+            self.insercio_tipus_contracte or self.value_if_empty,
+            self.user_gender or self.value_if_empty,
+            self.user_birthdate or self.value_if_empty,
+            self.user_town or self.value_if_empty,
+            self.project_nif or self.value_if_empty,
+            self.project_name or self.value_if_empty,
+            self.insercio_cercle or self.value_if_empty,
+        ]
+
+
 class ExportJustificationUsingSubSubService:
     """
     Aquesta classe NO fa servir cap funcionalitat relacionada amb els
@@ -132,6 +168,7 @@ class ExportJustificationUsingSubSubService:
         self.sheet_actuacions()
         self.sheet_participants()
         self.sheet_menors()
+        self.sheet_insercionslaborals()
 
         return self.export_manager.return_document("justificacio")
 
@@ -236,6 +273,7 @@ class ExportJustificationUsingSubSubService:
                 group=Actuacions.GROUPS.CREATION.value,
                 id=item.pk,
                 actuacio_row_obj=row,
+                model_obj=item,
             )
 
     def fill_actuacions_with_acompanyaments_consolidacio(self):
@@ -269,6 +307,7 @@ class ExportJustificationUsingSubSubService:
                 group=Actuacions.GROUPS.CONSOLIDATION.value,
                 id=item.pk,
                 actuacio_row_obj=row,
+                model_obj=item,
             )
 
     def fill_actuacions_with_sessions_menors(self):
@@ -436,6 +475,121 @@ class ExportJustificationUsingSubSubService:
             )
             self.export_manager.fill_row_from_factory(row)
 
+    def sheet_insercionslaborals(self):
+        self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+            "InsercionsLaborals",
+        )
+        self.export_manager.row_number = 1
+
+        columns = [
+            ("Referència", 20),
+            ("Nom actuació", 20),
+            ("Cognoms", 20),
+            ("Nom", 20),
+            ("ID", 20),
+            ("Data alta", 20),
+            ("Data baixa", 20),
+            ("Tipus contracte", 20),
+            ("Gènere", 20),
+            ("Data naixement", 20),
+            ("Població", 20),
+            ("NIF Projecte", 20),
+            ("Nom projecte", 20),
+            ("Cercle / Ateneu (omplir a ma)", 20),
+            ("[ convocatòria ]", 20),
+        ]
+        self.export_manager.create_columns(columns)
+
+        self.fill_insercionslaborals()
+
+    def fill_insercionslaborals(self):
+        for insertion in self.insercionslaborals_obj:
+            """
+            Cada EmploymentInsertion pot anar vinculada a un project o a una
+            activity.
+            Per poder identificar quina self.actuacions_obj.rows correspon,
+            hem de mirar:
+              - Si és (GROUPS.CREATION. id),
+              - Si és (GROUPS.CONSOLIDATION.id),
+              - Si és (GROUPS.ACTIVITY.id),
+              - Si és (GROUPS.ACTIVITY_MINORS.id) (tinc dubtes de si mai anirà
+                vinculada a una per menors, però com que és possible 
+                vincular-les, s'ha de comprovar)
+            """
+            town = ""
+            project_nif = ""
+            project_name = ""
+            if insertion.project:
+                # En el cas d'anar vinculada a un projecte, vol dir que NO sabem a
+                # quina ProjectStage correspon.
+                # El que farem és agafar el primer ProjectStage VÀLID que trobem,
+                # dels que hi hagi per aquesta convocatòria, suposant que n'hi
+                # hagi un.
+                # "Vàlid" vol dir que tingui sessions, un Estat d'acompanyament
+                # correcte, etc. i, per tant, que hagi entrat a
+                # self.actuacions_obj.rows.
+                #
+                # No podem obtenir l'stage fent insertion.project.stages.first()
+                # perquè retornarà stages que no són vàlids, a més que
+                # comportaria un query extra per cada inserció. En canvi, el que
+                # hem fet és que durant el procés d'anar omplint Actuacions.rows
+                # s'omple també Actuacions.index_by_project_id, de manera que un
+                # cop arribem aquí podem mirar si existeix a l'index i obtenir
+                # les dades sense fer més queries:
+                project_stage_key = self.actuacions_obj.index_by_project_id.get(
+                    insertion.project.id,
+                )
+                project_stage = self.actuacions_obj.rows.get(project_stage_key)
+                ic(project_stage)
+                if not project_stage:
+                    # Significa que han creat una inserció laboral per un
+                    # projecte que no té cap acompanyament vàlid.
+                    continue
+                actuacio_id = project_stage.id
+                if insertion.project.town:
+                    town = insertion.project.town.name
+                project_nif = insertion.project.cif
+                project_name = insertion.project.name
+            else:
+                actuacio_id = insertion.activity.id
+                if (
+                        insertion.activity.place is not None
+                        and insertion.activity.place.town
+                ):
+                    town = insertion.activity.place.town.name
+            # Checking the different possibilities from the most likely to less
+            # likely, to optimize performance.
+            actuacio_obj = self.actuacions_obj.rows.get(
+                (self.actuacions_obj.GROUPS.CREATION.value, actuacio_id)
+            ) or self.actuacions_obj.rows.get(
+                (self.actuacions_obj.GROUPS.CONSOLIDATION.value, actuacio_id)
+            ) or self.actuacions_obj.rows.get(
+                (self.actuacions_obj.GROUPS.ACTIVITY.value, actuacio_id)
+            ) or self.actuacions_obj.rows.get(
+                (self.actuacions_obj.GROUPS.ACTIVITY_MINORS.value, actuacio_id)
+            )
+            circle = (
+                CirclesChoices(insertion.circle).label
+                if insertion.circle is not None
+                else ""
+            )
+            row = InsercioLaboralRow(
+                actuacio_reference=actuacio_obj.reference,
+                user_surname=insertion.user.surname,
+                user_name=insertion.user.first_name,
+                user_id_number=insertion.user.id_number,
+                insercio_data_alta=insertion.insertion_date,
+                insercio_data_baixa=insertion.end_date,
+                insercio_tipus_contracte=insertion.get_contract_type_display(),
+                user_gender=insertion.user.get_gender_display(),
+                user_birthdate=insertion.user.birthdate,
+                user_town=town,
+                project_nif=project_nif,
+                project_name=project_name,
+                insercio_cercle=circle,
+            )
+            self.export_manager.fill_row_from_factory(row)
+
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
             Q(
@@ -498,6 +652,7 @@ class Actuacio:
     id: str
     group: str
     row_data: str
+    obj: object = None
 
 class Groups(StrEnum):
     ACTIVITY = "activity"
@@ -512,15 +667,17 @@ class Actuacions:
         # OrderedDict will remember the order that the items were added
         self.rows = OrderedDict()
         self.last_row = 0
+        self.index_by_project_id = {}
 
     def get_row(self, group, id):
         pass
 
-    def add_row(self, group, id, actuacio_row_obj):
+    def add_row(self, group, id, actuacio_row_obj, model_obj=None):
         """
         :param group: one of self.GROUPS
         :param id: The row's item database ID
         :param actuacio_row_obj: An ActuacioRow instance
+        :param model_obj: An instance of ProjectStage or Activity
         :return: The newly created and added Actuacio object
         """
         if (group, id) in self.rows:
@@ -540,8 +697,18 @@ class Actuacions:
             id=id,
             group=group,
             row_data=actuacio_row_obj,
+            obj=model_obj,
         )
         self.rows[(group, id)] = actuacio_obj
+
+        project_groups = (
+            self.GROUPS.CREATION,
+            self.GROUPS.CONSOLIDATION,
+        )
+        if model_obj and group in project_groups:
+            self.index_by_project_id.update(
+                {model_obj.project.id: (group, id)}
+            )
 
     @staticmethod
     def get_formatted_reference(
