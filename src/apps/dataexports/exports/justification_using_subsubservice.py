@@ -121,6 +121,33 @@ class InsercioLaboralRow(BaseRow):
         ]
 
 
+@dataclass
+class CreatedEntityRow(BaseRow):
+    actuacio_reference: str
+    project_name: str
+    project_nif: str
+    project_contact_details: str
+    project_email: str
+    project_phone: str
+    actuacio_circle: str
+    project_stages_list: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.project_name or self.value_if_empty,
+            self.project_nif or self.value_if_empty,
+            self.project_contact_details or self.value_if_empty,
+            self.project_email or self.value_if_empty,
+            self.project_phone or self.value_if_empty,
+            "Sí",  # Economia Social i Solidària (no tenim la dada)
+            self.actuacio_circle or self.value_if_empty,
+            self.project_stages_list or self.value_if_empty,
+        ]
+
+
 class ExportJustificationUsingSubSubService:
     """
     Aquesta classe NO fa servir cap funcionalitat relacionada amb els
@@ -140,12 +167,11 @@ class ExportJustificationUsingSubSubService:
         self.insercionslaborals_obj = EmploymentInsertion.objects.filter(
             subsidy_period__date_start__range=self.export_manager.subsidy_period_range,
         )
-        self.stages_obj = self.get_acompanyaments_obj()
         self.acompanyaments_creacio = self.get_acompanyaments_creacio_obj()
         # PENDENT de comprovar si fent el filtre així funciona bé.
         # Sinó, caldrà fer al revés i fer un .exclude dels tipus que no volem,
         # o bé passar paràmetre com fem amb for_minors.
-        self.acompanyaments_consolidacio = self.stages_obj.filter(
+        self.acompanyaments_consolidacio = self.get_acompanyaments_obj().filter(
             stage_type=StageTypeChoices.CONSOLIDATION,
         )
         self.actuacions_obj = Actuacions()
@@ -169,6 +195,7 @@ class ExportJustificationUsingSubSubService:
         self.sheet_participants()
         self.sheet_menors()
         self.sheet_insercionslaborals()
+        self.sheet_created_projects()
 
         return self.export_manager.return_document("justificacio")
 
@@ -176,7 +203,6 @@ class ExportJustificationUsingSubSubService:
         # The first sheet is already created, just need to adjust name.
         self.export_manager.worksheet.title = "Actuacions"
         self.export_manager.row_number = 1
-
         columns = [
             ("Servei", 40),
             ("Subservei", 70),
@@ -351,7 +377,6 @@ class ExportJustificationUsingSubSubService:
             "Participants",
         )
         self.export_manager.row_number = 1
-
         columns = [
             ("Referència", 40),
             ("Nom actuació", 40),
@@ -450,7 +475,6 @@ class ExportJustificationUsingSubSubService:
             "Menors",
         )
         self.export_manager.row_number = 1
-
         columns = [
             ("Referència", 40),
             ("Nom actuació", 40),
@@ -459,7 +483,6 @@ class ExportJustificationUsingSubSubService:
             ("Nombre participants", 20),
         ]
         self.export_manager.create_columns(columns)
-
         self.fill_menors()
 
     def fill_menors(self):
@@ -480,7 +503,6 @@ class ExportJustificationUsingSubSubService:
             "InsercionsLaborals",
         )
         self.export_manager.row_number = 1
-
         columns = [
             ("Referència", 20),
             ("Nom actuació", 20),
@@ -499,7 +521,6 @@ class ExportJustificationUsingSubSubService:
             ("[ convocatòria ]", 20),
         ]
         self.export_manager.create_columns(columns)
-
         self.fill_insercionslaborals()
 
     def fill_insercionslaborals(self):
@@ -509,10 +530,10 @@ class ExportJustificationUsingSubSubService:
             activity.
             Per poder identificar quina self.actuacions_obj.rows correspon,
             hem de mirar:
-              - Si és (GROUPS.CREATION. id),
-              - Si és (GROUPS.CONSOLIDATION.id),
-              - Si és (GROUPS.ACTIVITY.id),
-              - Si és (GROUPS.ACTIVITY_MINORS.id) (tinc dubtes de si mai anirà
+              - Si és (GROUPS.CREATION, id),
+              - Si és (GROUPS.CONSOLIDATION, id)
+              - Si és (GROUPS.ACTIVITY, id)
+              - Si és (GROUPS.ACTIVITY_MINORS, id) (tinc dubtes de si mai anirà
                 vinculada a una per menors, però com que és possible 
                 vincular-les, s'ha de comprovar)
             """
@@ -587,6 +608,68 @@ class ExportJustificationUsingSubSubService:
                 project_nif=project_nif,
                 project_name=project_name,
                 insercio_cercle=circle,
+            )
+            self.export_manager.fill_row_from_factory(row)
+
+    def sheet_created_projects(self):
+        self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+            "EntitatCreada",
+        )
+        self.export_manager.row_number = 1
+        columns = [
+            ("Referència", 10),
+            ("Nom actuació", 40),
+            ("Nom de l'entitat", 40),
+            ("NIF de l'entitat", 12),
+            ("Nom i cognoms persona de contacte", 30),
+            ("Correu electrònic", 12),
+            ("Telèfon", 10),
+            ("Economia solidària (revisar)", 35),
+            ("Ateneu / Cercle", 35),
+            ("[Acompanyaments]", 10),        ]
+        self.export_manager.create_columns(columns)
+        self.fill_created_projects()
+
+    def fill_created_projects(self):
+        """
+        By april 2024, created entities are changed. Previously each creation
+        had its own row in Actuacions, and then here each CreatedEntity
+        was filled in this sheet, calculating its reference number by the
+        normal incrementation of the row number and so.
+        Now, each creation has to be linked to a ProjectStage, so the rows
+        in Actuacions dedicated to CreatedEntity don't exist anymore, and the
+        reference number needs to be the corresponding ProjectStage's one.
+        """
+        for entity_created in self.acompanyaments_creacio:
+            if not entity_created.project_stage:
+                # Per si de cas algun ateneu no ha fet bé la tasca d'assignar
+                # acompanyament a tots els registres de CreatedEntity.
+                continue
+            actuacio_obj = self.actuacions_obj.rows[
+                (
+                    self.actuacions_obj.GROUPS.CREATION.value,
+                    entity_created.project_stage.id,
+                )
+            ]
+            first_partner = entity_created.project_stage.project.partners.first()
+            contact_details = ""
+            if first_partner:
+                contact_details = first_partner.full_name
+
+            # Note that in this case we can take some of the data from the
+            # actuacio_obj itself, because this sheet has the same rows that
+            # we used in the Actuacions sheet, unlike the other sheets which
+            # have rows for the participants, employment insertions, and so on.
+            row = CreatedEntityRow(
+                actuacio_reference=actuacio_obj.reference,
+                project_name=actuacio_obj.row_data.actuacio_name,
+                project_nif=entity_created.project_stage.project.cif,
+                project_contact_details=contact_details,
+                project_email=entity_created.project_stage.project.mail,
+                project_phone=entity_created.project_stage.project.phone,
+                # Column Economia solidària is hardcoded in CreatedEntityRow
+                actuacio_circle=actuacio_obj.row_data.circle,
+                project_stages_list=entity_created.project_stage.project.stages_list,
             )
             self.export_manager.fill_row_from_factory(row)
 
