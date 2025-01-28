@@ -148,6 +148,37 @@ class CreatedEntityRow(BaseRow):
         ]
 
 
+@dataclass
+class AcompanyamentRow(BaseRow):
+    actuacio_reference: str
+    project_name: str
+    project_status: str
+    stage_type: str
+    start_date: str
+    town: str
+    short_description: str
+    total_hours: str
+    latest_session_date: str
+    justification_documents_total: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            "Entitat",  # No tenim la dada; hardcodejat
+            self.project_name or self.value_if_empty,
+            self.project_status or self.value_if_empty,
+            self.stage_type or self.value_if_empty,  # Crea o Consolida
+            self.start_date or self.value_if_empty,
+            self.town or self.value_if_empty,
+            self.short_description or self.value_if_empty,
+            self.total_hours or self.value_if_empty,
+            self.latest_session_date or self.value_if_empty,
+            self.justification_documents_total or self.value_if_empty,
+        ]
+
+
 class ExportJustificationUsingSubSubService:
     """
     Aquesta classe NO fa servir cap funcionalitat relacionada amb els
@@ -196,6 +227,7 @@ class ExportJustificationUsingSubSubService:
         self.sheet_menors()
         self.sheet_insercionslaborals()
         self.sheet_created_projects()
+        self.sheet_acompanyaments()
 
         return self.export_manager.return_document("justificacio")
 
@@ -626,7 +658,8 @@ class ExportJustificationUsingSubSubService:
             ("Telèfon", 10),
             ("Economia solidària (revisar)", 35),
             ("Ateneu / Cercle", 35),
-            ("[Acompanyaments]", 10),        ]
+            ("[Acompanyaments]", 10),
+        ]
         self.export_manager.create_columns(columns)
         self.fill_created_projects()
 
@@ -656,10 +689,6 @@ class ExportJustificationUsingSubSubService:
             if first_partner:
                 contact_details = first_partner.full_name
 
-            # Note that in this case we can take some of the data from the
-            # actuacio_obj itself, because this sheet has the same rows that
-            # we used in the Actuacions sheet, unlike the other sheets which
-            # have rows for the participants, employment insertions, and so on.
             row = CreatedEntityRow(
                 actuacio_reference=actuacio_obj.reference,
                 project_name=actuacio_obj.row_data.actuacio_name,
@@ -670,6 +699,64 @@ class ExportJustificationUsingSubSubService:
                 # Column Economia solidària is hardcoded in CreatedEntityRow
                 actuacio_circle=actuacio_obj.row_data.circle,
                 project_stages_list=entity_created.project_stage.project.stages_list,
+            )
+            self.export_manager.fill_row_from_factory(row)
+
+    def sheet_acompanyaments(self):
+        self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
+            "EntitatCreada",
+        )
+        self.export_manager.row_number = 1
+        columns = [
+            ("Referència", 20),
+            ("Nom actuació", 40),
+            ("Destinatari de l'acompanyament (revisar)", 45),
+            ("En cas d'entitat (nom de l'entitat)", 40),
+            ("En cas d'entitat (revisar)", 30),
+            ("Creació/consolidació", 18),
+            ("Data d'inici", 13),
+            ("Localitat", 20),
+            ("Breu descripció del projecte", 50),
+            ("Total hores d'acompanyament", 10),
+            ("[Data fi]", 13),
+            ("[Docs. justificació]", 10),
+        ]
+        self.export_manager.create_columns(columns)
+        self.fill_acompanyaments()
+
+    def fill_acompanyaments(self):
+        for project_stage in self.acompanyaments_consolidacio:
+            actuacio_obj = self.actuacions_obj.rows[
+                (
+                    self.actuacions_obj.GROUPS.CONSOLIDATION.value,
+                    project_stage.id,
+                )
+            ]
+            start_date = (
+                project_stage.earliest_session.date if project_stage.earliest_session
+                else ""
+            )
+            project_description = ""
+            if project_stage.project.description:
+                # Fa falta l'IF pq per error Project.descripcion és nullable
+                project_description = project_stage.project.description
+            latest_session_date = (
+                project_stage.latest_session.date if project_stage.latest_session
+                else ""
+            )
+
+            row = AcompanyamentRow(
+                actuacio_reference=actuacio_obj.reference,
+                # Column Entitat: hardcoded
+                project_name=actuacio_obj.row_data.actuacio_name,
+                project_status=project_stage.project.get_project_status_display(),
+                stage_type=project_stage.get_stage_type_display(),
+                start_date=start_date,
+                town=actuacio_obj.row_data.circle,
+                short_description=project_description,
+                total_hours=project_stage.hours_sum(),
+                latest_session_date=latest_session_date,
+                justification_documents_total=project_stage.justification_documents_total,
             )
             self.export_manager.fill_row_from_factory(row)
 
