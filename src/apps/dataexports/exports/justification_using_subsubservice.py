@@ -25,7 +25,14 @@ class ActuacioRow(BaseRow):
     circle: str
     town: str
     participants_count: int
-    divulgation_material: str
+    material_difusio: str
+    document_acreditatiu: str
+    place: str
+    accio: str  # Course
+    cofunded: str
+    cofunded_ateneu: str
+    strategic_line: str
+    admin_url: str
     value_if_empty: str = "-"
 
     def get_columns(self) -> list:
@@ -39,7 +46,14 @@ class ActuacioRow(BaseRow):
             self.circle or self.value_if_empty,
             self.town or self.value_if_empty,
             self.participants_count or self.value_if_empty,
-            self.divulgation_material or self.value_if_empty,
+            self.material_difusio or self.value_if_empty,
+            self.document_acreditatiu or self.value_if_empty,
+            self.place or self.value_if_empty,
+            self.accio or self.value_if_empty,
+            self.cofunded or self.value_if_empty,
+            self.cofunded_ateneu or self.value_if_empty,
+            self.strategic_line or self.value_if_empty,
+            self.admin_url or self.value_if_empty,
         ]
 
 
@@ -247,12 +261,10 @@ class ExportJustificationUsingSubSubService:
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
             ("[Document acreditatiu]", 21),
-            ("[Incidències]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
             ("[Cofinançat amb AACC]", 20),
-            ("[Ateneu/Cercle]", 20),
             ("[Línia estratègica]", 20),
             ("[Link]", 20),
         ]
@@ -278,9 +290,13 @@ class ExportJustificationUsingSubSubService:
             town = ""
             if item.place is not None and item.place.town:
                 town = item.place.town.name
-            divulgation_material = "No"
+            material_difusio = "No"
+            if item.file1.name:
+                material_difusio = "Sí"
+            document_acreditatiu = "No"
             if item.photo2.name:
-                divulgation_material = "Sí"
+                document_acreditatiu = "Sí"
+
             row = ActuacioRow(
                 service=service,
                 subservice=subservice,
@@ -291,7 +307,16 @@ class ExportJustificationUsingSubSubService:
                 circle=circle,
                 town=town,
                 participants_count=item.enrolled.count(),
-                divulgation_material=divulgation_material,
+                material_difusio=material_difusio,
+                document_acreditatiu=document_acreditatiu,
+                place=str(item.place) if item.place else '',
+                accio=str(item.course),
+                cofunded=str(item.cofunded or "No"),
+                cofunded_ateneu="Sí" if item.cofunded_ateneu else "No",
+                strategic_line=(
+                    item.strategic_line.name if item.strategic_line else ""
+                ),
+                admin_url=item.absolute_url_admin,
             )
             self.actuacions_obj.add_row(
                 group=Actuacions.GROUPS.ACTIVITY.value,
@@ -325,7 +350,16 @@ class ExportJustificationUsingSubSubService:
                 circle=circle,
                 town=town,
                 participants_count=len(item.partners_involved_in_sessions),
-                divulgation_material="No",
+                material_difusio="No",
+                document_acreditatiu="",
+                place="",
+                accio="",
+                cofunded=str(item.cofunded or "No"),
+                cofunded_ateneu="Sí" if item.cofunded_ateneu else "No",
+                strategic_line=(
+                    item.strategic_line.name if item.strategic_line else ""
+                ),
+                admin_url="",
             )
             self.actuacions_obj.add_row(
                 group=Actuacions.GROUPS.CREATION.value,
@@ -359,7 +393,16 @@ class ExportJustificationUsingSubSubService:
                 circle=circle,
                 town=town,
                 participants_count=len(item.partners_involved_in_sessions),
-                divulgation_material="No",
+                material_difusio="No",
+                document_acreditatiu="",
+                place="",
+                accio="",
+                cofunded=str(item.cofunded or "No"),
+                cofunded_ateneu="Sí" if item.cofunded_ateneu else "No",
+                strategic_line=(
+                    item.strategic_line.name if item.strategic_line else ""
+                ),
+                admin_url="",
             )
             self.actuacions_obj.add_row(
                 group=Actuacions.GROUPS.CONSOLIDATION.value,
@@ -383,9 +426,12 @@ class ExportJustificationUsingSubSubService:
                 town = ""
                 if item.place is not None and item.place.town:
                     town =item.place.town.name
-                divulgation_material = "No"
+                material_difusio = "No"
+                if item.file1.name:
+                    material_difusio = "Sí"
+                document_acreditatiu = "No"
                 if item.photo2.name:
-                    divulgation_material = "Sí"
+                    document_acreditatiu = "Sí"
                 row = ActuacioRow(
                     service=service,
                     subservice=subservice,
@@ -396,7 +442,14 @@ class ExportJustificationUsingSubSubService:
                     circle=circle,
                     town=town,
                     participants_count=item.enrolled.count(),
-                    divulgation_material=divulgation_material,
+                    material_difusio=material_difusio,
+                    document_acreditatiu=document_acreditatiu,
+                    place=str(item.place) if item.place else "",
+                    accio=str(item.course),
+                    cofunded=str(item.cofunded or "No"),
+                    cofunded_ateneu="Sí" if item.cofunded_ateneu else "No",
+                    strategic_line="",
+                    admin_url="",
                 )
                 self.actuacions_obj.add_row(
                     group=Actuacions.GROUPS.ACTIVITY_MINORS.value,
