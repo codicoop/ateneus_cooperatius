@@ -235,7 +235,7 @@ class ExportJustificationUsingSubSubService:
                 admin_url="",
             )
             self.actuacions_obj.add_row(
-                group=Actuacions.GROUPS.CONSOLIDATION.value,
+                group=Actuacions.GROUPS.ACOMPANYAMENT.value,
                 id=item.pk,
                 actuacio_row_obj=row,
                 model_obj=item,
@@ -402,7 +402,7 @@ class ExportJustificationUsingSubSubService:
     def fill_participants_from_acompanyaments_consolidacio(self):
         for project_stage in self.acompanyaments_consolidacio:
             actuacio_obj = self.actuacions_obj.rows[
-                (self.actuacions_obj.GROUPS.CONSOLIDATION.value, project_stage.id)
+                (self.actuacions_obj.GROUPS.ACOMPANYAMENT.value, project_stage.id)
             ]
             for participant in project_stage.partners_involved_in_sessions:
                 town = ""
@@ -497,7 +497,7 @@ class ExportJustificationUsingSubSubService:
             Per poder identificar quina self.actuacions_obj.rows correspon,
             hem de mirar:
               - Si és (GROUPS.CREATION, id),
-              - Si és (GROUPS.CONSOLIDATION, id)
+              - Si és (GROUPS.ACOMPANYAMENT, id)
               - Si és (GROUPS.ACTIVITY, id)
               - Si és (GROUPS.ACTIVITY_MINORS, id) (tinc dubtes de si mai anirà
                 vinculada a una per menors, però com que és possible 
@@ -541,7 +541,7 @@ class ExportJustificationUsingSubSubService:
             actuacio_obj = self.actuacions_obj.rows.get(
                 (self.actuacions_obj.GROUPS.CREATION.value, actuacio_id)
             ) or self.actuacions_obj.rows.get(
-                (self.actuacions_obj.GROUPS.CONSOLIDATION.value, actuacio_id)
+                (self.actuacions_obj.GROUPS.ACOMPANYAMENT.value, actuacio_id)
             ) or self.actuacions_obj.rows.get(
                 (self.actuacions_obj.GROUPS.ACTIVITY.value, actuacio_id)
             ) or self.actuacions_obj.rows.get(
@@ -661,7 +661,7 @@ class ExportJustificationUsingSubSubService:
         for project_stage in self.acompanyaments_consolidacio:
             actuacio_obj = self.actuacions_obj.rows[
                 (
-                    self.actuacions_obj.GROUPS.CONSOLIDATION.value,
+                    self.actuacions_obj.GROUPS.ACOMPANYAMENT.value,
                     project_stage.id,
                 )
             ]
@@ -784,7 +784,7 @@ class Actuacio:
 class Groups(StrEnum):
     ACTIVITY = "activity"
     ACTIVITY_MINORS = "activity_minors"
-    CONSOLIDATION = "consolidation"
+    ACOMPANYAMENT = "acompanyament"
     CREATION = "creation"
 
 class Actuacions:
@@ -830,7 +830,7 @@ class Actuacions:
 
         project_groups = (
             self.GROUPS.CREATION,
-            self.GROUPS.CONSOLIDATION,
+            self.GROUPS.ACOMPANYAMENT,
         )
         if model_obj and group in project_groups:
             self.index_by_project_id.update(
