@@ -213,6 +213,14 @@ class ParticipantRow(BaseRow):
     user_gender: str
     user_birthdate: str
     user_town: str
+    employment_situation: str
+    birth_place: str
+    educational_level: str
+    discovered_us: str
+    user_email: str
+    user_phone_number: str
+    user_project: str
+    user_acompanyaments: str
     value_if_empty = "-"
 
     def get_columns(self) -> list:
@@ -225,6 +233,14 @@ class ParticipantRow(BaseRow):
             self.user_gender or self.value_if_empty,
             self.user_birthdate or self.value_if_empty,
             self.user_town or self.value_if_empty,
+            self.employment_situation or self.value_if_empty,
+            self.birth_place or self.value_if_empty,
+            self.educational_level or self.value_if_empty,
+            self.discovered_us or self.value_if_empty,
+            self.user_email or self.value_if_empty,
+            self.user_phone_number or self.value_if_empty,
+            self.user_project or self.value_if_empty,
+            self.user_acompanyaments or self.value_if_empty,
         ]
 
 

@@ -3,7 +3,6 @@ from enum import StrEnum
 
 from celery.utils.collections import OrderedDict
 from django.db.models import Q
-from icecream import ic
 
 from apps.cc_courses.choices import ProjectStageStatesChoices, StageTypeChoices
 from apps.coopolis.choices import CirclesChoices
@@ -338,6 +337,23 @@ class ExportJustificationUsingSubSubService:
                     user_gender=participant.get_gender_display() or "",
                     user_birthdate=participant.birthdate or "",
                     user_town=town,
+                    employment_situation=(
+                        participant.get_employment_situation_display() or ""
+                    ),
+                    birth_place=participant.get_birth_place_display() or "",
+                    educational_level=(
+                        participant.get_educational_level_display() or ""
+                    ),
+                    discovered_us=participant.get_discovered_us_display() or "",
+                    user_email=participant.email,
+                    user_phone_number=participant.phone_number or "",
+                    user_project=str(participant.project or ""),
+                    user_acompanyaments=(
+                        participant.project.stages_list
+                        if participant.project
+                           and participant.project.stages_list
+                        else ""
+                    ),
                 )
                 self.export_manager.fill_row_from_factory(row)
 
@@ -359,6 +375,23 @@ class ExportJustificationUsingSubSubService:
                     user_gender=participant.get_gender_display() or "",
                     user_birthdate=participant.birthdate or "",
                     user_town=town,
+                    employment_situation=(
+                            participant.get_employment_situation_display() or ""
+                    ),
+                    birth_place=participant.get_birth_place_display() or "",
+                    educational_level=(
+                            participant.get_educational_level_display() or ""
+                    ),
+                    discovered_us=participant.get_discovered_us_display() or "",
+                    user_email=participant.email,
+                    user_phone_number=participant.phone_number or "",
+                    user_project=str(participant.project or ""),
+                    user_acompanyaments=(
+                        participant.project.stages_list
+                        if participant.project
+                           and participant.project.stages_list
+                        else ""
+                    ),
                 )
                 self.export_manager.fill_row_from_factory(row)
 
@@ -380,6 +413,23 @@ class ExportJustificationUsingSubSubService:
                     user_gender=participant.get_gender_display() or "",
                     user_birthdate=participant.birthdate or "",
                     user_town=town,
+                    employment_situation=(
+                            participant.get_employment_situation_display() or ""
+                    ),
+                    birth_place=participant.get_birth_place_display() or "",
+                    educational_level=(
+                            participant.get_educational_level_display() or ""
+                    ),
+                    discovered_us=participant.get_discovered_us_display() or "",
+                    user_email=participant.email,
+                    user_phone_number=participant.phone_number or "",
+                    user_project=str(participant.project or ""),
+                    user_acompanyaments=(
+                        participant.project.stages_list
+                        if participant.project
+                           and participant.project.stages_list
+                        else ""
+                    ),
                 )
                 self.export_manager.fill_row_from_factory(row)
 
@@ -474,7 +524,6 @@ class ExportJustificationUsingSubSubService:
                     insertion.project.id,
                 )
                 project_stage = self.actuacions_obj.rows.get(project_stage_key)
-                ic(project_stage)
                 if not project_stage:
                     # Significa que han creat una inserció laboral per un
                     # projecte que no té cap acompanyament vàlid.
