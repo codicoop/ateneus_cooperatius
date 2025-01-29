@@ -190,8 +190,9 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
         'activity_poll_field', 'organizer_reminded', 'subsidy_period_field',
-        "axis", "subaxis", "service", "sub_service",
+        "axis", "subaxis", "service", "sub_service", "subservice_service",
     )
+    empty_value_display = "-"
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives', 'teacher', )
     list_filter = (
@@ -207,7 +208,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                        'date_start',
                        'date_end', 'subsidy_period_field', 'starting_time',
                        'ending_time', 'confirmed', 'equipments',
-                       'spots', 'subsubservice', 'circle', 'entity',
+                       'spots', 'subsubservice', 'subservice_service', 'circle', 'entity',
                        'responsible', 'organizer_reminded', 'publish',
                        'exclude_from_justification', ]
         }),
