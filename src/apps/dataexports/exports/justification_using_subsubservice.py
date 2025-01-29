@@ -36,16 +36,19 @@ class ExportJustificationUsingSubSubService:
         )
         self.sessions_obj = self.get_sessions_obj()
         self.menors_obj = self.get_sessions_obj(for_minors=True)
-        self.insercionslaborals_obj = EmploymentInsertion.objects.filter(
+        self.insercionslaborals_obj = EmploymentInsertion.objects.prefetch_related(
+            "subsidy_period",
+            "project",
+            "activity",
+            "user__town",
+        ).filter(
             subsidy_period__date_start__range=self.export_manager.subsidy_period_range,
         )
         self.acompanyaments_creacio = self.get_acompanyaments_creacio_obj()
         # PENDENT de comprovar si fent el filtre així funciona bé.
         # Sinó, caldrà fer al revés i fer un .exclude dels tipus que no volem,
         # o bé passar paràmetre com fem amb for_minors.
-        self.acompanyaments_consolidacio = self.get_acompanyaments_obj().filter(
-            stage_type=StageTypeChoices.CONSOLIDATION,
-        )
+        self.acompanyaments_consolidacio = self.get_acompanyaments_obj()
         self.actuacions_obj = Actuacions()
 
         # 1. Omplim Actuacions amb Activities per adults (amb inscripcions)
@@ -529,17 +532,10 @@ class ExportJustificationUsingSubSubService:
                     # projecte que no té cap acompanyament vàlid.
                     continue
                 actuacio_id = project_stage.id
-                if insertion.project.town:
-                    town = insertion.project.town.name
                 project_nif = insertion.project.cif
                 project_name = insertion.project.name
             else:
                 actuacio_id = insertion.activity.id
-                if (
-                        insertion.activity.place is not None
-                        and insertion.activity.place.town
-                ):
-                    town = insertion.activity.place.town.name
             # Checking the different possibilities from the most likely to less
             # likely, to optimize performance.
             actuacio_obj = self.actuacions_obj.rows.get(
@@ -559,6 +555,9 @@ class ExportJustificationUsingSubSubService:
             subsidy_period = ""
             if insertion.subsidy_period:
                 subsidy_period = insertion.subsidy_period.name
+            town = ""
+            if insertion.user.town:
+                town = insertion.user.town.name
             row = InsercioLaboralRow(
                 actuacio_reference=actuacio_obj.reference,
                 user_surname=insertion.user.surname,
@@ -695,7 +694,15 @@ class ExportJustificationUsingSubSubService:
             self.export_manager.fill_row_from_factory(row)
 
     def get_sessions_obj(self, for_minors=False):
-        return Activity.objects.filter(
+        return Activity.objects.prefetch_related(
+            "subsubservice__subservice__service",
+            "place__town",
+            "entity",
+            "course",
+            "strategic_line",
+            "enrollments__user__town",
+            "enrollments__user__projects__stages",
+        ).filter(
             Q(
                 date_start__range=self.export_manager.subsidy_period.range,
                 for_minors=for_minors,
@@ -709,9 +716,18 @@ class ExportJustificationUsingSubSubService:
         )
 
     def get_acompanyaments_obj(self):
-        return ProjectStage.objects.order_by("date_start").filter(
+        return ProjectStage.objects.order_by("date_start").prefetch_related(
+            "subsubservice__subservice__service",
+            "stage_sessions__involved_partners",
+            "stage_sessions__entity",
+            "strategic_line",
+            "project__town",
+            "project__stages",
+        ).filter(
             Q(
                 subsidy_period=self.export_manager.subsidy_period
+            ) & Q(
+                stage_type=StageTypeChoices.CONSOLIDATION
             ) & Q(
                 exclude_from_justification=False
             ) & (
@@ -725,7 +741,14 @@ class ExportJustificationUsingSubSubService:
         )
 
     def get_acompanyaments_creacio_obj(self):
-        return CreatedEntity.objects.filter(
+        return CreatedEntity.objects.prefetch_related(
+            "project_stage__subsubservice__subservice__service",
+            "project_stage__stage_sessions__involved_partners",
+            "project_stage__stage_sessions__entity",
+            "project_stage__strategic_line",
+            "project_stage__project__town",
+            "project_stage__project__stages",
+        ).filter(
             Q(
                 project_stage__subsidy_period=self.export_manager.subsidy_period
             ) & Q(
