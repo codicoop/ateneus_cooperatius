@@ -556,6 +556,9 @@ class ExportJustificationUsingSubSubService:
                 if insertion.circle is not None
                 else ""
             )
+            subsidy_period = ""
+            if insertion.subsidy_period:
+                subsidy_period = insertion.subsidy_period.name
             row = InsercioLaboralRow(
                 actuacio_reference=actuacio_obj.reference,
                 user_surname=insertion.user.surname,
@@ -570,6 +573,7 @@ class ExportJustificationUsingSubSubService:
                 project_nif=project_nif,
                 project_name=project_name,
                 insercio_cercle=circle,
+                subsidy_period=subsidy_period,
             )
             self.export_manager.fill_row_from_factory(row)
 

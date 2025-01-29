@@ -277,6 +277,7 @@ class InsercioLaboralRow(BaseRow):
     project_nif: str
     project_name: str
     insercio_cercle: str
+    subsidy_period: str
     value_if_empty = "-"
 
     def get_columns(self) -> list:
@@ -295,6 +296,7 @@ class InsercioLaboralRow(BaseRow):
             self.project_nif or self.value_if_empty,
             self.project_name or self.value_if_empty,
             self.insercio_cercle or self.value_if_empty,
+            self.subsidy_period or self.value_if_empty,
         ]
 
 
