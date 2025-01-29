@@ -637,7 +637,7 @@ class ExportJustificationUsingSubSubService:
 
     def sheet_acompanyaments(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
-            "EntitatCreada",
+            "Acompanyaments",
         )
         self.export_manager.row_number = 1
         columns = [
