@@ -4,7 +4,9 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
-from apps.dataexports.models import DataExports, SubsidyPeriod
+from apps.dataexports.models import (
+    DataExports, SubsidyPeriod, Service, SubService, SubSubService
+)
 
 
 @admin.register(SubsidyPeriod)
@@ -64,4 +66,49 @@ class DataExportsAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     def has_add_permission(self, request):
         if request.user.is_superuser and settings.DEBUG:
             return True
+        return False
+
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ("name", "subsidy_period")
+    readonly_fields = ("name", "subsidy_period")
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(SubService)
+class SubServiceAdmin(admin.ModelAdmin):
+    list_display = ("name", "service", "service__subsidy_period")
+    readonly_fields = ("name", "service")
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(SubSubService)
+class SubSubServiceAdmin(admin.ModelAdmin):
+    list_display = ("name", "subservice", "subservice__service", "subservice__service__subsidy_period")
+    readonly_fields = ("name", "subservice")
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
         return False

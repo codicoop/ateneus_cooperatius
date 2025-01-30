@@ -89,7 +89,13 @@ class MyDashboard(Dashboard):
                 title="Exportació de dades per justificacions",
                 column=1,
                 collapsible=False,
-                models=('apps.dataexports.models.DataExports', 'apps.dataexports.models.SubsidyPeriod'),
+                models=(
+                    "apps.dataexports.models.DataExports",
+                    "apps.dataexports.models.SubsidyPeriod",
+                    "apps.dataexports.models.Service",
+                    "apps.dataexports.models.SubService",
+                    "apps.dataexports.models.SubSubService",
+                ),
             ),
             modules.ModelList(
                 title="Gestió de dades",

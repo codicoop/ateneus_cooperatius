@@ -21,7 +21,6 @@ from .views import (
     ProjectCreateFormView,
     ProjectFormView,
     ProjectInfoView,
-    get_sub_services,
     project_stage_attatch_view,
     project_stage_data_view,
     project_stage_start_view,
@@ -131,7 +130,6 @@ urlpatterns += [
     path(
         "activities/<uuid:uuid>/poll", ActivityPollView.as_view(), name="activity_poll"
     ),
-    path("chained_dropdowns/get_sub_services/", get_sub_services),
     path("admin/", admin.site.urls),
     path("db_backup_download/", db_backup_download_view, name="db_backup_download"),
 ]

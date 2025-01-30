@@ -4,6 +4,7 @@ from datetime import date, datetime, time
 from constance import config
 from django.apps import apps
 from django.conf import settings
+from django.contrib import admin
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.validators import ValidationError
 from django.db import IntegrityError, models
@@ -257,14 +258,21 @@ class Activity(models.Model):  # --> SESSIONS
         "No incloure a l'excel de justificació",
         default=False,
     )
+    subsubservice = models.ForeignKey(
+        "dataexports.SubSubService",
+        verbose_name="actuació",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     service = models.SmallIntegerField(
-        "Servei",
+        "(OBSOLET) Servei",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "(OBSOLET) Sub-servei",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
@@ -708,6 +716,25 @@ class Activity(models.Model):  # --> SESSIONS
     @staticmethod
     def autocomplete_search_fields():
         return ("name__icontains",)
+
+    @admin.display(
+        description="Eix / Servei"
+    )
+    def subservice_service(self):
+        return (f"{self.subsubservice.subservice.name} / "
+                f"{self.subsubservice.subservice.service.name}")
+
+    @admin.display(
+        description="Eix"
+    )
+    def subservice(self):
+        return self.subsubservice.subservice.name
+
+    @admin.display(
+        description="Servei"
+    )
+    def service(self):
+        return self.subsubservice.subservice.service.name
 
 
 class ActivityResourceFile(models.Model):
