@@ -132,7 +132,9 @@ class ExportJustificationUsingSubSubService:
                 subservice=subservice,
                 actuacio_name=item.name,
                 actuacio_date=item.date_start,
-                actuacio_period="",
+                actuacio_period=(
+                    item.subsidy_period.name if item.subsidy_period else ""
+                ),
                 actuacio_entity=str(item.entity) if item.entity else "",
                 circle=circle,
                 town=town,
@@ -174,8 +176,12 @@ class ExportJustificationUsingSubSubService:
                 service=service,
                 subservice=subservice,
                 actuacio_name=item.project.name,
-                actuacio_date=item.earliest_session.date if item.earliest_session else "",
-                actuacio_period="",
+                actuacio_date=(
+                    item.earliest_session.date if item.earliest_session else ""
+                ),
+                actuacio_period=(
+                    item.subsidy_period.name if item.subsidy_period else ""
+                ),
                 actuacio_entity=item.entities_str,
                 circle=circle,
                 town=town,
@@ -217,8 +223,12 @@ class ExportJustificationUsingSubSubService:
                 service=service,
                 subservice=subservice,
                 actuacio_name=item.project.name,
-                actuacio_date=item.earliest_session.date if item.earliest_session else "",
-                actuacio_period="",
+                actuacio_date=(
+                    item.earliest_session.date if item.earliest_session else ""
+                ),
+                actuacio_period=(
+                    item.subsidy_period.name if item.subsidy_period else ""
+                ),
                 actuacio_entity=item.entities_str,
                 circle=circle,
                 town=town,
@@ -267,7 +277,9 @@ class ExportJustificationUsingSubSubService:
                     subservice=subservice,
                     actuacio_name=item.name,
                     actuacio_date=item.date_start,
-                    actuacio_period="",
+                    actuacio_period=(
+                        item.subsidy_period.name if item.subsidy_period else ""
+                    ),
                     actuacio_entity=str(item.entity) if item.entity else "",
                     circle=circle,
                     town=town,
@@ -811,9 +823,11 @@ class Actuacions:
             raise ValueError(f"Row with ID {id} already exists in group "
                              f"{group.value}")
         self.last_row += 1
+        if id == 2661:
+            print(f"{actuacio_row_obj.actuacio_period=}")
         reference = self.get_formatted_reference(
             row_number=self.last_row,
-            subservice=actuacio_row_obj.subservice,
+            subsubservice=actuacio_row_obj.subservice,
             actuacio_entity=actuacio_row_obj.actuacio_entity,
             circle=actuacio_row_obj.circle,
             actuacio_period=actuacio_row_obj.actuacio_period,
@@ -840,18 +854,18 @@ class Actuacions:
     @staticmethod
     def get_formatted_reference(
         row_number,
-        subservice,
+        subsubservice,
         actuacio_entity,
         circle,
         actuacio_period,
     ):
         if (
-            not subservice 
+            not subsubservice
             or not actuacio_entity
             or not circle 
             or not actuacio_period 
         ):
             return ""
         return (
-            f"{row_number} - {subservice} {actuacio_period} {actuacio_entity} - {circle}"
+            f"{row_number} - {subsubservice} {actuacio_period} {actuacio_entity} - {circle}"
         )
