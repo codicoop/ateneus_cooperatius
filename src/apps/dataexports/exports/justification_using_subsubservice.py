@@ -823,8 +823,6 @@ class Actuacions:
             raise ValueError(f"Row with ID {id} already exists in group "
                              f"{group.value}")
         self.last_row += 1
-        if id == 2661:
-            print(f"{actuacio_row_obj.actuacio_period=}")
         reference = self.get_formatted_reference(
             row_number=self.last_row,
             subsubservice=actuacio_row_obj.subservice,
