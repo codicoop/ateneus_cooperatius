@@ -521,7 +521,7 @@ def populate_mail_templates(apps, schema_editor):
   <tr>
     <td align="center" valign="top" class="em_text1 pad10">
       <p><strong>
-        Hola {{persona_fullname}}!
+        Hola!
       </strong></p>
     </td>
   </tr>
