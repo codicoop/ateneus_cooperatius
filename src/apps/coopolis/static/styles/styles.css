@@ -2139,12 +2139,17 @@ label.required::after {
   grid-column: 1;
   grid-row: 2;
 }
-.my-course-card .section .description {
-  grid-column: 1;
-  grid-row: span 3;
+.my-course-card .section .teacher {
+  grid-column: 2;
+  grid-row: 1;
 }
-.my-course-card .section .content {
-  grid-row: 1/span 2;
+.my-course-card .section .place {
+  grid-column: 2;
+  grid-row: 2;
+}
+.my-course-card .section .description {
+  grid-column: 1/span 2;
+  grid-row: 3;
 }
 
 .my-course-card.past-activities .my-course-card__pretitle {

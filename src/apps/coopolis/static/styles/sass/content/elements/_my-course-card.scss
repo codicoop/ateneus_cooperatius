@@ -484,15 +484,18 @@
       grid-column: 1;
       grid-row: 2;
     }
+    .teacher {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .place {
+      grid-column: 2;
+      grid-row: 2;
+    }
     .description {
-      grid-column: 1;
-      grid-row: span 3;
+      grid-column: 1 / span 2;
+      grid-row: 3;
     }
-    .content {      
-      grid-row: 1 /span 2;
-    }
-    // .teacher {}
-    // .place {}
   }
 }
 
