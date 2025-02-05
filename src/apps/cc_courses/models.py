@@ -597,7 +597,7 @@ class Activity(models.Model):  # --> SESSIONS
 
         # Prevents changing the date in a way that will change the subsidy
         # period in case there's an EmploymentInsertion linked to this Activity.
-        if self.pk is not None and self.employment_insertions.exclude(
+        if self.pk and self.employment_insertions.exclude(
             subsidy_period=self.subsidy_period,
         ).count():
             msg = (
@@ -613,7 +613,7 @@ class Activity(models.Model):  # --> SESSIONS
         # behaviour and will be difficult to detect, so we decided to make
         # the activity mandatory in the justification in that case.
         if (
-            self.pk is not None
+            self.pk
             and hasattr(self, "employment_insertions")
             and self.employment_insertions.count()
             and self.exclude_from_justification
