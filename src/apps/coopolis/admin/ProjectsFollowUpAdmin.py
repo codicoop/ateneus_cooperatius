@@ -425,7 +425,6 @@ class FollowUpSpreadsheet:
         self.row_number = 1
         for raw_row in self.raw_rows:
             self.row_number += 1
-            print(raw_row)
             stage_responsible = raw_row['project'].last_stage_responsible
             follow_up_situation = \
                 raw_row['project'].get_follow_up_situation_display()
