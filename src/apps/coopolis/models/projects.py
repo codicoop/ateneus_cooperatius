@@ -559,7 +559,7 @@ class ProjectStage(models.Model):
                 errors.update(
                     {
                         "subaxis": ValidationError(
-                            "Has seleccionat un sub-eix que no es " "correspon a l'eix."
+                            "Has seleccionat un sub-eix que no es correspon a l'eix."
                         )
                     }
                 )
