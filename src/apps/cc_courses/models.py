@@ -731,12 +731,6 @@ class Activity(models.Model):  # --> SESSIONS
     def subservice(self):
         return self.subsubservice.subservice.name
 
-    @admin.display(
-        description="Servei"
-    )
-    def service(self):
-        return self.subsubservice.subservice.service.name
-
 
 class ActivityResourceFile(models.Model):
     class Meta:
