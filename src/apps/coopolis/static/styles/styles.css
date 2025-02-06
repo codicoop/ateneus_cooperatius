@@ -2983,6 +2983,43 @@ label.required::after {
   background-color: var(--second-light);
   z-index: 1;
 }
+.sidebar__popup {
+  position: absolute;
+  left: 90px;
+  top: 0;
+  display: none;
+  padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad3);
+}
+.sidebar .sidebar-menu__button {
+  width: max-content;
+  padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad-2);
+  border-radius: 50px;
+  background-color: var(--second);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: var(--pad-2);
+}
+.sidebar .sidebar-menu__button svg circle {
+  fill: var(--second);
+}
+.sidebar .sidebar-menu__button svg polygon {
+  fill: var(--white);
+}
+.sidebar .sidebar-menu__button .sidebar-menu__button-img {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--white);
+}
+.sidebar .sidebar-menu__button .sidebar-menu__button-img img {
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+.sidebar .sidebar-menu__button-project {
+  margin-bottom: var(--pad-2);
+}
 
 .menu {
   position: relative;
@@ -3027,6 +3064,7 @@ label.required::after {
   display: var(--display-mobile-only);
 }
 .menu__item {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3039,6 +3077,9 @@ label.required::after {
 }
 .menu__item:hover {
   background-color: var(--second-med);
+}
+.menu__item:hover .sidebar__popup {
+  display: block;
 }
 .menu__item.is-active {
   background-color: var(--second-med);

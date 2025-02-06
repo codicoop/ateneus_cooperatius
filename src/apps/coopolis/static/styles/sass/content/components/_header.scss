@@ -227,6 +227,50 @@
       z-index: 1;
     }
   }
+  &__popup {
+    position: absolute;
+    left: 90px;
+    top: 0;
+    display: none;
+    padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad3);
+  }
+  // botons per afegir projectes
+  .sidebar-menu__button {
+    width: max-content;
+    padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad-2);
+    border-radius: 50px;
+    background-color: var(--second);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: var(--pad-2);
+
+    svg {
+      circle {
+        fill: var(--second);
+      }
+      polygon {
+        fill: var(--white)
+      }
+    }
+
+    .sidebar-menu__button-img {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: var(--white);
+
+      img {
+        object-fit: cover;
+        object-position: 50% 50%;
+      }
+    }
+  }
+  // botó de projectes
+  .sidebar-menu__button-project {
+    margin-bottom: var(--pad-2);
+  }
 }
 .menu {
   position: relative;
@@ -277,6 +321,7 @@
   }
 
   &__item {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -289,6 +334,10 @@
 
     &:hover {
       background-color: var(--second-med);
+
+      .sidebar__popup {
+        display: block;
+      }
     }
     &.is-active {
       background-color: var(--second-med);

@@ -178,15 +178,32 @@
               </div>
               <div class="text-menu">
                 <p>Projectes</p>
+              </div>
+              <div class="sidebar__popup">
                 {% for project in user_projects %}
-                    <a href="{% url 'edit_project' pk=project.pk %}"> 
-                    {% if project.logo %}
-                      <img src="{{ project.logo.url }}" alt="{{ project.name }}" width="10">
-                    {% endif %}
-                    <p>{{ project.name }}</p>
+                  <a href="{% url 'edit_project' pk=project.pk %}">
+                    <div class="sidebar-menu__button sidebar-menu__button-project">
+                      <div class="sidebar-menu__button-img">
+                        {% if project.logo %}
+                          <img src="{{ project.logo.url }}" alt="{{ project.name }}" width="10">
+                        {% endif %}
+                        </div>
+                      <p>{{ project.name }}</p>
+                    </div>
                   </a>
                 {% endfor %}
-                <p><a href="{% url 'new_project' %}">+ Afegir projecte</a></p>
+                <a href="{% url 'new_project' %}">
+                  <div class="sidebar-menu__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <circle style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:37.79527664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+                        id="path819" cx="12" cy="12" r="12" />
+                      <polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"
+                        points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "
+                        id="polygon2" style="opacity:1;fill-opacity:1" />
+                    </svg>
+                    <p>Afegir projecte</p>
+                  </div>
+                </a>
               </div>
             </div>
           </li>
