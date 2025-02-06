@@ -165,7 +165,9 @@
           </li>
           {% if request.user.is_authenticated %}
           <li>
-            <div class="menu__item {% block projects_is_active %}{% endblock %}">
+            <div class="menu__item {% block projects_is_active %}{% endblock %}"
+              _="on click add .show-popup to .sidebar__popup"
+            >
               <div class="menu__icon">
                 <svg
                   class="icon-pathfill-white"

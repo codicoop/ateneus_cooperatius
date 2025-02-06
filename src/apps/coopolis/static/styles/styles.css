@@ -2826,6 +2826,7 @@ label.required::after {
   --height: 100%;
   --display-popup: none;
   --padding-popup: 0;
+  --display-on-click: grid;
 }
 .sidebar .sidebar-menu__button {
   --border-radius: 0;
@@ -2892,6 +2893,7 @@ label.required::after {
     --height: auto;
     --display-popup: none;
     --padding-popup: var(--pad-2) var(--pad1) var(--pad-2) var(--pad3);
+    --display-on-click: block;
   }
   .sidebar .sidebar-menu__button {
     --border-radius: 50px;
@@ -3042,6 +3044,9 @@ label.required::after {
   display: var(--display-popup);
   grid-auto-rows: auto;
   padding: var(--padding-popup);
+}
+.sidebar__popup.show-popup {
+  display: var(--display-on-click);
 }
 .sidebar .sidebar-menu__button {
   width: var(--width);
