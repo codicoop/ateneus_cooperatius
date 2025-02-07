@@ -9,7 +9,7 @@ from apps.coopolis.forms import (
     ProjectStageInitialPetitionForm,
     ProjectStageStartForm,
 )
-from apps.coopolis.models import Project, ProjectStage, ProjectStageSession
+from apps.coopolis.models import Project, ProjectStage
 from apps.dataexports.models import SubsidyPeriod
 
 
@@ -136,14 +136,13 @@ def project_stage_characteristics_view(request, pk):
             new_project_stage.save()
             project.notify_new_request_to_ateneu()
             project.notify_request_confirmation()
-
             messages.success(
                 request,
                 "S'ha enviat una sol·licitud d'acompanyament del projecte. En els"
                 " propers dies et contactarà una persona de l'ateneu per concertar"
                 " una primera reunió.",
             )
-            return redirect("project_stage_characteristics", pk=pk)
+            return redirect("edit_project", pk=pk)
     else:
         form = ProjectCharacteristicsForm(instance=project)
     return render(

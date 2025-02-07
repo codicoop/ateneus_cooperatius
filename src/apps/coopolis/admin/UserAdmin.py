@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 from apps.cc_courses.models import ActivityEnrolled
 from apps.coopolis.forms import MySignUpAdminForm
 from apps.dataexports.models import SubsidyPeriod
-from conf.custom_mail_manager import MyMailTemplate
+from conf.post_office import send
 
 
 class ActivityEnrolledInline(admin.TabularInline):
@@ -339,12 +339,14 @@ class UserAdmin(admin.ModelAdmin):
             self.send_welcome_email(obj)
 
     def send_welcome_email(self, user_obj):
-        mail = MyMailTemplate("EMAIL_SIGNUP_WELCOME")
-        mail.subject_strings = {"ateneu_nom": config.PROJECT_FULL_NAME}
-        mail.body_strings = {
+        context = {
             "ateneu_nom": config.PROJECT_FULL_NAME,
             "url_backoffice": settings.ABSOLUTE_URL,
             "url_accions": f"{settings.ABSOLUTE_URL}{reverse('courses')}",
             "url_projecte": f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
         }
-        mail.send_to_user(user_obj)
+        send(
+            recipients=user_obj.email,
+            template="EMAIL_SIGNUP_WELCOME",
+            context=context,
+        )

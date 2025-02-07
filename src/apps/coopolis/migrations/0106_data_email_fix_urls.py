@@ -5,6 +5,9 @@ from django.db import migrations
 
 
 def custom_replace(original_string, target_string, replacement_string):
+    # Migration disabled because it references the deprecated package
+    # mailing_manager.
+
     """
     Replace the string if it's not preceded by a < or a double quote char and
     it's also not followed by a > or a double quote char.
@@ -27,6 +30,9 @@ def custom_replace(original_string, target_string, replacement_string):
 
 
 def fix_mail_urls(apps, schema_editor):
+    # Migration disabled because it references the deprecated package
+    # mailing_manager.
+
     print('')
     mail_model = apps.get_model('mailing_manager', 'Mail')
 
@@ -71,5 +77,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(fix_mail_urls),
+        # Migration disabled because it references the deprecated package
+        # mailing_manager.
+        # migrations.RunPython(fix_mail_urls),
     ]

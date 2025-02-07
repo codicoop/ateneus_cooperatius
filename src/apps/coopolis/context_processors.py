@@ -7,6 +7,7 @@ def global_context(request):
     context = {
         # **settings.GLOBAL_CONTEXT,
         **get_customization_context(),
+        **projects_menu_context(request),
     }
     return context
 
@@ -42,3 +43,10 @@ def get_customization_or_external_static(obj, field_name, file_name):
         return customization_image.url
     except (AttributeError, ValueError):
         return external_static(f"/{file_name}")
+
+
+def projects_menu_context(request):
+    user_projects = None
+    if request.user.is_authenticated and request.user.projects.count() > 0:
+        user_projects = request.user.projects.all()
+    return {"user_projects": user_projects}

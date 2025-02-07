@@ -25,6 +25,7 @@
     <!-- XDSoft DateTimePicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/_hyperscript.min.js' %}"></script>
     {% block extra_head %}{% endblock %}
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/onload.js' %}"></script>
@@ -74,11 +75,14 @@
             <p>Anar al backoffice</p>
           </a>
           {% endif %}
-          <a href="{% url 'logout' %}">
-            <div class="text-menu">
-              <p>Tancar sessió</p>
-            </div>
-          </a>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">
+              <div class="text-menu">
+                <p>Tancar sessió</p>
+              </div>
+            </button>
+          </form>
         </div>
         {% endif %}
       <div class="topbar__action">
@@ -159,25 +163,53 @@
               </div>
             </a>
           </li>
+          {% if request.user.is_authenticated %}
           <li>
-            <a href="{% url 'new_project' %}">
-              <div class="menu__item {% block projects_is_active %}{% endblock %}">
-                <div class="menu__icon">
-                  <svg
-                    class="icon-pathfill-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewbox="0 0 24.01 17.870682">
-                    <g transform="translate(-5.49,-8.57)">
-                      <path d="M 7.17,26.43 C 6.73,26.43 6.31,26.24 6.01,25.92 5.68,25.62 5.5,25.2 5.49,24.76 V 10.24 C 5.49,9.8 5.68,9.38 6,9.08 6.3,8.76 6.72,8.57 7.16,8.57 H 15 l 1.67,1.67 h 9.46 c 0.44,0 0.86,0.19 1.16,0.51 0.32,0.3 0.51,0.72 0.51,1.16 H 7.17 V 24.75 L 10.02,13.59 H 29.5 l -2.99,11.56 c -0.08,0.39 -0.29,0.74 -0.61,0.98 -0.34,0.22 -0.74,0.32 -1.14,0.31 H 7.17 Z" />
-                    </g>
-                  </svg>
-                </div>
-                <div class="text-menu">
-                  <p>Projectes</p>
-                </div>
+            <div class="menu__item {% block projects_is_active %}{% endblock %}"
+              _="on click add .show-popup to .sidebar__popup"
+            >
+              <div class="menu__icon">
+                <svg
+                  class="icon-pathfill-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewbox="0 0 24.01 17.870682">
+                  <g transform="translate(-5.49,-8.57)">
+                    <path d="M 7.17,26.43 C 6.73,26.43 6.31,26.24 6.01,25.92 5.68,25.62 5.5,25.2 5.49,24.76 V 10.24 C 5.49,9.8 5.68,9.38 6,9.08 6.3,8.76 6.72,8.57 7.16,8.57 H 15 l 1.67,1.67 h 9.46 c 0.44,0 0.86,0.19 1.16,0.51 0.32,0.3 0.51,0.72 0.51,1.16 H 7.17 V 24.75 L 10.02,13.59 H 29.5 l -2.99,11.56 c -0.08,0.39 -0.29,0.74 -0.61,0.98 -0.34,0.22 -0.74,0.32 -1.14,0.31 H 7.17 Z" />
+                  </g>
+                </svg>
               </div>
-            </a>
+              <div class="text-menu">
+                <p>Projectes</p>
+              </div>
+              <div class="sidebar__popup">
+                {% for project in user_projects %}
+                  <a href="{% url 'edit_project' pk=project.pk %}">
+                    <div class="sidebar-menu__button sidebar-menu__button-project">
+                      <div class="sidebar-menu__button-img">
+                        {% if project.logo %}
+                          <img src="{{ project.logo.url }}" alt="{{ project.name }}" width="10">
+                        {% endif %}
+                        </div>
+                      <p>{{ project.name }}</p>
+                    </div>
+                  </a>
+                {% endfor %}
+                <a href="{% url 'new_project' %}">
+                  <div class="sidebar-menu__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <circle style="opacity:1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:37.79527664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+                        id="path819" cx="12" cy="12" r="12" />
+                      <polygon transform="matrix(0.66666667,0,0,0.66666667,0.3333333,0.3333333)"
+                        points="16.5,11.5 16.5,16.5 11.5,16.5 11.5,18.5 16.5,18.5 16.5,23.5 18.5,23.5 18.5,18.5 23.5,18.5 23.5,16.5 18.5,16.5 18.5,11.5 "
+                        id="polygon2" style="opacity:1;fill-opacity:1" />
+                    </svg>
+                    <p>Afegir projecte</p>
+                  </div>
+                </a>
+              </div>
+            </div>
           </li>
+          {% endif %}
           <li class="mobile-only">
             <a href="{{ config.PROJECT_WEBSITE_URL }}">
               <div class="menu__item menu__item--narrow">
@@ -206,31 +238,34 @@
         <p>{{ user.email }}</p>
       </div>
       <div class="sidebar__logout">
-        <a href="{% url 'logout' %}">
-          <div class="menu__item">
-            <div class="menu__icon menu__icon--out">
-              <svg
-                class="icon-pathfill-white"
-                xmlns="http://www.w3.org/2000/svg"
-                viewbox="0 0 14 14">
-                <path d="M 6.34,10.65 V 2.54 L 3.72,5.16 2.78,4.22 7,0 11.22,4.22 10.28,5.16 7.66,2.54 v 8.12 H 6.35 Z M 1.31,14 C 0.59,13.98 0.01,13.41 0,12.69 V 9.56 h 1.31 v 3.13 H 12.69 V 9.56 H 14 v 3.13 c -0.02,0.72 -0.59,1.3 -1.31,1.31 z"/>
-              </svg>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit">
+            <div class="menu__item">
+              <div class="menu__icon menu__icon--out">
+                <svg
+                  class="icon-pathfill-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewbox="0 0 14 14">
+                  <path d="M 6.34,10.65 V 2.54 L 3.72,5.16 2.78,4.22 7,0 11.22,4.22 10.28,5.16 7.66,2.54 v 8.12 H 6.35 Z M 1.31,14 C 0.59,13.98 0.01,13.41 0,12.69 V 9.56 h 1.31 v 3.13 H 12.69 V 9.56 H 14 v 3.13 c -0.02,0.72 -0.59,1.3 -1.31,1.31 z"/>
+                </svg>
+              </div>
+              <div class="text-menu">
+                <p>Tancar sessió</p>
+              </div>
             </div>
-            <div class="text-menu">
-              <p>Tancar sessió</p>
-            </div>
-          </div>
-        </a>
+          </button>
+        </form>
       </div>
     {% endif %}
     </sidebar>
 
     <main class="grid-base__main">
       {% include './components/login_float.html' %}
-        {% block content %}
-            NO OVERRIDE
-        {% endblock %}
-        {% include 'components/footer.html' %}
+      {% block content %}
+      NO OVERRIDE
+      {% endblock %}
+      {% include 'components/footer.html' %}
         <!-- <div class="cookies-consent">
             <p>
             Aquest lloc web fa servir cookies pròpies i de tercers. En continuar la navegació entenem que s’accepta la

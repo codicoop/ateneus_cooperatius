@@ -9,6 +9,8 @@ from apps.dataexports.exports.justification_2_itineraris import (
 )
 from apps.dataexports.exports.justification_service import \
     ExportJustificationService
+from apps.dataexports.exports.justification_using_subsubservice import \
+    ExportJustificationUsingSubSubService
 from apps.dataexports.exports.memory import ExportMemory
 from apps.dataexports.exports.polls import ExportPolls, ExportPollsByServices
 from apps.dataexports.exports.stages_details import ExportStagesDetails
@@ -48,6 +50,14 @@ class ExportFunctions:
 
     def export_service(self, export_obj):
         controller = ExportJustificationService(export_obj)
+        return controller.export()
+
+    def export_justification(self, export_obj):
+        """
+        Export that uses the models Service, SubService and SubSubService
+        instead of the previous service and sub_service dropdowns.
+        """
+        controller = ExportJustificationUsingSubSubService(export_obj)
         return controller.export()
 
     def export_dos_itineraris(self, export_obj):

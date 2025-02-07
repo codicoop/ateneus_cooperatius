@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Union
 
 
@@ -158,3 +159,200 @@ class TextWithYesNoEmpty(BaseRow):
 
     def get_columns(self) -> list:
         return [self.title, self.value]
+
+
+@dataclass
+class ActuacioRow(BaseRow):
+    service: str
+    subservice: str
+    actuacio_name: str
+    actuacio_date: str
+    actuacio_period: str
+    actuacio_entity: str
+    circle: str
+    town: str
+    participants_count: int
+    material_difusio: str
+    document_acreditatiu: str
+    place: str
+    accio: str  # Course
+    cofunded: str
+    cofunded_ateneu: str
+    strategic_line: str
+    admin_url: str
+    value_if_empty: str = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.service or self.value_if_empty,
+            self.subservice or self.value_if_empty,
+            self.actuacio_name or self.value_if_empty,
+            self.actuacio_date or self.value_if_empty,
+            self.actuacio_period or self.value_if_empty,
+            self.actuacio_entity or self.value_if_empty,
+            self.circle or self.value_if_empty,
+            self.town or self.value_if_empty,
+            self.participants_count or self.value_if_empty,
+            self.material_difusio or self.value_if_empty,
+            self.document_acreditatiu or self.value_if_empty,
+            self.place or self.value_if_empty,
+            self.accio or self.value_if_empty,
+            self.cofunded or self.value_if_empty,
+            self.cofunded_ateneu or self.value_if_empty,
+            self.strategic_line or self.value_if_empty,
+            self.admin_url or self.value_if_empty,
+        ]
+
+
+@dataclass
+class ParticipantRow(BaseRow):
+    actuacio_reference: str
+    user_surname: str
+    user_name: str
+    user_id_number: str
+    user_gender: str
+    user_birthdate: str
+    user_town: str
+    employment_situation: str
+    birth_place: str
+    educational_level: str
+    discovered_us: str
+    user_email: str
+    user_phone_number: str
+    user_project: str
+    user_acompanyaments: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.user_surname or self.value_if_empty,
+            self.user_name or self.value_if_empty,
+            self.user_id_number or self.value_if_empty,
+            self.user_gender or self.value_if_empty,
+            self.user_birthdate or self.value_if_empty,
+            self.user_town or self.value_if_empty,
+            self.employment_situation or self.value_if_empty,
+            self.birth_place or self.value_if_empty,
+            self.educational_level or self.value_if_empty,
+            self.discovered_us or self.value_if_empty,
+            self.user_email or self.value_if_empty,
+            self.user_phone_number or self.value_if_empty,
+            self.user_project or self.value_if_empty,
+            self.user_acompanyaments or self.value_if_empty,
+        ]
+
+
+@dataclass
+class SessionMinorRow(BaseRow):
+    actuacio_reference: str
+    grade: str
+    school_name: str
+    participants_number: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.grade or self.value_if_empty,
+            self.school_name or self.value_if_empty,
+            self.participants_number or self.value_if_empty,
+        ]
+
+
+@dataclass
+class InsercioLaboralRow(BaseRow):
+    actuacio_reference: str
+    user_surname: str
+    user_name: str
+    user_id_number: str
+    insercio_data_alta: str
+    insercio_data_baixa: str
+    insercio_tipus_contracte: str
+    user_gender: str
+    user_birthdate: str
+    user_town: str
+    project_nif: str
+    project_name: str
+    insercio_cercle: str
+    subsidy_period: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.user_surname or self.value_if_empty,
+            self.user_name or self.value_if_empty,
+            self.user_id_number or self.value_if_empty,
+            self.insercio_data_alta or self.value_if_empty,
+            self.insercio_data_baixa or self.value_if_empty,
+            self.insercio_tipus_contracte or self.value_if_empty,
+            self.user_gender or self.value_if_empty,
+            self.user_birthdate or self.value_if_empty,
+            self.user_town or self.value_if_empty,
+            self.project_nif or self.value_if_empty,
+            self.project_name or self.value_if_empty,
+            self.insercio_cercle or self.value_if_empty,
+            self.subsidy_period or self.value_if_empty,
+        ]
+
+
+@dataclass
+class CreatedEntityRow(BaseRow):
+    actuacio_reference: str
+    project_name: str
+    project_nif: str
+    project_contact_details: str
+    project_email: str
+    project_phone: str
+    actuacio_circle: str
+    project_stages_list: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            self.project_name or self.value_if_empty,
+            self.project_nif or self.value_if_empty,
+            self.project_contact_details or self.value_if_empty,
+            self.project_email or self.value_if_empty,
+            self.project_phone or self.value_if_empty,
+            "Sí",  # Economia Social i Solidària (no tenim la dada)
+            self.actuacio_circle or self.value_if_empty,
+            self.project_stages_list or self.value_if_empty,
+        ]
+
+
+@dataclass
+class AcompanyamentRow(BaseRow):
+    actuacio_reference: str
+    project_name: str
+    project_status: str
+    stage_type: str
+    start_date: str
+    town: str
+    short_description: str
+    total_hours: str
+    latest_session_date: str
+    justification_documents_total: str
+    value_if_empty = "-"
+
+    def get_columns(self) -> list:
+        return [
+            self.actuacio_reference or self.value_if_empty,
+            "",  # Activity name: we need it empty, the excel will fill it
+            "Entitat",  # No tenim la dada; hardcodejat
+            self.project_name or self.value_if_empty,
+            self.project_status or self.value_if_empty,
+            self.stage_type or self.value_if_empty,  # Crea o Consolida
+            self.start_date or self.value_if_empty,
+            self.town or self.value_if_empty,
+            self.short_description or self.value_if_empty,
+            self.total_hours or self.value_if_empty,
+            self.latest_session_date or self.value_if_empty,
+            self.justification_documents_total or self.value_if_empty,
+        ]

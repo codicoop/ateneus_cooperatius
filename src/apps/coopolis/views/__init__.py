@@ -4,5 +4,4 @@ from .ProjectFormView import ProjectFormView, ProjectCreateFormView, ProjectInfo
 from .ProjectStageFormView import project_stage_view, project_stage_start_view, project_stage_data_view, project_stage_attatch_view, project_stage_attatch_view, project_stage_initial_petition_view, project_stage_characteristics_view, project_stage_sessions_view
 from .RegistrationMailView import CustomPasswordResetView
 from .ActivityPollView import ActivityPollView
-from .ChainedDropdownView import get_sub_services
 from .db_backup_download import db_backup_download_view

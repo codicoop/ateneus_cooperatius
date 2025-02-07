@@ -46,6 +46,26 @@
       --margin-left: -8px;
     }
   }
+  &__popup {
+    --top: 0;
+    --left: 0;
+    --right: 0;
+    --bottom: 0;
+    --width: 100%;
+    --height: 100%;
+    --display-popup: none;
+    --padding-popup: 0;
+    --display-on-click: grid;
+  }
+  .sidebar-menu__button {
+    --border-radius: 0;
+    --padding: 0 var(--pad1) 0 0;
+    --margin: 0 var(--pad1) 0 var(--pad1);
+  }
+  .sidebar-menu__button-project {
+    --margin-bottom: 0;
+    --border-bottom: 2px solid var(--second-light);
+  }
 }
 .menu {
   --display-menu: grid;
@@ -56,7 +76,15 @@
   &__item {
     --padding: var(--pad4-5) 0;
     --height: auto;
+
+    &:hover {
+      --hover-color: var(--second);
+
+      .sidebar__popup {
+        --display-popup: grid;
+      }
     }
+  }
   &__home {
     --display: none;
   }
@@ -88,6 +116,26 @@
     &__logout {
       --display: flex;
     }
+    &__popup {
+      --left: 90px;
+      --top: 0;
+      --right: auto;
+      --bottom: auto;
+      --width: max-content;
+      --height: auto;
+      --display-popup: none;
+      --padding-popup: var(--pad-2) var(--pad1) var(--pad-2) var(--pad3);
+      --display-on-click: block;
+    }
+    .sidebar-menu__button {
+      --border-radius: 50px;
+      --padding: var(--pad-2) var(--pad1) var(--pad-2) var(--pad-2);
+      --margin: 0;
+    }
+    .sidebar-menu__button-project {
+      --margin-bottom: var(--pad-2);
+      --border-bottom: none;
+    }
   }
   .menu {
     --display-menu: flex;
@@ -96,8 +144,16 @@
     --color-border-dk: var(--second-light);
 
     &__item {
-    --padding: var(--pad2) 0;
-    --height: 130px;
+      --padding: var(--pad2) 0;
+      --height: 130px;
+
+      &:hover {
+        --hover-color: var(--second-med);
+
+        .sidebar__popup {
+          --display-popup: block;
+        }
+      }
     }
     &__home {
       --display: block;
@@ -227,6 +283,62 @@
       z-index: 1;
     }
   }
+  &__popup {
+    position: absolute;
+    right: var(--right);
+    top: var(--top);
+    left: var(--left);
+    bottom: var(--bottom);
+    display: var(--display-popup);
+    grid-auto-rows: auto;
+    padding: var(--padding-popup);
+
+    &.show-popup {
+      display: var(--display-on-click);
+    }
+  }
+  // botons per afegir projectes
+  .sidebar-menu__button {
+    width: var(--width);
+    height: var(--height);
+    padding: var(--padding);
+    margin: var(--margin);
+    border-radius: var(--border-radius);
+    background-color: var(--second);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: var(--pad-2);
+
+    svg {
+      circle {
+        fill: var(--second);
+      }
+      polygon {
+        fill: var(--white)
+      }
+    }
+
+    .sidebar-menu__button-img {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: var(--white);
+
+      img {
+        object-fit: cover;
+        object-position: 50% 50%;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+  // botó de projectes
+  .sidebar-menu__button-project {
+    margin-bottom: var(--margin-bottom);
+    border-bottom: var(--border-bottom);
+  }
 }
 .menu {
   position: relative;
@@ -277,6 +389,7 @@
   }
 
   &__item {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -288,11 +401,10 @@
     color: var(--white);
 
     &:hover {
-      background-color: var(--second-med);
+      background-color: var(--hover-color);
     }
     &.is-active {
-      background-color: var(--second-med);
-      // width: var(--pad8);
+      background-color: var(--hover-color);
     }
     &.is-disabled {
       cursor: not-allowed;

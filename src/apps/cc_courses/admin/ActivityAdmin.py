@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django_summernote.admin import SummernoteModelAdminMixin
 from datetime import datetime
-import modelclone
+from apps import modelclone
 import weasyprint
 import django.template.loader as loader
 
@@ -32,7 +32,7 @@ from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation, \
     ReservationEquipment
-from apps.coopolis.filters import SubserviceFilter
+from conf.post_office import send
 
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
@@ -176,27 +176,27 @@ class ActivityFileInlineAdmin(admin.TabularInline):
 
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
-        js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
+        js = ('js/grappellihacks.js', )
         css = {
             'all': ('styles/grappellihacks.css',)
         }
 
     form = ActivityForm
     list_display = (
-        'date_start', 'spots', 'remaining_spots', 'name', 'service',
+        'date_start', 'spots', 'remaining_spots', 'name',
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field',
         'teacher', 'subsidy_period_field',
     )
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
         'activity_poll_field', 'organizer_reminded', 'subsidy_period_field',
-        "axis", "subaxis",
+        "axis", "subaxis", "service", "sub_service", "subservice_service",
     )
+    empty_value_display = "-"
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives', 'teacher', )
     list_filter = (
         FilterBySubsidyPeriod, FilterByJustificationFiles,
-        "service", SubserviceFilter,
         ("place__town", admin.RelatedOnlyFieldListFilter),
         'course', 'date_start', 'room', 'circle', 'entity',
         'place', 'for_minors', 'cofunded',
@@ -208,7 +208,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                        'date_start',
                        'date_end', 'subsidy_period_field', 'starting_time',
                        'ending_time', 'confirmed', 'equipments',
-                       'spots', 'service', 'sub_service', 'circle', 'entity',
+                       'spots', 'subsubservice', 'subservice_service', 'circle', 'entity',
                        'responsible', 'organizer_reminded', 'publish',
                        'exclude_from_justification', ]
         }),
@@ -250,17 +250,22 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'classes': ('placeholder enrollments-group',),
             'fields': (),
         }),
-        ("Camps convocatòries < 2020", {
+        ("Camps obsolets de justificació de convocatòria", {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ["axis", "subaxis", ]
+            'fields': ["axis", "subaxis", "service", "sub_service"]
         }),
     ]
     # define the raw_id_fields
-    raw_id_fields = ('enrolled', 'course', 'equipments', )
+    raw_id_fields = (
+        "enrolled",
+        "course",
+        "equipments",
+        "subsubservice",
+    )
     # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
-        'm2m': ['enrolled', 'equipments', ],
-        'fk': ['course'],
+        'm2m': ["enrolled", "equipments", ],
+        'fk': ["course", "subsubservice", ],
     }
     date_hierarchy = 'date_start'
     """
@@ -422,9 +427,12 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
             if 'preview' in request.POST:
-                mail = ActivityEnrolled.get_reminder_email(request.user, obj)
-                mail.to = request.POST['preview_to']
-                mail.send()
+                parameters = ActivityEnrolled.get_reminder_email(request.user, obj)
+                send(
+                    recipients=request.POST['preview_to'],
+                    **parameters,
+                )
+
                 self.message_user(
                     request,
                     "Correu de prova enviat correctament."

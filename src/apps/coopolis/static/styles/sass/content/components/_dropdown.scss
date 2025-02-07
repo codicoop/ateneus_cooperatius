@@ -1,13 +1,15 @@
 // Dynamic variables
 .dropdown {
-  &__topbar {
+  &__topbar,
+  &__bottom {
     --margin: var(--pad2) 0;
   }
 }
 
 @media (min-width: 900px) {
   .dropdown {
-    &__topbar {
+    &__topbar,
+    &__bottom {
       --margin: 0 var(--pad4-5);
     }
     .info {
@@ -67,7 +69,9 @@
     }
   }
   &__bottom {
-    margin-top: var(--pad2);
+    margin: var(--margin);
+    padding: var(--pad2) 0;
+    border-top: 1px solid var(--primary-lighter);
 
     .info {
       grid-column: 1 / span 3;

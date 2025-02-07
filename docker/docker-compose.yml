@@ -312,7 +312,7 @@ services:
 
   develop_ateneus_db:
     container_name: develop_ateneus_db
-    image: postgres:11
+    image: postgres:14
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:

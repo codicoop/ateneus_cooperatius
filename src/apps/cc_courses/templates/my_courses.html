@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load thumbnail static %}
+{% load static %}
 
 {% block home_is_active %}{% endblock %}
 {% block enrollments_is_active %}is-active{% endblock %}
@@ -152,15 +152,6 @@
                 <div class="description">
                   <div class="my-course-card__subtitle text-menu">
                     <p>Descripció</p>
-                  </div>
-                  <div class="my-course-card__text richtext">
-                    <p>{{ enrollment.activity.objectives|safe }}</p>
-                  </div>
-                </div>
-                <!-- NOU -->
-                <div class="content">
-                  <div class="my-course-card__subtitle text-menu">
-                    <p>Contingut</p>
                   </div>
                   <div class="my-course-card__text richtext">
                     <p>{{ enrollment.activity.objectives|safe }}</p>

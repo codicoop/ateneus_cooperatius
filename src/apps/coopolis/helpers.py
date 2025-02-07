@@ -18,3 +18,7 @@ def get_subaxis_for_axis(axis: str) -> list:
     if subaxis_tuples:
         subaxis_list = [x[0] for x in subaxis_tuples]
     return subaxis_list
+
+
+def absolute_url(path):
+    return f"{settings.ABSOLUTE_URL}{path}"

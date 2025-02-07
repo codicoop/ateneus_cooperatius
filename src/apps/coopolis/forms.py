@@ -155,7 +155,7 @@ class ProjectFormAdmin(ProjectForm):
                 if not self.cleaned_data.get("cif"):
                     self.add_error("cif", msg)
             if CreatedEntity.objects.filter(
-                project=self.instance.id,
+                project_stage__project=self.instance.id,
             ).count():
                 msg = (
                     "Aquest projecte està vinculat a una creació d'entitat, "

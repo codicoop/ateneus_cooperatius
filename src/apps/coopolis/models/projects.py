@@ -18,7 +18,7 @@ from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
-from conf.custom_mail_manager import MyMailTemplate
+from conf.post_office import send
 
 
 class Derivation(models.Model):
@@ -314,25 +314,28 @@ class Project(models.Model):
         super(Project, self).save(*args, **kw)
 
     def notify_new_request_to_ateneu(self):
-        mail = MyMailTemplate("EMAIL_NEW_PROJECT")
-        mail.to = config.EMAIL_FROM_PROJECTS.split(",")
-        mail.subject_strings = {"projecte_nom": self.name}
-        mail.body_strings = {
+        context = {
             "projecte_nom": self.name,
             "projecte_telefon": self.phone,
             "projecte_email": self.mail,
             "usuari_email": self.partners.all()[0].email,
         }
-        mail.send()
+        send(
+            recipients=config.EMAIL_FROM_PROJECTS.split(","),
+            template="EMAIL_NEW_PROJECT",
+            context=context,
+        )
 
     def notify_request_confirmation(self):
-        mail = MyMailTemplate("EMAIL_PROJECT_REQUEST_CONFIRMATION")
-        mail.subject_strings = {"projecte_nom": self.name}
-        mail.body_strings = {
+        context = {
             "projecte_nom": self.name,
             "url_backoffice": settings.ABSOLUTE_URL,
         }
-        mail.send_to_user(self.partners.all()[0])
+        send(
+            recipients=self.partners.all()[0].email,
+            template="EMAIL_PROJECT_REQUEST_CONFIRMATION",
+            context=context,
+        )
 
     def __str__(self):
         return self.name
@@ -416,14 +419,21 @@ class ProjectStage(models.Model):
     date_start = models.DateField(
         "data creació acompanyament", null=False, blank=False, auto_now_add=True
     )
+    subsubservice = models.ForeignKey(
+        "dataexports.SubSubService",
+        verbose_name="actuació",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     service = models.SmallIntegerField(
-        "Servei",
+        "(OBSOLET) Servei",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "(OBSOLET) Sub-servei",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
@@ -549,7 +559,7 @@ class ProjectStage(models.Model):
                 errors.update(
                     {
                         "subaxis": ValidationError(
-                            "Has seleccionat un sub-eix que no es " "correspon a l'eix."
+                            "Has seleccionat un sub-eix que no es correspon a l'eix."
                         )
                     }
                 )

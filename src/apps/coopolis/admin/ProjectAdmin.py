@@ -2,14 +2,13 @@ from functools import update_wrapper
 
 from constance import config
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.urls import reverse, reverse_lazy
 from django.utils import formats
 from django.utils.safestring import mark_safe
 from django_object_actions import DjangoObjectActions
 
-from apps.coopolis.filters import SubserviceFilter
 from apps.coopolis.forms import (
     EmploymentInsertionAdminForm,
     EmploymentInsertionInlineFormSet,
@@ -25,7 +24,7 @@ from apps.coopolis.models.projects import (
     ProjectStageSession,
 )
 from apps.dataexports.models import SubsidyPeriod
-from conf.custom_mail_manager import MyMailTemplate
+from conf.post_office import send_to_user
 
 
 class FilterByFounded(admin.SimpleListFilter):
@@ -135,7 +134,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "stage_state",
         "stage_type",
         "stage_responsible_field_ellipsis",
-        "service",
         "subsidy_period",
         "_has_certificate",
         "_participants_count",
@@ -145,8 +143,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     )
     list_filter = (
         FilterBySubsidyPeriod,
-        "service",
-        SubserviceFilter,
         ("stage_responsible", admin.RelatedOnlyFieldListFilter),
         "date_start",
         "stage_state",
@@ -165,10 +161,9 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
                     "project",
                     "stage_state",
                     "stage_type",
+                    "subsubservice",
                     "subsidy_period",
                     "exclude_from_justification",
-                    "service",
-                    "sub_service",
                     "circle",
                     "stage_responsible",
                     "scanned_certificate",
@@ -200,12 +195,14 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             },
         ),
         (
-            "Camps convocatòries < 2020",
+            "Camps obsolets de justificació de convocatòria",
             {
                 "classes": ("grp-collapse grp-closed",),
                 "fields": [
                     "axis",
                     "subaxis",
+                    "service",
+                    "sub_service",
                 ],
             },
         ),
@@ -220,13 +217,15 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "field_county",
         "axis",
         "subaxis",
+        "service",
+        "sub_service",
     )
     subsidy_period_filter_param = "subsidy_period"
+
 
     class Media:
         js = (
             "js/grappellihacks.js",
-            "js/chained_dropdown.js",
         )
         css = {"all": ("styles/grappellihacks.css",)}
 
@@ -351,10 +350,9 @@ class ProjectStagesInline(admin.StackedInline):
                     "project",
                     "stage_state",
                     "stage_type",
+                    "subsubservice",
                     "subsidy_period",
                     "exclude_from_justification",
-                    "service",
-                    "sub_service",
                     "circle",
                     "stage_responsible",
                     "scanned_certificate",
@@ -384,6 +382,13 @@ class ProjectStagesInline(admin.StackedInline):
         "earliest_session_field",
         "justification_documents_total",
     )
+    raw_id_fields = (
+        "subsubservice",
+    )
+    autocomplete_lookup_fields = {
+        'fk': ["subsubservice", ],
+    }
+
 
     def stage_sessions_field(self, obj):
         count = obj.sessions_count()
@@ -603,7 +608,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
 
         my_urls = [
-            url(r"(?P<id>\d+)/print/$", wrap(self.print), name="%s_%s_print" % info),
+            re_path(r"(?P<id>\d+)/print/$", wrap(self.print), name="%s_%s_print" % info),
         ]
 
         return my_urls + urls
@@ -667,15 +672,17 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def send_added_to_project_email(self, user_obj, project_name):
-        mail = MyMailTemplate("EMAIL_ADDED_TO_PROJECT")
-        mail.subject_strings = {"projecte_nom": project_name}
-        mail.body_strings = {
+        context = {
             "ateneu_nom": config.PROJECT_FULL_NAME,
             "projecte_nom": project_name,
             "url_projectes": settings.ABSOLUTE_URL + reverse("project_info"),
             "url_backoffice": settings.ABSOLUTE_URL,
         }
-        mail.send_to_user(user_obj)
+        send_to_user(
+            user_obj=user_obj,
+            context=context,
+            template="EMAIL_ADDED_TO_PROJECT",
+        )
 
     def _insertions_count(self, obj):
         if obj.employment_insertions:

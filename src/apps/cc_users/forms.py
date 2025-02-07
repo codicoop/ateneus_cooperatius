@@ -10,7 +10,7 @@ from django.urls import reverse
 
 from apps.coopolis.mixins import FormDistrictValidationMixin, FieldsetsMixin
 from apps.coopolis.widgets import XDSoftDatePickerInput
-from conf.custom_mail_manager import MyMailTemplate
+from conf.post_office import send
 
 
 class LogInForm(AuthenticationForm):
@@ -136,11 +136,6 @@ class PasswordResetForm(BasePasswordResetForm):
         to_email,
         html_email_template_name=None,
     ):
-        mail = MyMailTemplate("EMAIL_PASSWORD_RESET")
-        mail.to = to_email
-        mail.subject_strings = {
-            "ateneu_nom": config.PROJECT_FULL_NAME,
-        }
         password_reset_url = settings.ABSOLUTE_URL + reverse(
             "password_reset_confirm",
             kwargs={
@@ -148,11 +143,16 @@ class PasswordResetForm(BasePasswordResetForm):
                 "token": context["token"],
             },
         )
-        mail.body_strings = {
+        context = {
+            "ateneu_nom": config.PROJECT_FULL_NAME,
             "persona_nom": context["user"].first_name,
             "persona_email": context["email"],
             "absolute_url": settings.ABSOLUTE_URL,
             "password_reset_url": password_reset_url,
             "url_web_ateneu": config.PROJECT_WEBSITE_URL,
         }
-        mail.send()
+        send(
+            recipients=to_email,
+            template="EMAIL_PASSWORD_RESET",
+            context=context,
+        )

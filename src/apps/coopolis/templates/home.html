@@ -2,6 +2,31 @@
 {% load static my_tag_library %}
 
 {% block content %}
+{% if messages %}
+<div class="modal">
+	<div class="modal__background" onclick="hideMessageModal(event)"></div>
+	<div class="modal__card">
+		<div class="modal__title title-1">
+			<p>Confirmació</p>
+		</div>
+		<div class="modal__close" onclick="hideMessageModal(event)">
+			<svg class="icon-pathfill-primary" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 9.46 9.46">
+				<path d="M 0.73,9.46 0,8.73 4,4.73 0,0.73 0.73,0 l 4,4 4,-4 0.73,0.73 -4,4 4,4 -0.73,0.73 -4,-4 z" />
+			</svg>
+		</div>
+		<div class="modal__form">
+			{% for message in messages %}
+
+			<div class="modal__intro text-md">
+				<div {% if message.tags %} class="{{ message.tags }}-message" {% endif %}>
+					<p>{{ message }}</p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endif %}
 <div class="home {% if not user.is_authenticated %}not-logged{% endif %}">
 	{% if user.is_authenticated %}
 	<section class="home__welcome welcome grid-content">
@@ -137,11 +162,7 @@
 				<a href="{% url 'new_project' %}">
 					<div class="btn btn--primary">
 						<div class="btn__text">
-							{% if request.user.projects.all %}
-								Anar a la fitxa del projecte
-							{% else %}
-								Sol·licitar acompanyament
-							{% endif %}
+							Sol·licitar acompanyament
 						</div>
 					</div>
 				</a>
@@ -168,7 +189,7 @@
 					<div class="supercard__title text-md">
 						<p>{{ open_project.name }}</p>
 					</div>
-					<a class="supercard__edit text-menu" href="{% url 'edit_project' %}">
+					<a class="supercard__edit text-menu" href="{% url 'edit_project' pk=open_project.pk %}">
 						<p>Editar dades</p>
 					</a>
 					<div class="card card-link">

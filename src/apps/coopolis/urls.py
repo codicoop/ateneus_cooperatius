@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import include, path
@@ -21,7 +21,6 @@ from .views import (
     ProjectCreateFormView,
     ProjectFormView,
     ProjectInfoView,
-    get_sub_services,
     project_stage_attatch_view,
     project_stage_data_view,
     project_stage_start_view,
@@ -31,7 +30,7 @@ from .views import (
 from .views.ProjectFormView import project_partner_manage, invitation_partner
 
 urlpatterns = [
-    url(
+    re_path(
         "admin/login",
         RedirectView.as_view(
             pattern_name=settings.LOGIN_URL, permanent=True, query_string=True
@@ -68,7 +67,9 @@ urlpatterns += [
     ),
     path("summernote/", include("django_summernote.urls")),
     path(
-        "project/edit/", login_required(ProjectFormView.as_view()), name="edit_project"
+        "project/edit/<int:pk>", 
+        login_required(ProjectFormView.as_view()),
+        name="edit_project"
     ),
     path(
         "project/edit/add-partner/", login_required(project_partner_manage), name="add-partner"
@@ -80,7 +81,7 @@ urlpatterns += [
         "project/edit/delete-invitation/", login_required(project_partner_manage), name="delete_invitation"
     ),
     path(
-        "project/invitation/<uuid>/", login_required(invitation_partner), name="invitation_project"
+        "project/invitation/<uuid:uuid>/", login_required(invitation_partner), name="invitation_project"
     ),
     path(
         "project/new/",
@@ -129,7 +130,6 @@ urlpatterns += [
     path(
         "activities/<uuid:uuid>/poll", ActivityPollView.as_view(), name="activity_poll"
     ),
-    path("chained_dropdowns/get_sub_services/", get_sub_services),
     path("admin/", admin.site.urls),
     path("db_backup_download/", db_backup_download_view, name="db_backup_download"),
 ]
