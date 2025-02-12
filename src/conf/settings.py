@@ -464,48 +464,48 @@ MAINTENANCE_MODE = env.bool("MAINTENANCE_MODE", default=False)
 
 LOGGLY_TOKEN = env.str("LOGGLY_TOKEN", default="")
 LOGGLY_TAG = env.str("LOGGLY_TAG", default="ateneu-sense-tag")
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+        },
+        "simple": {
+            "format": "%(levelname)s %(message)s"
+        },
+        "json": {
+            "format": '{ "loggerName":"%(name)s", "asciTime":"%(asctime)s", "fileName":"%(filename)s", "logRecordCreationTime":"%(created)f", "functionName":"%(funcName)s", "levelNo":"%(levelno)s", "lineNo":"%(lineno)d", "time":"%(msecs)d", "levelName":"%(levelname)s", "message":"%(message)s"}',
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", ],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+        },
+        "": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
 
+loggly_settings = None
 if LOGGLY_TOKEN:
     if DEBUG:
         LOGGLY_TAG = f"develop,{LOGGLY_TAG}"
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "verbose": {
-                "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
-            },
-            "simple": {
-                "format": "%(levelname)s %(message)s"
-            },
-            "json": {
-                "format": '{ "loggerName":"%(name)s", "asciTime":"%(asctime)s", "fileName":"%(filename)s", "logRecordCreationTime":"%(created)f", "functionName":"%(funcName)s", "levelNo":"%(levelno)s", "lineNo":"%(lineno)d", "time":"%(msecs)d", "levelName":"%(levelname)s", "message":"%(message)s"}',
-            },
-        },
-        "handlers": {
-            "console": {
-                "class": "logging.StreamHandler",
-                "level": "DEBUG",
-                "formatter": "verbose",
-            },
-            "loggly": {
-                "class": "loggly.handlers.HTTPSHandler",
-                "level": "INFO",
-                "formatter": "json",
-                "url": f"https://logs-01.loggly.com/inputs/{LOGGLY_TOKEN}/tag/{LOGGLY_TAG}",
-            },
-        },
-        "loggers": {
-            "django": {
-                "handlers": ["console", ],
-                "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
-            },
-            "": {
-                "handlers": ["console", "loggly"],
-                "level": "INFO",
-            },
-        },
+    LOGGING["handlers"]["loggly"] = {
+        "class": "loggly.handlers.HTTPSHandler",
+        "level": "INFO",
+        "formatter": "json",
+        "url": f"https://logs-01.loggly.com/inputs/{LOGGLY_TOKEN}/tag/{LOGGLY_TAG}",
     }
+    LOGGING["loggers"][""]["handlers"].append("loggly")
 
 ################################################################################
 #                                  Email                                       #
